@@ -1,0 +1,29 @@
+{
+  "$schema": "https://github.com/openimagingdata/imaging-problem-list/schema/exam-problem-list-schema.json",
+  "diagnosticReportId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "patientInfo": {
+    "patientIdentifier": "MRN0000000",
+    "patientDOB": "1990-01-01"
+  },
+  "examInfo": {
+    "studyIdentifier": "CT2024001",
+    "studyDateTime": "2024-02-15T10:00:00Z",
+    "studyLoincCode": "72133-2",
+    "studyDescription": "CT Abdomen and Pelvis Without Contrast"
+  },
+  "findings": [
+    {
+      "observationId": "finding1",
+      "findingCode": "OIFM_GMTS_016552",
+      "findingDescription": "urinary tract calculus",
+      "attributes": [
+        {
+          "attributeCode": "OIFM_GMTS_016552",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_707209.1",
+          "attributeValueDescription": "present"
+        }
+      ]
+    }
+  ]
+}

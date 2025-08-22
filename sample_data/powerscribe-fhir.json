@@ -1,0 +1,481 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>CT Abdomen and Pelvis Without Contrast</b></p><p>Bilateral nonobstructive renal calculi with minimally increased burden since prior CT. Indeterminate 1.6 cm liver lesion requiring further evaluation with contrast-enhanced MRI. Diffuse osteopenia noted, most pronounced in thoracic spine.</p></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Patient",
+      "id": "patient1",
+      "identifier": [
+        {
+          "use": "usual",
+          "type": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                "code": "MR"
+              }
+            ]
+          },
+          "value": "anonymous"
+        }
+      ]
+    },
+    {
+      "resourceType": "ImagingStudy",
+      "id": "study1",
+      "status": "available",
+      "identifier": [
+        {
+          "use": "usual",
+          "type": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                "code": "ACSN"
+              }
+            ]
+          },
+          "value": "CT2024001"
+        }
+      ],
+      "subject": {
+        "reference": "#patient1"
+      },
+      "procedureCode": [
+        {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "72133-2",
+              "display": "CT Abdomen and Pelvis w/o contrast"
+            }
+          ],
+          "text": "CT Abdomen and Pelvis Without Contrast"
+        }
+      ]
+    },
+    {
+      "resourceType": "ImagingStudy",
+      "id": "priorStudy1",
+      "status": "available",
+      "identifier": [
+        {
+          "use": "usual",
+          "type": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                "code": "ACSN"
+              }
+            ]
+          },
+          "value": "CT2009826"
+        }
+      ],
+      "subject": {
+        "reference": "#patient1"
+      },
+      "started": "2009-08-26",
+      "procedureCode": [
+        {
+          "text": "CT abdomen and pelvis"
+        }
+      ]
+    },
+    {
+      "resourceType": "Device",
+      "id": "reporting-system",
+      "manufacturer": "Radiology Department",
+      "deviceName": [
+        {
+          "name": "CT Scanner Report System",
+          "type": "model-name"
+        }
+      ],
+      "version": [
+        {
+          "value": "1.0"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding1",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "95570007",
+            "display": "Kidney stone"
+          }
+        ],
+        "text": "Bilateral nonobstructive renal calculi"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID205",
+            "display": "Kidney"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "Bilateral nonobstructive renal calculi. Largest in right lower pole measures 3 mm. Largest on left in interpolar region measures 5 mm (image 41, series 2). Minimally increased calculus burden compared to prior. No hydronephrosis."
+        }
+      ],
+      "component": [
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://dicom.nema.org/resources/ontology/DCM",
+                "code": "113607",
+                "display": "Series Number"
+              }
+            ]
+          },
+          "valueInteger": 2
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://dicom.nema.org/resources/ontology/DCM",
+                "code": "113609",
+                "display": "Instance Number"
+              }
+            ]
+          },
+          "valueInteger": 41
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://dicom.nema.org/resources/ontology/DCM",
+                "code": "121126",
+                "display": "SOP Instance UID"
+              }
+            ]
+          },
+          "valueString": "2.25.119854268713263671493216308983890638841"
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://dicom.nema.org/resources/ontology/DCM",
+                "code": "110181",
+                "display": "SOP Class UID"
+              }
+            ]
+          },
+          "valueString": "1.2.840.10008.5.1.4.1.1.2"
+        }
+      ],
+      "derivedFrom": [
+        {
+          "reference": "#study1"
+        }
+      ],
+      "hasMember": [
+        {
+          "reference": "#finding2"
+        },
+        {
+          "reference": "#finding3"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding2",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "95570007",
+            "display": "Kidney stone"
+          }
+        ],
+        "text": "Right renal calculus"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID29663",
+            "display": "Right kidney"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "Right lower pole renal calculus measuring 3 mm"
+        }
+      ],
+      "valueQuantity": {
+        "value": 3,
+        "unit": "mm",
+        "system": "http://unitsofmeasure.org"
+      },
+      "derivedFrom": [
+        {
+          "reference": "#finding1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding3",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "95570007",
+            "display": "Kidney stone"
+          }
+        ],
+        "text": "Left renal calculus"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID29664",
+            "display": "Left kidney"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "Left interpolar renal calculus measuring 5 mm"
+        }
+      ],
+      "valueQuantity": {
+        "value": 5,
+        "unit": "mm",
+        "system": "http://unitsofmeasure.org"
+      },
+      "derivedFrom": [
+        {
+          "reference": "#finding1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding4",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "300245004",
+            "display": "Liver lesion"
+          }
+        ],
+        "text": "Indeterminate liver lesion"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID58",
+            "display": "Liver"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "A 1.6 cm focal area of increased attenuation is present (image 24, series 2), etiology uncertain. Contrast-enhanced MRI is recommended."
+        }
+      ],
+      "valueQuantity": {
+        "value": 1.6,
+        "unit": "cm",
+        "system": "http://unitsofmeasure.org"
+      },
+      "component": [
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://dicom.nema.org/resources/ontology/DCM",
+                "code": "113607",
+                "display": "Series Number"
+              }
+            ]
+          },
+          "valueInteger": 2
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://dicom.nema.org/resources/ontology/DCM",
+                "code": "113609",
+                "display": "Instance Number"
+              }
+            ]
+          },
+          "valueInteger": 24
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://dicom.nema.org/resources/ontology/DCM",
+                "code": "121126",
+                "display": "SOP Instance UID"
+              }
+            ]
+          },
+          "valueString": "2.25.102047390323940818625922490666759501159"
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://dicom.nema.org/resources/ontology/DCM",
+                "code": "110181",
+                "display": "SOP Class UID"
+              }
+            ]
+          },
+          "valueString": "1.2.840.10008.5.1.4.1.1.2"
+        }
+      ],
+      "derivedFrom": [
+        {
+          "reference": "#study1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding5",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "64859006",
+            "display": "Osteopenia"
+          }
+        ],
+        "text": "Diffuse osteopenia"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID7741",
+            "display": "Thoracic spine"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "Extensive osteopenia, especially in thoracic spine, with flowing osteophytes. Recommend correlation with clinical history for possible hematologic abnormality."
+        }
+      ],
+      "derivedFrom": [
+        {
+          "reference": "#study1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding6",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "197321007",
+            "display": "Steatosis of liver"
+          }
+        ],
+        "text": "Hepatic steatosis"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID58",
+            "display": "Liver"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "Liver is diffusely hypoattenuating, suggesting hepatic steatosis."
+        }
+      ],
+      "derivedFrom": [
+        {
+          "reference": "#study1"
+        }
+      ]
+    }
+  ],
+  "imagingStudy": [
+    {
+      "reference": "#study1"
+    },
+    {
+      "reference": "#priorStudy1"
+    }
+  ],
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+          "code": "RAD",
+          "display": "Radiology"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "68604-8",
+        "display": "Radiology Diagnostic study note"
+      }
+    ]
+  },
+  "result": [
+    {
+      "reference": "#finding1"
+    },
+    {
+      "reference": "#finding4"
+    },
+    {
+      "reference": "#finding5"
+    },
+    {
+      "reference": "#finding6"
+    }
+  ],
+  "subject": {
+    "reference": "#reporting-system"
+  },
+  "effectiveDateTime": "2024-08-11T12:00:00-05:00",
+  "conclusion": "1. Bilateral nonobstructive renal calculi with minimally increased burden since prior CT. Diffuse osteopenia, most pronounced in thoracic spine, raising possibility of metabolic disorder associated with renal calculus formation. 2. Indeterminate 1.6 cm liver lesion. Recommend further evaluation with contrast-enhanced MRI."
+}
