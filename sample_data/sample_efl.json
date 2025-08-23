@@ -18,9 +18,74 @@
       "findingDescription": "urinary tract calculus",
       "attributes": [
         {
-          "attributeCode": "OIFM_GMTS_016552",
+          "attributeCode": "OIFMA_GMTS_707209",
           "attributeDescription": "presence",
           "attributeValueCode": "OIFMA_GMTS_707209.1",
+          "attributeValueDescription": "present"
+        }
+      ]
+    },
+    {
+      "observationId": "finding2",
+      "findingCode": "OIFM_GMTS_016552",
+      "findingDescription": "urinary tract calculus",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_707209",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_707209.1",
+          "attributeValueDescription": "present"
+        }
+      ]
+    },
+    {
+      "observationId": "finding3",
+      "findingCode": "OIFM_GMTS_016552",
+      "findingDescription": "urinary tract calculus",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_707209",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_707209.1",
+          "attributeValueDescription": "present"
+        }
+      ]
+    },
+    {
+      "observationId": "finding4",
+      "findingCode": "OIFM_GMTS_005511",
+      "findingDescription": "solid liver lesion in adult",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_659517",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_659517.1",
+          "attributeValueDescription": "present"
+        }
+      ]
+    },
+    {
+      "observationId": "finding5",
+      "findingCode": "OIFM_GMTS_010762",
+      "findingDescription": "generalized osteoporosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_280445",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_280445.1",
+          "attributeValueDescription": "present"
+        }
+      ]
+    },
+    {
+      "observationId": "finding6",
+      "findingCode": "OIFM_GMTS_022461",
+      "findingDescription": "fatty liver",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_652230",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_652230.1",
           "attributeValueDescription": "present"
         }
       ]
