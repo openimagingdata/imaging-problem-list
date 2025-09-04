@@ -1,0 +1,184 @@
+{
+  "$schema": "http://example.com/schemas/imaging_problem_list.json",
+  "patient": {
+    "id": "MRN0000001",
+    "name": "John Doe",
+    "dob": "1985-06-15"
+  },
+  "findings": [
+    {
+      "id": "ipl-finding-001",
+      "finding_type_code": "OIFM_GMTS_016552",
+      "finding_type_display": "urinary tract calculus",
+      "observations": [
+        {
+          "report_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+          "observation_id": "finding1",
+          "exam_date": "2024-02-15",
+          "exam_type_code": "72133-2",
+          "exam_type_display": "CT Abdomen and Pelvis Without Contrast",
+          "presence": "present"
+        },
+        {
+          "report_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+          "observation_id": "finding2",
+          "exam_date": "2024-02-15",
+          "exam_type_code": "72133-2",
+          "exam_type_display": "CT Abdomen and Pelvis Without Contrast",
+          "presence": "present"
+        },
+        {
+          "report_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+          "observation_id": "finding3",
+          "exam_date": "2024-02-15",
+          "exam_type_code": "72133-2",
+          "exam_type_display": "CT Abdomen and Pelvis Without Contrast",
+          "presence": "present"
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-002",
+      "finding_type_code": "OIFM_GMTS_005511",
+      "finding_type_display": "solid liver lesion in adult",
+      "observations": [
+        {
+          "report_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+          "observation_id": "finding4",
+          "exam_date": "2024-02-15",
+          "exam_type_code": "72133-2",
+          "exam_type_display": "CT Abdomen and Pelvis Without Contrast",
+          "presence": "present"
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-003",
+      "finding_type_code": "OIFM_GMTS_010762",
+      "finding_type_display": "generalized osteoporosis",
+      "observations": [
+        {
+          "report_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+          "observation_id": "finding5",
+          "exam_date": "2024-02-15",
+          "exam_type_code": "72133-2",
+          "exam_type_display": "CT Abdomen and Pelvis Without Contrast",
+          "presence": "present"
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-004",
+      "finding_type_code": "OIFM_GMTS_022461",
+      "finding_type_display": "fatty liver",
+      "observations": [
+        {
+          "report_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+          "observation_id": "finding6",
+          "exam_date": "2024-02-15",
+          "exam_type_code": "72133-2",
+          "exam_type_display": "CT Abdomen and Pelvis Without Contrast",
+          "presence": "present"
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-005",
+      "finding_type_code": "OIFM_GMTS_014702",
+      "finding_type_display": "multiple pulmonary nodules",
+      "observations": [
+        {
+          "report_id": "cadaa331-d367-4472-abd1-f2a6b68c9352",
+          "observation_id": "finding1a",
+          "exam_date": "2024-03-20",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest Without Contrast",
+          "presence": "present"
+        },
+        {
+          "report_id": "cadaa331-d367-4472-abd1-f2a6b68c9352",
+          "observation_id": "finding1b",
+          "exam_date": "2024-03-20",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest Without Contrast",
+          "presence": "present"
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-006",
+      "finding_type_code": "OIFM_MSFT_430810",
+      "finding_type_display": "coronary artery calcifications",
+      "observations": [
+        {
+          "report_id": "cadaa331-d367-4472-abd1-f2a6b68c9352",
+          "observation_id": "finding2",
+          "exam_date": "2024-03-20",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest Without Contrast",
+          "presence": "present"
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-007",
+      "finding_type_code": "OIFM_GMTS_015734",
+      "finding_type_display": "mediastinal and or hilar lymph node enlargement",
+      "observations": [
+        {
+          "report_id": "cadaa331-d367-4472-abd1-f2a6b68c9352",
+          "observation_id": "finding3",
+          "exam_date": "2024-03-20",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest Without Contrast",
+          "presence": "present"
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-008",
+      "finding_type_code": "OIFM_GMTS_015868",
+      "finding_type_display": "pleural effusion with normal lungs",
+      "observations": [
+        {
+          "report_id": "cadaa331-d367-4472-abd1-f2a6b68c9352",
+          "observation_id": "finding4",
+          "exam_date": "2024-03-20",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest Without Contrast",
+          "presence": "absent"
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-009",
+      "finding_type_code": "OIFM_GMTS_023339",
+      "finding_type_display": "pneumothorax",
+      "observations": [
+        {
+          "report_id": "cadaa331-d367-4472-abd1-f2a6b68c9352",
+          "observation_id": "finding5",
+          "exam_date": "2024-03-20",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest Without Contrast",
+          "presence": "absent"
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-010",
+      "finding_type_code": "OIFM_GMTS_022456",
+      "finding_type_display": "diaphragmatic hernia",
+      "observations": [
+        {
+          "report_id": "cadaa331-d367-4472-abd1-f2a6b68c9352",
+          "observation_id": "finding6",
+          "exam_date": "2024-03-20",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest Without Contrast",
+          "presence": "absent"
+        }
+      ]
+    }
+  ]
+}

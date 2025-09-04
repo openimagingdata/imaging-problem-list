@@ -1,0 +1,391 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "cadaa331-d367-4472-abd1-f2a6b68c9352",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>CT Chest Without Contrast</b></p><p>Multiple small pulmonary nodules in right upper lobe, largest measuring 5mm. Coronary artery calcifications noted. Mild mediastinal lymphadenopathy with largest node measuring 1.2cm. No pleural effusion. No pneumothorax. No evidence of diaphragmatic hernia.</p></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Patient",
+      "id": "patient1",
+      "identifier": [
+        {
+          "use": "usual",
+          "type": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                "code": "MR"
+              }
+            ]
+          },
+          "value": "MRN0000001"
+        }
+      ]
+    },
+    {
+      "resourceType": "ImagingStudy",
+      "id": "study1",
+      "status": "available",
+      "identifier": [
+        {
+          "use": "usual",
+          "type": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                "code": "ACSN"
+              }
+            ]
+          },
+          "value": "CT2024002"
+        }
+      ],
+      "subject": {
+        "reference": "#patient1"
+      },
+      "procedureCode": [
+        {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "29252-4",
+              "display": "CT Chest WO contrast"
+            }
+          ],
+          "text": "CT Chest Without Contrast"
+        }
+      ]
+    },
+    {
+      "resourceType": "Device",
+      "id": "reporting-system",
+      "manufacturer": "Radiology Department",
+      "deviceName": [
+        {
+          "name": "CT Scanner Report System",
+          "type": "model-name"
+        }
+      ],
+      "version": [
+        {
+          "value": "1.0"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding1",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "427359005",
+            "display": "Solitary nodule of lung"
+          }
+        ],
+        "text": "Multiple pulmonary nodules"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID1303",
+            "display": "Right upper lobe of lung"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "Multiple small pulmonary nodules in right upper lobe. Two nodules measuring 3mm and 5mm respectively on axial images (series 2, images 45 and 47)."
+        }
+      ],
+      "component": [
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://dicom.nema.org/resources/ontology/DCM",
+                "code": "113607",
+                "display": "Series Number"
+              }
+            ]
+          },
+          "valueInteger": 2
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://dicom.nema.org/resources/ontology/DCM",
+                "code": "113609",
+                "display": "Instance Number"
+              }
+            ]
+          },
+          "valueInteger": 45
+        }
+      ],
+      "derivedFrom": [
+        {
+          "reference": "#study1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding2",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "368009",
+            "display": "Coronary artery calcification"
+          }
+        ],
+        "text": "Coronary artery calcifications"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID486",
+            "display": "Coronary artery"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "Coronary artery calcifications are present, particularly in the left anterior descending artery."
+        }
+      ],
+      "derivedFrom": [
+        {
+          "reference": "#study1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding3",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "111269006",
+            "display": "Mediastinal lymphadenopathy"
+          }
+        ],
+        "text": "Mediastinal lymph node enlargement"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID1463",
+            "display": "Mediastinum"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "Mild mediastinal lymphadenopathy is present. The largest lymph node in the subcarinal region measures 1.2 cm in short axis."
+        }
+      ],
+      "valueQuantity": {
+        "value": 1.2,
+        "unit": "cm",
+        "system": "http://unitsofmeasure.org"
+      },
+      "derivedFrom": [
+        {
+          "reference": "#study1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding4",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "60046008",
+            "display": "Pleural effusion"
+          }
+        ],
+        "text": "Pleural effusion absent"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID1362",
+            "display": "Pleural cavity"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "No pleural effusion identified."
+        }
+      ],
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "2667000",
+            "display": "Absent"
+          }
+        ]
+      },
+      "derivedFrom": [
+        {
+          "reference": "#study1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding5",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "36118008",
+            "display": "Pneumothorax"
+          }
+        ],
+        "text": "Pneumothorax absent"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID1362",
+            "display": "Pleural cavity"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "No pneumothorax identified."
+        }
+      ],
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "2667000",
+            "display": "Absent"
+          }
+        ]
+      },
+      "derivedFrom": [
+        {
+          "reference": "#study1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "finding6",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "235834004",
+            "display": "Diaphragmatic hernia"
+          }
+        ],
+        "text": "Diaphragmatic hernia absent"
+      },
+      "bodySite": {
+        "coding": [
+          {
+            "system": "http://www.radlex.org",
+            "code": "RID484",
+            "display": "Diaphragm"
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "No evidence of diaphragmatic hernia."
+        }
+      ],
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "2667000",
+            "display": "Absent"
+          }
+        ]
+      },
+      "derivedFrom": [
+        {
+          "reference": "#study1"
+        }
+      ]
+    }
+  ],
+  "imagingStudy": [
+    {
+      "reference": "#study1"
+    }
+  ],
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+          "code": "RAD",
+          "display": "Radiology"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "68604-8",
+        "display": "Radiology Diagnostic study note"
+      }
+    ]
+  },
+  "result": [
+    {
+      "reference": "#finding1"
+    },
+    {
+      "reference": "#finding2"
+    },
+    {
+      "reference": "#finding3"
+    },
+    {
+      "reference": "#finding4"
+    },
+    {
+      "reference": "#finding5"
+    },
+    {
+      "reference": "#finding6"
+    }
+  ],
+  "subject": {
+    "reference": "#reporting-system"
+  },
+  "effectiveDateTime": "2024-03-20T14:30:00Z",
+  "conclusion": "1. Multiple small pulmonary nodules in right upper lobe, recommend follow-up chest CT in 6 months. 2. Coronary artery calcifications present. 3. Mild mediastinal lymphadenopathy, likely reactive. 4. No acute pulmonary pathology."
+}
