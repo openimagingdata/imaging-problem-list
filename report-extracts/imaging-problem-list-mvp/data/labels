@@ -1,4 +1,4 @@
-{"id": "rpt_001", "findings": [
+{"report_id": "rpt_001", "findings": [
   {"name": "right pica territory infarct", "present": true},
   {"name": "edema", "present": true},
   {"name": "mass effect", "present": true},
@@ -9,3 +9,14 @@
   {"name": "herniation", "present": false},
   {"name": "ventricular effacement", "present": true}
 ]}
+
+{"report_id": "rpt_002", "findings": [
+  {"name": "pica territory infarct", "present": true},
+  {"name": "ventricular effacement", "present": true},
+  {"name": "mass effect", "present": true},
+  {"name": "petechial hemorrhage", "present": true},
+  {"name": "", "present":},
+  {"name": "", "present":},
+  {"name": "", "present":},
+  {"name": "", "present":},
+  {"name": "", "present":},
