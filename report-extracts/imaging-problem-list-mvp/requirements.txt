@@ -1,0 +1,5 @@
+pydantic>=2.8
+pydantic-ai>=0.0.16
+python-dotenv>=1.0
+tqdm>=4.66
+tabulate>=0.9
