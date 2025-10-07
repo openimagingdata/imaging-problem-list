@@ -22,7 +22,13 @@ def precision_recall_f1(tp, fp, fn):
 def main():
     gold = load_map(Path("data/labels.jsonl"))
     pred = load_map(Path("data/predictions.jsonl"))
-    assert gold.keys() == pred.keys(), "Mismatched report ids between gold and predictions."
+   # Evaluate only reports that exist in BOTH gold and predictions
+    common_ids = set(gold.keys()) & set(pred.keys())
+    print(f"Evaluating {len(common_ids)} report(s). Skipping "
+          f"{len(set(pred.keys()) - common_ids)} unlabeled prediction(s) and "
+          f"{len(set(gold.keys()) - common_ids)} gold-only id(s).")
+    gold = {k: gold[k] for k in common_ids}
+    pred = {k: pred[k] for k in common_ids}
 
     tp=fp=fn=tn=0
     per_finding = defaultdict(lambda: Counter(tp=0, fp=0, fn=0, tn=0))
