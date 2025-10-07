@@ -1,3 +1,11 @@
-{"id": "rpt_001", "findings": [{"name": "lung mass", "present": true}, {"name": "bronchial obstruction", "present": true}, {"name": "groundglass opacity", "present": true}, {"name": "atelectasis", "present": true}, {"name": "pulmonary nodule", "present": true}, {"name": "pleural effusion", "present": true}, {"name": "devices/tubes/lines", "present": false}, {"name": "pericardial effusion", "present": false}]}
-{"id": "rpt_002", "findings": [{"name": "ring enhancing lesion", "present": true}, {"name": "vasogenic edema", "present": true}, {"name": "midline shift", "present": true}, {"name": "acute infarct", "present": false}, {"name": "hydrocephalus", "present": false}, {"name": "brain metastasis", "present": true}]}
-{"id": "rpt_003", "findings": [{"name": "hepatic metastases", "present": true}, {"name": "biliary dilatation", "present": false}, {"name": "ascites", "present": true}, {"name": "bowel obstruction", "present": false}]}
+{"id": "rpt_001", "findings": [
+  {"name": "right pica territory infarct", "present": true},
+  {"name": "edema", "present": true},
+  {"name": "mass effect", "present": true},
+  {"name": "hydrocephalus", "present": false},
+  {"name": "hemorrhagic conversion", "present": false},
+  {"name": "sinus disease", "present": false"},
+  {"name": "orbital abnormality", "present": false},
+  {"name": "herniation", "present": false"},
+  {"name": "ventricular effacement", "present": true}
+]}
