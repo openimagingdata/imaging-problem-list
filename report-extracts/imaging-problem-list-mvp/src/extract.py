@@ -24,7 +24,7 @@ def main():
 
     with out_path.open("w") as out_f:
         for row in tqdm(load_jsonl(in_path), desc="Extracting"):
-            rpt_id = row["id"]
+            rpt_id = row.get["report_id"]
             text = row["text"]
             result = agent.run_sync(
                 f"REPORT_ID={rpt_id}\nREPORT_TEXT:\n{text}\n\nReturn structured output."
