@@ -4,6 +4,8 @@
 
 ## After running the extraction (`python -m src.extract`) and evaluation (`python -m src.evaluate`) on one labeled CT Head reports for patient X:
 
+```
+
 == Overall ==
 scope        TP    FP    FN    TN    Prec    Rec    F1
 ---------  ----  ----  ----  ----  ------  -----  ----
@@ -95,6 +97,7 @@ ventricular dilatation                                   0     1     0     0    
 ventricular effacement                                   1     0     6     0     1     0.14  0.25
 ventricular enlargement                                  3     0     3     1     1     0.5   0.67
 ventricular enlargment                                   0     0     1     0     0     0     0
-### 🩻 Interpretation
+
+```
 
 
