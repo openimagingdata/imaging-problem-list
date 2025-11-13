@@ -1,0 +1,34 @@
+CT CHEST WITHOUT CONTRAST
+
+Study Date: March 20, 2024
+Study ID: CT2024002
+Patient: MRN0000001
+DOB: 1985-06-15
+
+CLINICAL INDICATION: Follow-up pulmonary nodules, evaluate for change.
+
+TECHNIQUE: Axial CT images of the chest were obtained without intravenous contrast.
+
+COMPARISON: Prior CT chest from 6 months ago.
+
+FINDINGS:
+
+Lungs: Multiple pulmonary nodules are again identified, unchanged in size and distribution compared to prior. The largest nodule in the right upper lobe measures 5 mm (previously 5 mm). A 4 mm nodule in the left lower lobe is stable. No new nodules are identified.
+
+Pleura: No pleural effusion or pneumothorax.
+
+Mediastinum: Mild mediastinal and hilar lymphadenopathy is noted, with the largest node measuring 1.3 cm in the right paratracheal region, stable compared to prior.
+
+Heart: Moderate coronary artery calcifications are present in the LAD, LCX, and RCA distributions.
+
+Airways: Patent central airways without endobronchial lesion.
+
+Chest Wall/Bones: No aggressive osseous lesion.
+
+Upper Abdomen: Limited views show no gross abnormality. No hiatal hernia or diaphragmatic defect is identified.
+
+IMPRESSION:
+1. Stable multiple pulmonary nodules. Continued surveillance recommended per Fleischner criteria.
+2. Stable mild mediastinal and hilar lymphadenopathy.
+3. Moderate coronary artery calcifications.
+4. No pleural effusion, pneumothorax, or diaphragmatic hernia.
