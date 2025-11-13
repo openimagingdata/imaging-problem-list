@@ -1,0 +1,37 @@
+CT ABDOMEN AND PELVIS WITHOUT CONTRAST
+
+Study Date: February 15, 2024
+Study ID: CT2024001
+Patient: MRN0000000
+DOB: 1990-01-01
+
+CLINICAL INDICATION: Abdominal pain, evaluate for nephrolithiasis.
+
+TECHNIQUE: Axial CT images of the abdomen and pelvis were obtained without intravenous contrast.
+
+COMPARISON: None available.
+
+FINDINGS:
+
+Kidneys/Ureters: Multiple small calculi are noted in the left kidney measuring up to 4 mm. A 6 mm non-obstructing calculus is present in the distal left ureter. The right kidney demonstrates a 3 mm non-obstructing calculus in the lower pole.
+
+Liver: The liver demonstrates diffuse low attenuation consistent with hepatic steatosis. A 1.2 cm hypodense lesion is identified in segment 6, indeterminate but likely representing a simple cyst versus hemangioma. Recommend MRI or ultrasound for further characterization.
+
+Gallbladder: Unremarkable.
+
+Pancreas: Normal attenuation and morphology.
+
+Spleen: Normal size and attenuation.
+
+Adrenals: Unremarkable bilaterally.
+
+Bowel: No evidence of obstruction, wall thickening, or pneumatosis.
+
+Peritoneum: No ascites or free air.
+
+Bones: Diffuse osteopenia is noted throughout the visualized skeleton.
+
+IMPRESSION:
+1. Multiple urinary tract calculi as described, including left kidney and bilateral ureteral stones, the largest in the distal left ureter measuring 6 mm.
+2. Hepatic steatosis with indeterminate 1.2 cm liver lesion in segment 6. Recommend further characterization with MRI or ultrasound.
+3. Diffuse osteopenia.
