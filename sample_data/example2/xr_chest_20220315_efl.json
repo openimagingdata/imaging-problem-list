@@ -1,0 +1,296 @@
+{
+  "$schema": "https://github.com/openimagingdata/imaging-problem-list/schema/exam-problem-list-schema.json",
+  "diagnosticReportId": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+  "patientInfo": {
+    "patientIdentifier": "MRN0000001",
+    "patientDOB": "1961-01-01"
+  },
+  "examInfo": {
+    "studyIdentifier": "XR_CHEST_20220315",
+    "studyDateTime": "2022-03-15T10:00:00Z",
+    "studyLoincCode": "30745-4",
+    "studyDescription": "XR Chest"
+  },
+  "findings": [
+    {
+      "observationId": "aortic_atherosclerosis_1",
+      "findingCode": "OIFM_GMTS_022519",
+      "findingDescription": "atherosclerosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_924367",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_924367.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "The aortic knob is prominent with a tortuous descending thoracic aorta, compatible with atherosclerotic disease."
+    },
+    {
+      "observationId": "atelectasis_0",
+      "findingCode": "OIFM_GMTS_032553",
+      "findingDescription": "lobar atelectasis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_659539",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_659539.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+    },
+    {
+      "observationId": "cardiomegaly_0",
+      "findingCode": "OIFM_GMTS_022537",
+      "findingDescription": "cardiomegaly",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_359529",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_359529.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The cardiac silhouette is normal in size."
+    },
+    {
+      "observationId": "clavicle_fracture_1",
+      "findingCode": "OIFM_OIDM_842151",
+      "findingDescription": "clavicle fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_914237",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_914237.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "An old healed fracture of the left mid-clavicle is identified."
+    },
+    {
+      "observationId": "consolidation_0",
+      "findingCode": "OIFM_GMTS_033498",
+      "findingDescription": "pulmonary segmental consolidation",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_462110",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_462110.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+    },
+    {
+      "observationId": "coronary_artery_calcification_1",
+      "findingCode": "OIFM_MSFT_430810",
+      "findingDescription": "coronary artery calcifications",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MSFT_286425",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MSFT_286425.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Calcification of the coronary arteries is noted."
+    },
+    {
+      "observationId": "degenerative_spinal_changes_1",
+      "findingCode": "OIFM_OIDM_675673",
+      "findingDescription": "thoracic spine degenerative change",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_526575",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_526575.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Extensive degenerative changes of the thoracic spine with flowing anterior osteophytes bridging multiple levels, consistent with diffuse idiopathic skeletal hyperostosis."
+    },
+    {
+      "observationId": "diffuse_idiopathic_skeletal_hyperostosis_1",
+      "findingCode": "OIFM_OIDM_990401",
+      "findingDescription": "diffuse idiopathic skeletal hyperostosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_666030",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_666030.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Extensive degenerative changes of the thoracic spine with flowing anterior osteophytes bridging multiple levels, consistent with diffuse idiopathic skeletal hyperostosis."
+    },
+    {
+      "observationId": "hilar_lymphadenopathy_0",
+      "findingCode": "OIFM_GMTS_015734",
+      "findingDescription": "mediastinal and/or hilar lymph node enlargement",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_798527",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_798527.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The hila are normal in size and contour."
+    },
+    {
+      "observationId": "mitral_annular_calcification_1",
+      "findingCode": "OIFM_OIDM_159498",
+      "findingDescription": "mitral annular calcification",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_410031",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_410031.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Prominent mitral annular calcification is visible."
+    },
+    {
+      "observationId": "osteopenia_1",
+      "findingCode": "OIFM_GMTS_010762",
+      "findingDescription": "generalized osteoporosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_280445",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_280445.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Diffuse osteopenia is present."
+    },
+    {
+      "observationId": "pleural_effusion_0",
+      "findingCode": "OIFM_GMTS_015972",
+      "findingDescription": "massive pleural effusion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_744500",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_744500.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+    },
+    {
+      "observationId": "pleural_thickening_0",
+      "findingCode": "OIFM_GMTS_015999",
+      "findingDescription": "pleural thickening",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_223851",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_223851.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No pleural thickening or effusion."
+    },
+    {
+      "observationId": "pneumonia_0",
+      "findingCode": "OIFM_CDE_000076",
+      "findingDescription": "pneumonia",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_CDE_000397",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_CDE_000397.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+    },
+    {
+      "observationId": "pneumothorax_0",
+      "findingCode": "OIFM_GMTS_023339",
+      "findingDescription": "pneumothorax",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_471330",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_471330.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+    },
+    {
+      "observationId": "pulmonary_nodule_0",
+      "findingCode": "OIFM_GMTS_014616",
+      "findingDescription": "solitary pulmonary nodule",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_860278",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_860278.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+    },
+    {
+      "observationId": "rib_fracture_1",
+      "findingCode": "OIFM_MGB_944849",
+      "findingDescription": "rib fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MGB_080122",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MGB_080122.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Healed fractures of the left 7th and 8th ribs are present posterolaterally with smooth callus formation."
+    },
+    {
+      "observationId": "rib_fracture_2",
+      "findingCode": "OIFM_MGB_944849",
+      "findingDescription": "rib fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MGB_080122",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MGB_080122.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Healed fractures of the left 7th and 8th ribs are present posterolaterally with smooth callus formation."
+    },
+    {
+      "observationId": "soft_tissue_mass_0",
+      "findingCode": "OIFM_OIDM_299401",
+      "findingDescription": "soft tissue mass",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_818812",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_818812.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No soft tissue abnormality."
+    },
+    {
+      "observationId": "vertebral_compression_fracture_1",
+      "findingCode": "OIFM_GMTS_009850",
+      "findingDescription": "wedged vertebra",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_763442",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_763442.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "An old superior endplate compression fracture at T9 is noted, now appearing chronic/healed compared to April 2006."
+    }
+  ]
+}

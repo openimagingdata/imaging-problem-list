@@ -1,0 +1,3171 @@
+{
+  "$schema": "http://example.com/schemas/imaging_problem_list.json",
+  "patient": {
+    "id": "MRN0000001",
+    "name": "John Doe",
+    "dob": "1961-01-01"
+  },
+  "findings": [
+    {
+      "id": "ipl-finding-001",
+      "finding_type_code": "OIFM_CDE_000019",
+      "finding_type_display": "inflammatory sinus",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "sinus_mucosal_thickening_1",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "present",
+          "reportText": "Mild mucosal thickening in the maxillary sinuses bilaterally."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-002",
+      "finding_type_code": "OIFM_CDE_000076",
+      "finding_type_display": "pneumonia",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "pneumonia_1",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "There is a focal airspace opacity in the right lower lobe consistent with pneumonia."
+        },
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "pneumonia_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The visualized portions of the lower lungs are clear."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "pneumonia_0",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-003",
+      "finding_type_code": "OIFM_CDE_000229",
+      "finding_type_display": "humerus dislocation",
+      "observations": [
+        {
+          "report_id": "f2b9b789-cb68-48c1-a09c-a1c34ddef340",
+          "observation_id": "glenohumeral_dislocation_0",
+          "exam_date": "2021-05-22",
+          "exam_type_code": "26158-6",
+          "exam_type_display": "XR Shoulder - left",
+          "presence": "absent",
+          "reportText": "No dislocation or subluxation."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-004",
+      "finding_type_code": "OIFM_CDE_000232",
+      "finding_type_display": "humerus fracture",
+      "observations": [
+        {
+          "report_id": "f2b9b789-cb68-48c1-a09c-a1c34ddef340",
+          "observation_id": "bone_fracture_humerus_0",
+          "exam_date": "2021-05-22",
+          "exam_type_code": "26158-6",
+          "exam_type_display": "XR Shoulder - left",
+          "presence": "absent",
+          "reportText": "The humeral head, glenoid, clavicle, and scapula demonstrate normal bone density without fracture or lytic lesion."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-005",
+      "finding_type_code": "OIFM_GMTS_000480",
+      "finding_type_display": "ascites",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "ascites_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "There is no ascites."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "ascites_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No ascites."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-006",
+      "finding_type_code": "OIFM_GMTS_000570",
+      "finding_type_display": "cholecystitis",
+      "observations": [
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "acute_cholecystitis_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "Sonographic Murphy sign is negative."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "gallbladder_abnormality_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Gallbladder is unremarkable."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-007",
+      "finding_type_code": "OIFM_GMTS_001845",
+      "finding_type_display": "hepatomegaly",
+      "observations": [
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "hepatomegaly_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "The liver is normal in size measuring 16 cm in craniocaudal dimension."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-008",
+      "finding_type_code": "OIFM_GMTS_002512",
+      "finding_type_display": "solitary lesion of spleen",
+      "observations": [
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "splenic_abnormality_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No focal abnormality."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "splenic_lesion_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No focal lesions."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "splenic_lesion_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No focal lesions."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-009",
+      "finding_type_code": "OIFM_GMTS_002674",
+      "finding_type_display": "dilated pancreatic duct",
+      "observations": [
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "pancreatic_ductal_dilatation_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Normal in size and attenuation. No focal mass or ductal dilatation."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "pancreatic_ductal_dilatation_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No pancreatic ductal dilatation or peripancreatic fluid."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-010",
+      "finding_type_code": "OIFM_GMTS_002817",
+      "finding_type_display": "spontaneous pneumoperitoneum without peritonitis",
+      "observations": [
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "pneumoperitoneum_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No pneumoperitoneum."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-011",
+      "finding_type_code": "OIFM_GMTS_003106",
+      "finding_type_display": "abdominal lymphadenopathy",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "lymphadenopathy_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No enlarged abdominal or pelvic lymph nodes are identified."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "lymphadenopathy_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No enlarged abdominal or pelvic lymph nodes."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "lymphadenopathy_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No enlarged abdominal or pelvic lymph nodes."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "lymphadenopathy_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "A few mildly prominent pericolic lymph nodes are present, likely reactive."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "lymphadenopathy_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No pathologically enlarged retroperitoneal or pelvic lymph nodes."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "lymphadenopathy_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No pathologically enlarged retroperitoneal or pelvic lymph nodes."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "lymphadenopathy_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No intra-abdominal, retroperitoneal, or pelvic adenopathy."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-012",
+      "finding_type_code": "OIFM_GMTS_003554",
+      "finding_type_display": "pericholecystic fluid",
+      "observations": [
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "pericholecystic_fluid_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "No pericholecystic fluid."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "pericholecystic_fluid_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No gallbladder wall thickening or pericholecystic fluid."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-013",
+      "finding_type_code": "OIFM_GMTS_003565",
+      "finding_type_display": "splenomegaly",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "splenomegaly_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The spleen is normal in size."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "splenomegaly_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "The spleen is normal in size measuring 10 cm in craniocaudal dimension."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "splenomegaly_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Normal in size at 10.5 cm craniocaudal dimension."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "splenomegaly_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "Normal in size measuring 11 cm."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "splenomegaly_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Normal in size and attenuation."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-014",
+      "finding_type_code": "OIFM_GMTS_003706",
+      "finding_type_display": "pericardial effusion",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "pericardial_effusion_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The heart is not enlarged, and no pericardial fluid is identified."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "pericardial_effusion_0",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "absent",
+          "reportText": "No pericardial effusion or thickening."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "pericardial_effusion_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No pericardial effusion."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "pericardial_effusion_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No pericardial effusion."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "pericardial_effusion_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No pericardial fluid."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-015",
+      "finding_type_code": "OIFM_GMTS_004244",
+      "finding_type_display": "abdominal abscess",
+      "observations": [
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "soft_tissue_collection_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No abnormal masses or collections."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "abscess_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No drainable fluid collection or abscess."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "fluid_collection_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No abnormal soft tissue masses or collections."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-016",
+      "finding_type_code": "OIFM_GMTS_004609",
+      "finding_type_display": "dilated intrahepatic ducts",
+      "observations": [
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "intrahepatic_biliary_ductal_dilatation_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "No intrahepatic biliary ductal dilatation."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "intrahepatic_biliary_ductal_dilatation_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No intrahepatic biliary ductal dilatation."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "intrahepatic_biliary_ductal_dilatation_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No intrahepatic biliary ductal dilatation."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-017",
+      "finding_type_code": "OIFM_GMTS_004740",
+      "finding_type_display": "diffuse gallbladder wall thickening",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "gallbladder_wall_thickening_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The gallbladder is normally distended and shows no wall thickening or calcified stones."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "gallbladder_wall_thickening_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "The gallbladder wall measures 2 mm, within normal limits."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "gallbladder_wall_thickening_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No gallbladder wall thickening."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "gallbladder_wall_thickening_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No gallbladder wall thickening or pericholecystic fluid."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-018",
+      "finding_type_code": "OIFM_GMTS_005226",
+      "finding_type_display": "dilated bile ducts",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "biliary_duct_dilation_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The biliary ducts are not dilated."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "common_bile_duct_dilation_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "The common bile duct measures 4 mm, within normal limits."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "common_bile_duct_dilation_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "The common bile duct measures 5 mm, within normal limits."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "biliary_ductal_dilatation_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No biliary dilatation."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "biliary_ductal_dilation_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No biliary ductal dilation."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-019",
+      "finding_type_code": "OIFM_GMTS_005486",
+      "finding_type_display": "cystic liver lesion",
+      "observations": [
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "hepatic_cyst_2",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "indeterminate",
+          "reportText": "A small 6 mm hypodense lesion is present in segment 6 (image 22, series 2), too small to characterize, likely representing a simple cyst."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "hepatic_cyst_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Hepatic steatosis with stable 6 mm liver lesion, likely simple cyst."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-020",
+      "finding_type_code": "OIFM_GMTS_007598",
+      "finding_type_display": "periventricular t2 hyperintense lesion",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "white_matter_hyperintensity_1",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "present",
+          "reportText": "Multiple scattered T2/FLAIR hyperintense foci are present in the periventricular and subcortical white matter bilaterally, consistent with chronic small vessel ischemic changes."
+        },
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "white_matter_hyperintensity_2",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "present",
+          "reportText": "The largest focus measures 5 mm in the right frontal subcortical white matter."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-021",
+      "finding_type_code": "OIFM_GMTS_007619",
+      "finding_type_display": "cerebral infarction",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "infarct_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "No acute infarction is identified on diffusion-weighted imaging."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-022",
+      "finding_type_code": "OIFM_GMTS_007816",
+      "finding_type_display": "hydrocephalus",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "obstructive_hydrocephalus_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "No evidence of obstructive hydrocephalus."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-023",
+      "finding_type_code": "OIFM_GMTS_009850",
+      "finding_type_display": "wedged vertebra",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "vertebral_compression_fracture_1",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "An acute-appearing superior endplate compression fracture is present at T9."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "vertebral_compression_fracture_1",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "An old superior endplate compression fracture at T9 is noted, now appearing chronic/healed compared to April 2006."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "vertebral_compression_fracture_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Old superior endplate compression fracture at T9, chronic appearing."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "compression_fracture_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Old superior endplate compression fracture at T9, chronic in appearance."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "vertebral_compression_fracture_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Old superior endplate compression fracture at T9, unchanged."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-024",
+      "finding_type_code": "OIFM_GMTS_010762",
+      "finding_type_display": "generalized osteoporosis",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "osteopenia_1",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Moderate osteopenia."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "osteopenia_1",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Diffuse osteopenia is present."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "osteopenia_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Diffuse osteopenia is present, particularly severe in the thoracic spine."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "osteopenia_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Diffuse osteopenia, particularly in the thoracic spine."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "osteopenia_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Diffuse osteopenia."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "osteopenia_1",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Extensive osteopenia, especially in thoracic spine, with flowing osteophytes."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-025",
+      "finding_type_code": "OIFM_GMTS_012821",
+      "finding_type_display": "joint effusion",
+      "observations": [
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "glenohumeral_joint_effusion_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "The left glenohumeral joint demonstrates a moderate joint effusion."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-026",
+      "finding_type_code": "OIFM_GMTS_013911",
+      "finding_type_display": "pulmonary artery aneurysm",
+      "observations": [
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "main_pulmonary_artery_diameter_0",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "absent",
+          "reportText": "The main pulmonary artery measures 2.8 cm."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-027",
+      "finding_type_code": "OIFM_GMTS_014057",
+      "finding_type_display": "aortic aneurysm",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "aortic_dilation_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The abdominal aorta is of normal caliber."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "aortic_aneurysm_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "The visualized proximal abdominal aorta is normal in caliber."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "aortic_dilation_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "The ascending aorta measures 4.0 cm in maximal diameter with fusiform configuration, representing mild aneurysmal dilation."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "aortic_aneurysm_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "The ascending aorta measures 4.2 cm in maximal diameter, representing mild fusiform aneurysmal dilation, increased from 4.0 cm on September 2007 chest CT."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "aortic_aneurysm_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "The ascending aorta measures 4.3 cm in maximal diameter, stable to slightly increased."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-028",
+      "finding_type_code": "OIFM_GMTS_014547",
+      "finding_type_display": "ground-glass pulmonary opacity",
+      "observations": [
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "ground_glass_opacity_0",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "absent",
+          "reportText": "The lungs are well expanded and clear. No consolidation, interstitial thickening, or ground-glass opacity."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-029",
+      "finding_type_code": "OIFM_GMTS_014559",
+      "finding_type_display": "peribronchovascular interstitial thickening",
+      "observations": [
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "interstitial_thickening_0",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "absent",
+          "reportText": "The lungs are well expanded and clear. No consolidation, interstitial thickening, or ground-glass opacity."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-030",
+      "finding_type_code": "OIFM_GMTS_014616",
+      "finding_type_display": "solitary pulmonary nodule",
+      "observations": [
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "pulmonary_nodule_0",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "pulmonary_nodule_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "A 4 mm solid pulmonary nodule is present in the right lower lobe lateral basal segment (image 42, series 2)."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-031",
+      "finding_type_code": "OIFM_GMTS_014833",
+      "finding_type_display": "extensive pulmonary opacity with cavitation",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "cavitation_0",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "There is a focal airspace opacity in the right lower lobe consistent with pneumonia. No cavitation."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-032",
+      "finding_type_code": "OIFM_GMTS_015685",
+      "finding_type_display": "wide mediastinum",
+      "observations": [
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "mediastinal_contour_normal_0",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "absent",
+          "reportText": "The mediastinal and hilar contours are normal."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-033",
+      "finding_type_code": "OIFM_GMTS_015734",
+      "finding_type_display": "mediastinal and/or hilar lymph node enlargement",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "hilar_lymphadenopathy_0",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "Normal hilar contours bilaterally."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "hilar_lymphadenopathy_0",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "The hila are normal in size and contour."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "lymphadenopathy_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "A few borderline enlarged lymph nodes are present in the right hilum, largest measuring 11 mm in short axis, likely reactive."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-034",
+      "finding_type_code": "OIFM_GMTS_015972",
+      "finding_type_display": "massive pleural effusion",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "pleural_effusion_0",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "No pleural effusion or pneumothorax."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "pleural_effusion_0",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "pleural_effusion_0",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "absent",
+          "reportText": "No pleural effusion or pneumothorax."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "pleural_effusion_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No consolidation or pleural effusion."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "pleural_effusion_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No pleural effusion."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-035",
+      "finding_type_code": "OIFM_GMTS_015999",
+      "finding_type_display": "pleural thickening",
+      "observations": [
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "pleural_thickening_0",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "No pleural thickening or effusion."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-036",
+      "finding_type_code": "OIFM_GMTS_016635",
+      "finding_type_display": "renal cystic disease",
+      "observations": [
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "renal_cyst_1",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "present",
+          "reportText": "Anechoic parapelvic cysts are noted, largest measuring 1.5 cm, increased from 1.0 cm on prior CT (April 2006)."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "renal_cyst_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Small parapelvic cysts are noted in the left kidney, largest measuring 1.8 cm, increased from 1.5 cm on ultrasound (February 2007)."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "renal_cyst_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Small parapelvic cysts in the left kidney measure up to 1.8 cm, stable."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "renal_cyst_1",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Peripelvic cysts in the left kidney."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-037",
+      "finding_type_code": "OIFM_GMTS_017277",
+      "finding_type_display": "generalized bladder wall thickening",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "bladder_wall_thickening_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The urinary bladder is normal in contour."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-038",
+      "finding_type_code": "OIFM_GMTS_017289",
+      "finding_type_display": "bladder tumor",
+      "observations": [
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "bladder_mass_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "The urinary bladder is partially distended and unremarkable."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-039",
+      "finding_type_code": "OIFM_GMTS_017328",
+      "finding_type_display": "bladder calculus",
+      "observations": [
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "bladder_calculus_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No ureteral or bladder calculi identified."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "bladder_calculus_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No ureteral or bladder stones."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "bladder_calculus_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No ureteral or bladder calculi."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-040",
+      "finding_type_code": "OIFM_GMTS_017436",
+      "finding_type_display": "adrenal tumor",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "adrenal_lesion_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The adrenal glands are unremarkable."
+        },
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "adrenal_mass_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The adrenal glands are unremarkable."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "adrenal_mass_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "Normal bilaterally."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "adrenal_mass_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Normal in size and morphology bilaterally."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-041",
+      "finding_type_code": "OIFM_GMTS_017620",
+      "finding_type_display": "enlarged prostate",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "prostatomegaly_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The prostate and seminal vesicles appear within normal limits."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "prostatic_enlargement_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Prostate gland is mildly enlarged, estimated at 35 grams, slightly increased from 30 grams (April 2006)."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "prostatic_enlargement_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "The prostate gland and seminal vesicles are within normal limits."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-042",
+      "finding_type_code": "OIFM_GMTS_017947",
+      "finding_type_display": "dural sinus thrombosis",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "dural_venous_sinus_thrombosis_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "The major dural venous sinuses are patent."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-043",
+      "finding_type_code": "OIFM_GMTS_018633",
+      "finding_type_display": "skull base lesion",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "skull_base_lesion_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "No skull base or calvarial lesion."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-044",
+      "finding_type_code": "OIFM_GMTS_020556",
+      "finding_type_display": "radiodense urinary calculus",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "renal_calculus_1",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Stable bilateral renal stones including right lower pole stone measuring approximately 3 mm and left interpolar region, measuring about 4\u20135 mm."
+        },
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "renal_calculus_2",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Stable bilateral renal stones including right lower pole stone measuring approximately 3 mm and left interpolar region, measuring about 4\u20135 mm."
+        },
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "ureteral_calculus_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No ureteral stones are seen."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "renal_calculus_1",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "present",
+          "reportText": "Multiple small echogenic foci with posterior acoustic shadowing are present consistent with renal calculi, largest measuring 3 mm in the lower pole."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "renal_calculus_2",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "present",
+          "reportText": "A 3 mm echogenic focus with shadowing consistent with a calculus is present in the mid-pole region."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "renal_calculus_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "A 2 mm non-obstructing calculus is present in the right lower pole."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "renal_calculus_2",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "A 3 mm non-obstructing calculus is present in the left interpolar region."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "ureteral_calculus_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No ureteral or bladder calculi identified."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "renal_calculus_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Non-obstructing calculi are present bilaterally, stable. Right lower pole stone measures 3 mm."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "renal_calculus_2",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Non-obstructing calculi are present bilaterally, stable. Left interpolar stone measures approximately 4 mm."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "ureteral_calculus_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No ureteral or bladder stones."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "renal_calculus_1",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Bilateral nonobstructive renal calculi. Largest in right lower pole measures 3 mm."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "renal_calculus_2",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Largest on left in interpolar region measures 5 mm (image 41, series 2). Minimally increased calculus burden compared to prior."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "ureteral_calculus_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No ureteral or bladder calculi."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-045",
+      "finding_type_code": "OIFM_GMTS_022453",
+      "finding_type_display": "pancreatic calcification",
+      "observations": [
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "pancreatic_calcification_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Normal in size and contour. No masses or calcifications identified."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-046",
+      "finding_type_code": "OIFM_GMTS_022461",
+      "finding_type_display": "fatty liver",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "hepatic_steatosis_1",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "The liver appears diffusely decreased in attenuation, which is suggestive of fatty infiltration."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "hepatic_steatosis_1",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "present",
+          "reportText": "The hepatic parenchyma demonstrates diffusely increased echogenicity consistent with hepatic steatosis."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "hepatic_steatosis_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Limited views of the upper abdomen demonstrate hepatic steatosis."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "hepatic_steatosis_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Diffusely decreased hepatic attenuation consistent with moderate hepatic steatosis."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "hepatic_steatosis_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "The liver demonstrates diffuse decreased attenuation consistent with hepatic steatosis."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "hepatic_steatosis_1",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Liver is diffusely hypoattenuating, suggesting hepatic steatosis."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-047",
+      "finding_type_code": "OIFM_GMTS_022482",
+      "finding_type_display": "gallstone",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "cholelithiasis_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The gallbladder is normally distended and shows no wall thickening or calcified stones."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "cholelithiasis_1",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "present",
+          "reportText": "The gallbladder is non-distended and contains multiple mobile echogenic foci with posterior acoustic shadowing consistent with cholelithiasis. The largest stone measures 7 mm."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "cholelithiasis_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Cholelithiasis is present."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "cholelithiasis_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "The gallbladder contains multiple small calculi measuring up to 7 mm."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "cholelithiasis_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Multiple gallstones are present within the gallbladder."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "gallbladder_abnormality_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Gallbladder is unremarkable."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-048",
+      "finding_type_code": "OIFM_GMTS_022484",
+      "finding_type_display": "intestinal obstruction",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "bowel_obstruction_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The bowel is nondilated, and no areas of wall thickening or surrounding inflammatory change are noted."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-049",
+      "finding_type_code": "OIFM_GMTS_022519",
+      "finding_type_display": "atherosclerosis",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "aortic_atherosclerosis_1",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "The aortic knob is mildly prominent."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "aortic_atherosclerotic_calcification_1",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "present",
+          "reportText": "Atherosclerotic calcifications are present."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "aortic_atherosclerosis_1",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "The aortic knob is prominent with a tortuous descending thoracic aorta, compatible with atherosclerotic disease."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "aortic_atherosclerosis_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "The aortic arch and descending thoracic aorta are normal in caliber with atherosclerotic calcifications."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "atherosclerotic_calcification_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "The descending thoracic and abdominal aorta demonstrate atherosclerotic calcifications and are normal in caliber."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "aortic_atherosclerotic_calcification_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "The abdominal aorta is normal in caliber with atherosclerotic calcifications."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-050",
+      "finding_type_code": "OIFM_GMTS_022537",
+      "finding_type_display": "cardiomegaly",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "cardiomegaly_0",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "The heart size is normal."
+        },
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "cardiomegaly_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The heart is not enlarged, and no pericardial fluid is identified."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "cardiomegaly_0",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "The cardiac silhouette is normal in size."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "cardiomegaly_0",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "absent",
+          "reportText": "The heart is normal in size."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "cardiomegaly_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Heart size is normal."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "cardiomegaly_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "The heart is normal in size."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "cardiomegaly_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The heart is normal in size."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-051",
+      "finding_type_code": "OIFM_GMTS_023339",
+      "finding_type_display": "pneumothorax",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "pneumothorax_0",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "No pleural effusion or pneumothorax."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "pneumothorax_0",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "pneumothorax_0",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "absent",
+          "reportText": "No pleural effusion or pneumothorax."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-052",
+      "finding_type_code": "OIFM_GMTS_025663",
+      "finding_type_display": "degenerative joint changes",
+      "observations": [
+        {
+          "report_id": "f2b9b789-cb68-48c1-a09c-a1c34ddef340",
+          "observation_id": "acromioclavicular_degenerative_changes_1",
+          "exam_date": "2021-05-22",
+          "exam_type_code": "26158-6",
+          "exam_type_display": "XR Shoulder - left",
+          "presence": "present",
+          "reportText": "Mild degenerative changes of the acromioclavicular joint with joint space narrowing and small osteophytes."
+        },
+        {
+          "report_id": "f2b9b789-cb68-48c1-a09c-a1c34ddef340",
+          "observation_id": "glenohumeral_joint_degenerative_changes_0",
+          "exam_date": "2021-05-22",
+          "exam_type_code": "26158-6",
+          "exam_type_display": "XR Shoulder - left",
+          "presence": "absent",
+          "reportText": "The glenohumeral joint space is preserved."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-053",
+      "finding_type_code": "OIFM_GMTS_030847",
+      "finding_type_display": "sellar lesion",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "pituitary_mass_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "The pituitary gland is normal in size and demonstrates homogeneous enhancement."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-054",
+      "finding_type_code": "OIFM_GMTS_031526",
+      "finding_type_display": "calcification in a tendon",
+      "observations": [
+        {
+          "report_id": "f2b9b789-cb68-48c1-a09c-a1c34ddef340",
+          "observation_id": "calcific_tendinopathy_1",
+          "exam_date": "2021-05-22",
+          "exam_type_code": "26158-6",
+          "exam_type_display": "XR Shoulder - left",
+          "presence": "present",
+          "reportText": "Amorphous calcifications are present in the region of the supraspinatus tendon insertion on the greater tuberosity, consistent with calcific tendonitis."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "calcific_tendinopathy_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Calcifications are noted in the region of the rotator cuff insertion at the greater tuberosity, compatible with known calcific tendonitis (May 2006 radiograph)."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-055",
+      "finding_type_code": "OIFM_GMTS_032553",
+      "finding_type_display": "lobar atelectasis",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "atelectasis_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The visualized portions of the lower lungs are clear."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "atelectasis_0",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-056",
+      "finding_type_code": "OIFM_GMTS_033498",
+      "finding_type_display": "pulmonary segmental consolidation",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "consolidation_0",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "The left lung is clear."
+        },
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "consolidation_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The visualized portions of the lower lungs are clear."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "consolidation_0",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "consolidation_0",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "absent",
+          "reportText": "The lungs are well expanded and clear. No consolidation, interstitial thickening, or ground-glass opacity."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "consolidation_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Visualized lung bases are clear."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "consolidation_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "The visualized lung bases are clear."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "consolidation_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Lung bases are clear."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-057",
+      "finding_type_code": "OIFM_GMTS_035534",
+      "finding_type_display": "portal vein thrombosis",
+      "observations": [
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "hepatic_vein_thrombosis_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "The hepatic veins and portal vein are patent with normal flow direction."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "portal_vein_thrombosis_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "The hepatic veins and portal vein are patent with normal flow direction."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-058",
+      "finding_type_code": "OIFM_MGB_311515",
+      "finding_type_display": "glenohumeral joint abnormality",
+      "observations": [
+        {
+          "report_id": "f2b9b789-cb68-48c1-a09c-a1c34ddef340",
+          "observation_id": "high_riding_humeral_head_1",
+          "exam_date": "2021-05-22",
+          "exam_type_code": "26158-6",
+          "exam_type_display": "XR Shoulder - left",
+          "presence": "present",
+          "reportText": "The humeral head is positioned in a high-riding configuration with reduced acromiohumeral distance measuring approximately 6 mm, suggesting chronic rotator cuff pathology."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "humeral_head_malposition_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "The humeral head is in a high-riding position with reduced acromiohumeral distance."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-059",
+      "finding_type_code": "OIFM_MGB_944849",
+      "finding_type_display": "rib fracture",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "rib_fracture_1",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Healed fractures of the left 7th and 8th ribs are noted posterolaterally."
+        },
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "rib_fracture_2",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Healed fractures of the left 7th and 8th ribs are noted posterolaterally."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "rib_fracture_1",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Healed fractures of the left 7th and 8th ribs are present posterolaterally with smooth callus formation."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "rib_fracture_2",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Healed fractures of the left 7th and 8th ribs are present posterolaterally with smooth callus formation."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "rib_fracture_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Healed fractures of the left 7th and 8th ribs are present along the posterior axillary line with callus formation."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "rib_fracture_2",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Healed fractures of the left 7th and 8th ribs are present along the posterior axillary line with callus formation."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "rib_fracture_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Healed fractures of the left 7th and 8th ribs posterolaterally."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "rib_fracture_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Healed left 7th and 8th rib fractures."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "rib_fracture_2",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Healed left 7th and 8th rib fractures."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-060",
+      "finding_type_code": "OIFM_MGB_949427",
+      "finding_type_display": "bronchial wall thickening",
+      "observations": [
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "bronchial wall thickening_0",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "absent",
+          "reportText": "The airways are patent without bronchial wall thickening."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-061",
+      "finding_type_code": "OIFM_MSFT_134126",
+      "finding_type_display": "abdominal aortic aneurysm",
+      "observations": [
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "abdominal_aortic_aneurysm_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "The abdominal aorta is normal in caliber with atherosclerotic calcifications."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "abdominal_aortic_aneurysm_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Abdominal aorta is normal in caliber."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-062",
+      "finding_type_code": "OIFM_MSFT_213340",
+      "finding_type_display": "pleural abnormality",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "pleural_abnormality_0",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "No pleural abnormality."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-063",
+      "finding_type_code": "OIFM_MSFT_218756",
+      "finding_type_display": "Intracerebral Hemorrhage",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "hemorrhage_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "No mass, hemorrhage, or abnormal enhancement."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-064",
+      "finding_type_code": "OIFM_MSFT_430810",
+      "finding_type_display": "coronary artery calcifications",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "coronary_artery_calcification_1",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Mild coronary artery calcification."
+        },
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "coronary_artery_calcification_1",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Vascular calcifications are present, including at the mitral annulus and within the coronary arteries."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "coronary_artery_calcification_1",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Calcification of the coronary arteries is noted."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "coronary_artery_calcification_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Coronary artery calcifications are present."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "coronary_artery_calcification_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Mitral annular and coronary artery calcifications are present."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "coronary_artery_calcification_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Mitral annular and coronary artery calcifications are present."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "coronary_artery_calcification_1",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Mitral annular and coronary artery calcifications are noted."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-065",
+      "finding_type_code": "OIFM_MSFT_440456",
+      "finding_type_display": "cerebral aneurysm",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "intracranial_aneurysm_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "No aneurysm or vascular malformation identified."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-066",
+      "finding_type_code": "OIFM_OIDM_023679",
+      "finding_type_display": "abnormal intracranial enhancement",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "abnormal_enhancement_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "No mass, hemorrhage, or abnormal enhancement."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-067",
+      "finding_type_code": "OIFM_OIDM_029466",
+      "finding_type_display": "enotosis",
+      "observations": [
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "benign_bone_island_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "A small sclerotic focus in the T7 vertebral body measuring 8 mm is stable compared to August 2005, consistent with benign bone island."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "bone_island_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "A small sclerotic focus in the T7 vertebral body is stable, consistent with benign bone island."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "bone_island_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Stable sclerotic focus in T7 vertebral body."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-068",
+      "finding_type_code": "OIFM_OIDM_093125",
+      "finding_type_display": "cerebral small vessel disease",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "small_vessel_ischemic_disease_1",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "present",
+          "reportText": "Multiple scattered T2/FLAIR hyperintense foci are present in the periventricular and subcortical white matter bilaterally, consistent with chronic small vessel ischemic changes."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-069",
+      "finding_type_code": "OIFM_OIDM_119725",
+      "finding_type_display": "intracranial mass",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "intracranial_mass_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "No mass, hemorrhage, or abnormal enhancement."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-070",
+      "finding_type_code": "OIFM_OIDM_159498",
+      "finding_type_display": "mitral annular calcification",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "mitral_annular_calcification_1",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Mitral annular calcification is present."
+        },
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "mitral_annular_calcification_1",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Vascular calcifications are present, including at the mitral annulus and within the coronary arteries."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "mitral_annular_calcification_1",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Prominent mitral annular calcification is visible."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "mitral_annular_calcification_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Mitral annular calcification is prominent."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "mitral_annular_calcification_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Mitral annular and coronary artery calcifications are present."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "mitral_annular_calcification_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Mitral annular and coronary artery calcifications are present."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "mitral_annular_calcification_1",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Mitral annular and coronary artery calcifications are noted."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-071",
+      "finding_type_code": "OIFM_OIDM_160831",
+      "finding_type_display": "hepatic lesion",
+      "observations": [
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "hepatic_mass_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "No focal mass lesion identified."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "focal_hepatic_lesion_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No other focal lesion."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "hepatic_lesion_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "A small 6 mm hypodense lesion is present in segment 6 (image 22, series 2), too small to characterize, likely representing a simple cyst."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "hepatic_lesion_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "The previously noted 6 mm hypodense lesion in segment 6 is again seen and unchanged."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "hepatic_lesion_2",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "indeterminate",
+          "reportText": "A 1.6 cm focal area of increased attenuation is present (image 24, series 2), etiology uncertain."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-072",
+      "finding_type_code": "OIFM_OIDM_201175",
+      "finding_type_display": "bowel inflammation",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "bowel_inflammation_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The bowel is nondilated, and no areas of wall thickening or surrounding inflammatory change are noted."
+        },
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "bowel_wall_thickening_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The bowel is nondilated, and no areas of wall thickening or surrounding inflammatory change are noted."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "bowel_wall_thickening_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No wall thickening or inflammatory changes."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "inflammatory_changes_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No wall thickening or inflammatory changes."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "pericolonic_fat_stranding_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "There is wall thickening of the sigmoid colon with pericolonic fat stranding consistent with acute diverticulitis."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "sigmoid_colon_wall_thickening_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "There is wall thickening of the sigmoid colon with pericolonic fat stranding consistent with acute diverticulitis."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "bowel_inflammatory_changes_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Non-opacified bowel is unremarkable. No bowel wall thickening or inflammatory changes."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "bowel_wall_thickening_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Non-opacified bowel is unremarkable. No bowel wall thickening or inflammatory changes."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-073",
+      "finding_type_code": "OIFM_OIDM_208758",
+      "finding_type_display": "orbital mass",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "orbital_mass_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "No orbital mass."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-074",
+      "finding_type_code": "OIFM_OIDM_228653",
+      "finding_type_display": "mastoid air cell effusion",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "mastoid_effusion_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "The mastoid air cells are clear."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-075",
+      "finding_type_code": "OIFM_OIDM_267712",
+      "finding_type_display": "basal cistern effacement",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "basal_cistern_effacement_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "Basal cisterns: Patent and symmetric."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-076",
+      "finding_type_code": "OIFM_OIDM_299401",
+      "finding_type_display": "soft tissue mass",
+      "observations": [
+        {
+          "report_id": "f2b9b789-cb68-48c1-a09c-a1c34ddef340",
+          "observation_id": "soft_tissue_mass_0",
+          "exam_date": "2021-05-22",
+          "exam_type_code": "26158-6",
+          "exam_type_display": "XR Shoulder - left",
+          "presence": "absent",
+          "reportText": "The visualized soft tissues are unremarkable on radiograph."
+        },
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "soft_tissue_mass_0",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "Soft tissues are unremarkable."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "soft_tissue_mass_0",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "absent",
+          "reportText": "No soft tissue abnormality."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "soft_tissue_mass_0",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "absent",
+          "reportText": "No chest wall mass or abnormal soft tissue collection."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "soft_tissue_mass_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No abnormal masses or collections."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "soft_tissue_mass_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No abnormal soft tissue masses or collections."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-077",
+      "finding_type_code": "OIFM_OIDM_309677",
+      "finding_type_display": "skull abnormality",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "calvarial_lesion_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "No skull base or calvarial lesion."
+        },
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "skull_fracture_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "No fracture."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-078",
+      "finding_type_code": "OIFM_OIDM_332518",
+      "finding_type_display": "prostatic abnormality",
+      "observations": [
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "prostatic_abnormality_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Urinary bladder, seminal vesicles, and prostate gland are unremarkable."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-079",
+      "finding_type_code": "OIFM_OIDM_371547",
+      "finding_type_display": "pancreatic lesion",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "pancreatic_lesion_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The pancreas is normal in contour and demonstrates no focal abnormality."
+        },
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "pancreatic_mass_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "The pancreas is normal in contour and demonstrates no focal abnormality."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "pancreatic_mass_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "The pancreatic head and body are visualized and appear normal."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "pancreatic_mass_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Normal in size and attenuation. No focal mass or ductal dilatation."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "pancreatic_mass_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "Normal in size and demonstrates homogeneous enhancement."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "pancreatic_mass_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Normal in size and contour. No masses or calcifications identified."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-080",
+      "finding_type_code": "OIFM_OIDM_388787",
+      "finding_type_display": "colonic diverticulosis",
+      "observations": [
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "diverticulosis_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Moderate sigmoid diverticulosis is present, increased from mild on prior exam (April 2006), without evidence of diverticulitis."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "diverticulosis_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Moderate sigmoid diverticulosis is present."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-081",
+      "finding_type_code": "OIFM_OIDM_437042",
+      "finding_type_display": "bladder abnormality",
+      "observations": [
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "bladder_abnormality_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Urinary bladder, seminal vesicles, and prostate gland are unremarkable."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-082",
+      "finding_type_code": "OIFM_OIDM_452510",
+      "finding_type_display": "seminal vesicle abnormality",
+      "observations": [
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "seminal_vesicle_abnormality_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Urinary bladder, seminal vesicles, and prostate gland are unremarkable."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-083",
+      "finding_type_code": "OIFM_OIDM_456265",
+      "finding_type_display": "Chiari malformation",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "chiari_malformation_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "The cerebellar tonsils are in normal position. No Chiari malformation."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-084",
+      "finding_type_code": "OIFM_OIDM_467681",
+      "finding_type_display": "parapelvic renal cyst",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "parapelvic_cyst_1",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Small parapelvic cysts are present in the left kidney."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-085",
+      "finding_type_code": "OIFM_OIDM_478641",
+      "finding_type_display": "pulmonary opacity",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "pulmonary_opacity_1",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "There is a focal airspace opacity in the right lower lobe consistent with pneumonia."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-086",
+      "finding_type_code": "OIFM_OIDM_481402",
+      "finding_type_display": "lumbar spine degenerative change",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "degenerative_spinal_changes_1",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "The bones show advanced degenerative changes throughout the thoracic and lumbar spine."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "degenerative_changes_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Degenerative changes throughout the thoracic and lumbar spine with anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "degenerative_spinal_changes_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Degenerative changes of the thoracic and lumbar spine with flowing anterior osteophytes consistent with diffuse idiopathic skeletal hyperostosis."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "degenerative_spinal_changes_1",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Degenerative changes of the thoracic and lumbar spine."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-087",
+      "finding_type_code": "OIFM_OIDM_500879",
+      "finding_type_display": "colonic diverticulitis",
+      "observations": [
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "diverticulitis_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "Moderate sigmoid diverticulosis is present, increased from mild on prior exam (April 2006), without evidence of diverticulitis."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "diverticulitis_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "There is wall thickening of the sigmoid colon with pericolonic fat stranding consistent with acute diverticulitis."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-088",
+      "finding_type_code": "OIFM_OIDM_668318",
+      "finding_type_display": "inferior vena cava thrombosis",
+      "observations": [
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "inferior_vena_cava_thrombosis_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "Patent with normal respiratory variation."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-089",
+      "finding_type_code": "OIFM_OIDM_675673",
+      "finding_type_display": "thoracic spine degenerative change",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "degenerative_spinal_changes_1",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Multilevel degenerative changes of the thoracic spine with flowing anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis (DISH)."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "degenerative_spinal_changes_1",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Extensive degenerative changes of the thoracic spine with flowing anterior osteophytes bridging multiple levels, consistent with diffuse idiopathic skeletal hyperostosis."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "degenerative_spinal_changes_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Extensive degenerative changes of the thoracic spine with anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis (DISH)."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-090",
+      "finding_type_code": "OIFM_OIDM_745898",
+      "finding_type_display": "pulmonary scar",
+      "observations": [
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "pulmonary_scarring_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Mild linear scarring is noted in the right lower lobe medial basilar segment, likely sequela of prior pneumonia (June 2006)."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-091",
+      "finding_type_code": "OIFM_OIDM_786384",
+      "finding_type_display": "cerebral atrophy",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "cerebral_volume_loss_1",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "present",
+          "reportText": "The brain parenchyma demonstrates mild generalized volume loss appropriate for age."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-092",
+      "finding_type_code": "OIFM_OIDM_786838",
+      "finding_type_display": "loss of gray-white differentiation",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "loss_of_gray_white_differentiation_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "The gray-white matter differentiation is preserved."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-093",
+      "finding_type_code": "OIFM_OIDM_842151",
+      "finding_type_display": "clavicle fracture",
+      "observations": [
+        {
+          "report_id": "f2b9b789-cb68-48c1-a09c-a1c34ddef340",
+          "observation_id": "bone_fracture_clavicle_0",
+          "exam_date": "2021-05-22",
+          "exam_type_code": "26158-6",
+          "exam_type_display": "XR Shoulder - left",
+          "presence": "absent",
+          "reportText": "The humeral head, glenoid, clavicle, and scapula demonstrate normal bone density without fracture or lytic lesion."
+        },
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "clavicle_fracture_1",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "An old healed left mid-clavicular fracture is identified."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "clavicle_fracture_1",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "An old healed fracture of the left mid-clavicle is identified."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "clavicle_fracture_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "An old healed fracture of the left clavicle at the mid-shaft is identified with smooth corticated margins."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-094",
+      "finding_type_code": "OIFM_OIDM_874812",
+      "finding_type_display": "hydronephrosis",
+      "observations": [
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "hydronephrosis_0",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "There is no hydronephrosis."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "hydronephrosis_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "No hydronephrosis."
+        },
+        {
+          "report_id": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+          "observation_id": "hydronephrosis_0",
+          "exam_date": "2022-02-08",
+          "exam_type_code": "24558-9",
+          "exam_type_display": "US Abdomen",
+          "presence": "absent",
+          "reportText": "No hydronephrosis."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "hydronephrosis_0",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No hydronephrosis."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "hydronephrosis_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No hydronephrosis."
+        },
+        {
+          "report_id": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+          "observation_id": "hydronephrosis_0",
+          "exam_date": "2025-10-07",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "absent",
+          "reportText": "No hydronephrosis."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-095",
+      "finding_type_code": "OIFM_OIDM_920919",
+      "finding_type_display": "peripancreatic fluid",
+      "observations": [
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "peripancreatic_fluid_0",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "absent",
+          "reportText": "No pancreatic ductal dilatation or peripancreatic fluid."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-096",
+      "finding_type_code": "OIFM_OIDM_971596",
+      "finding_type_display": "upper extremity fracture",
+      "observations": [
+        {
+          "report_id": "f2b9b789-cb68-48c1-a09c-a1c34ddef340",
+          "observation_id": "bone_fracture_scapula_0",
+          "exam_date": "2021-05-22",
+          "exam_type_code": "26158-6",
+          "exam_type_display": "XR Shoulder - left",
+          "presence": "absent",
+          "reportText": "The humeral head, glenoid, clavicle, and scapula demonstrate normal bone density without fracture or lytic lesion."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-097",
+      "finding_type_code": "OIFM_OIDM_972279",
+      "finding_type_display": "intracranial vascular abnormality",
+      "observations": [
+        {
+          "report_id": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+          "observation_id": "vascular_malformation_0",
+          "exam_date": "2023-01-25",
+          "exam_type_code": "24587-8",
+          "exam_type_display": "MR Brain WO and W contrast IV",
+          "presence": "absent",
+          "reportText": "No aneurysm or vascular malformation identified."
+        }
+      ]
+    },
+    {
+      "id": "ipl-finding-098",
+      "finding_type_code": "OIFM_OIDM_990401",
+      "finding_type_display": "diffuse idiopathic skeletal hyperostosis",
+      "observations": [
+        {
+          "report_id": "785eae28-f4b4-4268-9730-79292c7eff53",
+          "observation_id": "diffuse_idiopathic_skeletal_hyperostosis_1",
+          "exam_date": "2021-06-14",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Multilevel degenerative changes of the thoracic spine with flowing anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis (DISH)."
+        },
+        {
+          "report_id": "19506144-0132-40e7-8d60-26ac5642df0b",
+          "observation_id": "diffuse_idiopathic_skeletal_hyperostosis_2",
+          "exam_date": "2021-08-26",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "indeterminate",
+          "reportText": "Flowing osteophytes are present, raising the possibility of diffuse idiopathic skeletal hyperostosis."
+        },
+        {
+          "report_id": "2887d285-2326-48fd-b950-b50a3a7fa13b",
+          "observation_id": "diffuse_idiopathic_skeletal_hyperostosis_1",
+          "exam_date": "2022-03-15",
+          "exam_type_code": "30745-4",
+          "exam_type_display": "XR Chest",
+          "presence": "present",
+          "reportText": "Extensive degenerative changes of the thoracic spine with flowing anterior osteophytes bridging multiple levels, consistent with diffuse idiopathic skeletal hyperostosis."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "diffuse_idiopathic_skeletal_hyperostosis_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "reportText": "Extensive degenerative changes of the thoracic spine with anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis (DISH)."
+        },
+        {
+          "report_id": "c37a02e9-a670-4a70-883e-b306f5158a15",
+          "observation_id": "diffuse_idiopathic_skeletal_hyperostosis_1",
+          "exam_date": "2022-11-03",
+          "exam_type_code": "36952-0",
+          "exam_type_display": "CT Abdomen and Pelvis WO contrast",
+          "presence": "present",
+          "reportText": "Degenerative changes throughout the thoracic and lumbar spine with anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis."
+        },
+        {
+          "report_id": "d069f74b-2672-4f4f-bb81-f11401720780",
+          "observation_id": "diffuse_idiopathic_skeletal_hyperostosis_1",
+          "exam_date": "2023-01-18",
+          "exam_type_code": "36813-4",
+          "exam_type_display": "CT Abdomen and Pelvis W contrast IV",
+          "presence": "present",
+          "reportText": "Degenerative changes of the thoracic and lumbar spine with flowing anterior osteophytes consistent with diffuse idiopathic skeletal hyperostosis."
+        }
+      ]
+    }
+  ]
+}

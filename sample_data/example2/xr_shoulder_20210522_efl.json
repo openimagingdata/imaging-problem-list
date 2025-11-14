@@ -1,0 +1,142 @@
+{
+  "$schema": "https://github.com/openimagingdata/imaging-problem-list/schema/exam-problem-list-schema.json",
+  "diagnosticReportId": "f2b9b789-cb68-48c1-a09c-a1c34ddef340",
+  "patientInfo": {
+    "patientIdentifier": "MRN0000001",
+    "patientDOB": "1961-01-01"
+  },
+  "examInfo": {
+    "studyIdentifier": "XR_SHOULDER_20210522",
+    "studyDateTime": "2021-05-22T10:00:00Z",
+    "studyLoincCode": "26158-6",
+    "studyDescription": "XR Shoulder - left"
+  },
+  "findings": [
+    {
+      "observationId": "acromioclavicular_degenerative_changes_1",
+      "findingCode": "OIFM_GMTS_025663",
+      "findingDescription": "degenerative joint changes",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_265084",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_265084.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Mild degenerative changes of the acromioclavicular joint with joint space narrowing and small osteophytes."
+    },
+    {
+      "observationId": "bone_fracture_clavicle_0",
+      "findingCode": "OIFM_OIDM_842151",
+      "findingDescription": "clavicle fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_914237",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_914237.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The humeral head, glenoid, clavicle, and scapula demonstrate normal bone density without fracture or lytic lesion."
+    },
+    {
+      "observationId": "bone_fracture_humerus_0",
+      "findingCode": "OIFM_CDE_000232",
+      "findingDescription": "humerus fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_CDE_001476",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_CDE_001476.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The humeral head, glenoid, clavicle, and scapula demonstrate normal bone density without fracture or lytic lesion."
+    },
+    {
+      "observationId": "bone_fracture_scapula_0",
+      "findingCode": "OIFM_OIDM_971596",
+      "findingDescription": "upper extremity fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_017528",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_017528.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The humeral head, glenoid, clavicle, and scapula demonstrate normal bone density without fracture or lytic lesion."
+    },
+    {
+      "observationId": "calcific_tendinopathy_1",
+      "findingCode": "OIFM_GMTS_031526",
+      "findingDescription": "calcification in a tendon",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_261480",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_261480.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Amorphous calcifications are present in the region of the supraspinatus tendon insertion on the greater tuberosity, consistent with calcific tendonitis."
+    },
+    {
+      "observationId": "glenohumeral_dislocation_0",
+      "findingCode": "OIFM_CDE_000229",
+      "findingDescription": "humerus dislocation",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_CDE_001468",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_CDE_001468.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No dislocation or subluxation."
+    },
+    {
+      "observationId": "glenohumeral_joint_degenerative_changes_0",
+      "findingCode": "OIFM_GMTS_025663",
+      "findingDescription": "degenerative joint changes",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_265084",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_265084.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The glenohumeral joint space is preserved."
+    },
+    {
+      "observationId": "high_riding_humeral_head_1",
+      "findingCode": "OIFM_MGB_311515",
+      "findingDescription": "glenohumeral joint abnormality",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MGB_175812",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MGB_175812.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "The humeral head is positioned in a high-riding configuration with reduced acromiohumeral distance measuring approximately 6 mm, suggesting chronic rotator cuff pathology."
+    },
+    {
+      "observationId": "soft_tissue_mass_0",
+      "findingCode": "OIFM_OIDM_299401",
+      "findingDescription": "soft tissue mass",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_818812",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_818812.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The visualized soft tissues are unremarkable on radiograph."
+    }
+  ]
+}
