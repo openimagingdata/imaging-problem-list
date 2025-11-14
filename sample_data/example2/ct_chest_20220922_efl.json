@@ -1,0 +1,450 @@
+{
+  "$schema": "https://github.com/openimagingdata/imaging-problem-list/schema/exam-problem-list-schema.json",
+  "diagnosticReportId": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+  "patientInfo": {
+    "patientIdentifier": "MRN0000001",
+    "patientDOB": "1961-01-01"
+  },
+  "examInfo": {
+    "studyIdentifier": "CT_CHEST_20220922",
+    "studyDateTime": "2022-09-22T10:00:00Z",
+    "studyLoincCode": "29252-4",
+    "studyDescription": "CT Chest WO contrast"
+  },
+  "findings": [
+    {
+      "observationId": "bronchial wall thickening_0",
+      "findingCode": "OIFM_MGB_949427",
+      "findingDescription": "bronchial wall thickening",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MGB_171492",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MGB_171492.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The airways are patent without bronchial wall thickening."
+    },
+    {
+      "observationId": "aortic_atherosclerosis_1",
+      "findingCode": "OIFM_GMTS_022519",
+      "findingDescription": "atherosclerosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_924367",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_924367.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "The aortic arch and descending thoracic aorta are normal in caliber with atherosclerotic calcifications."
+    },
+    {
+      "observationId": "aortic_dilation_1",
+      "findingCode": "OIFM_GMTS_014057",
+      "findingDescription": "aortic aneurysm",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_127013",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_127013.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "The ascending aorta measures 4.0 cm in maximal diameter with fusiform configuration, representing mild aneurysmal dilation."
+    },
+    {
+      "observationId": "benign_bone_island_1",
+      "findingCode": "OIFM_OIDM_029466",
+      "findingDescription": "enotosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_071504",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_071504.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "A small sclerotic focus in the T7 vertebral body measuring 8 mm is stable compared to August 2005, consistent with benign bone island."
+    },
+    {
+      "observationId": "calcific_tendinopathy_1",
+      "findingCode": "OIFM_GMTS_031526",
+      "findingDescription": "calcification in a tendon",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_261480",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_261480.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Calcifications are noted in the region of the rotator cuff insertion at the greater tuberosity, compatible with known calcific tendonitis (May 2006 radiograph)."
+    },
+    {
+      "observationId": "cardiomegaly_0",
+      "findingCode": "OIFM_GMTS_022537",
+      "findingDescription": "cardiomegaly",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_359529",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_359529.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The heart is normal in size."
+    },
+    {
+      "observationId": "cholelithiasis_1",
+      "findingCode": "OIFM_GMTS_022482",
+      "findingDescription": "gallstone",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_792189",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_792189.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Cholelithiasis is present."
+    },
+    {
+      "observationId": "clavicle_fracture_1",
+      "findingCode": "OIFM_OIDM_842151",
+      "findingDescription": "clavicle fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_914237",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_914237.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "An old healed fracture of the left clavicle at the mid-shaft is identified with smooth corticated margins."
+    },
+    {
+      "observationId": "consolidation_0",
+      "findingCode": "OIFM_GMTS_033498",
+      "findingDescription": "pulmonary segmental consolidation",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_462110",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_462110.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The lungs are well expanded and clear. No consolidation, interstitial thickening, or ground-glass opacity."
+    },
+    {
+      "observationId": "coronary_artery_calcification_1",
+      "findingCode": "OIFM_MSFT_430810",
+      "findingDescription": "coronary artery calcifications",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MSFT_286425",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MSFT_286425.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Coronary artery calcifications are present."
+    },
+    {
+      "observationId": "degenerative_spinal_changes_1",
+      "findingCode": "OIFM_OIDM_675673",
+      "findingDescription": "thoracic spine degenerative change",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_526575",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_526575.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Extensive degenerative changes of the thoracic spine with anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis (DISH)."
+    },
+    {
+      "observationId": "diffuse_idiopathic_skeletal_hyperostosis_1",
+      "findingCode": "OIFM_OIDM_990401",
+      "findingDescription": "diffuse idiopathic skeletal hyperostosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_666030",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_666030.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Extensive degenerative changes of the thoracic spine with anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis (DISH)."
+    },
+    {
+      "observationId": "glenohumeral_joint_effusion_1",
+      "findingCode": "OIFM_GMTS_012821",
+      "findingDescription": "joint effusion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_173626",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_173626.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "The left glenohumeral joint demonstrates a moderate joint effusion."
+    },
+    {
+      "observationId": "ground_glass_opacity_0",
+      "findingCode": "OIFM_GMTS_014547",
+      "findingDescription": "ground-glass pulmonary opacity",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_847364",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_847364.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The lungs are well expanded and clear. No consolidation, interstitial thickening, or ground-glass opacity."
+    },
+    {
+      "observationId": "hepatic_steatosis_1",
+      "findingCode": "OIFM_GMTS_022461",
+      "findingDescription": "fatty liver",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_652230",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_652230.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Limited views of the upper abdomen demonstrate hepatic steatosis."
+    },
+    {
+      "observationId": "humeral_head_malposition_1",
+      "findingCode": "OIFM_MGB_311515",
+      "findingDescription": "glenohumeral joint abnormality",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MGB_175812",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MGB_175812.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "The humeral head is in a high-riding position with reduced acromiohumeral distance."
+    },
+    {
+      "observationId": "interstitial_thickening_0",
+      "findingCode": "OIFM_GMTS_014559",
+      "findingDescription": "peribronchovascular interstitial thickening",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_533259",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_533259.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The lungs are well expanded and clear. No consolidation, interstitial thickening, or ground-glass opacity."
+    },
+    {
+      "observationId": "lymphadenopathy_1",
+      "findingCode": "OIFM_GMTS_015734",
+      "findingDescription": "mediastinal and/or hilar lymph node enlargement",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_798527",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_798527.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "A few borderline enlarged lymph nodes are present in the right hilum, largest measuring 11 mm in short axis, likely reactive."
+    },
+    {
+      "observationId": "main_pulmonary_artery_diameter_0",
+      "findingCode": "OIFM_GMTS_013911",
+      "findingDescription": "pulmonary artery aneurysm",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_289416",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_289416.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The main pulmonary artery measures 2.8 cm."
+    },
+    {
+      "observationId": "mediastinal_contour_normal_0",
+      "findingCode": "OIFM_GMTS_015685",
+      "findingDescription": "wide mediastinum",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_598296",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_598296.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The mediastinal and hilar contours are normal."
+    },
+    {
+      "observationId": "mitral_annular_calcification_1",
+      "findingCode": "OIFM_OIDM_159498",
+      "findingDescription": "mitral annular calcification",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_410031",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_410031.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Mitral annular calcification is prominent."
+    },
+    {
+      "observationId": "osteopenia_1",
+      "findingCode": "OIFM_GMTS_010762",
+      "findingDescription": "generalized osteoporosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_280445",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_280445.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Diffuse osteopenia is present, particularly severe in the thoracic spine."
+    },
+    {
+      "observationId": "pericardial_effusion_0",
+      "findingCode": "OIFM_GMTS_003706",
+      "findingDescription": "pericardial effusion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_840395",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_840395.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No pericardial effusion or thickening."
+    },
+    {
+      "observationId": "pleural_effusion_0",
+      "findingCode": "OIFM_GMTS_015972",
+      "findingDescription": "massive pleural effusion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_744500",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_744500.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No pleural effusion or pneumothorax."
+    },
+    {
+      "observationId": "pneumothorax_0",
+      "findingCode": "OIFM_GMTS_023339",
+      "findingDescription": "pneumothorax",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_471330",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_471330.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No pleural effusion or pneumothorax."
+    },
+    {
+      "observationId": "pulmonary_nodule_1",
+      "findingCode": "OIFM_GMTS_014616",
+      "findingDescription": "solitary pulmonary nodule",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_860278",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_860278.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "A 4 mm solid pulmonary nodule is present in the right lower lobe lateral basal segment (image 42, series 2)."
+    },
+    {
+      "observationId": "pulmonary_scarring_1",
+      "findingCode": "OIFM_OIDM_745898",
+      "findingDescription": "pulmonary scar",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_328800",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_328800.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Mild linear scarring is noted in the right lower lobe medial basilar segment, likely sequela of prior pneumonia (June 2006)."
+    },
+    {
+      "observationId": "rib_fracture_1",
+      "findingCode": "OIFM_MGB_944849",
+      "findingDescription": "rib fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MGB_080122",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MGB_080122.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Healed fractures of the left 7th and 8th ribs are present along the posterior axillary line with callus formation."
+    },
+    {
+      "observationId": "rib_fracture_2",
+      "findingCode": "OIFM_MGB_944849",
+      "findingDescription": "rib fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MGB_080122",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MGB_080122.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Healed fractures of the left 7th and 8th ribs are present along the posterior axillary line with callus formation."
+    },
+    {
+      "observationId": "soft_tissue_mass_0",
+      "findingCode": "OIFM_OIDM_299401",
+      "findingDescription": "soft tissue mass",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_818812",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_818812.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No chest wall mass or abnormal soft tissue collection."
+    },
+    {
+      "observationId": "vertebral_compression_fracture_1",
+      "findingCode": "OIFM_GMTS_009850",
+      "findingDescription": "wedged vertebra",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_763442",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_763442.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Old superior endplate compression fracture at T9, chronic appearing."
+    }
+  ]
+}

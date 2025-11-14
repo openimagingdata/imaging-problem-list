@@ -1,0 +1,324 @@
+{
+  "$schema": "https://github.com/openimagingdata/imaging-problem-list/schema/exam-problem-list-schema.json",
+  "diagnosticReportId": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+  "patientInfo": {
+    "patientIdentifier": "MRN0000001",
+    "patientDOB": "1961-01-01"
+  },
+  "examInfo": {
+    "studyIdentifier": "MR_BRAIN_20230125",
+    "studyDateTime": "2023-01-25T10:00:00Z",
+    "studyLoincCode": "24587-8",
+    "studyDescription": "MR Brain WO and W contrast IV"
+  },
+  "findings": [
+    {
+      "observationId": "abnormal_enhancement_0",
+      "findingCode": "OIFM_OIDM_023679",
+      "findingDescription": "abnormal intracranial enhancement",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_767543",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_767543.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No mass, hemorrhage, or abnormal enhancement."
+    },
+    {
+      "observationId": "basal_cistern_effacement_0",
+      "findingCode": "OIFM_OIDM_267712",
+      "findingDescription": "basal cistern effacement",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_208513",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_208513.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Basal cisterns: Patent and symmetric."
+    },
+    {
+      "observationId": "calvarial_lesion_0",
+      "findingCode": "OIFM_OIDM_309677",
+      "findingDescription": "skull abnormality",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_085738",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_085738.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No skull base or calvarial lesion."
+    },
+    {
+      "observationId": "cerebral_volume_loss_1",
+      "findingCode": "OIFM_OIDM_786384",
+      "findingDescription": "cerebral atrophy",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_875999",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_875999.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "The brain parenchyma demonstrates mild generalized volume loss appropriate for age."
+    },
+    {
+      "observationId": "chiari_malformation_0",
+      "findingCode": "OIFM_OIDM_456265",
+      "findingDescription": "Chiari malformation",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_987513",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_987513.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The cerebellar tonsils are in normal position. No Chiari malformation."
+    },
+    {
+      "observationId": "dural_venous_sinus_thrombosis_0",
+      "findingCode": "OIFM_GMTS_017947",
+      "findingDescription": "dural sinus thrombosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_031147",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_031147.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The major dural venous sinuses are patent."
+    },
+    {
+      "observationId": "hemorrhage_0",
+      "findingCode": "OIFM_MSFT_218756",
+      "findingDescription": "Intracerebral Hemorrhage",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MSFT_953007",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MSFT_953007.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No mass, hemorrhage, or abnormal enhancement."
+    },
+    {
+      "observationId": "infarct_0",
+      "findingCode": "OIFM_GMTS_007619",
+      "findingDescription": "cerebral infarction",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_304072",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_304072.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No acute infarction is identified on diffusion-weighted imaging."
+    },
+    {
+      "observationId": "intracranial_aneurysm_0",
+      "findingCode": "OIFM_MSFT_440456",
+      "findingDescription": "cerebral aneurysm",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MSFT_102146",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MSFT_102146.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No aneurysm or vascular malformation identified."
+    },
+    {
+      "observationId": "intracranial_mass_0",
+      "findingCode": "OIFM_OIDM_119725",
+      "findingDescription": "intracranial mass",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_618522",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_618522.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No mass, hemorrhage, or abnormal enhancement."
+    },
+    {
+      "observationId": "loss_of_gray_white_differentiation_0",
+      "findingCode": "OIFM_OIDM_786838",
+      "findingDescription": "loss of gray-white differentiation",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_691854",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_691854.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The gray-white matter differentiation is preserved."
+    },
+    {
+      "observationId": "mastoid_effusion_0",
+      "findingCode": "OIFM_OIDM_228653",
+      "findingDescription": "mastoid air cell effusion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_605675",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_605675.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The mastoid air cells are clear."
+    },
+    {
+      "observationId": "obstructive_hydrocephalus_0",
+      "findingCode": "OIFM_GMTS_007816",
+      "findingDescription": "hydrocephalus",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_209158",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_209158.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No evidence of obstructive hydrocephalus."
+    },
+    {
+      "observationId": "orbital_mass_0",
+      "findingCode": "OIFM_OIDM_208758",
+      "findingDescription": "orbital mass",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_667264",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_667264.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No orbital mass."
+    },
+    {
+      "observationId": "pituitary_mass_0",
+      "findingCode": "OIFM_GMTS_030847",
+      "findingDescription": "sellar lesion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_087417",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_087417.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The pituitary gland is normal in size and demonstrates homogeneous enhancement."
+    },
+    {
+      "observationId": "sinus_mucosal_thickening_1",
+      "findingCode": "OIFM_CDE_000019",
+      "findingDescription": "inflammatory sinus",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_000000",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_000000.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Mild mucosal thickening in the maxillary sinuses bilaterally."
+    },
+    {
+      "observationId": "skull_base_lesion_0",
+      "findingCode": "OIFM_GMTS_018633",
+      "findingDescription": "skull base lesion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_422050",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_422050.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No skull base or calvarial lesion."
+    },
+    {
+      "observationId": "skull_fracture_0",
+      "findingCode": "OIFM_OIDM_309677",
+      "findingDescription": "cranial abnormality",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_085738",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_085738.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No fracture."
+    },
+    {
+      "observationId": "small_vessel_ischemic_disease_1",
+      "findingCode": "OIFM_OIDM_093125",
+      "findingDescription": "cerebral small vessel disease",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_278592",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_278592.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Multiple scattered T2/FLAIR hyperintense foci are present in the periventricular and subcortical white matter bilaterally, consistent with chronic small vessel ischemic changes."
+    },
+    {
+      "observationId": "vascular_malformation_0",
+      "findingCode": "OIFM_OIDM_972279",
+      "findingDescription": "intracranial vascular abnormality",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_762026",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_762026.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No aneurysm or vascular malformation identified."
+    },
+    {
+      "observationId": "white_matter_hyperintensity_1",
+      "findingCode": "OIFM_GMTS_007598",
+      "findingDescription": "periventricular t2 hyperintense lesion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_146831",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_146831.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Multiple scattered T2/FLAIR hyperintense foci are present in the periventricular and subcortical white matter bilaterally, consistent with chronic small vessel ischemic changes."
+    },
+    {
+      "observationId": "white_matter_hyperintensity_2",
+      "findingCode": "OIFM_GMTS_007598",
+      "findingDescription": "periventricular t2 hyperintense lesion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_146831",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_146831.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "The largest focus measures 5 mm in the right frontal subcortical white matter."
+    }
+  ]
+}

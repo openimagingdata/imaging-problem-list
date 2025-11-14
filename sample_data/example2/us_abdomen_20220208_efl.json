@@ -1,0 +1,310 @@
+{
+  "$schema": "https://github.com/openimagingdata/imaging-problem-list/schema/exam-problem-list-schema.json",
+  "diagnosticReportId": "ba4861c1-dd7c-41e0-8c59-b1b563e03dd9",
+  "patientInfo": {
+    "patientIdentifier": "MRN0000001",
+    "patientDOB": "1961-01-01"
+  },
+  "examInfo": {
+    "studyIdentifier": "US_ABDOMEN_20220208",
+    "studyDateTime": "2022-02-08T10:00:00Z",
+    "studyLoincCode": "24558-9",
+    "studyDescription": "US Abdomen"
+  },
+  "findings": [
+    {
+      "observationId": "acute_cholecystitis_0",
+      "findingCode": "OIFM_GMTS_000570",
+      "findingDescription": "cholecystitis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_356932",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_356932.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Sonographic Murphy sign is negative."
+    },
+    {
+      "observationId": "aortic_aneurysm_0",
+      "findingCode": "OIFM_GMTS_014057",
+      "findingDescription": "aortic aneurysm",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_127013",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_127013.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The visualized proximal abdominal aorta is normal in caliber."
+    },
+    {
+      "observationId": "aortic_atherosclerotic_calcification_1",
+      "findingCode": "OIFM_GMTS_022519",
+      "findingDescription": "atherosclerosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_924367",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_924367.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Atherosclerotic calcifications are present."
+    },
+    {
+      "observationId": "cholelithiasis_1",
+      "findingCode": "OIFM_GMTS_022482",
+      "findingDescription": "gallstone",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_792189",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_792189.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "The gallbladder is non-distended and contains multiple mobile echogenic foci with posterior acoustic shadowing consistent with cholelithiasis. The largest stone measures 7 mm."
+    },
+    {
+      "observationId": "common_bile_duct_dilation_0",
+      "findingCode": "OIFM_GMTS_005226",
+      "findingDescription": "dilated bile ducts",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_677965",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_677965.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The common bile duct measures 4 mm, within normal limits."
+    },
+    {
+      "observationId": "gallbladder_wall_thickening_0",
+      "findingCode": "OIFM_GMTS_004740",
+      "findingDescription": "diffuse gallbladder wall thickening",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_615365",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_615365.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The gallbladder wall measures 2 mm, within normal limits."
+    },
+    {
+      "observationId": "hepatic_mass_0",
+      "findingCode": "OIFM_OIDM_160831",
+      "findingDescription": "hepatic lesion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_522515",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_522515.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No focal mass lesion identified."
+    },
+    {
+      "observationId": "hepatic_steatosis_1",
+      "findingCode": "OIFM_GMTS_022461",
+      "findingDescription": "fatty liver",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_652230",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_652230.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "The hepatic parenchyma demonstrates diffusely increased echogenicity consistent with hepatic steatosis."
+    },
+    {
+      "observationId": "hepatic_vein_thrombosis_0",
+      "findingCode": "OIFM_GMTS_035534",
+      "findingDescription": "portal vein thrombosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_586795",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_586795.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The hepatic veins and portal vein are patent with normal flow direction."
+    },
+    {
+      "observationId": "hepatomegaly_0",
+      "findingCode": "OIFM_GMTS_001845",
+      "findingDescription": "hepatomegaly",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_845763",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_845763.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The liver is normal in size measuring 16 cm in craniocaudal dimension."
+    },
+    {
+      "observationId": "hydronephrosis_0",
+      "findingCode": "OIFM_OIDM_874812",
+      "findingDescription": "hydronephrosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_718681",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_718681.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No hydronephrosis."
+    },
+    {
+      "observationId": "hydronephrosis_0",
+      "findingCode": "OIFM_OIDM_874812",
+      "findingDescription": "hydronephrosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_718681",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_718681.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No hydronephrosis."
+    },
+    {
+      "observationId": "inferior_vena_cava_thrombosis_0",
+      "findingCode": "OIFM_OIDM_668318",
+      "findingDescription": "inferior vena cava thrombosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_445893",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_445893.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Patent with normal respiratory variation."
+    },
+    {
+      "observationId": "intrahepatic_biliary_ductal_dilatation_0",
+      "findingCode": "OIFM_GMTS_004609",
+      "findingDescription": "dilated intrahepatic ducts",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_092469",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_092469.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No intrahepatic biliary ductal dilatation."
+    },
+    {
+      "observationId": "pancreatic_mass_0",
+      "findingCode": "OIFM_OIDM_371547",
+      "findingDescription": "pancreatic lesion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_177687",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_177687.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The pancreatic head and body are visualized and appear normal."
+    },
+    {
+      "observationId": "pericholecystic_fluid_0",
+      "findingCode": "OIFM_GMTS_003554",
+      "findingDescription": "pericholecystic fluid",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_815498",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_815498.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No pericholecystic fluid."
+    },
+    {
+      "observationId": "portal_vein_thrombosis_0",
+      "findingCode": "OIFM_GMTS_035534",
+      "findingDescription": "portal vein thrombosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_586795",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_586795.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The hepatic veins and portal vein are patent with normal flow direction."
+    },
+    {
+      "observationId": "renal_calculus_1",
+      "findingCode": "OIFM_GMTS_020556",
+      "findingDescription": "radiodense urinary calculus",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_616653",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_616653.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Multiple small echogenic foci with posterior acoustic shadowing are present consistent with renal calculi, largest measuring 3 mm in the lower pole."
+    },
+    {
+      "observationId": "renal_calculus_2",
+      "findingCode": "OIFM_GMTS_020556",
+      "findingDescription": "radiodense urinary calculus",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_616653",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_616653.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "A 3 mm echogenic focus with shadowing consistent with a calculus is present in the mid-pole region."
+    },
+    {
+      "observationId": "renal_cyst_1",
+      "findingCode": "OIFM_GMTS_016635",
+      "findingDescription": "renal cystic disease",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_763167",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_763167.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Anechoic parapelvic cysts are noted, largest measuring 1.5 cm, increased from 1.0 cm on prior CT (April 2006)."
+    },
+    {
+      "observationId": "splenomegaly_0",
+      "findingCode": "OIFM_GMTS_003565",
+      "findingDescription": "splenomegaly",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_558632",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_558632.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The spleen is normal in size measuring 10 cm in craniocaudal dimension."
+    }
+  ]
+}
