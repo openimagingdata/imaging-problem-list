@@ -8,6 +8,8 @@ The Imaging Problem List project is a structured representation system for patie
 
 This is primarily a data specification and documentation project, not a traditional code repository. The focus is on defining JSON structures and providing examples.
 
+When working on the browser viewer under `viewer/`, prefer **Alpine.js** and **Flowbite** patterns over custom JavaScript and hand-rolled Tailwind markup.
+
 ## Key Data Structures
 
 ### 1. Exam Finding List (EFL)
@@ -131,3 +133,10 @@ python3 -m http.server 8000
 
 The EFL schema is referenced in the sample files as: `https://github.com/openimagingdata/imaging-problem-list/schema/exam-problem-list-schema.json`, but it doesn't exist yet.
 - We set up a .venv using uv; you should use that rather than using python3 directly.
+
+## Agent Quick Reference
+
+- **Core artifacts:** Exam Finding Lists capture single-exam observations and Imaging Problem Lists aggregate them across the patient timeline. The canonical descriptions live in `README.md` (“Exam Finding List” and “Imaging Problem List”) plus the “Key Data Structures” section above.
+- **Documentation map:** `README.md` = domain/FHIR framing, `CLAUDE.md` = agent workflow + schema detail, `.github/copilot-instructions.md` = coding style + repo conventions, `viewer/README.md` = viewer UX/feature expectations.
+- **Viewer conventions:** `viewer/index.html` and `viewer/app.js` form the static SPA; keep Flowbite v4 + Tailwind markup and Alpine.js state patterns per `.github/copilot-instructions.md`.
+- **Data on disk:** Treat `data/patients.json` as the manifest, with each patient under `data/patients/<patient-id>/` following the structure diagram in `viewer/README.md`. `sample_data/` mirrors this for worked examples you can reference.
