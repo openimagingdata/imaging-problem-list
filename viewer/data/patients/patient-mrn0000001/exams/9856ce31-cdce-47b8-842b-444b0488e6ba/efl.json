@@ -1,0 +1,478 @@
+{
+  "$schema": "https://github.com/openimagingdata/imaging-problem-list/schema/exam-problem-list-schema.json",
+  "diagnosticReportId": "9856ce31-cdce-47b8-842b-444b0488e6ba",
+  "patientInfo": {
+    "patientIdentifier": "MRN0000001",
+    "patientDOB": "1961-01-01"
+  },
+  "examInfo": {
+    "studyIdentifier": "CT_ABDOMEN_20251007",
+    "studyDateTime": "2025-10-07T10:00:00Z",
+    "studyLoincCode": "36952-0",
+    "studyDescription": "CT Abdomen and Pelvis WO contrast"
+  },
+  "findings": [
+    {
+      "observationId": "abdominal_aortic_aneurysm_0",
+      "findingCode": "OIFM_MSFT_134126",
+      "findingDescription": "abdominal aortic aneurysm",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MSFT_898601",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MSFT_898601.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Abdominal aorta is normal in caliber."
+    },
+    {
+      "observationId": "adrenal_mass_0",
+      "findingCode": "OIFM_GMTS_017436",
+      "findingDescription": "adrenal tumor",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_762515",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_762515.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Normal in size and morphology bilaterally."
+    },
+    {
+      "observationId": "biliary_ductal_dilatation_0",
+      "findingCode": "OIFM_GMTS_005226",
+      "findingDescription": "dilated bile ducts",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_677965",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_677965.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No biliary dilatation."
+    },
+    {
+      "observationId": "biliary_ductal_dilation_0",
+      "findingCode": "OIFM_GMTS_005226",
+      "findingDescription": "dilated bile ducts",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_677965",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_677965.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No biliary ductal dilation."
+    },
+    {
+      "observationId": "bladder_abnormality_0",
+      "findingCode": "OIFM_OIDM_437042",
+      "findingDescription": "bladder abnormality",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_971446",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_971446.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Urinary bladder, seminal vesicles, and prostate gland are unremarkable."
+    },
+    {
+      "observationId": "bladder_calculus_0",
+      "findingCode": "OIFM_GMTS_017328",
+      "findingDescription": "bladder calculus",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_786671",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_786671.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No ureteral or bladder calculi."
+    },
+    {
+      "observationId": "bowel_inflammatory_changes_0",
+      "findingCode": "OIFM_OIDM_201175",
+      "findingDescription": "bowel inflammation",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_211627",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_211627.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Non-opacified bowel is unremarkable. No bowel wall thickening or inflammatory changes."
+    },
+    {
+      "observationId": "bowel_wall_thickening_0",
+      "findingCode": "OIFM_OIDM_201175",
+      "findingDescription": "bowel inflammation",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_211627",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_211627.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Non-opacified bowel is unremarkable. No bowel wall thickening or inflammatory changes."
+    },
+    {
+      "observationId": "cardiomegaly_0",
+      "findingCode": "OIFM_GMTS_022537",
+      "findingDescription": "cardiomegaly",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_359529",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_359529.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The heart is normal in size."
+    },
+    {
+      "observationId": "consolidation_0",
+      "findingCode": "OIFM_GMTS_033498",
+      "findingDescription": "pulmonary segmental consolidation",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_462110",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_462110.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Lung bases are clear."
+    },
+    {
+      "observationId": "coronary_artery_calcification_1",
+      "findingCode": "OIFM_MSFT_430810",
+      "findingDescription": "coronary artery calcifications",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MSFT_286425",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MSFT_286425.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Mitral annular and coronary artery calcifications are noted."
+    },
+    {
+      "observationId": "degenerative_spinal_changes_1",
+      "findingCode": "OIFM_OIDM_481402",
+      "findingDescription": "lumbar spine degenerative change",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_820446",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_820446.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Degenerative changes of the thoracic and lumbar spine."
+    },
+    {
+      "observationId": "fluid_collection_0",
+      "findingCode": "OIFM_GMTS_004244",
+      "findingDescription": "abdominal abscess",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_384452",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_384452.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No abnormal soft tissue masses or collections."
+    },
+    {
+      "observationId": "gallbladder_abnormality_0",
+      "findingCode": "OIFM_GMTS_000570",
+      "findingDescription": "cholecystitis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_356932",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_356932.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Gallbladder is unremarkable."
+    },
+    {
+      "observationId": "gallbladder_abnormality_0",
+      "findingCode": "OIFM_GMTS_022482",
+      "findingDescription": "gallstone",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_792189",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_792189.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Gallbladder is unremarkable."
+    },
+    {
+      "observationId": "hepatic_lesion_2",
+      "findingCode": "OIFM_OIDM_160831",
+      "findingDescription": "hepatic lesion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_522515",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_522515.2",
+          "attributeValueDescription": "indeterminate"
+        }
+      ],
+      "reportText": "A 1.6 cm focal area of increased attenuation is present (image 24, series 2), etiology uncertain."
+    },
+    {
+      "observationId": "hepatic_steatosis_1",
+      "findingCode": "OIFM_GMTS_022461",
+      "findingDescription": "fatty liver",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_652230",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_652230.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Liver is diffusely hypoattenuating, suggesting hepatic steatosis."
+    },
+    {
+      "observationId": "hydronephrosis_0",
+      "findingCode": "OIFM_OIDM_874812",
+      "findingDescription": "hydronephrosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_718681",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_718681.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No hydronephrosis."
+    },
+    {
+      "observationId": "lymphadenopathy_0",
+      "findingCode": "OIFM_GMTS_003106",
+      "findingDescription": "abdominal lymphadenopathy",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_654419",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_654419.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No intra-abdominal, retroperitoneal, or pelvic adenopathy."
+    },
+    {
+      "observationId": "mitral_annular_calcification_1",
+      "findingCode": "OIFM_OIDM_159498",
+      "findingDescription": "mitral annular calcification",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_410031",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_410031.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Mitral annular and coronary artery calcifications are noted."
+    },
+    {
+      "observationId": "osteopenia_1",
+      "findingCode": "OIFM_GMTS_010762",
+      "findingDescription": "generalized osteoporosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_280445",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_280445.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Extensive osteopenia, especially in thoracic spine, with flowing osteophytes."
+    },
+    {
+      "observationId": "pancreatic_calcification_0",
+      "findingCode": "OIFM_GMTS_022453",
+      "findingDescription": "pancreatic calcification",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_590804",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_590804.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Normal in size and contour. No masses or calcifications identified."
+    },
+    {
+      "observationId": "pancreatic_mass_0",
+      "findingCode": "OIFM_OIDM_371547",
+      "findingDescription": "pancreatic lesion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_177687",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_177687.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Normal in size and contour. No masses or calcifications identified."
+    },
+    {
+      "observationId": "pericardial_effusion_0",
+      "findingCode": "OIFM_GMTS_003706",
+      "findingDescription": "pericardial effusion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_840395",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_840395.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No pericardial fluid."
+    },
+    {
+      "observationId": "prostatic_abnormality_0",
+      "findingCode": "OIFM_OIDM_332518",
+      "findingDescription": "prostatic abnormality",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_351510",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_351510.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Urinary bladder, seminal vesicles, and prostate gland are unremarkable."
+    },
+    {
+      "observationId": "renal_calculus_1",
+      "findingCode": "OIFM_GMTS_020556",
+      "findingDescription": "radiodense urinary calculus",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_616653",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_616653.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Bilateral nonobstructive renal calculi. Largest in right lower pole measures 3 mm."
+    },
+    {
+      "observationId": "renal_calculus_2",
+      "findingCode": "OIFM_GMTS_020556",
+      "findingDescription": "radiodense urinary calculus",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_616653",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_616653.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Largest on left in interpolar region measures 5 mm (image 41, series 2). Minimally increased calculus burden compared to prior."
+    },
+    {
+      "observationId": "renal_cyst_1",
+      "findingCode": "OIFM_GMTS_016635",
+      "findingDescription": "renal cystic disease",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_763167",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_763167.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Peripelvic cysts in the left kidney."
+    },
+    {
+      "observationId": "seminal_vesicle_abnormality_0",
+      "findingCode": "OIFM_OIDM_452510",
+      "findingDescription": "seminal vesicle abnormality",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_439750",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_439750.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Urinary bladder, seminal vesicles, and prostate gland are unremarkable."
+    },
+    {
+      "observationId": "soft_tissue_mass_0",
+      "findingCode": "OIFM_OIDM_299401",
+      "findingDescription": "soft tissue mass",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_818812",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_818812.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No abnormal soft tissue masses or collections."
+    },
+    {
+      "observationId": "splenic_lesion_0",
+      "findingCode": "OIFM_GMTS_002512",
+      "findingDescription": "solitary lesion of spleen",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_288995",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_288995.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No focal lesions."
+    },
+    {
+      "observationId": "splenomegaly_0",
+      "findingCode": "OIFM_GMTS_003565",
+      "findingDescription": "splenomegaly",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_558632",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_558632.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Normal in size and attenuation."
+    },
+    {
+      "observationId": "ureteral_calculus_0",
+      "findingCode": "OIFM_GMTS_020556",
+      "findingDescription": "radiodense urinary calculus",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_616653",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_616653.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No ureteral or bladder calculi."
+    }
+  ]
+}

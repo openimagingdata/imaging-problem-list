@@ -1,0 +1,296 @@
+{
+  "$schema": "https://github.com/openimagingdata/imaging-problem-list/schema/exam-problem-list-schema.json",
+  "diagnosticReportId": "785eae28-f4b4-4268-9730-79292c7eff53",
+  "patientInfo": {
+    "patientIdentifier": "MRN0000001",
+    "patientDOB": "1961-01-01"
+  },
+  "examInfo": {
+    "studyIdentifier": "XR_CHEST_20210614",
+    "studyDateTime": "2021-06-14T10:00:00Z",
+    "studyLoincCode": "30745-4",
+    "studyDescription": "XR Chest"
+  },
+  "findings": [
+    {
+      "observationId": "aortic_atherosclerosis_1",
+      "findingCode": "OIFM_GMTS_022519",
+      "findingDescription": "atherosclerosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_924367",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_924367.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "The aortic knob is mildly prominent."
+    },
+    {
+      "observationId": "cardiomegaly_0",
+      "findingCode": "OIFM_GMTS_022537",
+      "findingDescription": "cardiomegaly",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_359529",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_359529.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The heart size is normal."
+    },
+    {
+      "observationId": "cavitation_0",
+      "findingCode": "OIFM_GMTS_014833",
+      "findingDescription": "extensive pulmonary opacity with cavitation",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_892504",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_892504.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "There is a focal airspace opacity in the right lower lobe consistent with pneumonia. No cavitation."
+    },
+    {
+      "observationId": "clavicle_fracture_1",
+      "findingCode": "OIFM_OIDM_842151",
+      "findingDescription": "clavicle fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_914237",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_914237.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "An old healed left mid-clavicular fracture is identified."
+    },
+    {
+      "observationId": "consolidation_0",
+      "findingCode": "OIFM_GMTS_033498",
+      "findingDescription": "pulmonary segmental consolidation",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_462110",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_462110.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "The left lung is clear."
+    },
+    {
+      "observationId": "coronary_artery_calcification_1",
+      "findingCode": "OIFM_MSFT_430810",
+      "findingDescription": "coronary artery calcifications",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MSFT_286425",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MSFT_286425.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Mild coronary artery calcification."
+    },
+    {
+      "observationId": "degenerative_spinal_changes_1",
+      "findingCode": "OIFM_OIDM_675673",
+      "findingDescription": "thoracic spine degenerative change",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_526575",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_526575.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Multilevel degenerative changes of the thoracic spine with flowing anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis (DISH)."
+    },
+    {
+      "observationId": "diffuse_idiopathic_skeletal_hyperostosis_1",
+      "findingCode": "OIFM_OIDM_990401",
+      "findingDescription": "diffuse idiopathic skeletal hyperostosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_666030",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_666030.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Multilevel degenerative changes of the thoracic spine with flowing anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis (DISH)."
+    },
+    {
+      "observationId": "hilar_lymphadenopathy_0",
+      "findingCode": "OIFM_GMTS_015734",
+      "findingDescription": "mediastinal and/or hilar lymph node enlargement",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_798527",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_798527.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Normal hilar contours bilaterally."
+    },
+    {
+      "observationId": "mitral_annular_calcification_1",
+      "findingCode": "OIFM_OIDM_159498",
+      "findingDescription": "mitral annular calcification",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_410031",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_410031.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Mitral annular calcification is present."
+    },
+    {
+      "observationId": "osteopenia_1",
+      "findingCode": "OIFM_GMTS_010762",
+      "findingDescription": "generalized osteoporosis",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_280445",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_280445.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Moderate osteopenia."
+    },
+    {
+      "observationId": "pleural_abnormality_0",
+      "findingCode": "OIFM_MSFT_213340",
+      "findingDescription": "pleural abnormality",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MSFT_182025",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MSFT_182025.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No pleural abnormality."
+    },
+    {
+      "observationId": "pleural_effusion_0",
+      "findingCode": "OIFM_GMTS_015972",
+      "findingDescription": "massive pleural effusion",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_744500",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_744500.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No pleural effusion or pneumothorax."
+    },
+    {
+      "observationId": "pneumonia_1",
+      "findingCode": "OIFM_CDE_000076",
+      "findingDescription": "pneumonia",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_CDE_000397",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_CDE_000397.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "There is a focal airspace opacity in the right lower lobe consistent with pneumonia."
+    },
+    {
+      "observationId": "pneumothorax_0",
+      "findingCode": "OIFM_GMTS_023339",
+      "findingDescription": "pneumothorax",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_471330",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_471330.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "No pleural effusion or pneumothorax."
+    },
+    {
+      "observationId": "pulmonary_opacity_1",
+      "findingCode": "OIFM_OIDM_478641",
+      "findingDescription": "pulmonary opacity",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_212823",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_212823.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "There is a focal airspace opacity in the right lower lobe consistent with pneumonia."
+    },
+    {
+      "observationId": "rib_fracture_1",
+      "findingCode": "OIFM_MGB_944849",
+      "findingDescription": "rib fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MGB_080122",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MGB_080122.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Healed fractures of the left 7th and 8th ribs are noted posterolaterally."
+    },
+    {
+      "observationId": "rib_fracture_2",
+      "findingCode": "OIFM_MGB_944849",
+      "findingDescription": "rib fracture",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_MGB_080122",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_MGB_080122.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "Healed fractures of the left 7th and 8th ribs are noted posterolaterally."
+    },
+    {
+      "observationId": "soft_tissue_mass_0",
+      "findingCode": "OIFM_OIDM_299401",
+      "findingDescription": "soft tissue mass",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_OIDM_818812",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_OIDM_818812.0",
+          "attributeValueDescription": "absent"
+        }
+      ],
+      "reportText": "Soft tissues are unremarkable."
+    },
+    {
+      "observationId": "vertebral_compression_fracture_1",
+      "findingCode": "OIFM_GMTS_009850",
+      "findingDescription": "wedged vertebra",
+      "attributes": [
+        {
+          "attributeCode": "OIFMA_GMTS_763442",
+          "attributeDescription": "presence",
+          "attributeValueCode": "OIFMA_GMTS_763442.1",
+          "attributeValueDescription": "present"
+        }
+      ],
+      "reportText": "An acute-appearing superior endplate compression fracture is present at T9."
+    }
+  ]
+}
