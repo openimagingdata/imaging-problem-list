@@ -1,8 +1,8 @@
 {
   "$schema": "http://example.com/schemas/imaging_problem_list.json",
   "patient": {
-    "id": "MRN0000001",
-    "name": "John Doe",
+    "id": "MRN0000002",
+    "name": "Jane Smith",
     "dob": "1985-06-15"
   },
   "findings": [

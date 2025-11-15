@@ -17,8 +17,6 @@ function iplApp() {
         currentEfl: null,
         currentReport: null,
         loading: true,
-        patientDropdownOpen: false,
-        isDark: document.documentElement.classList.contains('dark'),
 
         // Filters
         filterStatus: 'all', // 'all', 'present', 'resolved', 'ever-present', 'ruled-out'
@@ -210,19 +208,6 @@ function iplApp() {
             }
 
             this.loading = false;
-        },
-
-        // Toggle theme
-        toggleTheme() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.theme = 'light';
-                this.isDark = false;
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.theme = 'dark';
-                this.isDark = true;
-            }
         }
     };
 }

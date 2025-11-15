@@ -5,19 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imaging Problem List Viewer</title>
 
-    <!-- Tailwind CSS v4 -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {}
+            }
+        }
+    </script>
 
-    <!-- Flowbite v4 -->
+    <!-- Flowbite CSS -->
     <link href="https://cdn.jsdelivr.net/npm/flowbite@4.0.0/dist/flowbite.min.css" rel="stylesheet" />
 
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <!-- Dark mode script - runs before page render -->
+    <!-- Dark mode initialization script - MUST run before page render -->
     <script>
-        // Check for saved theme preference or default to dark mode for radiologists
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem('color-theme') === 'dark' ||
+            (!('color-theme' in localStorage) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
@@ -30,17 +39,27 @@
             width: 10px;
         }
         ::-webkit-scrollbar-track {
-            @apply bg-gray-100 dark:bg-gray-900;
+            background-color: rgb(243 244 246);
+        }
+        .dark ::-webkit-scrollbar-track {
+            background-color: rgb(17 24 39);
         }
         ::-webkit-scrollbar-thumb {
-            @apply bg-gray-300 dark:bg-gray-700 rounded;
+            background-color: rgb(209 213 219);
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background-color: rgb(55 65 81);
         }
         ::-webkit-scrollbar-thumb:hover {
-            @apply bg-gray-400 dark:bg-gray-600;
+            background-color: rgb(156 163 175);
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background-color: rgb(75 85 99);
         }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
 
     <div x-data="iplApp()" x-init="init()" class="min-h-screen">
 
@@ -53,32 +72,31 @@
                             Imaging Problem List
                         </h1>
 
-                        <!-- Patient Selector -->
-                        <div x-show="patients.length > 0" class="relative">
-                            <button @click="patientDropdownOpen = !patientDropdownOpen"
-                                    class="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <!-- Patient Selector Dropdown (Flowbite) -->
+                        <div x-show="patients.length > 0">
+                            <button id="patientDropdownButton"
+                                    data-dropdown-toggle="patientDropdown"
+                                    type="button"
+                                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5 inline-flex items-center dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                                 <span x-text="currentPatient ? currentPatient.display_name + ' (' + currentPatient.mrn + ')' : 'Select Patient'"></span>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                 </svg>
                             </button>
 
-                            <!-- Dropdown -->
-                            <div x-show="patientDropdownOpen"
-                                 @click.outside="patientDropdownOpen = false"
-                                 x-transition
-                                 class="absolute left-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
-                                <ul class="py-2">
+                            <!-- Dropdown menu -->
+                            <div id="patientDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-80 dark:bg-gray-700 dark:divide-gray-600">
+                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="patientDropdownButton">
                                     <template x-for="patient in patients" :key="patient.id">
                                         <li>
-                                            <a @click.prevent="selectPatient(patient.id); patientDropdownOpen = false"
+                                            <a @click.prevent="selectPatient(patient.id)"
                                                href="#"
-                                               class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
-                                               :class="currentPatient && currentPatient.id === patient.id ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'">
-                                                <div class="font-medium" x-text="patient.display_name"></div>
+                                               class="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                               :class="currentPatient && currentPatient.id === patient.id ? 'bg-blue-50 dark:bg-blue-900/20' : ''">
+                                                <div class="font-medium text-gray-900 dark:text-white" x-text="patient.display_name"></div>
                                                 <div class="text-xs text-gray-500 dark:text-gray-400">
                                                     <span x-text="patient.mrn"></span> •
                                                     <span x-text="patient.dob"></span> •
@@ -92,14 +110,14 @@
                         </div>
                     </div>
 
-                    <!-- Theme Toggle -->
-                    <button @click="toggleTheme()"
-                            class="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                        <svg x-show="!isDark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    <!-- Theme Toggle Button (Flowbite) -->
+                    <button id="theme-toggle" type="button"
+                            class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                         </svg>
-                        <svg x-show="isDark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
                         </svg>
                     </button>
                 </div>
@@ -109,7 +127,13 @@
         <!-- Loading State -->
         <div x-show="loading" class="flex items-center justify-center h-64">
             <div class="text-center">
-                <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400"></div>
+                <div role="status">
+                    <svg aria-hidden="true" class="inline w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none">
+                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                    </svg>
+                    <span class="sr-only">Loading...</span>
+                </div>
                 <p class="mt-4 text-gray-600 dark:text-gray-400">Loading patient data...</p>
             </div>
         </div>
@@ -120,44 +144,44 @@
             <!-- View: IPL (Problem List) -->
             <div x-show="currentView === 'ipl'">
 
-                <!-- Filters -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
-                    <div class="flex flex-wrap gap-4 items-center">
+                <!-- Filters Card -->
+                <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-6">
+                    <div class="flex flex-wrap gap-6 items-center">
                         <div>
-                            <label class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Status</label>
-                            <div class="flex flex-wrap gap-2">
-                                <button @click="filterStatus = 'all'"
-                                        :class="filterStatus === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'"
-                                        class="px-3 py-1 text-sm rounded-lg hover:opacity-80 transition-opacity">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
+                            <div class="inline-flex rounded-md shadow-sm" role="group">
+                                <button @click="filterStatus = 'all'" type="button"
+                                        :class="filterStatus === 'all' ? 'text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
+                                        class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-s-lg focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
                                     All
                                 </button>
-                                <button @click="filterStatus = 'present'"
-                                        :class="filterStatus === 'present' ? 'bg-emerald-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'"
-                                        class="px-3 py-1 text-sm rounded-lg hover:opacity-80 transition-opacity">
-                                    Currently Present
+                                <button @click="filterStatus = 'present'" type="button"
+                                        :class="filterStatus === 'present' ? 'text-white bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
+                                        class="px-4 py-2 text-sm font-medium border-t border-b border-gray-200 focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
+                                    Present
                                 </button>
-                                <button @click="filterStatus = 'resolved'"
-                                        :class="filterStatus === 'resolved' ? 'bg-amber-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'"
-                                        class="px-3 py-1 text-sm rounded-lg hover:opacity-80 transition-opacity">
+                                <button @click="filterStatus = 'resolved'" type="button"
+                                        :class="filterStatus === 'resolved' ? 'text-white bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-300 dark:hover:bg-yellow-400' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
+                                        class="px-4 py-2 text-sm font-medium border-t border-b border-gray-200 focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
                                     Resolved
                                 </button>
-                                <button @click="filterStatus = 'ever-present'"
-                                        :class="filterStatus === 'ever-present' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'"
-                                        class="px-3 py-1 text-sm rounded-lg hover:opacity-80 transition-opacity">
+                                <button @click="filterStatus = 'ever-present'" type="button"
+                                        :class="filterStatus === 'ever-present' ? 'text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
+                                        class="px-4 py-2 text-sm font-medium border-t border-b border-gray-200 focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
                                     Ever Present
                                 </button>
-                                <button @click="filterStatus = 'ruled-out'"
-                                        :class="filterStatus === 'ruled-out' ? 'bg-gray-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'"
-                                        class="px-3 py-1 text-sm rounded-lg hover:opacity-80 transition-opacity">
+                                <button @click="filterStatus = 'ruled-out'" type="button"
+                                        :class="filterStatus === 'ruled-out' ? 'text-white bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
+                                        class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-e-lg focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
                                     Ruled Out
                                 </button>
                             </div>
                         </div>
 
                         <div>
-                            <label class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Body Region</label>
-                            <select x-model="filterRegion"
-                                    class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-0 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <label for="region-select" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Body Region</label>
+                            <select x-model="filterRegion" id="region-select"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="all">All Regions</option>
                                 <option value="chest">Chest</option>
                                 <option value="abdomen">Abdomen</option>
@@ -176,28 +200,28 @@
                 <!-- Findings Grid -->
                 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     <template x-for="finding in filteredFindings" :key="finding.id">
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-5 hover:shadow-md transition-shadow cursor-pointer"
+                        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 cursor-pointer transition-colors"
                              @click="viewFindingDetails(finding)">
 
                             <!-- Finding Header -->
                             <div class="flex justify-between items-start mb-3">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white pr-2"
-                                    x-text="finding.finding_type_display"></h3>
+                                <h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white pr-2"
+                                    x-text="finding.finding_type_display"></h5>
 
-                                <!-- Status Badge -->
-                                <span class="px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap"
+                                <!-- Status Badge (Flowbite) -->
+                                <span class="text-xs font-medium px-2.5 py-0.5 rounded-full"
                                       :class="{
-                                          'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400': finding.status === 'present',
-                                          'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400': finding.status === 'resolved',
-                                          'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-400': finding.status === 'ruled-out'
+                                          'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': finding.status === 'present',
+                                          'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300': finding.status === 'resolved',
+                                          'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300': finding.status === 'ruled-out'
                                       }"
                                       x-text="finding.statusLabel">
                                 </span>
                             </div>
 
                             <!-- Finding Code -->
-                            <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 font-mono"
-                                 x-text="finding.finding_type_code"></div>
+                            <p class="mb-3 text-xs font-mono text-gray-500 dark:text-gray-400"
+                               x-text="finding.finding_type_code"></p>
 
                             <!-- Timeline -->
                             <div class="space-y-2">
@@ -206,11 +230,11 @@
                                 </div>
                                 <div class="flex flex-wrap gap-1">
                                     <template x-for="obs in finding.observations" :key="obs.observation_id">
-                                        <div class="px-2 py-1 text-xs rounded"
-                                             :class="obs.presence === 'present' ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'"
-                                             :title="obs.exam_type_display + ' - ' + obs.exam_date">
+                                        <span class="text-xs font-medium px-2.5 py-0.5 rounded"
+                                              :class="obs.presence === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'"
+                                              :title="obs.exam_type_display + ' - ' + obs.exam_date">
                                             <span x-text="obs.exam_date"></span>
-                                        </div>
+                                        </span>
                                     </template>
                                 </div>
                             </div>
@@ -234,18 +258,18 @@
                     <div>
                         <!-- Breadcrumb -->
                         <button @click="currentView = 'ipl'; currentEfl = null"
-                                class="flex items-center text-sm text-blue-600 dark:text-blue-400 hover:underline mb-4">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="inline-flex items-center text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 mb-4">
+                            <svg class="w-4 h-4 me-2 rtl:rotate-180" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                             </svg>
                             Back to Problem List
                         </button>
 
-                        <!-- Exam Info Card -->
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
-                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4"
+                        <!-- Exam Info Card (Flowbite) -->
+                        <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-6">
+                            <h2 class="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
                                 x-text="currentEfl.examInfo.studyDescription"></h2>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
                                 <div>
                                     <div class="text-gray-500 dark:text-gray-400">Study Date</div>
                                     <div class="font-medium text-gray-900 dark:text-white"
@@ -253,12 +277,12 @@
                                 </div>
                                 <div>
                                     <div class="text-gray-500 dark:text-gray-400">Study ID</div>
-                                    <div class="font-medium text-gray-900 dark:text-white font-mono"
+                                    <div class="font-medium font-mono text-gray-900 dark:text-white"
                                          x-text="currentEfl.examInfo.studyIdentifier"></div>
                                 </div>
                                 <div>
                                     <div class="text-gray-500 dark:text-gray-400">LOINC Code</div>
-                                    <div class="font-medium text-gray-900 dark:text-white font-mono"
+                                    <div class="font-medium font-mono text-gray-900 dark:text-white"
                                          x-text="currentEfl.examInfo.studyLoincCode"></div>
                                 </div>
                                 <div>
@@ -267,35 +291,29 @@
                                          x-text="currentEfl.findings.length"></div>
                                 </div>
                             </div>
-                            <div class="mt-4">
-                                <button @click="viewReport(currentEfl.diagnosticReportId)"
-                                        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
-                                    View Full Report
-                                </button>
-                            </div>
+                            <button @click="viewReport(currentEfl.diagnosticReportId)" type="button"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                View Full Report
+                            </button>
                         </div>
 
                         <!-- Findings List -->
                         <div class="space-y-4">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Findings</h3>
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Findings</h3>
                             <template x-for="finding in currentEfl.findings" :key="finding.observationId">
-                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-5">
-                                    <div class="flex justify-between items-start mb-3">
-                                        <div>
-                                            <h4 class="text-base font-semibold text-gray-900 dark:text-white"
-                                                x-text="finding.findingDescription"></h4>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 font-mono mt-1"
-                                                 x-text="finding.findingCode"></div>
-                                        </div>
-                                    </div>
+                                <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                    <h4 class="mb-2 text-base font-bold text-gray-900 dark:text-white"
+                                        x-text="finding.findingDescription"></h4>
+                                    <p class="mb-3 text-xs font-mono text-gray-500 dark:text-gray-400"
+                                       x-text="finding.findingCode"></p>
 
                                     <!-- Attributes -->
-                                    <div class="mt-3 space-y-2">
+                                    <div class="space-y-2">
                                         <template x-for="attr in finding.attributes" :key="attr.attributeCode">
                                             <div class="flex items-center space-x-2 text-sm">
                                                 <span class="text-gray-600 dark:text-gray-400" x-text="attr.attributeDescription + ':'"></span>
-                                                <span class="px-2 py-1 rounded text-xs font-medium"
-                                                      :class="attr.attributeValueDescription === 'present' ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-400'"
+                                                <span class="text-xs font-medium px-2.5 py-0.5 rounded"
+                                                      :class="attr.attributeValueDescription === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'"
                                                       x-text="attr.attributeValueDescription">
                                                 </span>
                                             </div>
@@ -314,16 +332,16 @@
                     <div>
                         <!-- Breadcrumb -->
                         <button @click="currentView = 'efl'"
-                                class="flex items-center text-sm text-blue-600 dark:text-blue-400 hover:underline mb-4">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="inline-flex items-center text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 mb-4">
+                            <svg class="w-4 h-4 me-2 rtl:rotate-180" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                             </svg>
                             Back to Exam Details
                         </button>
 
-                        <!-- Report Card -->
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Full Report</h2>
+                        <!-- Report Card (Flowbite) -->
+                        <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Full Report</h2>
                             <pre class="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap font-mono leading-relaxed"
                                  x-text="currentReport"></pre>
                         </div>
@@ -334,8 +352,50 @@
         </main>
     </div>
 
-    <!-- Flowbite JS -->
+    <!-- Flowbite JS - MUST be before app.js -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.0/dist/flowbite.min.js"></script>
+
+    <!-- Theme toggle script -->
+    <script>
+        var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+        // Initialize icons based on current theme
+        if (localStorage.getItem('color-theme') === 'dark' ||
+            (!('color-theme' in localStorage) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+
+        var themeToggleBtn = document.getElementById('theme-toggle');
+
+        themeToggleBtn.addEventListener('click', function() {
+            // Toggle icons
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+
+            // Toggle theme
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+    </script>
 
     <!-- Application Logic -->
     <script src="app.js"></script>
