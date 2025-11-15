@@ -69,6 +69,64 @@ sample_data/
     findings_with_oifm_ids.xlsx  # Working data
 ```
 
+## IPL Viewer Application
+
+The `viewer/` directory contains a single-page web application for visualizing imaging problem lists.
+
+### Technology Stack
+- **HTML5 + Alpine.js**: Reactive UI without build step
+- **Tailwind CSS + Flowbite**: Styling and UI components (via CDN)
+- **No build required**: Opens directly in browser or via simple HTTP server
+
+### Key Features
+1. **Three-Level Navigation**: IPL → EFL → Report
+   - IPL view: Shows aggregated findings across all exams
+   - EFL view: Shows findings from a single exam
+   - Report view: Displays raw report text
+
+2. **Temporal Status Tracking**: Automatically computes finding status based on observation history:
+   - **Present** (green): Most recent observation shows finding present
+   - **Resolved** (amber): Was present in past, but most recent observation shows absent
+   - **Not Present/Ruled Out** (gray): All observations show absent (never present)
+
+3. **Smart Filtering**:
+   - By status: All, Currently Present, Resolved, Ever Present, Ruled Out
+   - By body region: Chest, Abdomen, Pelvis/GU, Musculoskeletal, Head/Neck
+
+4. **Body Region Inference**: Automatically categorizes findings by matching keywords in finding descriptions (see `BODY_REGION_MAP` in `viewer/app.js:1-8`)
+
+5. **Multi-Patient Support**: Switch between patients via dropdown or URL parameter (`?patient=patient-mrn0000001`)
+
+### Data Directory Structure
+
+The viewer expects data organized as:
+```
+data/
+  patients.json              # Manifest listing all patients
+  patients/
+    <patient-id>/
+      patient.json           # Patient metadata (demographics, exam count)
+      ipl.json              # Imaging Problem List for this patient
+      exams/
+        <report-id>/
+          efl.json          # Exam Finding List
+          report.txt        # Raw report text
+```
+
+### Running the Viewer
+```bash
+cd viewer
+python3 -m http.server 8000
+# Then open http://localhost:8000
+```
+
+### Important Implementation Details
+
+- **Status computation** (`viewer/app.js:101-124`): Sorts observations by date and checks most recent presence status
+- **Body region mapping** (`viewer/app.js:1-8`): Uses keyword matching on finding descriptions
+- **Dark mode first**: Designed for radiologists, defaults to dark theme with localStorage persistence
+- **Finding aggregation**: When viewing a finding, clicks load the most recent exam containing that finding
+
 ## Schema Reference
 
 The EFL schema is referenced in the sample files as: `https://github.com/openimagingdata/imaging-problem-list/schema/exam-problem-list-schema.json`, but it doesn't exist yet.

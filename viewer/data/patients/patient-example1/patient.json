@@ -1,0 +1,7 @@
+{
+  "id": "patient-example1",
+  "display_name": "Jane Smith",
+  "mrn": "MRN0000002",
+  "dob": "1985-06-15",
+  "exam_count": 2
+}
