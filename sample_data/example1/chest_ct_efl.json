@@ -2,7 +2,7 @@
   "$schema": "https://github.com/openimagingdata/imaging-problem-list/schema/exam-problem-list-schema.json",
   "diagnosticReportId": "cadaa331-d367-4472-abd1-f2a6b68c9352",
   "patientInfo": {
-    "patientIdentifier": "MRN0000001",
+    "patientIdentifier": "MRN0000002",
     "patientDOB": "1985-06-15"
   },
   "examInfo": {
