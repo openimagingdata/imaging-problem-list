@@ -1,18 +1,18 @@
 {
   "patients": [
     {
-      "id": "patient-example1",
+      "id": "patient-mrn0000001",
+      "display_name": "John Doe",
+      "mrn": "MRN0000001",
+      "dob": "1961-01-01",
+      "exam_count": 10
+    },
+    {
+      "id": "patient-mrn0000002",
       "display_name": "Jane Smith",
       "mrn": "MRN0000002",
       "dob": "1985-06-15",
       "exam_count": 2
-    },
-    {
-      "id": "patient-mrn0000001",
-      "display_name": "John Doe (Example 2)",
-      "mrn": "MRN0000001",
-      "dob": "1961-01-01",
-      "exam_count": 10
     }
   ]
 }

@@ -44,7 +44,7 @@ function iplApp() {
         // Load patients list
         async loadPatients() {
             try {
-                const response = await fetch('../data/patients.json');
+                const response = await fetch('data/patients.json');
                 const data = await response.json();
                 this.patients = data.patients;
                 console.log('Loaded patients:', this.patients);
@@ -60,11 +60,11 @@ function iplApp() {
 
             try {
                 // Load patient metadata
-                const patientResponse = await fetch(`../data/patients/${patientId}/patient.json`);
+                const patientResponse = await fetch(`data/patients/${patientId}/patient.json`);
                 this.currentPatient = await patientResponse.json();
 
                 // Load IPL
-                const iplResponse = await fetch(`../data/patients/${patientId}/ipl.json`);
+                const iplResponse = await fetch(`data/patients/${patientId}/ipl.json`);
                 this.ipl = await iplResponse.json();
 
                 // Process findings to add computed status
@@ -182,7 +182,7 @@ function iplApp() {
             this.loading = true;
 
             try {
-                const response = await fetch(`../data/patients/${this.currentPatient.id}/exams/${reportId}/efl.json`);
+                const response = await fetch(`data/patients/${this.currentPatient.id}/exams/${reportId}/efl.json`);
                 this.currentEfl = await response.json();
                 this.currentView = 'efl';
                 console.log('Loaded EFL:', this.currentEfl);
@@ -199,7 +199,7 @@ function iplApp() {
             this.loading = true;
 
             try {
-                const response = await fetch(`../data/patients/${this.currentPatient.id}/exams/${reportId}/report.txt`);
+                const response = await fetch(`data/patients/${this.currentPatient.id}/exams/${reportId}/report.txt`);
                 this.currentReport = await response.text();
                 this.currentView = 'report';
                 console.log('Loaded report');
