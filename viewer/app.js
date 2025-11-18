@@ -17,6 +17,7 @@ function iplApp() {
         currentEfl: null,
         currentReport: null,
         loading: true,
+        examTypeMappings: {},
 
         // Filters
         filterStatus: 'all', // 'all', 'present', 'resolved', 'ever-present', 'ruled-out'
@@ -25,6 +26,7 @@ function iplApp() {
         // Initialization
         async init() {
             console.log('Initializing IPL App...');
+            await this.loadExamTypeMappings();
             await this.loadPatients();
 
             // Check URL parameters
@@ -39,6 +41,18 @@ function iplApp() {
             }
 
             this.loading = false;
+        },
+
+        // Load exam type mappings
+        async loadExamTypeMappings() {
+            try {
+                const response = await fetch('data/exam_type_mappings.json');
+                this.examTypeMappings = await response.json();
+                console.log('Loaded exam type mappings:', this.examTypeMappings);
+            } catch (error) {
+                console.error('Error loading exam type mappings:', error);
+                this.examTypeMappings = {};
+            }
         },
 
         // Load patients list
@@ -117,7 +131,7 @@ function iplApp() {
                 return { status: 'resolved', label: 'Resolved' };
             } else {
                 // Always absent = ruled out
-                return { status: 'ruled-out', label: 'Not Present' };
+                return { status: 'ruled-out', label: 'Absent' };
             }
         },
 
@@ -132,6 +146,54 @@ function iplApp() {
             }
 
             return 'other';
+        },
+
+        // Get short exam name from mapping, fallback to original
+        getShortExamName(fullName) {
+            return this.examTypeMappings[fullName] || fullName;
+        },
+
+        // Group observations by report_id and sort by date (most recent first)
+        getGroupedObservations(finding) {
+            if (!finding.observations || finding.observations.length === 0) {
+                return [];
+            }
+
+            // Group by report_id
+            const groups = {};
+            finding.observations.forEach(obs => {
+                if (!groups[obs.report_id]) {
+                    groups[obs.report_id] = {
+                        report_id: obs.report_id,
+                        exam_date: obs.exam_date,
+                        exam_type_display: obs.exam_type_display,
+                        observations: [],
+                        count: 0
+                    };
+                }
+                groups[obs.report_id].observations.push(obs);
+                groups[obs.report_id].count++;
+            });
+
+            // Convert to array and sort by date (most recent first)
+            const groupedArray = Object.values(groups).sort((a, b) =>
+                new Date(b.exam_date) - new Date(a.exam_date)
+            );
+
+            // Determine presence status for each group
+            groupedArray.forEach(group => {
+                // If any observation is present, mark the group as present
+                const hasPresent = group.observations.some(obs => obs.presence === 'present');
+                group.presence = hasPresent ? 'present' : 'absent';
+
+                // Use the first observation's reportText for the popover
+                group.reportText = group.observations[0].reportText;
+
+                // Create a unique ID for popovers
+                group.popoverId = 'popover-group-' + group.report_id;
+            });
+
+            return groupedArray;
         },
 
         // Filtered findings based on current filters

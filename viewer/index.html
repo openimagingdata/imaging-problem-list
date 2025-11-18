@@ -199,14 +199,39 @@
 
                 <!-- Findings Grid -->
                 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    <template x-for="finding in filteredFindings" :key="finding.id">
+                    <template x-for="(finding, index) in filteredFindings" :key="index">
                         <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 cursor-pointer transition-colors"
                              @click="viewFindingDetails(finding)">
 
                             <!-- Finding Header -->
                             <div class="flex justify-between items-start mb-3">
-                                <h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white pr-2"
-                                    x-text="finding.finding_type_display"></h5>
+                                <!-- Finding Name with Popover for Code -->
+                                <div class="relative"
+                                     x-data="{ popover: null }"
+                                     x-effect="if (window.Popover && !popover) {
+                                         const targetEl = $el.querySelector('[role=tooltip]');
+                                         const triggerEl = $el.querySelector('h5');
+                                         if (targetEl && triggerEl) {
+                                             popover = new Popover(targetEl, triggerEl, {
+                                                 placement: 'top',
+                                                 triggerType: 'hover'
+                                             });
+                                         }
+                                     }">
+                                    <h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white pr-2"
+                                        :data-popover-target="'popover-finding-' + finding.finding_type_code.replace(/[^a-zA-Z0-9]/g, '-')"
+                                        data-popover-trigger="hover"
+                                        data-popover-placement="top"
+                                        x-text="finding.finding_type_display"></h5>
+
+                                    <!-- Popover for Finding Code -->
+                                    <div :id="'popover-finding-' + finding.finding_type_code.replace(/[^a-zA-Z0-9]/g, '-')"
+                                         role="tooltip"
+                                         class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-mono text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                                        <span x-text="finding.finding_type_code"></span>
+                                        <div data-popper-arrow></div>
+                                    </div>
+                                </div>
 
                                 <!-- Status Badge (Flowbite) -->
                                 <span class="text-xs font-medium px-2.5 py-0.5 rounded-full"
@@ -219,22 +244,46 @@
                                 </span>
                             </div>
 
-                            <!-- Finding Code -->
-                            <p class="mb-3 text-xs font-mono text-gray-500 dark:text-gray-400"
-                               x-text="finding.finding_type_code"></p>
-
-                            <!-- Timeline -->
+                            <!-- Timeline / Observations -->
                             <div class="space-y-2">
-                                <div class="text-xs font-medium text-gray-700 dark:text-gray-300">
-                                    <span x-text="finding.observations.length"></span> observation<span x-show="finding.observations.length !== 1">s</span>
-                                </div>
                                 <div class="flex flex-wrap gap-1">
-                                    <template x-for="obs in finding.observations" :key="obs.observation_id">
-                                        <span class="text-xs font-medium px-2.5 py-0.5 rounded"
-                                              :class="obs.presence === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'"
-                                              :title="obs.exam_type_display + ' - ' + obs.exam_date">
-                                            <span x-text="obs.exam_date"></span>
-                                        </span>
+                                    <template x-for="group in getGroupedObservations(finding)" :key="group.report_id">
+                                        <div class="inline-block relative"
+                                             x-data="{ popover: null }"
+                                             x-effect="if (window.Popover && !popover) {
+                                                 const targetEl = $el.querySelector('[role=tooltip]');
+                                                 const triggerEl = $el.querySelector('button');
+                                                 if (targetEl && triggerEl) {
+                                                     popover = new Popover(targetEl, triggerEl, {
+                                                         placement: 'top',
+                                                         triggerType: 'hover'
+                                                     });
+                                                 }
+                                             }">
+                                            <!-- Observation Button with Two Lines -->
+                                            <button class="text-xs font-medium px-2.5 py-1 rounded flex flex-col items-center leading-tight"
+                                                  :class="group.presence === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-300'"
+                                                  :data-popover-target="group.popoverId"
+                                                  data-popover-trigger="hover"
+                                                  data-popover-placement="top"
+                                                  @click.stop="">
+                                                <span x-text="getShortExamName(group.exam_type_display)" class="whitespace-nowrap"></span>
+                                                <span x-text="group.exam_date" class="whitespace-nowrap"></span>
+                                            </button>
+
+                                            <!-- Badge for multiple observations -->
+                                            <span x-show="group.count > 1"
+                                                  class="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-blue-600 rounded-full"
+                                                  x-text="group.count"></span>
+
+                                            <!-- Popover for Report Text -->
+                                            <div :id="group.popoverId"
+                                                 role="tooltip"
+                                                 class="absolute z-10 invisible inline-block w-96 px-3 py-2 text-xs text-gray-800 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800">
+                                                <p class="leading-relaxed" x-text="group.reportText"></p>
+                                                <div data-popper-arrow></div>
+                                            </div>
+                                        </div>
                                     </template>
                                 </div>
                             </div>
