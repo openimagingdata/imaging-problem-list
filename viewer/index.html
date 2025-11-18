@@ -155,10 +155,10 @@
                                         class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-s-lg focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
                                     All
                                 </button>
-                                <button @click="filterStatus = 'present'" type="button"
-                                        :class="filterStatus === 'present' ? 'text-white bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
+                                <button @click="filterStatus = 'current'" type="button"
+                                        :class="filterStatus === 'current' ? 'text-white bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
                                         class="px-4 py-2 text-sm font-medium border-t border-b border-gray-200 focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
-                                    Present
+                                    Current
                                 </button>
                                 <button @click="filterStatus = 'resolved'" type="button"
                                         :class="filterStatus === 'resolved' ? 'text-white bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-300 dark:hover:bg-yellow-400' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
@@ -168,12 +168,12 @@
                                 <button @click="filterStatus = 'ever-present'" type="button"
                                         :class="filterStatus === 'ever-present' ? 'text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
                                         class="px-4 py-2 text-sm font-medium border-t border-b border-gray-200 focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
-                                    Ever Present
+                                    Ever
                                 </button>
-                                <button @click="filterStatus = 'ruled-out'" type="button"
-                                        :class="filterStatus === 'ruled-out' ? 'text-white bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
+                                <button @click="filterStatus = 'never'" type="button"
+                                        :class="filterStatus === 'never' ? 'text-white bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
                                         class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-e-lg focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
-                                    Ruled Out
+                                    Never
                                 </button>
                             </div>
                         </div>
@@ -236,9 +236,10 @@
                                 <!-- Status Badge (Flowbite) -->
                                 <span class="text-xs font-medium px-2.5 py-0.5 rounded-full"
                                       :class="{
-                                          'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': finding.status === 'present',
+                                          'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': finding.status === 'current',
+                                          'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300': finding.status === 'always',
                                           'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300': finding.status === 'resolved',
-                                          'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300': finding.status === 'ruled-out'
+                                          'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300': finding.status === 'never'
                                       }"
                                       x-text="finding.statusLabel">
                                 </span>

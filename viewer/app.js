@@ -20,7 +20,7 @@ function iplApp() {
         examTypeMappings: {},
 
         // Filters
-        filterStatus: 'all', // 'all', 'present', 'resolved', 'ever-present', 'ruled-out'
+        filterStatus: 'all', // 'all', 'current', 'resolved', 'ever-present', 'never'
         filterRegion: 'all',
 
         // Initialization
@@ -123,15 +123,21 @@ function iplApp() {
 
             const mostRecent = sortedObs[0];
             const hasEverBeenPresent = finding.observations.some(obs => obs.presence === 'present');
+            const allPresent = finding.observations.every(obs => obs.presence === 'present');
 
             if (mostRecent.presence === 'present') {
-                return { status: 'present', label: 'Present' };
+                // Present on most recent
+                if (allPresent && finding.observations.length > 1) {
+                    return { status: 'always', label: 'Always' };
+                } else {
+                    return { status: 'current', label: 'Current' };
+                }
             } else if (hasEverBeenPresent) {
                 // Was present before, now absent = resolved
                 return { status: 'resolved', label: 'Resolved' };
             } else {
-                // Always absent = ruled out
-                return { status: 'ruled-out', label: 'Absent' };
+                // Never present
+                return { status: 'never', label: 'Never' };
             }
         },
 
@@ -207,14 +213,14 @@ function iplApp() {
             if (this.filterStatus !== 'all') {
                 findings = findings.filter(finding => {
                     switch (this.filterStatus) {
-                        case 'present':
-                            return finding.status === 'present';
+                        case 'current':
+                            return finding.status === 'current' || finding.status === 'always';
                         case 'resolved':
                             return finding.status === 'resolved';
                         case 'ever-present':
-                            return finding.status === 'present' || finding.status === 'resolved';
-                        case 'ruled-out':
-                            return finding.status === 'ruled-out';
+                            return finding.status === 'current' || finding.status === 'always' || finding.status === 'resolved';
+                        case 'never':
+                            return finding.status === 'never';
                         default:
                             return true;
                     }
