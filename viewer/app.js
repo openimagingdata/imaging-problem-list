@@ -1,12 +1,3 @@
-// Body region mapping for findings
-const BODY_REGION_MAP = {
-    chest: ['pulmonary', 'lung', 'pleural', 'mediastinal', 'hilar', 'coronary', 'diaphragm', 'pneumothorax', 'nodule'],
-    abdomen: ['liver', 'hepatic', 'pancrea', 'spleen', 'splenic', 'abdom'],
-    pelvis: ['urinary', 'bladder', 'prostate', 'uterine', 'pelvi', 'calcul'],
-    msk: ['bone', 'joint', 'fracture', 'osteo', 'vertebr', 'skeletal'],
-    head: ['brain', 'intracranial', 'sinus', 'cranial', 'cerebr']
-};
-
 function iplApp() {
     return {
         // State
@@ -18,6 +9,7 @@ function iplApp() {
         currentReport: null,
         loading: true,
         examTypeMappings: {},
+        findingRegionMappings: {},
 
         // Filters
         filterStatus: 'all', // 'all', 'current', 'resolved', 'ever-present', 'never'
@@ -27,6 +19,7 @@ function iplApp() {
         async init() {
             console.log('Initializing IPL App...');
             await this.loadExamTypeMappings();
+            await this.loadFindingRegionMappings();
             await this.loadPatients();
 
             // Check URL parameters
@@ -52,6 +45,18 @@ function iplApp() {
             } catch (error) {
                 console.error('Error loading exam type mappings:', error);
                 this.examTypeMappings = {};
+            }
+        },
+
+        // Load finding region mappings
+        async loadFindingRegionMappings() {
+            try {
+                const response = await fetch('data/finding_region_mappings.json');
+                this.findingRegionMappings = await response.json();
+                console.log('Loaded finding region mappings:', this.findingRegionMappings);
+            } catch (error) {
+                console.error('Error loading finding region mappings:', error);
+                this.findingRegionMappings = {};
             }
         },
 
@@ -88,7 +93,7 @@ function iplApp() {
                         ...finding,
                         status: status.status,
                         statusLabel: status.label,
-                        bodyRegion: this.inferBodyRegion(finding.finding_type_display)
+                        bodyRegions: this.getBodyRegions(finding.finding_type_display)
                     };
                 });
 
@@ -141,17 +146,13 @@ function iplApp() {
             }
         },
 
-        // Infer body region from finding description
-        inferBodyRegion(description) {
-            const lowerDesc = description.toLowerCase();
-
-            for (const [region, keywords] of Object.entries(BODY_REGION_MAP)) {
-                if (keywords.some(keyword => lowerDesc.includes(keyword))) {
-                    return region;
-                }
+        // Get body regions for a finding
+        getBodyRegions(findingTypeDisplay) {
+            const mapping = this.findingRegionMappings[findingTypeDisplay];
+            if (!mapping) {
+                return ['Unknown'];
             }
-
-            return 'other';
+            return mapping.regions === 'ALL' ? ['ALL'] : mapping.regions;
         },
 
         // Get short exam name from mapping, fallback to original
@@ -229,7 +230,12 @@ function iplApp() {
 
             // Filter by body region
             if (this.filterRegion !== 'all') {
-                findings = findings.filter(finding => finding.bodyRegion === this.filterRegion);
+                findings = findings.filter(finding =>
+                    finding.bodyRegions && (
+                        finding.bodyRegions.includes(this.filterRegion) ||
+                        finding.bodyRegions.includes('ALL')
+                    )
+                );
             }
 
             return findings;
