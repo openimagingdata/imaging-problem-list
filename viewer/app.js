@@ -186,8 +186,11 @@ function iplApp() {
                 const hasPresent = group.observations.some(obs => obs.presence === 'present');
                 group.presence = hasPresent ? 'present' : 'absent';
 
-                // Use the first observation's reportText for the popover
-                group.reportText = group.observations[0].reportText;
+                // Combine all report texts from observations in this group
+                group.reportText = group.observations
+                    .map(obs => obs.reportText)
+                    .filter(text => text) // Remove any null/undefined
+                    .join('\n\n');
 
                 // Create a unique ID for popovers
                 group.popoverId = 'popover-group-' + group.report_id;
