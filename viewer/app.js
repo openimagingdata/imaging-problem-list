@@ -206,27 +206,9 @@ function iplApp() {
             return groupedArray;
         },
 
-        // Filtered findings based on current filters
+        // Filtered findings based on current filters (region only)
         get filteredFindings() {
             let findings = this.ipl.findings;
-
-            // Filter by status
-            if (this.filterStatus !== 'all') {
-                findings = findings.filter(finding => {
-                    switch (this.filterStatus) {
-                        case 'current':
-                            return finding.status === 'current' || finding.status === 'always';
-                        case 'resolved':
-                            return finding.status === 'resolved';
-                        case 'ever-present':
-                            return finding.status === 'current' || finding.status === 'always' || finding.status === 'resolved';
-                        case 'never':
-                            return finding.status === 'never';
-                        default:
-                            return true;
-                    }
-                });
-            }
 
             // Filter by body region
             if (this.filterRegion !== 'all') {
@@ -239,6 +221,18 @@ function iplApp() {
             }
 
             return findings;
+        },
+
+        // Group findings by status for sectioned display
+        get groupedFindings() {
+            const findings = this.filteredFindings;
+
+            return {
+                current: findings.filter(f => f.status === 'current'),
+                always: findings.filter(f => f.status === 'always'),
+                resolved: findings.filter(f => f.status === 'resolved'),
+                never: findings.filter(f => f.status === 'never')
+            };
         },
 
         // View finding details (placeholder - could expand to show more info)

@@ -148,37 +148,6 @@
                 <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-6">
                     <div class="flex flex-wrap gap-6 items-center">
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                            <div class="inline-flex rounded-md shadow-sm" role="group">
-                                <button @click="filterStatus = 'all'" type="button"
-                                        :class="filterStatus === 'all' ? 'text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
-                                        class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-s-lg focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
-                                    All
-                                </button>
-                                <button @click="filterStatus = 'current'" type="button"
-                                        :class="filterStatus === 'current' ? 'text-white bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
-                                        class="px-4 py-2 text-sm font-medium border-t border-b border-gray-200 focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
-                                    Current
-                                </button>
-                                <button @click="filterStatus = 'resolved'" type="button"
-                                        :class="filterStatus === 'resolved' ? 'text-white bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-300 dark:hover:bg-yellow-400' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
-                                        class="px-4 py-2 text-sm font-medium border-t border-b border-gray-200 focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
-                                    Resolved
-                                </button>
-                                <button @click="filterStatus = 'ever-present'" type="button"
-                                        :class="filterStatus === 'ever-present' ? 'text-white bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
-                                        class="px-4 py-2 text-sm font-medium border-t border-b border-gray-200 focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
-                                    Ever
-                                </button>
-                                <button @click="filterStatus = 'never'" type="button"
-                                        :class="filterStatus === 'never' ? 'text-white bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-700' : 'text-gray-900 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700'"
-                                        class="px-4 py-2 text-sm font-medium border border-gray-200 rounded-e-lg focus:z-10 focus:ring-2 focus:ring-blue-700 dark:border-gray-700">
-                                    Never
-                                </button>
-                            </div>
-                        </div>
-
-                        <div>
                             <label for="region-select" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Body Region</label>
                             <select x-model="filterRegion" id="region-select"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -199,9 +168,11 @@
                     </div>
                 </div>
 
-                <!-- Findings Grid -->
-                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    <template x-for="(finding, index) in filteredFindings" :key="index">
+                <!-- Current Findings -->
+                <div x-show="groupedFindings.current.length > 0" class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Current</h2>
+                    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        <template x-for="(finding, index) in groupedFindings.current" :key="'current-' + index">
                         <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 cursor-pointer transition-colors"
                              @click="viewFindingDetails(finding)">
 
@@ -292,6 +263,262 @@
                             </div>
                         </div>
                     </template>
+                    </div>
+                </div>
+
+                <!-- Always Findings -->
+                <div x-show="groupedFindings.always.length > 0" class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Always</h2>
+                    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        <template x-for="(finding, index) in groupedFindings.always" :key="'always-' + index">
+                        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                             @click="viewFindingDetails(finding)">
+                            <!-- Finding content (same as Current section) -->
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="relative"
+                                     x-data="{ popover: null }"
+                                     x-effect="if (window.Popover && !popover) {
+                                         const targetEl = $el.querySelector('[role=tooltip]');
+                                         const triggerEl = $el.querySelector('h5');
+                                         if (targetEl && triggerEl) {
+                                             popover = new Popover(targetEl, triggerEl, {
+                                                 placement: 'top',
+                                                 triggerType: 'hover'
+                                             });
+                                         }
+                                     }">
+                                    <h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white pr-2"
+                                        :data-popover-target="'popover-finding-' + finding.finding_type_code.replace(/[^a-zA-Z0-9]/g, '-')"
+                                        data-popover-trigger="hover"
+                                        data-popover-placement="top"
+                                        x-text="finding.finding_type_display"></h5>
+                                    <div :id="'popover-finding-' + finding.finding_type_code.replace(/[^a-zA-Z0-9]/g, '-')"
+                                         role="tooltip"
+                                         class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-mono text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                                        <span x-text="finding.finding_type_code"></span>
+                                        <div data-popper-arrow></div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-medium px-2.5 py-0.5 rounded-full"
+                                      :class="{
+                                          'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': finding.status === 'current',
+                                          'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300': finding.status === 'always',
+                                          'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300': finding.status === 'resolved',
+                                          'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300': finding.status === 'never'
+                                      }"
+                                      x-text="finding.statusLabel">
+                                </span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-1">
+                                    <template x-for="group in getGroupedObservations(finding)" :key="group.report_id">
+                                        <div class="inline-block relative"
+                                             x-data="{ popover: null }"
+                                             x-effect="if (window.Popover && !popover) {
+                                                 const targetEl = $el.querySelector('[role=tooltip]');
+                                                 const triggerEl = $el.querySelector('button');
+                                                 if (targetEl && triggerEl) {
+                                                     popover = new Popover(targetEl, triggerEl, {
+                                                         placement: 'top',
+                                                         triggerType: 'hover'
+                                                     });
+                                                 }
+                                             }">
+                                            <button class="text-xs font-medium px-2.5 py-1 rounded flex flex-col items-center leading-tight"
+                                                  :class="group.presence === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-300'"
+                                                  :data-popover-target="group.popoverId"
+                                                  data-popover-trigger="hover"
+                                                  data-popover-placement="top"
+                                                  @click.stop="">
+                                                <span x-text="getShortExamName(group.exam_type_display)" class="whitespace-nowrap"></span>
+                                                <span x-text="group.exam_date" class="whitespace-nowrap"></span>
+                                            </button>
+                                            <span x-show="group.count > 1"
+                                                  class="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-blue-600 rounded-full"
+                                                  x-text="group.count"></span>
+                                            <div :id="group.popoverId"
+                                                 role="tooltip"
+                                                 class="absolute z-10 invisible inline-block w-96 px-3 py-2 text-xs text-gray-800 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800">
+                                                <p class="leading-relaxed whitespace-pre-line" x-text="group.reportText"></p>
+                                                <div data-popper-arrow></div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Resolved Findings -->
+                <div x-show="groupedFindings.resolved.length > 0" class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Resolved</h2>
+                    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        <template x-for="(finding, index) in groupedFindings.resolved" :key="'resolved-' + index">
+                        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                             @click="viewFindingDetails(finding)">
+                            <!-- Same content structure as above -->
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="relative"
+                                     x-data="{ popover: null }"
+                                     x-effect="if (window.Popover && !popover) {
+                                         const targetEl = $el.querySelector('[role=tooltip]');
+                                         const triggerEl = $el.querySelector('h5');
+                                         if (targetEl && triggerEl) {
+                                             popover = new Popover(targetEl, triggerEl, {
+                                                 placement: 'top',
+                                                 triggerType: 'hover'
+                                             });
+                                         }
+                                     }">
+                                    <h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white pr-2"
+                                        :data-popover-target="'popover-finding-' + finding.finding_type_code.replace(/[^a-zA-Z0-9]/g, '-')"
+                                        data-popover-trigger="hover"
+                                        data-popover-placement="top"
+                                        x-text="finding.finding_type_display"></h5>
+                                    <div :id="'popover-finding-' + finding.finding_type_code.replace(/[^a-zA-Z0-9]/g, '-')"
+                                         role="tooltip"
+                                         class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-mono text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                                        <span x-text="finding.finding_type_code"></span>
+                                        <div data-popper-arrow></div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-medium px-2.5 py-0.5 rounded-full"
+                                      :class="{
+                                          'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': finding.status === 'current',
+                                          'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300': finding.status === 'always',
+                                          'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300': finding.status === 'resolved',
+                                          'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300': finding.status === 'never'
+                                      }"
+                                      x-text="finding.statusLabel">
+                                </span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-1">
+                                    <template x-for="group in getGroupedObservations(finding)" :key="group.report_id">
+                                        <div class="inline-block relative"
+                                             x-data="{ popover: null }"
+                                             x-effect="if (window.Popover && !popover) {
+                                                 const targetEl = $el.querySelector('[role=tooltip]');
+                                                 const triggerEl = $el.querySelector('button');
+                                                 if (targetEl && triggerEl) {
+                                                     popover = new Popover(targetEl, triggerEl, {
+                                                         placement: 'top',
+                                                         triggerType: 'hover'
+                                                     });
+                                                 }
+                                             }">
+                                            <button class="text-xs font-medium px-2.5 py-1 rounded flex flex-col items-center leading-tight"
+                                                  :class="group.presence === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-300'"
+                                                  :data-popover-target="group.popoverId"
+                                                  data-popover-trigger="hover"
+                                                  data-popover-placement="top"
+                                                  @click.stop="">
+                                                <span x-text="getShortExamName(group.exam_type_display)" class="whitespace-nowrap"></span>
+                                                <span x-text="group.exam_date" class="whitespace-nowrap"></span>
+                                            </button>
+                                            <span x-show="group.count > 1"
+                                                  class="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-blue-600 rounded-full"
+                                                  x-text="group.count"></span>
+                                            <div :id="group.popoverId"
+                                                 role="tooltip"
+                                                 class="absolute z-10 invisible inline-block w-96 px-3 py-2 text-xs text-gray-800 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800">
+                                                <p class="leading-relaxed whitespace-pre-line" x-text="group.reportText"></p>
+                                                <div data-popper-arrow></div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Never Findings -->
+                <div x-show="groupedFindings.never.length > 0" class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Never</h2>
+                    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        <template x-for="(finding, index) in groupedFindings.never" :key="'never-' + index">
+                        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                             @click="viewFindingDetails(finding)">
+                            <!-- Same content structure -->
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="relative"
+                                     x-data="{ popover: null }"
+                                     x-effect="if (window.Popover && !popover) {
+                                         const targetEl = $el.querySelector('[role=tooltip]');
+                                         const triggerEl = $el.querySelector('h5');
+                                         if (targetEl && triggerEl) {
+                                             popover = new Popover(targetEl, triggerEl, {
+                                                 placement: 'top',
+                                                 triggerType: 'hover'
+                                             });
+                                         }
+                                     }">
+                                    <h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white pr-2"
+                                        :data-popover-target="'popover-finding-' + finding.finding_type_code.replace(/[^a-zA-Z0-9]/g, '-')"
+                                        data-popover-trigger="hover"
+                                        data-popover-placement="top"
+                                        x-text="finding.finding_type_display"></h5>
+                                    <div :id="'popover-finding-' + finding.finding_type_code.replace(/[^a-zA-Z0-9]/g, '-')"
+                                         role="tooltip"
+                                         class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-mono text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                                        <span x-text="finding.finding_type_code"></span>
+                                        <div data-popper-arrow></div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-medium px-2.5 py-0.5 rounded-full"
+                                      :class="{
+                                          'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': finding.status === 'current',
+                                          'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300': finding.status === 'always',
+                                          'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300': finding.status === 'resolved',
+                                          'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300': finding.status === 'never'
+                                      }"
+                                      x-text="finding.statusLabel">
+                                </span>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex flex-wrap gap-1">
+                                    <template x-for="group in getGroupedObservations(finding)" :key="group.report_id">
+                                        <div class="inline-block relative"
+                                             x-data="{ popover: null }"
+                                             x-effect="if (window.Popover && !popover) {
+                                                 const targetEl = $el.querySelector('[role=tooltip]');
+                                                 const triggerEl = $el.querySelector('button');
+                                                 if (targetEl && triggerEl) {
+                                                     popover = new Popover(targetEl, triggerEl, {
+                                                         placement: 'top',
+                                                         triggerType: 'hover'
+                                                     });
+                                                 }
+                                             }">
+                                            <button class="text-xs font-medium px-2.5 py-1 rounded flex flex-col items-center leading-tight"
+                                                  :class="group.presence === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-300'"
+                                                  :data-popover-target="group.popoverId"
+                                                  data-popover-trigger="hover"
+                                                  data-popover-placement="top"
+                                                  @click.stop="">
+                                                <span x-text="getShortExamName(group.exam_type_display)" class="whitespace-nowrap"></span>
+                                                <span x-text="group.exam_date" class="whitespace-nowrap"></span>
+                                            </button>
+                                            <span x-show="group.count > 1"
+                                                  class="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-blue-600 rounded-full"
+                                                  x-text="group.count"></span>
+                                            <div :id="group.popoverId"
+                                                 role="tooltip"
+                                                 class="absolute z-10 invisible inline-block w-96 px-3 py-2 text-xs text-gray-800 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-200 dark:border-gray-600 dark:bg-gray-800">
+                                                <p class="leading-relaxed whitespace-pre-line" x-text="group.reportText"></p>
+                                                <div data-popper-arrow></div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        </template>
+                    </div>
                 </div>
 
                 <!-- Empty State -->
