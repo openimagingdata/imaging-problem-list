@@ -198,9 +198,6 @@ function iplApp() {
                     .map(obs => obs.reportText)
                     .filter(text => text) // Remove any null/undefined
                     .join('\n\n');
-
-                // Create a unique ID for popovers
-                group.popoverId = 'popover-group-' + group.report_id;
             });
 
             return groupedArray;
@@ -233,6 +230,16 @@ function iplApp() {
                 resolved: findings.filter(f => f.status === 'resolved'),
                 never: findings.filter(f => f.status === 'never')
             };
+        },
+
+        // Get sections with findings for rendering (eliminates duplication)
+        get findingSections() {
+            return [
+                { title: 'Current', key: 'current', findings: this.groupedFindings.current },
+                { title: 'Always', key: 'always', findings: this.groupedFindings.always },
+                { title: 'Resolved', key: 'resolved', findings: this.groupedFindings.resolved },
+                { title: 'Never', key: 'never', findings: this.groupedFindings.never }
+            ].filter(section => section.findings.length > 0);
         },
 
         // View finding details (placeholder - could expand to show more info)
