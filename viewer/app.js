@@ -4,12 +4,14 @@ function iplApp() {
         patients: [],
         currentPatient: null,
         ipl: { findings: [] },
-        currentView: 'ipl', // 'ipl', 'efl', 'report'
+        currentView: 'ipl', // 'ipl', 'exam', 'report'
+        currentExam: null,
         currentEfl: null,
         currentReport: null,
         loading: true,
         examTypeMappings: {},
         findingRegionMappings: {},
+        highlightedTexts: [],
 
         // Filters
         filterStatus: 'all', // 'all', 'current', 'resolved', 'ever-present', 'never'
@@ -104,6 +106,7 @@ function iplApp() {
 
                 // Reset view
                 this.currentView = 'ipl';
+                this.currentExam = null;
                 this.currentEfl = null;
                 this.currentReport = null;
 
@@ -286,6 +289,193 @@ function iplApp() {
             }
 
             this.loading = false;
+        },
+
+        // Load exam view with split layout
+        async loadExamView(reportId) {
+            console.log('Loading exam view:', reportId);
+            this.loading = true;
+
+            try {
+                // Load the EFL for this exam
+                const eflResponse = await fetch(`data/patients/${this.currentPatient.id}/exams/${reportId}/efl.json`);
+                const efl = await eflResponse.json();
+
+                // Load the report text
+                const reportResponse = await fetch(`data/patients/${this.currentPatient.id}/exams/${reportId}/report.txt`);
+                const reportText = await reportResponse.text();
+
+                // Find all observations for this report from the IPL
+                const examObservations = [];
+                this.ipl.findings.forEach(finding => {
+                    const obsForThisReport = finding.observations.filter(obs => obs.report_id === reportId);
+                    if (obsForThisReport.length > 0) {
+                        examObservations.push({
+                            finding_type_code: finding.finding_type_code,
+                            finding_type_display: finding.finding_type_display,
+                            observations: obsForThisReport,
+                            count: obsForThisReport.length,
+                            reportTexts: obsForThisReport.map(obs => obs.reportText).filter(text => text)
+                        });
+                    }
+                });
+
+                // Compute status for each finding in this exam
+                examObservations.forEach(finding => {
+                    // Get the full finding from IPL to check overall status
+                    const iplFinding = this.ipl.findings.find(f => f.finding_type_code === finding.finding_type_code);
+                    if (iplFinding) {
+                        const status = this.computeFindingStatus(iplFinding);
+                        finding.status = status.status;
+                        finding.statusLabel = status.label;
+                    }
+                });
+
+                // Group findings by status
+                const findingSections = [
+                    { title: 'Current', key: 'current', findings: examObservations.filter(f => f.status === 'current') },
+                    { title: 'Always', key: 'always', findings: examObservations.filter(f => f.status === 'always') },
+                    { title: 'Resolved', key: 'resolved', findings: examObservations.filter(f => f.status === 'resolved') },
+                    { title: 'Never', key: 'never', findings: examObservations.filter(f => f.status === 'never') }
+                ];
+
+                // Get exam metadata from first observation
+                const firstObs = examObservations[0]?.observations[0];
+
+                this.currentExam = {
+                    report_id: reportId,
+                    exam_date: firstObs?.exam_date || efl.examInfo?.studyDateTime?.split('T')[0] || 'Unknown',
+                    exam_type_display: firstObs?.exam_type_display || efl.examInfo?.studyDescription || 'Unknown',
+                    findings: examObservations,
+                    findingSections: findingSections,
+                    reportText: reportText
+                };
+
+                this.currentView = 'exam';
+                console.log('Loaded exam view:', this.currentExam);
+                console.log('Finding sections:', findingSections);
+                console.log('First finding reportTexts:', examObservations[0]?.reportTexts);
+            } catch (error) {
+                console.error('Error loading exam view:', error);
+            }
+
+            this.loading = false;
+        },
+
+        // Highlight text in report
+        highlightText(texts) {
+            console.log('highlightText called with:', texts);
+            this.highlightedTexts = texts || [];
+
+            // Scroll to first highlighted text after DOM updates
+            setTimeout(() => {
+                const reportContainer = document.querySelector('#report-text');
+                const firstMark = reportContainer?.querySelector('mark');
+                console.log('First mark element:', firstMark);
+
+                if (firstMark && reportContainer) {
+                    // Check if mark is visible in the container
+                    const containerRect = reportContainer.getBoundingClientRect();
+                    const markRect = firstMark.getBoundingClientRect();
+
+                    const isVisible = (
+                        markRect.top >= containerRect.top &&
+                        markRect.bottom <= containerRect.bottom
+                    );
+
+                    // Only scroll if not visible
+                    if (!isVisible) {
+                        const markTop = firstMark.offsetTop;
+                        const containerHeight = reportContainer.clientHeight;
+                        const targetScroll = markTop - (containerHeight / 2);
+
+                        reportContainer.scrollTo({
+                            top: targetScroll,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            }, 100);
+        },
+
+        // Clear highlighting
+        clearHighlight() {
+            this.highlightedTexts = [];
+        },
+
+        // Format report with highlights
+        formatReportWithHighlights(reportText) {
+            if (!reportText) return '';
+
+            // Preprocess: Convert ONLY "Findings" and "Impression" to headers
+            let preprocessedText = reportText;
+
+            // Convert **Findings** or **Impression** (with or without colon)
+            preprocessedText = preprocessedText.replace(/(^|\n)\*\*(Findings|Impression):?\*\*/gi,
+                (match, lineStart, word) => `${lineStart}### ${word}`
+            );
+
+            // Render Markdown to HTML
+            let formattedText = marked.parse(preprocessedText);
+
+            // Apply highlights - need to search across HTML tags
+            if (this.highlightedTexts && this.highlightedTexts.length > 0) {
+                this.highlightedTexts.forEach(text => {
+                    if (text && text.trim()) {
+                        // Create a temporary div to work with the HTML
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = formattedText;
+
+                        // Find and highlight text in text nodes
+                        this.highlightTextInElement(tempDiv, text);
+
+                        formattedText = tempDiv.innerHTML;
+                    }
+                });
+            }
+
+            return formattedText;
+        },
+
+        // Helper function to highlight text across HTML elements
+        highlightTextInElement(element, searchText) {
+            const walker = document.createTreeWalker(
+                element,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+
+            const nodesToReplace = [];
+            let node;
+
+            // First pass: find all text nodes containing the search text
+            while (node = walker.nextNode()) {
+                const index = node.textContent.toLowerCase().indexOf(searchText.toLowerCase());
+                if (index !== -1) {
+                    nodesToReplace.push({ node, index, length: searchText.length });
+                }
+            }
+
+            // Second pass: replace text nodes with highlighted versions
+            nodesToReplace.forEach(({ node, index, length }) => {
+                const before = node.textContent.substring(0, index);
+                const match = node.textContent.substring(index, index + length);
+                const after = node.textContent.substring(index + length);
+
+                const fragment = document.createDocumentFragment();
+
+                if (before) fragment.appendChild(document.createTextNode(before));
+
+                const mark = document.createElement('mark');
+                mark.className = 'bg-yellow-300 dark:bg-yellow-600 px-1';
+                mark.textContent = match;
+                fragment.appendChild(mark);
+
+                if (after) fragment.appendChild(document.createTextNode(after));
+
+                node.parentNode.replaceChild(fragment, node);
+            });
         }
     };
 }

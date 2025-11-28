@@ -19,6 +19,9 @@
     <!-- Flowbite CSS -->
     <link href="https://cdn.jsdelivr.net/npm/flowbite@4.0.0/dist/flowbite.min.css" rel="stylesheet" />
 
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -56,6 +59,41 @@
         }
         .dark ::-webkit-scrollbar-thumb:hover {
             background-color: rgb(75 85 99);
+        }
+
+        /* Report text styling */
+        #report-text {
+            line-height: 1.5;
+        }
+        #report-text p {
+            margin-bottom: 1rem;
+        }
+        #report-text strong {
+            font-weight: 700;
+            color: rgb(17 24 39);
+        }
+        .dark #report-text strong {
+            color: rgb(243 244 246);
+        }
+        #report-text h1, #report-text h2, #report-text h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: rgb(37 99 235);
+            border-bottom: 2px solid rgb(37 99 235);
+            padding-bottom: 0.5rem;
+        }
+        .dark #report-text h1, .dark #report-text h2, .dark #report-text h3 {
+            color: rgb(96 165 250);
+            border-bottom-color: rgb(96 165 250);
+        }
+        #report-text hr {
+            margin: 1.5rem 0;
+            border-color: rgb(209 213 219);
+        }
+        .dark #report-text hr {
+            border-color: rgb(55 65 81);
         }
     </style>
 </head>
@@ -174,8 +212,7 @@
                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4" x-text="section.title"></h2>
                     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                         <template x-for="(finding, index) in section.findings" :key="section.key + '-' + index">
-                        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 cursor-pointer transition-colors"
-                             @click="viewFindingDetails(finding)">
+                        <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
 
                             <!-- Finding Header -->
                             <div class="flex justify-between items-start mb-3">
@@ -218,7 +255,7 @@
                                             <button class="text-xs font-medium px-2.5 py-1 rounded flex flex-col items-center leading-tight"
                                                   :class="group.presence === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-300'"
                                                   @mouseenter="open = true"
-                                                  @click.stop="">
+                                                  @click.stop="loadExamView(group.report_id)">
                                                 <span x-text="getShortExamName(group.exam_type_display)" class="whitespace-nowrap"></span>
                                                 <span x-text="group.exam_date" class="whitespace-nowrap"></span>
                                             </button>
@@ -255,12 +292,12 @@
                 </div>
             </div>
 
-            <!-- View: EFL (Exam Detail) -->
-            <div x-show="currentView === 'efl'">
-                <template x-if="currentEfl">
+            <!-- View: Exam (Split View) -->
+            <div x-show="currentView === 'exam'">
+                <template x-if="currentExam">
                     <div>
                         <!-- Breadcrumb -->
-                        <button @click="currentView = 'ipl'; currentEfl = null"
+                        <button @click="currentView = 'ipl'; currentExam = null"
                                 class="inline-flex items-center text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 mb-4">
                             <svg class="w-4 h-4 me-2 rtl:rotate-180" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -268,62 +305,65 @@
                             Back to Problem List
                         </button>
 
-                        <!-- Exam Info Card (Flowbite) -->
+                        <!-- Exam Info Card -->
                         <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-6">
                             <h2 class="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-                                x-text="currentEfl.examInfo.studyDescription"></h2>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
+                                x-text="currentExam.exam_type_display"></h2>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                                 <div>
-                                    <div class="text-gray-500 dark:text-gray-400">Study Date</div>
+                                    <div class="text-gray-500 dark:text-gray-400">Exam Date</div>
                                     <div class="font-medium text-gray-900 dark:text-white"
-                                         x-text="new Date(currentEfl.examInfo.studyDateTime).toLocaleDateString()"></div>
+                                         x-text="currentExam.exam_date"></div>
                                 </div>
                                 <div>
-                                    <div class="text-gray-500 dark:text-gray-400">Study ID</div>
-                                    <div class="font-medium font-mono text-gray-900 dark:text-white"
-                                         x-text="currentEfl.examInfo.studyIdentifier"></div>
-                                </div>
-                                <div>
-                                    <div class="text-gray-500 dark:text-gray-400">LOINC Code</div>
-                                    <div class="font-medium font-mono text-gray-900 dark:text-white"
-                                         x-text="currentEfl.examInfo.studyLoincCode"></div>
+                                    <div class="text-gray-500 dark:text-gray-400">Report ID</div>
+                                    <div class="font-medium font-mono text-sm text-gray-900 dark:text-white"
+                                         x-text="currentExam.report_id"></div>
                                 </div>
                                 <div>
                                     <div class="text-gray-500 dark:text-gray-400">Findings</div>
                                     <div class="font-medium text-gray-900 dark:text-white"
-                                         x-text="currentEfl.findings.length"></div>
+                                         x-text="currentExam.findings.length"></div>
                                 </div>
                             </div>
-                            <button @click="viewReport(currentEfl.diagnosticReportId)" type="button"
-                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                                View Full Report
-                            </button>
                         </div>
 
-                        <!-- Findings List -->
-                        <div class="space-y-4">
-                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Findings</h3>
-                            <template x-for="finding in currentEfl.findings" :key="finding.observationId">
-                                <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                                    <h4 class="mb-2 text-base font-bold text-gray-900 dark:text-white"
-                                        x-text="finding.findingDescription"></h4>
-                                    <p class="mb-3 text-xs font-mono text-gray-500 dark:text-gray-400"
-                                       x-text="finding.findingCode"></p>
-
-                                    <!-- Attributes -->
-                                    <div class="space-y-2">
-                                        <template x-for="attr in finding.attributes" :key="attr.attributeCode">
-                                            <div class="flex items-center space-x-2 text-sm">
-                                                <span class="text-gray-600 dark:text-gray-400" x-text="attr.attributeDescription + ':'"></span>
-                                                <span class="text-xs font-medium px-2.5 py-0.5 rounded"
-                                                      :class="attr.attributeValueDescription === 'present' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'"
-                                                      x-text="attr.attributeValueDescription">
-                                                </span>
-                                            </div>
-                                        </template>
+                        <!-- Split View: Findings (1/3) + Report (2/3) -->
+                        <div class="grid grid-cols-3 gap-6">
+                            <!-- Left: Findings List (1/3) -->
+                            <div class="col-span-1 space-y-6">
+                                <template x-for="section in currentExam.findingSections" :key="section.key">
+                                    <div x-show="section.findings.length > 0">
+                                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3" x-text="section.title"></h3>
+                                        <div class="space-y-2">
+                                            <template x-for="finding in section.findings" :key="finding.finding_type_code">
+                                                <div class="relative"
+                                                     x-data="{ hover: false }"
+                                                     @mouseenter="hover = true; highlightText(finding.reportTexts)"
+                                                     @mouseleave="hover = false; clearHighlight()">
+                                                    <div class="p-3 bg-white border rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 cursor-pointer transition-colors"
+                                                         :class="hover ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500' : 'border-gray-200'">
+                                                        <div class="flex items-center justify-between">
+                                                            <span class="text-sm font-medium text-gray-900 dark:text-white" x-text="finding.finding_type_display"></span>
+                                                            <span x-show="finding.count > 1"
+                                                                  class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-blue-600 rounded-full"
+                                                                  x-text="finding.count"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
                                     </div>
+                                </template>
+                            </div>
+
+                            <!-- Right: Report Text (2/3) -->
+                            <div class="col-span-2">
+                                <div class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 sticky top-24">
+                                    <div id="report-text" class="max-h-[calc(100vh-12rem)] overflow-y-auto prose prose-sm dark:prose-invert max-w-none pr-4"
+                                         x-html="formatReportWithHighlights(currentExam.reportText)"></div>
                                 </div>
-                            </template>
+                            </div>
                         </div>
                     </div>
                 </template>
