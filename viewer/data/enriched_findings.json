@@ -1,0 +1,5477 @@
+{
+  "OIFM_GMTS_004244": {
+    "name": "abdominal abscess",
+    "description": "A localized collection of pus in the abdomen",
+    "synonyms": [
+      "intra-abdominal abscess"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "75100008",
+        "display": "Abdominal abscess"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "47493003",
+        "display": "Abdominal visceral abscess"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "2471009",
+        "display": "Postoperative intra-abdominal abscess"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "80437003",
+        "display": "Abscess of abdominal wall"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID32954",
+      "text": "abdominal cavity"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "iatrogenic:post-operative",
+      "post-traumatic",
+      "inflammatory"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "ER",
+      "IR"
+    ]
+  },
+  "OIFM_MSFT_134126": {
+    "name": "abdominal aortic aneurysm",
+    "description": "An abdominal aortic aneurysm (AAA) is a localized dilation of the abdominal aorta, typically defined as a diameter greater than 3 cm, which can lead to rupture and significant morbidity or mortality.",
+    "synonyms": [
+      "AAA"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "233985008",
+        "display": "Abdominal aortic aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "14336007",
+        "display": "Ruptured abdominal aortic aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "195268001",
+        "display": "Leaking abdominal aortic aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "75878002",
+        "display": "Abdominal aortic aneurysm without rupture"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "314186008",
+        "display": "Inflammatory abdominal aortic aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "425771001",
+        "display": "Enlarging abdominal aortic aneurysm"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID905",
+      "text": "abdominal aorta"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "vascular:aneurysmal",
+      "degenerative",
+      "inflammatory"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "VI",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_003106": {
+    "name": "abdominal lymphadenopathy",
+    "description": "Enlarged lymph nodes in the abdominal region",
+    "synonyms": [
+      "abdominal lymph node enlargement"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "127154008",
+        "display": "Retroperitoneal lymphadenopathy"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "127144009",
+        "display": "Mesenteric lymphadenopathy"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID28854",
+        "display": "abdominal lymph node group"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "245284000",
+        "display": "Abdominal lymph node group"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID31899",
+        "display": "abdominal proper lymph node group"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID28854",
+      "text": "abdominal lymph node group"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "neoplastic:malignant",
+      "neoplastic:metastatic",
+      "autoimmune"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR",
+      "PET"
+    ],
+    "subspecialties": [
+      "AB",
+      "OI",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_023679": {
+    "name": "abnormal intracranial enhancement",
+    "description": "Focal or diffuse increased enhancement within intracranial structures on contrast-enhanced CT or MRI indicating disruption of the blood\u2013brain barrier or abnormal vascularity; common causes include neoplasm, infection/abscess, inflammation, subacute infarction, hemorrhage, and postoperative/iatrogenic change. The original phrasing 'abnormal intracranial enhancement' is an example of this finding.",
+    "synonyms": [
+      "intracranial enhancement",
+      "intracranial contrast enhancement",
+      "abnormal contrast enhancement",
+      "enhancing intracranial lesion",
+      "abnormal brain enhancement",
+      "pathologic intracranial enhancement"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID39563",
+        "display": "homogeneous enhancement"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID6058",
+        "display": "enhancement pattern"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34309",
+        "display": "stippled enhancement"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34310",
+        "display": "clumped enhancement"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID6434",
+      "text": "brain"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "neoplastic:metastatic",
+      "inflammatory:infectious",
+      "inflammatory",
+      "vascular:ischemic",
+      "vascular:hemorrhagic",
+      "iatrogenic:post-operative"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "NR",
+      "ER",
+      "OI"
+    ]
+  },
+  "OIFM_GMTS_017436": {
+    "name": "adrenal tumor",
+    "description": "Neoplastic growth within the adrenal gland, could be benign or malignant.",
+    "synonyms": [
+      "Adrenal neoplasm"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "237783006",
+        "display": "Adrenal mass"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "363355002",
+        "display": "Malignant tumor of adrenal gland"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "255035007",
+        "display": "Adrenal carcinoma"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "281562007",
+        "display": "Adrenal neuroblastoma"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "237796007",
+        "display": "Virilizing adrenal tumor"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "54292009",
+        "display": "Adrenal rest tumor"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID88",
+      "text": "adrenal gland"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "neoplastic:metastatic"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "GU",
+      "OI"
+    ]
+  },
+  "OIFM_GMTS_014057": {
+    "name": "aortic aneurysm",
+    "description": "An abnormal bulge in the wall of the aorta.",
+    "synonyms": [
+      "aortic dilatation",
+      "aneurysm of aorta"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "67362008",
+        "display": "Aortic aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "233985008",
+        "display": "Abdominal aortic aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "73067008",
+        "display": "Ruptured aortic aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "314185007",
+        "display": "Juxtarenal aortic aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "233984007",
+        "display": "Thoracoabdominal aortic aneurysm"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34793",
+        "display": "dissecting aortic aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "14336007",
+        "display": "Ruptured abdominal aortic aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "195268001",
+        "display": "Leaking abdominal aortic aneurysm"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1283",
+      "text": "aorta"
+    },
+    "body_regions": [
+      "Chest",
+      "Abdomen"
+    ],
+    "etiologies": [
+      "vascular:aneurysmal",
+      "degenerative",
+      "inflammatory",
+      "congenital"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "CA",
+      "VI",
+      "AB",
+      "CH",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_000480": {
+    "name": "ascites",
+    "description": "Accumulation of fluid in the peritoneal cavity.",
+    "synonyms": [
+      "peritoneal effusion"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "409614007",
+        "display": "Peritoneal fluid"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID29522",
+        "display": "peritoneal fluid"
+      },
+      {
+        "system": "LOINC",
+        "code": "LP7507-9",
+        "display": "Peritoneal fluid"
+      },
+      {
+        "system": "LOINC",
+        "code": "MTHU003151",
+        "display": "Peritoneal fluid /ascites"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID397",
+      "text": "peritoneal cavity"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "vascular:ischemic",
+      "neoplastic:malignant",
+      "neoplastic:metastatic",
+      "inflammatory:infectious",
+      "inflammatory",
+      "degenerative",
+      "metabolic"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR",
+      "XR"
+    ],
+    "subspecialties": [
+      "AB",
+      "ER",
+      "OI"
+    ]
+  },
+  "OIFM_GMTS_022519": {
+    "name": "atherosclerosis",
+    "description": "Thickening or hardening of the arteries due to plaque buildup.",
+    "synonyms": [
+      "arterial plaque"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "129573006",
+        "display": "Atherosclerotic occlusive disease"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "20717008",
+        "display": "Atherosclerotic fibrous plaque"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID3290",
+        "display": "atherosclerotic plaque"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID13183",
+      "text": "arterial system"
+    },
+    "body_regions": [
+      "ALL"
+    ],
+    "etiologies": [
+      "degenerative",
+      "metabolic",
+      "vascular:ischemic"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR",
+      "DSA"
+    ],
+    "subspecialties": [
+      "CA",
+      "VI",
+      "NR",
+      "AB"
+    ]
+  },
+  "OIFM_OIDM_267712": {
+    "name": "basal cistern effacement",
+    "description": "Loss, narrowing, or obliteration of the cerebrospinal fluid\u2013filled basal (perimesencephalic) cisterns on CT or MRI due to mass effect from edema, hemorrhage, or a space-occupying lesion. This finding commonly reflects elevated intracranial pressure and may indicate increased risk of transtentorial herniation; the original phrasing 'basal cistern effacement' is an example of this imaging appearance.",
+    "synonyms": [
+      "effacement of basal cisterns",
+      "basilar cistern effacement",
+      "cisternal effacement",
+      "perimesencephalic cistern effacement",
+      "basal cistern obliteration",
+      "basal cistern effacement"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [],
+    "anatomic_location": {
+      "id": "RID7091",
+      "text": "meningeal cluster"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "vascular:hemorrhagic",
+      "traumatic",
+      "vascular:ischemic",
+      "inflammatory:infectious"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "NR",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_437042": {
+    "name": "urinary bladder abnormality",
+    "description": "Urinary bladder abnormality is a non-specific radiologic descriptor for any irregularity of the bladder identified on imaging, including contour irregularities, wall thickening, intraluminal masses, or calcifications. Correlation with clinical history and, if indicated, additional targeted imaging or endoscopic evaluation may be required to define etiology.",
+    "synonyms": [
+      "bladder abnormality",
+      "urinary bladder abnormality",
+      "bladder contour abnormality",
+      "abnormality of the urinary bladder"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID5298",
+        "display": "neurogenic bladder disease"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID237",
+      "text": "bladder"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "inflammatory",
+      "inflammatory:infectious",
+      "traumatic",
+      "iatrogenic:post-operative",
+      "mechanical",
+      "degenerative",
+      "congenital"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "GU",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_017328": {
+    "name": "bladder calculus",
+    "description": "Stone formation within the urinary bladder.",
+    "synonyms": [
+      "bladder stone",
+      "vesical calculus",
+      "urinary bladder calculus",
+      "cystolith"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "70650003",
+        "display": "Urinary bladder stone"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "386102003",
+        "display": "Bladder stone"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID5008",
+        "display": "bladder calculus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "271778003",
+        "display": "Oxalate urinary bladder stone"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "271780009",
+        "display": "Phosphate calculus of urinary bladder"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "446702009",
+        "display": "Small calculus particles in urinary bladder"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "833292002",
+        "display": "Calcium oxalate calculus of urinary bladder"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "18109005",
+        "display": "Calculus in diverticulum of urinary bladder"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID237",
+      "text": "bladder"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "metabolic",
+      "mechanical",
+      "inflammatory:infectious"
+    ],
+    "modalities": [
+      "CT",
+      "XR",
+      "US"
+    ],
+    "subspecialties": [
+      "GU",
+      "AB",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_017289": {
+    "name": "bladder tumor",
+    "description": "Neoplasm present in the bladder.",
+    "synonyms": [
+      "bladder cancer",
+      "bladder neoplasm"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "LOINC",
+        "code": "LP36862-8",
+        "display": "Bladder tumor"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID237",
+      "text": "bladder"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "neoplastic:malignant",
+      "neoplastic:benign"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "GU",
+      "AB",
+      "OI"
+    ]
+  },
+  "OIFM_OIDM_201175": {
+    "name": "bowel inflammation",
+    "description": "Radiologic finding representing inflammation of the bowel; commonly demonstrated by bowel wall thickening with mural hyperenhancement and surrounding mesenteric stranding. This finding can be described as 'bowel inflammatory signs' and is seen in enteritis or colitis and may be accompanied by luminal dilation.",
+    "synonyms": [
+      "bowel inflammatory signs",
+      "bowel wall thickening",
+      "bowel wall thickening with mural enhancement",
+      "enteritis signs",
+      "colitis signs"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "24526004",
+        "display": "Inflammatory bowel disease"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID3474",
+        "display": "inflammatory bowel disease"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "9281000146109",
+        "display": "Suspected inflammatory bowel disease"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID94",
+      "text": "gastrointestinal tract"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "autoimmune"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_031526": {
+    "name": "calcification in a tendon",
+    "description": "Calcium deposition within a tendon, often due to chronic tendinopathy.",
+    "synonyms": [],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID5196",
+        "display": "calcification"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "60963005",
+        "display": "Dystrophic calcification"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "129750001",
+        "display": "Dystrophic calcification"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34246",
+        "display": "dystrophic calcification"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "129755006",
+        "display": "Punctate calcification"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "129769006",
+        "display": "Calcification cluster"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID39569",
+      "text": "whole body"
+    },
+    "body_regions": [
+      "Arm",
+      "Leg"
+    ],
+    "etiologies": [
+      "degenerative",
+      "metabolic",
+      "post-traumatic"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "US",
+      "MR"
+    ],
+    "subspecialties": [
+      "MK"
+    ]
+  },
+  "OIFM_GMTS_022537": {
+    "name": "cardiomegaly",
+    "description": "Enlargement of the heart size beyond normal limits.",
+    "synonyms": [
+      "enlarged heart"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [],
+    "anatomic_location": {
+      "id": "RID1385",
+      "text": "heart"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "vascular:ischemic",
+      "inflammatory",
+      "degenerative",
+      "metabolic"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "CA",
+      "CH",
+      "ER"
+    ]
+  },
+  "OIFM_MSFT_440456": {
+    "name": "Cerebral Aneurysm",
+    "description": "An abnormal bulging in a blood vessel in the brain that can lead to serious complications such as rupture or hemorrhage.",
+    "synonyms": [
+      "Intracranial Aneurysm",
+      "Brain Aneurysm",
+      "Cerebral Aneurysm (CA)"
+    ],
+    "attributes": [
+      "presence"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "128608001",
+        "display": "Aneurysm of cerebral artery"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "128609009",
+        "display": "Intracranial aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "233983001",
+        "display": "Ruptured cerebral aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "783629005",
+        "display": "Congenital aneurysm of cerebral artery"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "783416000",
+        "display": "Aneurysm of anterior cerebral artery"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "429221000124104",
+        "display": "Dissecting aneurysm of cerebral artery"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "783716004",
+        "display": "Acquired aneurysm of cerebral artery"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "783420001",
+        "display": "Aneurysm of middle cerebral artery"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "783419007",
+        "display": "Aneurysm of posterior cerebral artery"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID28600",
+      "text": "circle of Willis"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "congenital",
+      "degenerative",
+      "vascular:aneurysmal",
+      "traumatic",
+      "inflammatory:infectious"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "DSA"
+    ],
+    "subspecialties": [
+      "NR",
+      "ER",
+      "IR",
+      "VI"
+    ]
+  },
+  "OIFM_OIDM_786384": {
+    "name": "cerebral atrophy",
+    "description": "Cerebral atrophy denotes loss of cerebral parenchymal volume, often diffuse but can be regional. The original phrase provided, \"cerebral volume loss\", is a commonly used radiology descriptor for this finding.",
+    "synonyms": [
+      "cerebral volume loss",
+      "global cerebral atrophy",
+      "brain atrophy",
+      "diffuse cerebral atrophy",
+      "cerebral parenchymal loss"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "278849000",
+        "display": "Cerebral atrophy"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "691461000119103",
+        "display": "Acquired cerebral atrophy"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "111033008",
+        "display": "Circumscribed atrophy of brain"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1208481000",
+        "display": "Progressive cerebello-cerebral atrophy"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "776087007",
+        "display": "Autosomal recessive cerebral atrophy"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID13857",
+      "text": "cerebral hemisphere"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "degenerative",
+      "vascular:ischemic",
+      "inflammatory",
+      "metabolic",
+      "traumatic",
+      "idiopathic"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "NR"
+    ]
+  },
+  "OIFM_GMTS_007619": {
+    "name": "cerebral infarction",
+    "description": "Death of brain tissue due to inadequate blood supply.",
+    "synonyms": [
+      "stroke",
+      "brain infarct"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "432504007",
+        "display": "Cerebral infarction"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "422504002",
+        "display": "Ischemic stroke"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "276219001",
+        "display": "Occipital cerebral infarction"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "230706003",
+        "display": "Hemorrhagic cerebral infarction"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "16218291000119100",
+        "display": "Acute cerebral ischemia"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "287731003",
+        "display": "Cerebral ischemia"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID6434",
+      "text": "brain"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "vascular:ischemic",
+      "vascular:thrombotic",
+      "vascular:hemorrhagic"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "NR",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_093125": {
+    "name": "cerebral small vessel disease",
+    "description": "Cerebral small vessel disease is characterized by chronic ischemic changes of the brain due to small vessel pathology, typically presenting as diffuse or focal white matter hyperintensities with possible lacunes or microbleeds. The original phrasing 'small vessel ischemic disease' may be used to describe this finding in radiology reports.",
+    "synonyms": [
+      "small vessel ischemic disease",
+      "ischemic small vessel disease",
+      "small-vessel disease",
+      "CSVD"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "443929000",
+        "display": "Small vessel cerebrovascular disease"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1186724002",
+        "display": "HTRA1-related autosomal dominant cerebral small vessel disease"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID6434",
+      "text": "brain"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "vascular:ischemic",
+      "degenerative",
+      "vascular:hemorrhagic"
+    ],
+    "modalities": [
+      "MR",
+      "CT"
+    ],
+    "subspecialties": [
+      "NR",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_456265": {
+    "name": "chiari malformation",
+    "description": "chiari malformation is downward displacement of the cerebellar tonsils through the foramen magnum, potentially causing brainstem crowding and syringomyelia in some patients (original phrasing: 'chiari malformation'). MRI is the preferred modality to confirm the diagnosis and assess associated craniovertebral anomalies.",
+    "synonyms": [
+      "chiari malformation",
+      "arnold-chiari malformation",
+      "chiari i malformation",
+      "chiari type i malformation",
+      "arnold chiari malformation",
+      "CM"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "253184003",
+        "display": "Chiari malformation"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID28827",
+        "display": "chiari malformation"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "253185002",
+        "display": "Chiari malformation type I"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "373587001",
+        "display": "Chiari malformation type II"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "253186001",
+        "display": "Chiari malformation type III"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "253187005",
+        "display": "Chiari malformation type IV"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34700",
+        "display": "chiari malformation type I"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34701",
+        "display": "chiari malformation type II"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34702",
+        "display": "chiari malformation type III"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34703",
+        "display": "chiari malformation type IV"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID6381_RID6434",
+      "text": "infratentorial brain"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "congenital",
+      "developmental"
+    ],
+    "modalities": [
+      "MR",
+      "CT"
+    ],
+    "subspecialties": [
+      "NR",
+      "PD"
+    ]
+  },
+  "OIFM_GMTS_000570": {
+    "name": "cholecystitis",
+    "description": "Inflammation of the gallbladder, usually due to gallstones blocking the bile ducts.",
+    "synonyms": [],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "76581006",
+        "display": "Cholecystitis"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID3394",
+        "display": "cholecystitis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "65275009",
+        "display": "Acute cholecystitis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "20824003",
+        "display": "Chronic cholecystitis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "396335001",
+        "display": "Acute and chronic cholecystitis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "25924004",
+        "display": "Calculus of gallbladder with cholecystitis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "59771005",
+        "display": "Calculus of gallbladder with acute cholecystitis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "72533002",
+        "display": "Acute gangrenous cholecystitis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "89628003",
+        "display": "Acute suppurative cholecystitis"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID187",
+      "text": "gallbladder"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory",
+      "inflammatory:infectious",
+      "mechanical"
+    ],
+    "modalities": [
+      "US",
+      "CT",
+      "MR",
+      "NM"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_842151": {
+    "name": "clavicle fracture",
+    "description": "Fracture of the clavicle with disruption of the bony cortex. It may be displaced or nondisplaced and can involve the midshaft or the medial or lateral end.",
+    "synonyms": [
+      "clavicular fracture",
+      "fracture of the clavicle",
+      "clavicle fx",
+      "clavicular fx"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "58150001",
+        "display": "Fracture of clavicle"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "424455005",
+        "display": "Pathological fracture of clavicle"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "311817009",
+        "display": "Open multiple fractures of clavicle and/or scapula and/or humerus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "311816000",
+        "display": "Closed multiple fractures of clavicle and/or scapula and/or humerus"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1854",
+      "text": "clavicle"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "traumatic",
+      "post-traumatic",
+      "neoplastic:malignant",
+      "neoplastic:metastatic"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "MK",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_500879": {
+    "name": "colonic diverticulitis",
+    "description": "Colonic diverticulitis is inflammation or infection of colonic diverticula, most commonly involving the sigmoid colon; the original input 'colornic diverticulitis' illustrates the need to standardize terminology. On cross-sectional imaging, findings include focal colonic wall thickening with pericolonic fat stranding, and complicated disease may present with abscess, phlegmon, or perforation.",
+    "synonyms": [
+      "colornic diverticulitis",
+      "diverticulitis of the colon",
+      "diverticular inflammation of the colon"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "111359004",
+        "display": "Diverticulitis of colon"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID3409",
+        "display": "diverticulitis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1162590005",
+        "display": "Diverticulitis of ascending colon"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1172640002",
+        "display": "Diverticulitis of descending colon"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "427910000",
+        "display": "Diverticulitis of sigmoid colon"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "123629008",
+        "display": "Hemorrhagic diverticulitis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "110429003",
+        "display": "Perforated diverticulitis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "123628000",
+        "display": "Obstructive diverticulitis"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID152",
+      "text": "large intestine"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "mechanical"
+    ],
+    "modalities": [
+      "CT",
+      "US"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_388787": {
+    "name": "colonic diverticulosis",
+    "description": "Presence of multiple diverticula within the colon, most commonly in the sigmoid colon, seen as outpouchings along the colonic wall. It is typically an incidental finding and does not show signs of acute inflammation unless diverticulitis is present.",
+    "synonyms": [
+      "colonic diverticulosis",
+      "diverticulosis of the colon",
+      "colonic diverticula",
+      "diverticular disease of the colon"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "733657002",
+        "display": "Diverticulosis of colon"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "397881000",
+        "display": "Diverticular disease"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID152",
+      "text": "large intestine"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "degenerative",
+      "mechanical"
+    ],
+    "modalities": [
+      "CT",
+      "RF"
+    ],
+    "subspecialties": [
+      "GI",
+      "AB"
+    ]
+  },
+  "OIFM_MSFT_430810": {
+    "name": "coronary artery calcifications",
+    "description": "Atherosclerotic calcifications of the coronary arteries",
+    "synonyms": [
+      "Coronary Calcification",
+      "CAC",
+      "Coronary Atherosclerosis"
+    ],
+    "attributes": [
+      "presence",
+      "cac severity category",
+      "location",
+      "agatston score",
+      "arterial age"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID50146",
+        "display": "coronary artery calcification"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "445512009",
+        "display": "Calcification of coronary artery"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "450360000",
+        "display": "Coronary artery calcium score"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "450734004",
+        "display": "Coronary artery calcium score"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID28727",
+      "text": "set of coronary arteries"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "degenerative",
+      "metabolic",
+      "vascular:ischemic"
+    ],
+    "modalities": [
+      "CT",
+      "XR"
+    ],
+    "subspecialties": [
+      "CA",
+      "CH",
+      "ER",
+      "OI"
+    ]
+  },
+  "OIFM_GMTS_005486": {
+    "name": "cystic liver lesion",
+    "description": "Fluid-filled lesion within the liver tissue.",
+    "synonyms": [
+      "hepatic cyst"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "85057007",
+        "display": "Liver cyst"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "72925005",
+        "display": "Congenital cystic disease of liver"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID58",
+      "text": "liver"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "congenital",
+      "developmental",
+      "neoplastic:benign",
+      "inflammatory:infectious",
+      "post-traumatic"
+    ],
+    "modalities": [
+      "US",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI"
+    ]
+  },
+  "OIFM_GMTS_025663": {
+    "name": "degenerative joint changes",
+    "description": "Alterations in joint structure due to chronic wear or arthritis; common with aging.",
+    "synonyms": [
+      "Osteoarthritic changes",
+      "Joint degeneration"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "82300000",
+        "display": "Degenerative joint disease of ankle AND/OR foot"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "22193007",
+        "display": "Degenerative joint disease of hand"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "14380001000004102",
+        "display": "Degenerative joint disease of thumb"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "445478004",
+        "display": "Degenerative joint disease of pelvis"
+      },
+      {
+        "system": "LOINC",
+        "code": "LA31860-2",
+        "display": "Degenerative disc disease"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID13209",
+      "text": "musculoskeletal system"
+    },
+    "body_regions": [
+      "ALL"
+    ],
+    "etiologies": [
+      "degenerative"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "MK"
+    ]
+  },
+  "OIFM_GMTS_004740": {
+    "name": "diffuse gallbladder wall thickening",
+    "description": "Thickening of the gallbladder wall seen diffusely",
+    "synonyms": [
+      "gallbladder wall thickening",
+      "diffuse thickening of gallbladder wall"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID34385",
+        "display": "ductal wall thickening"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "76875008",
+        "display": "Hypertrophy of gallbladder"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID187",
+      "text": "gallbladder"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "vascular:ischemic",
+      "neoplastic:malignant",
+      "mechanical"
+    ],
+    "modalities": [
+      "US",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_990401": {
+    "name": "diffuse idiopathic skeletal hyperostosis",
+    "description": "Diffuse idiopathic skeletal hyperostosis (DISH) is characterized radiographically by flowing calcifications along the anterior longitudinal ligament spanning at least four contiguous vertebral bodies with preservation of intervertebral disc height. It may be associated with peripheral enthesopathy and does not typically involve sacroiliac joint fusion.",
+    "synonyms": [
+      "DISH",
+      "Forestier disease",
+      "diffuse idiopathic skeletal hyperostosis (DISH)"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID5069",
+        "display": "diffuse idiopathic skeletal hyperostosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "31487001",
+        "display": "Disseminated idiopathic skeletal hyperostosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "302321000119100",
+        "display": "Diffuse idiopathic skeletal hyperostosis of cervicothoracic spine"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "302311000119107",
+        "display": "Diffuse idiopathic skeletal hyperostosis of cervical spine"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "302381000119101",
+        "display": "Diffuse idiopathic skeletal hyperostosis of thoracic spine"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "302331000119102",
+        "display": "Diffuse idiopathic skeletal hyperostosis of lumbar spine"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "302391000119103",
+        "display": "Diffuse idiopathic skeletal hyperostosis of thoracolumbar spine"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "302341000119106",
+        "display": "Diffuse idiopathic skeletal hyperostosis of lumbosacral spine"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID7741",
+      "text": "spine"
+    },
+    "body_regions": [
+      "Head",
+      "Neck",
+      "Chest",
+      "Abdomen"
+    ],
+    "etiologies": [
+      "idiopathic",
+      "degenerative",
+      "metabolic"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "MK",
+      "NR"
+    ]
+  },
+  "OIFM_GMTS_005226": {
+    "name": "dilated bile ducts",
+    "description": "Enlargement of the bile ducts suggestive of obstruction",
+    "synonyms": [
+      "biliary tree dilation",
+      "biliary ductal dilatation",
+      "biliary dilation"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "440471007",
+        "display": "Cystic dilatation of common bile duct"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1155727009",
+        "display": "Congenital dilatation of common bile duct"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "111331000",
+        "display": "Congenital dilatation of lobar intrahepatic bile duct"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "441285006",
+        "display": "Acquired cystic dilatation of common bile duct"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1204346009",
+        "display": "Congenital cystic dilatation of common bile duct"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34711",
+        "display": "congenital dilatation of lobar intrahepatic bile duct"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID33652",
+      "text": "biliary tree"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "mechanical",
+      "neoplastic:malignant",
+      "inflammatory",
+      "congenital",
+      "iatrogenic:post-operative"
+    ],
+    "modalities": [
+      "US",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI"
+    ]
+  },
+  "OIFM_GMTS_004609": {
+    "name": "dilated intrahepatic ducts",
+    "description": "Expansion of the bile ducts within the liver",
+    "synonyms": [
+      "intrahepatic duct dilatation",
+      "intrahepatic biliary dilation"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID196",
+        "display": "intrahepatic bile duct branch"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "362193005",
+        "display": "Entire intrahepatic bile duct"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "111331000",
+        "display": "Congenital dilatation of lobar intrahepatic bile duct"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34711",
+        "display": "congenital dilatation of lobar intrahepatic bile duct"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "235925007",
+        "display": "Cyst of intrahepatic bile ducts"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "97961000119108",
+        "display": "Congenital dilatation of lobar intrahepatic bile duct with obstruction"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID58",
+      "text": "liver"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "mechanical",
+      "neoplastic:malignant",
+      "inflammatory",
+      "congenital",
+      "iatrogenic:post-operative"
+    ],
+    "modalities": [
+      "US",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI"
+    ]
+  },
+  "OIFM_GMTS_002674": {
+    "name": "dilated pancreatic duct",
+    "description": "Expansion of the pancreatic duct, often due to obstruction",
+    "synonyms": [
+      "pancreatic duct dilatation"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID177",
+        "display": "main pancreatic duct"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID176",
+        "display": "pancreatic duct"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1230032007",
+        "display": "Entire main pancreatic duct"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID176",
+      "text": "pancreatic duct"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "mechanical",
+      "neoplastic:malignant",
+      "neoplastic:benign",
+      "inflammatory",
+      "post-traumatic"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI"
+    ]
+  },
+  "OIFM_GMTS_017947": {
+    "name": "dural sinus thrombosis",
+    "description": "The formation of a blood clot in one of the brain's dural venous sinuses.",
+    "synonyms": [
+      "dural venous sinus thrombosis",
+      "Cerebral venous sinus thrombosis"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "192759008",
+        "display": "Cerebral venous sinus thrombosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "195229008",
+        "display": "Non-pyogenic venous sinus thrombosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "42970005",
+        "display": "Nonpyogenic thrombosis of intracranial venous sinus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "21258007",
+        "display": "Thrombosis of lateral venous sinus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "89980009",
+        "display": "Thrombosis of cavernous venous sinus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "230720005",
+        "display": "Cerebral venous thrombosis of straight sinus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1156027008",
+        "display": "Cerebral venous sinus thrombosis in pregnancy"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "722930000",
+        "display": "Neonatal thrombosis of cerebral venous sinus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "702374000",
+        "display": "Neonatal noninfectious cerebral venous sinus thrombosis"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID34474",
+      "text": "dural venous sinus"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "vascular:thrombotic",
+      "inflammatory:infectious",
+      "neoplastic:malignant",
+      "iatrogenic:medication-related",
+      "traumatic",
+      "idiopathic"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "NR",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_017620": {
+    "name": "enlarged prostate",
+    "description": "Increase in prostate size, often indicating benign prostatic hyperplasia",
+    "synonyms": [
+      "prostatic enlargement",
+      "prostatomegaly",
+      "prostatic hypertrophy"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "266569009",
+        "display": "Benign prostatic hyperplasia"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID3784",
+        "display": "benign prostatic hyperplasia"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID49524",
+        "display": "benign prostatic hyperplasia nodule"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "236646007",
+        "display": "Benign prostatic hyperplasia with outflow obstruction"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "254902007",
+        "display": "Benign prostatic hyperplasia without outflow obstruction"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID343",
+      "text": "prostate"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "degenerative"
+    ],
+    "modalities": [
+      "US",
+      "MR",
+      "CT"
+    ],
+    "subspecialties": [
+      "GU",
+      "AB"
+    ]
+  },
+  "OIFM_GMTS_014833": {
+    "name": "extensive pulmonary opacity with cavitation",
+    "description": "Large area of lung opacity with cavitation, seen in infections, malignancy, or infarction.",
+    "synonyms": [
+      "destructive lung opacity",
+      "cavitating lung mass",
+      "cavitating infiltrate"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "301863008",
+        "display": "Cavitation of lung"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "95436008",
+        "display": "Lung consolidation"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "846749001",
+        "display": "Consolidation of lung present"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "186177005",
+        "display": "Tuberculosis of lung with cavitation"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1301",
+      "text": "lung"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "neoplastic:malignant",
+      "vascular:ischemic",
+      "inflammatory"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "CH",
+      "ER",
+      "OI"
+    ]
+  },
+  "OIFM_GMTS_022461": {
+    "name": "fatty liver",
+    "description": "Accumulation of excess fat in liver cells",
+    "synonyms": [
+      "fatty infiltration of liver",
+      "fatty change in liver",
+      "hepatic steatosis"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "197321007",
+        "display": "Steatosis of liver"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID5217",
+        "display": "steatosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1187537008",
+        "display": "Steatosis"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID58",
+      "text": "liver"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "metabolic",
+      "toxic"
+    ],
+    "modalities": [
+      "US",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI"
+    ]
+  },
+  "OIFM_GMTS_022482": {
+    "name": "gallstone",
+    "description": "Stone formation in the gallbladder or bile duct.",
+    "synonyms": [
+      "gallstones",
+      "cholelithiasis"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "722869007",
+        "display": "Calculus of gallbladder without cholecystitis or cholangitis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "830075002",
+        "display": "Pigment calculus of gallbladder"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "830074003",
+        "display": "Cholesterol calculus of gallbladder"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "266474003",
+        "display": "Biliary calculus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "10754741000119103",
+        "display": "Postpartum gallbladder calculus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "94611000119105",
+        "display": "Gallbladder calculus during pregnancy"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID187",
+      "text": "gallbladder"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "metabolic",
+      "inflammatory"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "US",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_017277": {
+    "name": "generalized bladder wall thickening",
+    "description": "Thickening of the bladder wall which may indicate inflammation or other causes.",
+    "synonyms": [],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID30135",
+        "display": "wall of urinary bladder"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "362225003",
+        "display": "Entire wall of urinary bladder"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID237",
+      "text": "bladder"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "neoplastic:malignant",
+      "mechanical",
+      "post-traumatic"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR"
+    ],
+    "subspecialties": [
+      "GU",
+      "AB"
+    ]
+  },
+  "OIFM_GMTS_010762": {
+    "name": "generalized osteoporosis",
+    "description": "Reduction in bone density throughout the skeleton, leading to fragile bones.",
+    "synonyms": [
+      "osteopenia"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "64859006",
+        "display": "Osteoporosis"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID5389",
+        "display": "osteoporosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "203429007",
+        "display": "Idiopathic generalized osteoporosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "240157009",
+        "display": "Secondary generalized osteoporosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "240155001",
+        "display": "Adult idiopathic generalized osteoporosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "240156000",
+        "display": "Juvenile idiopathic generalized osteoporosis"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID39569",
+      "text": "whole body"
+    },
+    "body_regions": [
+      "ALL"
+    ],
+    "etiologies": [
+      "metabolic",
+      "degenerative",
+      "idiopathic"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "MK",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_014547": {
+    "name": "ground-glass pulmonary opacity",
+    "description": "Hazy increased lung opacity with preserved bronchial and vascular markings.",
+    "synonyms": [
+      "ground-glass opacity",
+      "GGO"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "1217294009",
+        "display": "Ground glass opacity"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID28531",
+        "display": "ground-glass opacity"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID35247",
+        "display": "ground glass pattern"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID35248",
+        "display": "ground-glass sign"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1301",
+      "text": "lung"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "vascular:hemorrhagic",
+      "neoplastic:malignant",
+      "vascular:ischemic"
+    ],
+    "modalities": [
+      "CT",
+      "XR"
+    ],
+    "subspecialties": [
+      "CH",
+      "ER",
+      "OI"
+    ]
+  },
+  "OIFM_OIDM_160831": {
+    "name": "hepatic lesion",
+    "description": "A hepatic lesion denotes a focal abnormality of the liver parenchyma detected on imaging. The finding encompasses a spectrum of etiologies from benign to malignant, and further characterization with dedicated liver imaging is often required to refine the diagnosis.",
+    "synonyms": [
+      "hepatic lesion",
+      "liver lesion",
+      "focal liver lesion",
+      "hepatic mass",
+      "liver mass"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "300331000",
+        "display": "Lesion of liver"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "300332007",
+        "display": "Liver mass"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID39466",
+        "display": "liver mass"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "197328001",
+        "display": "Liver abscess via hepatic artery"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID58",
+      "text": "liver"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "neoplastic:metastatic",
+      "inflammatory:infectious",
+      "vascular:hemorrhagic"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "AB",
+      "OI",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_001845": {
+    "name": "hepatomegaly",
+    "description": "Enlargement of the liver.",
+    "synonyms": [
+      "enlarged liver"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID34593",
+        "display": "enlarged liver"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "249566006",
+        "display": "Liver size"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID58",
+      "text": "liver"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "neoplastic:metastatic",
+      "vascular:ischemic",
+      "metabolic",
+      "degenerative"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI",
+      "OI",
+      "ER"
+    ]
+  },
+  "OIFM_CDE_000229": {
+    "name": "Humerus Dislocation",
+    "description": "Humerus Dislocation",
+    "synonyms": [],
+    "attributes": [
+      "Presence",
+      "Type",
+      "Side"
+    ],
+    "ontology_codes": [],
+    "anatomic_location": {
+      "id": "RID1905",
+      "text": "glenohumeral joint"
+    },
+    "body_regions": [
+      "Arm"
+    ],
+    "etiologies": [
+      "traumatic",
+      "mechanical"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "MK",
+      "ER"
+    ]
+  },
+  "OIFM_CDE_000232": {
+    "name": "Humerus Fracture",
+    "description": "Acute Humerus Fracture Type",
+    "synonyms": [],
+    "attributes": [
+      "Presence",
+      "Type",
+      "Pattern",
+      "Side"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "66308002",
+        "display": "Fracture of humerus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "704335006",
+        "display": "Osteoporotic fracture of humerus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "89294002",
+        "display": "Open fracture of humerus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "704062006",
+        "display": "Stress fracture of humerus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "263193000",
+        "display": "Supracondylar fracture of humerus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "43295006",
+        "display": "Closed fracture of humerus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "127286005",
+        "display": "Fracture of upper end of humerus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "50890004",
+        "display": "Fracture of shaft of humerus"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1971",
+      "text": "humerus"
+    },
+    "body_regions": [
+      "Arm"
+    ],
+    "etiologies": [
+      "traumatic",
+      "degenerative",
+      "metabolic",
+      "post-traumatic"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "MK",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_007816": {
+    "name": "hydrocephalus",
+    "description": "Accumulation of cerebrospinal fluid in the brain ventricles leading to increased pressure.",
+    "synonyms": [
+      "hydrocephaly",
+      "fetal ventriculomegaly"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [],
+    "anatomic_location": {
+      "id": "RID7124",
+      "text": "lateral ventricle"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "congenital",
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "inflammatory:infectious",
+      "vascular:hemorrhagic",
+      "post-traumatic",
+      "idiopathic"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "NR",
+      "PD",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_874812": {
+    "name": "hydronephrosis",
+    "description": "Hydronephrosis refers to dilation of the renal pelvis and calyces caused by obstruction to urinary outflow distal to the kidney. It may be unilateral or bilateral; chronic obstruction can lead to cortical thinning and impaired renal function.",
+    "synonyms": [
+      "hydronephrosis",
+      "renal pelvis dilation",
+      "renal pelvis dilatation",
+      "dilated renal pelvis",
+      "collecting system dilation"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [],
+    "anatomic_location": {
+      "id": "RID205",
+      "text": "kidney"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "mechanical",
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "congenital",
+      "iatrogenic:post-operative"
+    ],
+    "modalities": [
+      "US",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "GU",
+      "AB",
+      "ER",
+      "PD"
+    ]
+  },
+  "OIFM_OIDM_668318": {
+    "name": "inferior vena cava thrombosis",
+    "description": "Inferior vena cava thrombosis is the formation of a thrombus within the lumen of the inferior vena cava. On cross-sectional imaging, it appears as an intraluminal filling defect and may be associated with venous dilation; this finding is exemplified by the original phrasing 'IVC thrombosis'.",
+    "synonyms": [
+      "IVC thrombosis",
+      "inferior vena cava thrombus",
+      "thrombosis of the inferior vena cava",
+      "IVC thrombus"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "281595001",
+        "display": "Thrombosis of inferior vena cava"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "15712441000119103",
+        "display": "Chronic thrombosis of inferior vena cava"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "15712161000119106",
+        "display": "Acute thrombosis of inferior vena cava"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1258884008",
+        "display": "Tumor thrombus of inferior vena cava"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1178",
+      "text": "inferior vena cava"
+    },
+    "body_regions": [
+      "Abdomen",
+      "Chest"
+    ],
+    "etiologies": [
+      "vascular:thrombotic",
+      "neoplastic:malignant",
+      "mechanical",
+      "iatrogenic:device-related",
+      "inflammatory:infectious"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "AB",
+      "VI",
+      "ER",
+      "CA"
+    ]
+  },
+  "OIFM_CDE_000019": {
+    "name": "Inflammatory Sinus",
+    "description": "This module describes the Common Data elements and Macros for Inflammatory Sinus",
+    "synonyms": [],
+    "attributes": [
+      "Side",
+      "Lateral positions",
+      "Keros class",
+      "Ethmoid arteries",
+      "Maxillary sinus vertical diameter",
+      "Uncinate processes",
+      "Maxillary Infundibulum",
+      "Osteomeatalunits",
+      "Sphenoethmoidal recesses",
+      "Sphenoid sinus vertical diameter",
+      "Maxillary sinus horizontal diameter",
+      "Sphenoid sinus horizontal diameter",
+      "Nature of inflammatory disease",
+      "Frontal recess patency",
+      "Nasal Septum",
+      "Ethmoid air cells aeration",
+      "Sphenoethmoidal recess patency",
+      "Osteo-meatal unit patency",
+      "Depth of mucosal disease",
+      "Polyps",
+      "Sinus variants"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID9554",
+        "display": "paranasal sinus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "120228005",
+        "display": "Paranasal sinus part"
+      },
+      {
+        "system": "LOINC",
+        "code": "LP209036-5",
+        "display": "Infection or inflammation"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID9554",
+      "text": "paranasal sinus"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "autoimmune"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "XR"
+    ],
+    "subspecialties": [
+      "HN",
+      "ER",
+      "PD"
+    ]
+  },
+  "OIFM_GMTS_022484": {
+    "name": "intestinal obstruction",
+    "description": "Blockage that prevents the normal flow of intestinal contents.",
+    "synonyms": [
+      "Bowel obstruction",
+      "Intestinal blockage",
+      "bowel obstruction"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "81060008",
+        "display": "Intestinal obstruction"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "281255004",
+        "display": "Small bowel obstruction"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "281254000",
+        "display": "Large bowel obstruction"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "429196001",
+        "display": "Partial obstruction of small bowel"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34751",
+        "display": "small bowel closed-loop obstruction"
+      },
+      {
+        "system": "LOINC",
+        "code": "LA15425-4",
+        "display": "Small bowel obstruction/partial or complete"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID94",
+      "text": "gastrointestinal tract"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "mechanical",
+      "neoplastic:malignant",
+      "inflammatory",
+      "post-traumatic",
+      "iatrogenic:post-operative",
+      "congenital"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI",
+      "ER"
+    ]
+  },
+  "OIFM_MSFT_218756": {
+    "name": "Intracerebral Hemorrhage",
+    "description": "Intracerebral hemorrhage refers to bleeding that occurs within the brain tissue itself, often due to a ruptured blood vessel.",
+    "synonyms": [
+      "ICH",
+      "cerebral hemorrhage"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "274100004",
+        "display": "Cerebral hemorrhage"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "449020009",
+        "display": "Intraparenchymal hemorrhage of brain"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "143521000119103",
+        "display": "Nontraumatic intraparenchymal cerebral hemorrhage"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "195168007",
+        "display": "Intracerebral hemorrhage, intraventricular"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "195169004",
+        "display": "Intracerebral hemorrhage, multiple localized"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1332499002",
+        "display": "Traumatic intraparenchymal cerebral hemorrhage"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1386000",
+        "display": "Intracranial hemorrhage"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID6434",
+      "text": "brain"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "vascular:hemorrhagic",
+      "traumatic",
+      "vascular:aneurysmal",
+      "vascular:ischemic"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "NR",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_119725": {
+    "name": "intracranial mass",
+    "description": "A focal space-occupying lesion within the cranial cavity that may reflect neoplasm, hemorrhage, infection, or other pathology; may cause edema or mass effect depending on size and location. The original phrasing 'intracranial mass' is provided as an example use case.",
+    "synonyms": [
+      "intracranial mass",
+      "brain mass",
+      "intracranial lesion",
+      "cranial mass",
+      "intracerebral mass",
+      "intracranial tumor"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "85974009",
+        "display": "Intracranial mass"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "422840005",
+        "display": "Mass lesion of brain"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID6434",
+      "text": "brain"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "neoplastic:metastatic",
+      "vascular:hemorrhagic",
+      "inflammatory:infectious",
+      "inflammatory"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "NR",
+      "ER",
+      "OI"
+    ]
+  },
+  "OIFM_OIDM_972279": {
+    "name": "intracranial vascular abnormality",
+    "description": "A generic descriptor for any abnormality of the intracranial vasculature, which may include aneurysm, arteriovenous malformation, arteriovenous fistula, stenosis, or other vascular abnormality. The provided phrase 'intracranial vascular abnormality' serves as an example use case of this category.",
+    "synonyms": [
+      "intracranial vascular abnormality",
+      "intracranial vascular anomaly",
+      "cerebral vascular abnormality",
+      "cerebral vascular anomaly",
+      "intracranial vasculopathy",
+      "cerebral vasculopathy"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "703221003",
+        "display": "Congenital intracranial vascular malformation"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "783806000",
+        "display": "Vascular malformation"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID3332",
+        "display": "vascular malformation"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "400159008",
+        "display": "Congenital vascular malformation"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID6434",
+      "text": "brain"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "congenital",
+      "degenerative",
+      "vascular:aneurysmal",
+      "vascular:thrombotic",
+      "traumatic"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "DSA"
+    ],
+    "subspecialties": [
+      "NR",
+      "VI",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_012821": {
+    "name": "joint effusion",
+    "description": "Excess fluid accumulation in or around a joint.",
+    "synonyms": [
+      "Joint swelling",
+      "Hydrarthrosis"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "387637008",
+        "display": "Effusion of joint"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "202381003",
+        "display": "Knee joint effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "202379000",
+        "display": "Hip joint effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "202383000",
+        "display": "Ankle joint effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "202373004",
+        "display": "Elbow joint effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "202392002",
+        "display": "Acute joint effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "202391009",
+        "display": "Chronic joint effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "263118005",
+        "display": "Traumatic joint effusion"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID39569",
+      "text": "whole body"
+    },
+    "body_regions": [
+      "Arm",
+      "Leg"
+    ],
+    "etiologies": [
+      "inflammatory",
+      "inflammatory:infectious",
+      "traumatic",
+      "degenerative",
+      "mechanical"
+    ],
+    "modalities": [
+      "XR",
+      "US",
+      "MR",
+      "CT"
+    ],
+    "subspecialties": [
+      "MK",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_032553": {
+    "name": "lobar atelectasis",
+    "description": "Collapse or loss of volume in an entire lobe of the lung.",
+    "synonyms": [
+      "lobar collapse"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [],
+    "anatomic_location": {
+      "id": "RID1301",
+      "text": "lung"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "mechanical",
+      "neoplastic:malignant",
+      "inflammatory:infectious",
+      "post-traumatic"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "CH",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_786838": {
+    "name": "loss of gray-white differentiation",
+    "description": "Loss of gray-white differentiation is a radiologic sign in which the distinction between the cortical gray matter and the underlying white matter is diminished, most commonly reflecting cerebral edema or acute ischemia. It is detectable on CT or MRI and can indicate early brain injury.",
+    "synonyms": [
+      "loss of gray-white differentiation",
+      "lgwd",
+      "loss of gray-white matter differentiation"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [],
+    "anatomic_location": {
+      "id": "RID13857",
+      "text": "cerebral hemisphere"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "vascular:ischemic",
+      "traumatic",
+      "inflammatory:infectious",
+      "neoplastic:malignant",
+      "metabolic"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "NR",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_481402": {
+    "name": "lumbar spine degenerative change",
+    "description": "Degenerative changes of the lumbar spine refer to age-related or wear-related alterations such as disc-space narrowing, facet arthropathy, endplate sclerosis, and osteophyte formation. The original term 'lumbar spine degenerative changes' is encompassed by this canonical form.",
+    "synonyms": [
+      "lumbar spine degenerative changes",
+      "lumbar spondylosis",
+      "degenerative change of the lumbar spine",
+      "degenerative changes of the lumbar spine"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "239880009",
+        "display": "Lumbar spondylosis"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID34573",
+      "text": "lumbar vertebral column"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "degenerative"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "MK",
+      "NR"
+    ]
+  },
+  "OIFM_GMTS_015972": {
+    "name": "massive pleural effusion",
+    "description": "A very large collection of fluid in the pleural space.",
+    "synonyms": [
+      "large pleural effusion",
+      "extensive pleural effusion"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "60046008",
+        "display": "Pleural effusion"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34539",
+        "display": "pleural effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "425802001",
+        "display": "Bilateral pleural effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "427895005",
+        "display": "Loculated pleural effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "13841000119107",
+        "display": "Exudative pleural effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "307202004",
+        "display": "Hemorrhagic pleural effusion"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1363",
+      "text": "pleural space"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "neoplastic:malignant",
+      "vascular:hemorrhagic",
+      "mechanical",
+      "iatrogenic:post-operative"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "US"
+    ],
+    "subspecialties": [
+      "CH",
+      "ER",
+      "OI"
+    ]
+  },
+  "OIFM_OIDM_228653": {
+    "name": "mastoid air cell effusion",
+    "description": "Fluid within the mastoid air cell system visible on imaging, presenting as opacification of the mastoid region. This finding may reflect otitis media with effusion or mastoiditis; the original term \"mastoid air cell fluid\" illustrates this context.",
+    "synonyms": [
+      "mastoid air cell fluid",
+      "fluid in mastoid air cells",
+      "mastoid effusion",
+      "mastoid air cell opacification"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [],
+    "anatomic_location": {
+      "id": "RID9361",
+      "text": "temporal bone"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "mechanical"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "HN",
+      "NR",
+      "ER",
+      "PD"
+    ]
+  },
+  "OIFM_GMTS_015734": {
+    "name": "mediastinal and/or hilar lymph node enlargement",
+    "description": "Enlargement of lymph nodes in the mediastinum and/or hilar lung regions.",
+    "synonyms": [
+      "mediastinal lymphadenopathy",
+      "hilar lymphadenopathy",
+      "mediastinal/hilar adenopathy"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "52324001",
+        "display": "Mediastinal lymphadenopathy"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "87500009",
+        "display": "Hilar lymphadenopathy"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID28891",
+        "display": "mediastinal lymph node"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "245276004",
+        "display": "Mediastinal lymph node group"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "181760002",
+        "display": "Entire mediastinal lymph node"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID28852",
+      "text": "set of mediastinal lymph nodes"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "neoplastic:malignant",
+      "neoplastic:metastatic",
+      "inflammatory",
+      "autoimmune"
+    ],
+    "modalities": [
+      "CT",
+      "XR",
+      "PET"
+    ],
+    "subspecialties": [
+      "CH",
+      "OI",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_159498": {
+    "name": "mitral annular calcification",
+    "description": "Mitral annular calcification is degenerative calcification of the fibrous ring (annulus) of the mitral valve, commonly seen in older patients. It may be incidental on imaging and can be associated with reduced annular compliance and mild mitral valve dysfunction.",
+    "synonyms": [
+      "MAC",
+      "mitral annulus calcification",
+      "calcification of the mitral annulus"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "251002009",
+        "display": "Mitral valve annular calcification"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "473372009",
+        "display": "Calcification of mitral valve"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "286011000119101",
+        "display": "Rheumatic mitral valve annular calcification"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1395",
+      "text": "mitral valve"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "degenerative",
+      "metabolic"
+    ],
+    "modalities": [
+      "CT",
+      "XR",
+      "US"
+    ],
+    "subspecialties": [
+      "CA",
+      "CH"
+    ]
+  },
+  "OIFM_OIDM_208758": {
+    "name": "orbital mass",
+    "description": "An orbital mass is a space-occupying lesion within the orbit that may arise from lacrimal gland, extraocular muscles, or other orbital tissues and can be benign or malignant; imaging features aid in characterization and differential diagnosis, with 'orbital mass' serving as the exemplar original phrasing.",
+    "synonyms": [
+      "orbital mass",
+      "orbital lesion",
+      "orbital tumor"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "280545009",
+        "display": "Orbital space"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "729425008",
+        "display": "Entire orbital space"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID9573",
+      "text": "orbit"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "inflammatory",
+      "inflammatory:infectious",
+      "vascular:hemorrhagic"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "HN",
+      "NR"
+    ]
+  },
+  "OIFM_GMTS_022453": {
+    "name": "pancreatic calcification",
+    "description": "Calcified deposits within the pancreas.",
+    "synonyms": [],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [],
+    "anatomic_location": {
+      "id": "RID170",
+      "text": "pancreas"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "metabolic",
+      "degenerative"
+    ],
+    "modalities": [
+      "CT",
+      "XR",
+      "US"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI"
+    ]
+  },
+  "OIFM_OIDM_371547": {
+    "name": "pancreatic lesion",
+    "description": "A focal abnormality within the pancreatic parenchyma identified on imaging. The term 'pancreatic lesion' is a non-specific descriptor that may represent cystic, solid, or inflammatory processes and often requires further imaging characterization and, when appropriate, tissue sampling for definitive diagnosis.",
+    "synonyms": [
+      "pancreatic lesion",
+      "lesion of pancreas",
+      "pancreatic mass",
+      "pancreatic focal lesion",
+      "pancreatic abnormality"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "128878003",
+        "display": "Pancreatic endocrine tumor"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID4163",
+        "display": "pancreatic cystic neoplasm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "25803005",
+        "display": "Pancreatic fistula"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID170",
+      "text": "pancreas"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "inflammatory",
+      "inflammatory:infectious"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI",
+      "OI"
+    ]
+  },
+  "OIFM_OIDM_467681": {
+    "name": "parapelvic renal cyst",
+    "description": "Parapelvic renal cyst is a fluid-filled, non-enhancing cyst of the renal sinus adjacent to the renal pelvis. On imaging, it appears as a well-defined, simple cyst that does not communicate with the collecting system and may be incidentally encountered; large lesions may cause calyceal compression or hydronephrosis.",
+    "synonyms": [
+      "parapelvic cyst",
+      "renal parapelvic cyst",
+      "parapelvic renal sinus cyst"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "431481000124104",
+        "display": "Parapelvic renal cyst"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID3929",
+        "display": "parapelvic cyst"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID35811",
+        "display": "renal cyst"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "77945009",
+        "display": "Simple renal cyst"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID205",
+      "text": "kidney"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "congenital",
+      "developmental"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "AB",
+      "GU"
+    ]
+  },
+  "OIFM_GMTS_014559": {
+    "name": "peribronchovascular interstitial thickening",
+    "description": "Thickening of the connective tissues around the bronchi and vessels, often associated with interstitial lung diseases.",
+    "synonyms": [
+      "peribronchovascular thickening",
+      "peribronchial thickening"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID28521",
+        "display": "peribronchovascular interstitium"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID28509",
+        "display": "thickening"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID46021",
+        "display": "septal thickening"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1301",
+      "text": "lung"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "vascular:ischemic",
+      "neoplastic:malignant",
+      "iatrogenic:post-radiation"
+    ],
+    "modalities": [
+      "CT",
+      "XR"
+    ],
+    "subspecialties": [
+      "CH",
+      "OI"
+    ]
+  },
+  "OIFM_GMTS_003706": {
+    "name": "pericardial effusion",
+    "description": "Accumulation of fluid in the pericardial cavity",
+    "synonyms": [
+      "fluid around the heart"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "373945007",
+        "display": "Pericardial effusion"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID38588",
+        "display": "pericardial effusion"
+      },
+      {
+        "system": "LOINC",
+        "code": "MTHU063500",
+        "display": "Pericardial effusion"
+      },
+      {
+        "system": "LOINC",
+        "code": "LP411655-6",
+        "display": "Pericardial effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "57231008",
+        "display": "Acute pericardial effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "194970009",
+        "display": "Pericardial effusion - noninflammatory"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1269348003",
+        "display": "Malignant pericardial effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1230405007",
+        "display": "Postoperative pericardial effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "460445000",
+        "display": "Viral pericarditis with pericardial effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "450303000",
+        "display": "Congenital pericardial effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "233887004",
+        "display": "Chronic cholesterol pericardial effusion"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1407",
+      "text": "pericardium"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "neoplastic:malignant",
+      "neoplastic:metastatic",
+      "iatrogenic:post-operative",
+      "mechanical",
+      "vascular:hemorrhagic",
+      "metabolic",
+      "idiopathic"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "CA",
+      "CH",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_003554": {
+    "name": "pericholecystic fluid",
+    "description": "Fluid accumulation around the gallbladder",
+    "synonyms": [],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [],
+    "anatomic_location": {
+      "id": "RID187",
+      "text": "gallbladder"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "vascular:ischemic",
+      "neoplastic:malignant",
+      "post-traumatic"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "ER",
+      "GI"
+    ]
+  },
+  "OIFM_OIDM_920919": {
+    "name": "peripancreatic fluid",
+    "description": "Fluid accumulation in the peripancreatic space on cross-sectional imaging, representing inflammatory exudate or fluid collection surrounding the pancreas. It is commonly associated with acute pancreatitis, pancreatic injury, postoperative leakage, or evolution into a pancreatic pseudocyst.",
+    "synonyms": [
+      "peripancreatic fluid",
+      "peri-pancreatic fluid",
+      "peripancreatic fluid collection",
+      "peripancreatic effusion",
+      "fluid around the pancreas"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "235958003",
+        "display": "Acute pancreatic fluid collection"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID49691",
+        "display": "postsurgical fluid collection"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID170",
+      "text": "pancreas"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory",
+      "inflammatory:infectious",
+      "traumatic",
+      "post-traumatic",
+      "iatrogenic:post-operative",
+      "neoplastic:malignant"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_007598": {
+    "name": "periventricular t2 hyperintense lesion",
+    "description": "An area adjacent to the ventricles that appears bright on T2-weighted MR images, suggestive of demyelination or gliosis.",
+    "synonyms": [
+      "white matter hyperintensities"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "230769007",
+        "display": "Periventricular leukomalacia"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "816068000",
+        "display": "Periventricular nodular heterotopia"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID6434",
+      "text": "brain"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "inflammatory",
+      "vascular:ischemic",
+      "degenerative",
+      "inflammatory:infectious"
+    ],
+    "modalities": [
+      "MR"
+    ],
+    "subspecialties": [
+      "NR"
+    ]
+  },
+  "OIFM_MSFT_213340": {
+    "name": "pleural abnormality",
+    "description": "A pleural abnormality refers to any pathological change affecting the pleura, the tissue layers enveloping the lungs. These abnormalities may include pleural effusion, thickening, plaques, or pneumothorax, and can be indicative of various underlying conditions such as infection, malignancy, or autoimmune disease.",
+    "synonyms": [
+      "pleural disease",
+      "pleural condition",
+      "pleural lesion"
+    ],
+    "attributes": [
+      "presence"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "60046008",
+        "display": "Pleural effusion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "233658003",
+        "display": "Pleural plaque"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1177035002",
+        "display": "Pleural aspergillosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1293083009",
+        "display": "Pleural fibroma"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1362",
+      "text": "pleura"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "vascular:hemorrhagic",
+      "traumatic",
+      "iatrogenic:post-operative"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "US"
+    ],
+    "subspecialties": [
+      "CH",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_015999": {
+    "name": "pleural thickening",
+    "description": "Increase in thickness of the pleural lining",
+    "synonyms": [],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "233656004",
+        "display": "Post-infective pleural fibrosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "233657008",
+        "display": "Post-tuberculous pleural fibrosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "233653007",
+        "display": "Asbestos-induced pleural fibrosis"
+      },
+      {
+        "system": "LOINC",
+        "code": "MTHU040646",
+        "display": "Pleural fibrosis"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1362",
+      "text": "pleura"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "post-traumatic",
+      "inflammatory",
+      "iatrogenic:post-radiation",
+      "neoplastic:malignant",
+      "toxic"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "CH"
+    ]
+  },
+  "OIFM_CDE_000076": {
+    "name": "Pneumonia",
+    "description": "This module describes the Common Data elements and Macros for Pneumonia",
+    "synonyms": [],
+    "attributes": [
+      "Presence",
+      "Pleural fluid",
+      "Pneumomediastinum",
+      "Extrapleural air ",
+      "Lobar collapse",
+      "Pulmonary edema",
+      "Lung tissue involvement"
+    ],
+    "ontology_codes": [],
+    "anatomic_location": {
+      "id": "RID1301",
+      "text": "lung"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "CH",
+      "ER",
+      "PD"
+    ]
+  },
+  "OIFM_GMTS_023339": {
+    "name": "pneumothorax",
+    "description": "Presence of gas or air in the pleural space.",
+    "synonyms": [
+      "collapsed lung",
+      "air in pleural space"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "36118008",
+        "display": "Pneumothorax"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID5352",
+        "display": "pneumothorax"
+      },
+      {
+        "system": "LOINC",
+        "code": "LA7466-1",
+        "display": "Pneumothorax"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "80423007",
+        "display": "Spontaneous pneumothorax"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "328561000119107",
+        "display": "Primary spontaneous pneumothorax"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "328571000119101",
+        "display": "Secondary spontaneous pneumothorax"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "196102003",
+        "display": "Spontaneous tension pneumothorax"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "715219001",
+        "display": "Familial spontaneous pneumothorax"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1363",
+      "text": "pleural space"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "traumatic",
+      "iatrogenic:post-operative",
+      "mechanical",
+      "inflammatory:infectious",
+      "congenital"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "US"
+    ],
+    "subspecialties": [
+      "CH",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_035534": {
+    "name": "portal vein thrombosis",
+    "description": "Blood clot formation within the portal vein",
+    "synonyms": [
+      "portal venous thrombosis"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "17920008",
+        "display": "Portal vein thrombosis"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "57348003",
+        "display": "Portal vein obstruction"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1208",
+      "text": "portal vein"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "vascular:thrombotic",
+      "inflammatory:infectious",
+      "neoplastic:malignant",
+      "iatrogenic:post-operative",
+      "mechanical"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI",
+      "VI",
+      "IR"
+    ]
+  },
+  "OIFM_OIDM_332518": {
+    "name": "prostatic abnormality",
+    "description": "Prostatic abnormality refers to any deviation from normal prostate gland parenchyma on imaging. It is a non-specific descriptor that may reflect benign etiologies such as benign prostatic hyperplasia or inflammatory processes, or malignant disease. Further characterization with dedicated imaging and clinical correlation is typically required to define etiology.",
+    "synonyms": [
+      "prostate abnormality",
+      "prostatic lesion",
+      "prostate lesion",
+      "prostate gland abnormality",
+      "abnormality of the prostate"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "300532006",
+        "display": "Lesion of prostate"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "197973004",
+        "display": "Prostatic congestion or hemorrhage"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID49505",
+        "display": "lesion effect on prostate"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID343",
+      "text": "prostate"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "inflammatory",
+      "inflammatory:infectious",
+      "degenerative"
+    ],
+    "modalities": [
+      "MR",
+      "US",
+      "CT"
+    ],
+    "subspecialties": [
+      "GU",
+      "AB",
+      "OI"
+    ]
+  },
+  "OIFM_GMTS_013911": {
+    "name": "pulmonary artery aneurysm",
+    "description": "Ballooning or dilation of a pulmonary artery segment.",
+    "synonyms": [],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "194892009",
+        "display": "Pulmonary artery aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "268187005",
+        "display": "Congenital pulmonary artery aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "703243006",
+        "display": "Acquired aneurysm of pulmonary artery"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "251045002",
+        "display": "Peripheral pulmonary artery A/V aneurysm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "270512000",
+        "display": "Pulmonary arteriovenous aneurysm"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID974",
+      "text": "pulmonary artery"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "vascular:aneurysmal",
+      "congenital",
+      "inflammatory:infectious",
+      "traumatic"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "CH",
+      "CA",
+      "VI"
+    ]
+  },
+  "OIFM_OIDM_478641": {
+    "name": "pulmonary opacity",
+    "description": "Pulmonary opacity denotes an area of increased radiodensity within the lung parenchyma on chest radiographs or CT, which may be focal or diffuse. It is a non-specific finding with a broad differential including atelectasis, edema, infectious consolidation, hemorrhage, or neoplasm; the term 'pulmonary opacity' exemplifies this non-specific opacification.",
+    "synonyms": [
+      "lung opacity",
+      "opacification of the lung",
+      "lung opacities",
+      "pulmonary opacity"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID28530",
+        "display": "opacity"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "128305008",
+        "display": "Opacity"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "8691000175105",
+        "display": "Multilobar lung infiltrate"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1301",
+      "text": "lung"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "vascular:ischemic",
+      "vascular:hemorrhagic",
+      "neoplastic:malignant",
+      "neoplastic:benign"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "CH",
+      "ER",
+      "PD"
+    ]
+  },
+  "OIFM_OIDM_745898": {
+    "name": "pulmonary scar",
+    "description": "Pulmonary scar denotes residual scarring of the lung parenchyma, typically reflecting prior inflammation or injury. Radiographically it may appear as linear or band-like markings, often subpleural or along fissures; correlate with history of prior infection, inflammation, trauma, or surgery.",
+    "synonyms": [
+      "pulmonary scarring",
+      "lung scar",
+      "scar tissue in the lung",
+      "parenchymal scar"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "275322007",
+        "display": "Scar"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID3829",
+        "display": "scar"
+      },
+      {
+        "system": "LOINC",
+        "code": "MTHU040644",
+        "display": "Pulmonary fibrosis"
+      },
+      {
+        "system": "LOINC",
+        "code": "LP128703-8",
+        "display": "Pulmonary fibrosis"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1301",
+      "text": "lung"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "post-traumatic",
+      "inflammatory:infectious",
+      "inflammatory",
+      "iatrogenic:post-operative",
+      "iatrogenic:post-radiation"
+    ],
+    "modalities": [
+      "CT",
+      "XR"
+    ],
+    "subspecialties": [
+      "CH"
+    ]
+  },
+  "OIFM_GMTS_033498": {
+    "name": "pulmonary segmental consolidation",
+    "description": "Consolidation confined to a segment of the lung.",
+    "synonyms": [
+      "segmental consolidation",
+      "consolidated lung segment"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "95436008",
+        "display": "Lung consolidation"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID43255",
+        "display": "consolidation"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "846749001",
+        "display": "Consolidation of lung present"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "9656002",
+        "display": "Consolidation"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID46009",
+        "display": "semi-consolidation"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "707496003",
+        "display": "Inflammation and consolidation"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1301",
+      "text": "lung"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "vascular:hemorrhagic",
+      "vascular:ischemic",
+      "neoplastic:malignant"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "CH",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_020556": {
+    "name": "radiodense urinary calculus",
+    "description": "A radiopaque kidney stone detectable on radiography.",
+    "synonyms": [
+      "radiopaque kidney stone"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "724376009",
+        "display": "Urinary system calculus"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "70650003",
+        "display": "Urinary bladder stone"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "79509009",
+        "display": "Calculus of lower urinary tract"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "717958000",
+        "display": "Calculus of upper urinary tract"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID204",
+      "text": "urinary tract"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "metabolic",
+      "mechanical"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "GU",
+      "AB",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_016635": {
+    "name": "renal cystic disease",
+    "description": "Presence of cysts in the kidneys, possibly indicating polycystic kidney disease.",
+    "synonyms": [
+      "cystic kidneys",
+      "cystic disease of kidney"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "105999006",
+        "display": "Acquired renal cystic disease"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34674",
+        "display": "cystic disease"
+      },
+      {
+        "system": "LOINC",
+        "code": "LA10565-2",
+        "display": "Cystic Kidney Disease"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "204957003",
+        "display": "Medullary cystic disease of the kidney"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "253881008",
+        "display": "Cortical cystic disease"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID34636",
+        "display": "polycystic kidney disease"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1263485003",
+        "display": "Acquired cystic disease of transplanted kidney"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID205",
+      "text": "kidney"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "congenital",
+      "developmental",
+      "degenerative",
+      "iatrogenic:post-operative"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "GU"
+    ]
+  },
+  "OIFM_MGB_944849": {
+    "name": "Rib Fracture",
+    "description": "Fracture of one or more ribs",
+    "synonyms": [],
+    "attributes": [
+      "Presence",
+      "Number of ribs involved",
+      "Location",
+      "Specific ribs affected",
+      "Fracture type",
+      "Pneumothorax",
+      "Hemothorax",
+      "Pulmonary contusion",
+      "Subcutaneous emphysema",
+      "Flail chest",
+      "Vertebral fracture",
+      "Sternal fracture",
+      "Clavicular fracture",
+      "Evidence of healing",
+      "Mechanism of Injury"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "33737001",
+        "display": "Fracture of rib"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID28591",
+      "text": "set of ribs"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "traumatic",
+      "post-traumatic",
+      "mechanical"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "CH",
+      "ER",
+      "MK"
+    ]
+  },
+  "OIFM_GMTS_030847": {
+    "name": "sellar lesion",
+    "description": "An abnormality in the sella turcica, often affecting the pituitary gland.",
+    "synonyms": [
+      "pituitary mass"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "788578009",
+        "display": "Sellar ependymoma"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "788758003",
+        "display": "Sellar ependymoma of posterior pituitary gland"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID9286",
+      "text": "sella turcica"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "congenital",
+      "vascular:hemorrhagic",
+      "inflammatory"
+    ],
+    "modalities": [
+      "MR",
+      "CT"
+    ],
+    "subspecialties": [
+      "NR",
+      "HN"
+    ]
+  },
+  "OIFM_OIDM_452510": {
+    "name": "seminal vesicle abnormality",
+    "description": "Seminal vesicle abnormality denotes any structural abnormality of the seminal vesicles, including congenital anomalies, cystic dilation, mass lesions, or calcifications. Radiologic evaluation should document size, morphology, symmetry, and any communication with the ejaculatory ducts, with attention to unilateral versus bilateral involvement and to associated findings such as ejaculatory duct obstruction.",
+    "synonyms": [
+      "seminal vesicle abnormality",
+      "seminal vesicle pathology",
+      "seminal vesicle lesion",
+      "seminal vesicle anomaly",
+      "SV abnormality",
+      "seminal vesicle cyst",
+      "seminal vesicle mass",
+      "congenital seminal vesicle anomaly"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "27001009",
+        "display": "Seminal vesiculitis"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID357",
+      "text": "seminal vesicle"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "congenital",
+      "developmental",
+      "inflammatory:infectious",
+      "inflammatory",
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "mechanical"
+    ],
+    "modalities": [
+      "MR",
+      "CT",
+      "US"
+    ],
+    "subspecialties": [
+      "GU",
+      "AB"
+    ]
+  },
+  "OIFM_OIDM_309677": {
+    "name": "cranial abnormality",
+    "description": "Cranial abnormality denotes any deviation from normal skull morphology evident on radiologic imaging. This umbrella term encompasses a range of etiologies (congenital, traumatic, infectious, developmental, or post-surgical changes); the original phrasing 'skull abnormality' may be used as an example of this finding.",
+    "synonyms": [
+      "skull abnormality",
+      "abnormal skull contour",
+      "cranial deformity",
+      "cranial malformation"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "268239009",
+        "display": "Congenital abnormality of skull and face bones"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "254023004",
+        "display": "Congenital abnormality of skull shape"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "275349007",
+        "display": "Absence of skull bone"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID9196",
+      "text": "skull"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "congenital",
+      "developmental",
+      "traumatic",
+      "post-traumatic",
+      "iatrogenic:post-operative"
+    ],
+    "modalities": [
+      "CT",
+      "XR",
+      "MR"
+    ],
+    "subspecialties": [
+      "NR",
+      "HN",
+      "PD",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_018633": {
+    "name": "skull base lesion",
+    "description": "Abnormal tissue or mass located at the base of the skull.",
+    "synonyms": [
+      "lesion at skull base",
+      "skull base mass"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "181890004",
+        "display": "Entire base of skull"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID28731",
+      "text": "base of cranium"
+    },
+    "body_regions": [
+      "Head"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "inflammatory",
+      "congenital"
+    ],
+    "modalities": [
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "HN",
+      "NR"
+    ]
+  },
+  "OIFM_OIDM_299401": {
+    "name": "soft tissue mass",
+    "description": "A focal soft-tissue abnormality that appears as a discrete or ill-defined mass within soft tissues on imaging. It encompasses a spectrum of etiologies from benign to malignant; correlation with clinical history and further imaging or biopsy may be required for characterization.",
+    "synonyms": [
+      "soft-tissue mass",
+      "soft tissue lesion",
+      "soft-tissue lesion",
+      "STM"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "125139001",
+        "display": "Soft mass"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID39569",
+      "text": "whole body"
+    },
+    "body_regions": [
+      "ALL"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "inflammatory",
+      "inflammatory:infectious",
+      "post-traumatic"
+    ],
+    "modalities": [
+      "MR",
+      "CT",
+      "US"
+    ],
+    "subspecialties": [
+      "MK",
+      "AB",
+      "HN",
+      "OI"
+    ]
+  },
+  "OIFM_GMTS_002512": {
+    "name": "solitary lesion of spleen",
+    "description": "A single mass located in the spleen.",
+    "synonyms": [
+      "Single splenic mass",
+      "Solitary splenic tumor"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID43312",
+        "display": "solitary lesion"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "79040006",
+        "display": "Splenic cyst"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "400146000",
+        "display": "Splenic hamartoma"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "22996003",
+        "display": "Splenic infarction"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "82053000",
+        "display": "Splenic abscess"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "262818004",
+        "display": "Splenic hematoma"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID86",
+      "text": "spleen"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "neoplastic:metastatic",
+      "inflammatory:infectious",
+      "vascular:ischemic",
+      "vascular:hemorrhagic",
+      "traumatic",
+      "congenital"
+    ],
+    "modalities": [
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "AB",
+      "ER",
+      "OI"
+    ]
+  },
+  "OIFM_GMTS_014616": {
+    "name": "solitary pulmonary nodule",
+    "description": "A single rounded opacity in the lung less than or equal to 3 cm.",
+    "synonyms": [
+      "lung lesion smaller than 4 cm",
+      "pulmonary nodule",
+      "SPN",
+      "lung nodule"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "427359005",
+        "display": "Solitary nodule of lung"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID50149",
+        "display": "pulmonary nodule"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID50151",
+        "display": "solid pulmonary nodule"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID50152",
+        "display": "part-solid pulmonary nodule"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID50153",
+        "display": "non-solid pulmonary nodule"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "786838002",
+        "display": "Nodule of lung"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1301",
+      "text": "lung"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "neoplastic:malignant",
+      "neoplastic:benign",
+      "neoplastic:metastatic",
+      "inflammatory:infectious",
+      "inflammatory"
+    ],
+    "modalities": [
+      "CT",
+      "XR"
+    ],
+    "subspecialties": [
+      "CH",
+      "OI"
+    ]
+  },
+  "OIFM_GMTS_003565": {
+    "name": "splenomegaly",
+    "description": "Enlargement of the spleen",
+    "synonyms": [
+      "enlarged spleen"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID34587",
+        "display": "enlarged spleen"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "442021009",
+        "display": "Enlargement"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID86",
+      "text": "spleen"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "inflammatory:infectious",
+      "inflammatory",
+      "neoplastic:malignant",
+      "neoplastic:benign",
+      "vascular:thrombotic",
+      "metabolic"
+    ],
+    "modalities": [
+      "CT",
+      "US",
+      "MR"
+    ],
+    "subspecialties": [
+      "AB",
+      "ER",
+      "OI",
+      "PD"
+    ]
+  },
+  "OIFM_GMTS_002817": {
+    "name": "spontaneous pneumoperitoneum without peritonitis",
+    "description": "Presence of air in the peritoneal cavity without infection signs.",
+    "synonyms": [],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "17204006",
+        "display": "Pneumoperitoneum"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID4803",
+        "display": "pneumoperitoneum"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "168819002",
+        "display": "Pneumoperitoneum - abdomen"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID397",
+      "text": "peritoneal cavity"
+    },
+    "body_regions": [
+      "Abdomen"
+    ],
+    "etiologies": [
+      "idiopathic",
+      "mechanical",
+      "iatrogenic:post-operative"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "AB",
+      "GI",
+      "ER"
+    ]
+  },
+  "OIFM_OIDM_675673": {
+    "name": "degenerative change of the thoracic spine",
+    "description": "Degenerative change of the thoracic spine, reflecting age-related spondylosis with multilevel degenerative alterations of the thoracic intervertebral discs and facet joints; this description corresponds to the original term 'thoracic spine degenerative changes' as an example context.",
+    "synonyms": [
+      "thoracic spine degenerative change",
+      "degenerative changes of the thoracic spine",
+      "thoracic spondylosis",
+      "thoracic spondylotic changes",
+      "thoracic osteoarthritis",
+      "thoracic facet arthropathy",
+      "thoracic spine degenerative changes"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "387802007",
+        "display": "Thoracic spondylosis"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID34572",
+      "text": "thoracic vertebral column"
+    },
+    "body_regions": [
+      "Chest",
+      "Abdomen"
+    ],
+    "etiologies": [
+      "degenerative"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "MK",
+      "NR"
+    ]
+  },
+  "OIFM_OIDM_971596": {
+    "name": "fracture of the upper extremity",
+    "description": "Fracture of the upper extremity is a disruption of cortical continuity in any bone of the upper limb, from the shoulder girdle to the distal hand. Radiographic findings may include a fracture line with displacement, angulation, or rotation, and may be associated with dislocation or soft tissue injury depending on the location; this canonical name generalizes the original phrasing 'upper extremity fracture' as the example use case.",
+    "synonyms": [
+      "upper extremity fracture",
+      "upper limb fracture",
+      "fracture of the upper limb",
+      "UE fracture"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "23406007",
+        "display": "Fracture of upper limb"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "287065007",
+        "display": "Pathological fracture - upper arm"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "288244006",
+        "display": "Fracture malunion - upper arm"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1968",
+      "text": "arm"
+    },
+    "body_regions": [
+      "Arm"
+    ],
+    "etiologies": [
+      "traumatic",
+      "post-traumatic",
+      "mechanical",
+      "iatrogenic:post-operative"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "MK",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_009850": {
+    "name": "wedged vertebra",
+    "description": "Triangular deformity of a vertebra usually due to compression or abnormal growth.",
+    "synonyms": [
+      "vertebral wedge fracture"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID4699",
+        "display": "wedge compression fracture"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "42942008",
+        "display": "Compression fracture of vertebral column"
+      },
+      {
+        "system": "RADLEX",
+        "code": "RID4658",
+        "display": "compression fracture"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "443395009",
+        "display": "Compression fracture"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "767132004",
+        "display": "Pathologic compression fracture"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "1003500000",
+        "display": "Osteoporotic compression fracture"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "439144005",
+        "display": "Closed compression fracture"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID7741",
+      "text": "vertebral column"
+    },
+    "body_regions": [
+      "Head",
+      "Neck",
+      "Chest",
+      "Abdomen"
+    ],
+    "etiologies": [
+      "traumatic",
+      "degenerative",
+      "metabolic",
+      "neoplastic:malignant",
+      "neoplastic:metastatic",
+      "congenital",
+      "developmental"
+    ],
+    "modalities": [
+      "XR",
+      "CT",
+      "MR"
+    ],
+    "subspecialties": [
+      "MK",
+      "NR",
+      "ER"
+    ]
+  },
+  "OIFM_GMTS_015685": {
+    "name": "wide mediastinum",
+    "description": "Increased width of the mediastinum, which may indicate mass, hemorrhage, or vascular anomaly.",
+    "synonyms": [
+      "mediastinal widening",
+      "enlarged mediastinum"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "363646005",
+        "display": "Widened mediastinum"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1384",
+      "text": "mediastinum"
+    },
+    "body_regions": [
+      "Chest"
+    ],
+    "etiologies": [
+      "neoplastic:benign",
+      "neoplastic:malignant",
+      "vascular:hemorrhagic",
+      "vascular:aneurysmal",
+      "inflammatory:infectious"
+    ],
+    "modalities": [
+      "XR",
+      "CT"
+    ],
+    "subspecialties": [
+      "CH",
+      "ER",
+      "CA"
+    ]
+  },
+  "OIFM_OIDM_029466": {
+    "name": "enostosis",
+    "description": "Enostosis is a benign, incidental focal intramedullary sclerotic lesion arising from the endosteal surface of cancellous bone. Radiographs typically show a well-defined, homogeneously dense focus within cancellous bone without aggressive features; 'bone island' is a common radiologic synonym and represents the original descriptive phrase.",
+    "synonyms": [
+      "bone island",
+      "bone islands"
+    ],
+    "attributes": [
+      "presence",
+      "change from prior"
+    ],
+    "ontology_codes": [
+      {
+        "system": "SNOMEDCT",
+        "code": "16302391000119104",
+        "display": "Lesion of bone of left radius and/or ulna"
+      },
+      {
+        "system": "SNOMEDCT",
+        "code": "16302471000119107",
+        "display": "Lesion of bone of right radius and/or ulna"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID39569",
+      "text": "whole body"
+    },
+    "body_regions": [
+      "ALL"
+    ],
+    "etiologies": [
+      "normal-variant"
+    ],
+    "modalities": [
+      "CT",
+      "XR"
+    ],
+    "subspecialties": [
+      "MK"
+    ]
+  },
+  "OIFM_MGB_311515": {
+    "name": "Glenohumeral Joint",
+    "description": "The glenohumeral joint is the joint connecting the glenoid cavity of the scapula (shoulder blade) and the head of the humerus (upper arm bone).",
+    "synonyms": [],
+    "attributes": [
+      "Presence",
+      "Status",
+      "Articulation",
+      "Degenerative changes",
+      "Bony Changes",
+      "Joint Effusion",
+      "Density of the Effusion",
+      "Presence of Joint Bodies"
+    ],
+    "ontology_codes": [
+      {
+        "system": "RADLEX",
+        "code": "RID1905",
+        "display": "glenohumeral joint"
+      }
+    ],
+    "anatomic_location": {
+      "id": "RID1905",
+      "text": "glenohumeral joint"
+    },
+    "body_regions": [
+      "Arm"
+    ],
+    "etiologies": [],
+    "modalities": [
+      "XR",
+      "CT",
+      "MR",
+      "US"
+    ],
+    "subspecialties": [
+      "MK"
+    ]
+  }
+}
