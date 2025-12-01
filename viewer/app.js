@@ -11,6 +11,7 @@ function iplApp() {
         loading: true,
         examTypeMappings: {},
         findingRegionMappings: {},
+        findingDisplayInfo: {},
         highlightedTexts: [],
 
         // Filters
@@ -22,6 +23,7 @@ function iplApp() {
             console.log('Initializing IPL App...');
             await this.loadExamTypeMappings();
             await this.loadFindingRegionMappings();
+            await this.loadFindingDisplayInfo();
             await this.loadPatients();
 
             // Check URL parameters
@@ -60,6 +62,23 @@ function iplApp() {
                 console.error('Error loading finding region mappings:', error);
                 this.findingRegionMappings = {};
             }
+        },
+
+        // Load finding display info for popovers
+        async loadFindingDisplayInfo() {
+            try {
+                const response = await fetch('data/finding_display_info.json');
+                this.findingDisplayInfo = await response.json();
+                console.log('Loaded finding display info:', Object.keys(this.findingDisplayInfo).length, 'findings');
+            } catch (error) {
+                console.error('Error loading finding display info:', error);
+                this.findingDisplayInfo = {};
+            }
+        },
+
+        // Get finding display info by code
+        getFindingDisplayInfo(code) {
+            return this.findingDisplayInfo[code] || null;
         },
 
         // Load patients list

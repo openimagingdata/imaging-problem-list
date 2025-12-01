@@ -37,6 +37,9 @@
     </script>
 
     <style>
+        /* Alpine.js cloak - hide elements until initialized */
+        [x-cloak] { display: none !important; }
+
         /* Custom scrollbar for dark mode */
         ::-webkit-scrollbar {
             width: 10px;
@@ -216,19 +219,96 @@
 
                             <!-- Finding Header -->
                             <div class="flex justify-between items-start mb-3">
-                                <!-- Finding Name with Popover for Code -->
+                                <!-- Finding Name with Rich Popover -->
                                 <div class="relative"
-                                     x-data="{ open: false }"
-                                     @mouseleave="open = false">
-                                    <h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white pr-2"
-                                        @mouseenter="open = true"
+                                     x-data="{ open: false, info: null }"
+                                     x-init="info = getFindingDisplayInfo(finding.finding_type_code)"
+                                     @click.outside="open = false">
+                                    <h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white pr-2 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400"
+                                        @click="open = !open"
                                         x-text="finding.finding_type_display"></h5>
 
-                                    <!-- Popover for Finding Code -->
+                                    <!-- Rich Finding Info Popover -->
                                     <div x-show="open"
+                                         x-cloak
+                                         x-transition:enter="transition ease-out duration-100"
+                                         x-transition:enter-start="opacity-0 scale-95"
+                                         x-transition:enter-end="opacity-100 scale-100"
+                                         x-transition:leave="transition ease-in duration-75"
+                                         x-transition:leave-start="opacity-100 scale-100"
+                                         x-transition:leave-end="opacity-0 scale-95"
                                          role="tooltip"
-                                         class="absolute z-10 bottom-full left-0 mb-2 px-3 py-2 text-sm font-mono text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
-                                        <span x-text="finding.finding_type_code"></span>
+                                         class="absolute z-50 bottom-full left-0 mb-2 w-96 max-h-96 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg dark:border-gray-600 dark:bg-gray-800">
+
+                                        <!-- Popover Header with Close Button -->
+                                        <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-600 flex justify-between items-start">
+                                            <div>
+                                                <h6 class="font-semibold text-gray-900 dark:text-white" x-text="info?.name || finding.finding_type_display"></h6>
+                                                <p class="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1" x-text="finding.finding_type_code"></p>
+                                            </div>
+                                            <button @click="open = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        <!-- Popover Body -->
+                                        <div class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 space-y-3">
+                                            <!-- Description -->
+                                            <p x-show="info?.description" x-text="info?.description" class="text-gray-600 dark:text-gray-400"></p>
+
+                                            <!-- Synonyms -->
+                                            <div x-show="info?.synonyms">
+                                                <span class="font-medium text-gray-900 dark:text-white">Synonyms:</span>
+                                                <span x-text="info?.synonyms" class="text-gray-600 dark:text-gray-400"></span>
+                                            </div>
+
+                                            <!-- Location -->
+                                            <div x-show="info?.location?.text">
+                                                <span class="font-medium text-gray-900 dark:text-white">Location:</span>
+                                                <span x-text="info?.location?.text" class="text-gray-600 dark:text-gray-400"></span>
+                                                <span x-show="info?.location?.radlex_id" class="text-xs font-mono text-gray-500 dark:text-gray-500" x-text="'(' + info?.location?.radlex_id + ')'"></span>
+                                            </div>
+
+                                            <!-- Regions -->
+                                            <div x-show="info?.regions">
+                                                <span class="font-medium text-gray-900 dark:text-white">Regions:</span>
+                                                <span x-text="info?.regions" class="text-gray-600 dark:text-gray-400"></span>
+                                            </div>
+
+                                            <!-- Modalities -->
+                                            <div x-show="info?.modalities">
+                                                <span class="font-medium text-gray-900 dark:text-white">Modalities:</span>
+                                                <span x-text="info?.modalities" class="text-gray-600 dark:text-gray-400"></span>
+                                            </div>
+
+                                            <!-- Subspecialties -->
+                                            <div x-show="info?.subspecialties">
+                                                <span class="font-medium text-gray-900 dark:text-white">Subspecialties:</span>
+                                                <span x-text="info?.subspecialties" class="text-gray-600 dark:text-gray-400"></span>
+                                            </div>
+
+                                            <!-- Etiologies -->
+                                            <div x-show="info?.etiologies">
+                                                <span class="font-medium text-gray-900 dark:text-white">Etiologies:</span>
+                                                <span x-text="info?.etiologies" class="text-gray-600 dark:text-gray-400"></span>
+                                            </div>
+
+                                            <!-- Ontology Codes -->
+                                            <div x-show="info?.ontology_codes?.length > 0">
+                                                <div class="font-medium text-gray-900 dark:text-white mb-1">Ontology Codes:</div>
+                                                <div class="max-h-32 overflow-y-auto space-y-1 pl-2 border-l-2 border-gray-200 dark:border-gray-600">
+                                                    <template x-for="oc in info?.ontology_codes || []" :key="oc.system + oc.code">
+                                                        <div class="text-xs">
+                                                            <span class="font-mono text-blue-600 dark:text-blue-400" x-text="oc.system"></span>
+                                                            <span class="font-mono text-gray-700 dark:text-gray-300" x-text="oc.code"></span>
+                                                            <span class="text-gray-500 dark:text-gray-500" x-text="'- ' + oc.display"></span>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -338,16 +418,95 @@
                                         <div class="space-y-2">
                                             <template x-for="finding in section.findings" :key="finding.finding_type_code">
                                                 <div class="relative"
-                                                     x-data="{ hover: false }"
+                                                     x-data="{ hover: false, popoverOpen: false, info: null }"
+                                                     x-init="info = getFindingDisplayInfo(finding.finding_type_code)"
                                                      @mouseenter="hover = true; highlightText(finding.reportTexts)"
-                                                     @mouseleave="hover = false; clearHighlight()">
+                                                     @mouseleave="hover = false; clearHighlight()"
+                                                     @click.outside="popoverOpen = false">
                                                     <div class="p-3 bg-white border rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 cursor-pointer transition-colors"
                                                          :class="hover ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500' : 'border-gray-200'">
                                                         <div class="flex items-center justify-between">
-                                                            <span class="text-sm font-medium text-gray-900 dark:text-white" x-text="finding.finding_type_display"></span>
+                                                            <!-- Finding name with info icon trigger -->
+                                                            <div class="flex items-center gap-2">
+                                                                <span class="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
+                                                                      @click.stop="popoverOpen = !popoverOpen"
+                                                                      x-text="finding.finding_type_display"></span>
+                                                            </div>
                                                             <span x-show="finding.count > 1"
                                                                   class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-blue-600 rounded-full"
                                                                   x-text="finding.count"></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Rich Finding Info Popover (same as IPL view) -->
+                                                    <div x-show="popoverOpen"
+                                                         x-cloak
+                                                         x-transition:enter="transition ease-out duration-100"
+                                                         x-transition:enter-start="opacity-0 scale-95"
+                                                         x-transition:enter-end="opacity-100 scale-100"
+                                                         x-transition:leave="transition ease-in duration-75"
+                                                         x-transition:leave-start="opacity-100 scale-100"
+                                                         x-transition:leave-end="opacity-0 scale-95"
+                                                         @click.stop
+                                                         role="tooltip"
+                                                         class="absolute z-50 top-full left-0 mt-2 w-80 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg dark:border-gray-600 dark:bg-gray-800">
+
+                                                        <!-- Popover Header with Close Button -->
+                                                        <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-600 flex justify-between items-start">
+                                                            <div>
+                                                                <h6 class="font-semibold text-gray-900 dark:text-white" x-text="info?.name || finding.finding_type_display"></h6>
+                                                                <p class="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1" x-text="finding.finding_type_code"></p>
+                                                            </div>
+                                                            <button @click.stop="popoverOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+
+                                                        <!-- Popover Body -->
+                                                        <div class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                                                            <!-- Description -->
+                                                            <p x-show="info?.description" x-text="info?.description" class="text-gray-600 dark:text-gray-400 text-xs"></p>
+
+                                                            <!-- Synonyms -->
+                                                            <div x-show="info?.synonyms" class="text-xs">
+                                                                <span class="font-medium text-gray-900 dark:text-white">Synonyms:</span>
+                                                                <span x-text="info?.synonyms" class="text-gray-600 dark:text-gray-400"></span>
+                                                            </div>
+
+                                                            <!-- Location -->
+                                                            <div x-show="info?.location?.text" class="text-xs">
+                                                                <span class="font-medium text-gray-900 dark:text-white">Location:</span>
+                                                                <span x-text="info?.location?.text" class="text-gray-600 dark:text-gray-400"></span>
+                                                                <span x-show="info?.location?.radlex_id" class="font-mono text-gray-500 dark:text-gray-500" x-text="'(' + info?.location?.radlex_id + ')'"></span>
+                                                            </div>
+
+                                                            <!-- Modalities -->
+                                                            <div x-show="info?.modalities" class="text-xs">
+                                                                <span class="font-medium text-gray-900 dark:text-white">Modalities:</span>
+                                                                <span x-text="info?.modalities" class="text-gray-600 dark:text-gray-400"></span>
+                                                            </div>
+
+                                                            <!-- Subspecialties -->
+                                                            <div x-show="info?.subspecialties" class="text-xs">
+                                                                <span class="font-medium text-gray-900 dark:text-white">Subspecialties:</span>
+                                                                <span x-text="info?.subspecialties" class="text-gray-600 dark:text-gray-400"></span>
+                                                            </div>
+
+                                                            <!-- Ontology Codes -->
+                                                            <div x-show="info?.ontology_codes?.length > 0" class="text-xs">
+                                                                <div class="font-medium text-gray-900 dark:text-white mb-1">Ontology Codes:</div>
+                                                                <div class="max-h-24 overflow-y-auto space-y-0.5 pl-2 border-l-2 border-gray-200 dark:border-gray-600">
+                                                                    <template x-for="oc in info?.ontology_codes || []" :key="oc.system + oc.code">
+                                                                        <div>
+                                                                            <span class="font-mono text-blue-600 dark:text-blue-400" x-text="oc.system"></span>
+                                                                            <span class="font-mono text-gray-700 dark:text-gray-300" x-text="oc.code"></span>
+                                                                            <span class="text-gray-500 dark:text-gray-500" x-text="'- ' + oc.display"></span>
+                                                                        </div>
+                                                                    </template>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

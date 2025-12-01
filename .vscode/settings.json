@@ -1,3 +1,4 @@
 {
-  "livePreview.serverRoot": "viewer"
+  "livePreview.serverRoot": "viewer",
+  "livePreview.defaultPreviewPath": "/viewer/index.html"
 }
