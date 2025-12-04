@@ -2,6 +2,21 @@ function iplApp() {
     return {
         // State
         patients: [],
+
+        // Track which finding popover is currently open (by finding code)
+        // Used to ensure only one popover is open at a time across the app
+        openFindingPopover: null,
+
+        // Popover field definitions for finding info display
+        // These are the simple label:value fields rendered via x-for
+        // Description, Location (with RadLex ID), and Ontology Codes are handled separately
+        popoverFields: [
+            { label: 'Synonyms', key: 'synonyms' },
+            { label: 'Regions', key: 'regions' },
+            { label: 'Modalities', key: 'modalities' },
+            { label: 'Subspecialties', key: 'subspecialties' },
+            { label: 'Etiologies', key: 'etiologies' },
+        ],
         currentPatient: null,
         ipl: { findings: [] },
         currentView: 'ipl', // 'ipl', 'exam', 'report'
@@ -79,6 +94,32 @@ function iplApp() {
         // Get finding display info by code
         getFindingDisplayInfo(code) {
             return this.findingDisplayInfo[code] || null;
+        },
+
+        // Get a field value from finding info object
+        // Used by popover template to access simple string fields
+        getInfoFieldValue(info, key) {
+            if (!info) return null;
+            return info[key] || null;
+        },
+
+        // Toggle finding popover - ensures only one is open at a time
+        toggleFindingPopover(findingCode) {
+            if (this.openFindingPopover === findingCode) {
+                this.openFindingPopover = null;
+            } else {
+                this.openFindingPopover = findingCode;
+            }
+        },
+
+        // Close any open finding popover
+        closeFindingPopover() {
+            this.openFindingPopover = null;
+        },
+
+        // Check if a specific finding popover should be open
+        isFindingPopoverOpen(findingCode) {
+            return this.openFindingPopover === findingCode;
         },
 
         // Load patients list
