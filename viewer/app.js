@@ -138,21 +138,34 @@ function iplApp() {
         },
 
         // Get popover positioning style based on current view and anchor element
-        // IPL view: popover appears above the finding (bottom-full equivalent)
-        // Exam view: popover appears to the right of the finding (left-full equivalent)
+        // IPL view: popover appears above the finding, or below if near top of viewport
+        // Exam view: popover appears to the right of the finding
         getPopoverStyle() {
             if (!this.popoverAnchorRect) return { display: 'none' };
             const rect = this.popoverAnchorRect;
 
             if (this.currentView === 'ipl') {
-                // Position above the element (like bottom-full left-0 mb-2)
-                return {
-                    position: 'fixed',
-                    left: rect.left + 'px',
-                    top: (rect.top - 8) + 'px',
-                    transform: 'translateY(-100%)',
-                    zIndex: 100
-                };
+                const popoverHeight = 384; // max-h-96 = 24rem = 384px
+                const hasRoomAbove = rect.top > popoverHeight + 8;
+
+                if (hasRoomAbove) {
+                    // Position above the element
+                    return {
+                        position: 'fixed',
+                        left: rect.left + 'px',
+                        top: (rect.top - 8) + 'px',
+                        transform: 'translateY(-100%)',
+                        zIndex: 100
+                    };
+                } else {
+                    // Position below the element (not enough room above)
+                    return {
+                        position: 'fixed',
+                        left: rect.left + 'px',
+                        top: (rect.bottom + 8) + 'px',
+                        zIndex: 100
+                    };
+                }
             } else {
                 // Position to the right of the element (like left-full top-0 ml-2)
                 return {
