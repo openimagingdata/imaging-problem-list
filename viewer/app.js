@@ -7,6 +7,12 @@ function iplApp() {
         // Used to ensure only one popover is open at a time across the app
         openFindingPopover: null,
 
+        // Info object for the currently open popover (loaded when popover opens)
+        openFindingInfo: null,
+
+        // Bounding rect of the element that triggered the popover (for positioning)
+        popoverAnchorRect: null,
+
         // Popover field definitions for finding info display
         // These are the simple label:value fields rendered via x-for
         // Description, Location (with RadLex ID), and Ontology Codes are handled separately
@@ -104,22 +110,58 @@ function iplApp() {
         },
 
         // Toggle finding popover - ensures only one is open at a time
-        toggleFindingPopover(findingCode) {
+        // Now also stores the info object and anchor position for the shared popover
+        toggleFindingPopover(findingCode, event) {
             if (this.openFindingPopover === findingCode) {
-                this.openFindingPopover = null;
+                this.closeFindingPopover();
             } else {
                 this.openFindingPopover = findingCode;
+                this.openFindingInfo = this.getFindingDisplayInfo(findingCode);
+                // Store anchor position for popover positioning
+                if (event) {
+                    const anchor = event.target.closest('.relative') || event.target;
+                    this.popoverAnchorRect = anchor.getBoundingClientRect();
+                }
             }
         },
 
         // Close any open finding popover
         closeFindingPopover() {
             this.openFindingPopover = null;
+            this.openFindingInfo = null;
+            this.popoverAnchorRect = null;
         },
 
         // Check if a specific finding popover should be open
         isFindingPopoverOpen(findingCode) {
             return this.openFindingPopover === findingCode;
+        },
+
+        // Get popover positioning style based on current view and anchor element
+        // IPL view: popover appears above the finding (bottom-full equivalent)
+        // Exam view: popover appears to the right of the finding (left-full equivalent)
+        getPopoverStyle() {
+            if (!this.popoverAnchorRect) return { display: 'none' };
+            const rect = this.popoverAnchorRect;
+
+            if (this.currentView === 'ipl') {
+                // Position above the element (like bottom-full left-0 mb-2)
+                return {
+                    position: 'fixed',
+                    left: rect.left + 'px',
+                    top: (rect.top - 8) + 'px',
+                    transform: 'translateY(-100%)',
+                    zIndex: 100
+                };
+            } else {
+                // Position to the right of the element (like left-full top-0 ml-2)
+                return {
+                    position: 'fixed',
+                    left: (rect.right + 8) + 'px',
+                    top: rect.top + 'px',
+                    zIndex: 100
+                };
+            }
         },
 
         // Load patients list

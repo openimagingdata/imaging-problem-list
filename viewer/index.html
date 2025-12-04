@@ -219,75 +219,11 @@
 
                             <!-- Finding Header -->
                             <div class="flex justify-between items-start mb-3">
-                                <!-- Finding Name with Rich Popover -->
-                                <div class="relative"
-                                     x-data="{ info: null }"
-                                     x-init="info = getFindingDisplayInfo(finding.finding_type_code)">
+                                <!-- Finding Name (clicks open shared popover) -->
+                                <div class="relative">
                                     <h5 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white pr-2 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400"
-                                        @click="toggleFindingPopover(finding.finding_type_code)"
+                                        @click="toggleFindingPopover(finding.finding_type_code, $event)"
                                         x-text="finding.finding_type_display"></h5>
-
-                                    <!-- Rich Finding Info Popover -->
-                                    <div x-show="currentView === 'ipl' && isFindingPopoverOpen(finding.finding_type_code)"
-                                         @click.outside="closeFindingPopover()"
-                                         x-cloak
-                                         x-transition:enter="transition ease-out duration-100"
-                                         x-transition:enter-start="opacity-0 scale-95"
-                                         x-transition:enter-end="opacity-100 scale-100"
-                                         x-transition:leave="transition ease-in duration-75"
-                                         x-transition:leave-start="opacity-100 scale-100"
-                                         x-transition:leave-end="opacity-0 scale-95"
-                                         role="tooltip"
-                                         class="absolute z-50 bottom-full left-0 mb-2 w-96 max-h-96 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg dark:border-gray-600 dark:bg-gray-800">
-
-                                        <!-- Popover Header with Close Button -->
-                                        <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-600 flex justify-between items-start">
-                                            <div>
-                                                <h6 class="font-semibold text-gray-900 dark:text-white" x-text="info?.name || finding.finding_type_display"></h6>
-                                                <p class="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1" x-text="finding.finding_type_code"></p>
-                                            </div>
-                                            <button @click="closeFindingPopover()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        </div>
-
-                                        <!-- Popover Body -->
-                                        <div class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 space-y-2">
-                                            <!-- Description -->
-                                            <p x-show="info?.description" x-text="info?.description" class="text-gray-600 dark:text-gray-400"></p>
-
-                                            <!-- Location (special: has RadLex ID suffix) -->
-                                            <div x-show="info?.location?.text">
-                                                <span class="font-medium text-gray-900 dark:text-white">Location:</span>
-                                                <span x-text="info?.location?.text" class="text-gray-600 dark:text-gray-400"></span>
-                                                <span x-show="info?.location?.radlex_id" class="text-xs font-mono text-gray-500 dark:text-gray-500" x-text="'(' + info?.location?.radlex_id + ')'"></span>
-                                            </div>
-
-                                            <!-- Simple label:value fields from popoverFields config -->
-                                            <template x-for="field in popoverFields" :key="field.key">
-                                                <div x-show="getInfoFieldValue(info, field.key)">
-                                                    <span class="font-medium text-gray-900 dark:text-white" x-text="field.label + ':'"></span>
-                                                    <span x-text="getInfoFieldValue(info, field.key)" class="text-gray-600 dark:text-gray-400"></span>
-                                                </div>
-                                            </template>
-
-                                            <!-- Ontology Codes (special: nested list structure) -->
-                                            <div x-show="info?.ontology_codes?.length > 0">
-                                                <div class="font-medium text-gray-900 dark:text-white mb-1">Ontology Codes:</div>
-                                                <div class="max-h-32 overflow-y-auto space-y-1 pl-2 border-l-2 border-gray-200 dark:border-gray-600">
-                                                    <template x-for="oc in info?.ontology_codes || []" :key="oc.system + oc.code">
-                                                        <div class="text-xs">
-                                                            <span class="font-mono text-blue-600 dark:text-blue-400" x-text="oc.system"></span>
-                                                            <span class="font-mono text-gray-700 dark:text-gray-300" x-text="oc.code"></span>
-                                                            <span class="text-gray-500 dark:text-gray-500" x-text="'- ' + oc.display"></span>
-                                                        </div>
-                                                    </template>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <!-- Status Badge (Flowbite) -->
@@ -396,86 +332,22 @@
                                         <div class="space-y-2">
                                             <template x-for="finding in section.findings" :key="finding.finding_type_code">
                                                 <div class="relative"
-                                                     x-data="{ hover: false, info: null }"
-                                                     x-init="info = getFindingDisplayInfo(finding.finding_type_code)"
+                                                     x-data="{ hover: false }"
                                                      @mouseenter="hover = true; highlightText(finding.reportTexts)"
                                                      @mouseleave="hover = false; clearHighlight()">
                                                     <div class="p-3 bg-white border rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 cursor-pointer transition-colors"
                                                          :class="hover ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500' : 'border-gray-200'">
                                                         <div class="flex items-center justify-between">
-                                                            <!-- Finding name with info icon trigger -->
+                                                            <!-- Finding name (clicks open shared popover) -->
                                                             <div class="flex items-center gap-2">
                                                                 <span class="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
-                                                                      @click="toggleFindingPopover(finding.finding_type_code)"
+                                                                      @click="toggleFindingPopover(finding.finding_type_code, $event)"
                                                                       x-text="finding.finding_type_display"></span>
                                                             </div>
                                                             <span x-show="finding.count > 1"
                                                                   class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-blue-600 rounded-full"
                                                                   x-text="finding.count"></span>
                                                         </div>
-                                                    </div>
-
-                                                    <!-- Rich Finding Info Popover (same as IPL view) -->
-                                                    <div x-show="currentView === 'exam' && isFindingPopoverOpen(finding.finding_type_code)"
-                                                         @click.outside="closeFindingPopover()"
-                                                         x-cloak
-                                                         x-transition:enter="transition ease-out duration-100"
-                                                         x-transition:enter-start="opacity-0 scale-95"
-                                                         x-transition:enter-end="opacity-100 scale-100"
-                                                         x-transition:leave="transition ease-in duration-75"
-                                                         x-transition:leave-start="opacity-100 scale-100"
-                                                         x-transition:leave-end="opacity-0 scale-95"
-                                                         role="tooltip"
-                                                         class="absolute z-50 left-full top-0 ml-2 pointer-events-none">
-                                                      <div class="w-96 max-h-96 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg dark:border-gray-600 dark:bg-gray-800 pointer-events-auto">
-                                                        <!-- Popover Header with Close Button -->
-                                                        <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-600 flex justify-between items-start">
-                                                            <div>
-                                                                <h6 class="font-semibold text-gray-900 dark:text-white" x-text="info?.name || finding.finding_type_display"></h6>
-                                                                <p class="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1" x-text="finding.finding_type_code"></p>
-                                                            </div>
-                                                            <button @click="closeFindingPopover()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-
-                                                        <!-- Popover Body -->
-                                                        <div class="px-4 py-3 text-xs text-gray-700 dark:text-gray-300 space-y-2">
-                                                            <!-- Description -->
-                                                            <p x-show="info?.description" x-text="info?.description" class="text-gray-600 dark:text-gray-400"></p>
-
-                                                            <!-- Location (special: has RadLex ID suffix) -->
-                                                            <div x-show="info?.location?.text">
-                                                                <span class="font-medium text-gray-900 dark:text-white">Location:</span>
-                                                                <span x-text="info?.location?.text" class="text-gray-600 dark:text-gray-400"></span>
-                                                                <span x-show="info?.location?.radlex_id" class="text-xs font-mono text-gray-500 dark:text-gray-500" x-text="'(' + info?.location?.radlex_id + ')'"></span>
-                                                            </div>
-
-                                                            <!-- Simple label:value fields from popoverFields config -->
-                                                            <template x-for="field in popoverFields" :key="field.key">
-                                                                <div x-show="getInfoFieldValue(info, field.key)">
-                                                                    <span class="font-medium text-gray-900 dark:text-white" x-text="field.label + ':'"></span>
-                                                                    <span x-text="getInfoFieldValue(info, field.key)" class="text-gray-600 dark:text-gray-400"></span>
-                                                                </div>
-                                                            </template>
-
-                                                            <!-- Ontology Codes (special: nested list structure) -->
-                                                            <div x-show="info?.ontology_codes?.length > 0">
-                                                                <div class="font-medium text-gray-900 dark:text-white mb-1">Ontology Codes:</div>
-                                                                <div class="max-h-32 overflow-y-auto space-y-1 pl-2 border-l-2 border-gray-200 dark:border-gray-600">
-                                                                    <template x-for="oc in info?.ontology_codes || []" :key="oc.system + oc.code">
-                                                                        <div class="text-xs">
-                                                                            <span class="font-mono text-blue-600 dark:text-blue-400" x-text="oc.system"></span>
-                                                                            <span class="font-mono text-gray-700 dark:text-gray-300" x-text="oc.code"></span>
-                                                                            <span class="text-gray-500 dark:text-gray-500" x-text="'- ' + oc.display"></span>
-                                                                        </div>
-                                                                    </template>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                      </div>
                                                     </div>
                                                 </div>
                                             </template>
@@ -517,6 +389,75 @@
                         </div>
                     </div>
                 </template>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SHARED FINDING INFO POPOVER                    -->
+            <!-- Single popover instance used by both IPL and   -->
+            <!-- Exam views. Position is calculated dynamically -->
+            <!-- based on the clicked element and current view. -->
+            <!-- ============================================== -->
+            <div x-show="openFindingPopover !== null"
+                 @click.outside="closeFindingPopover()"
+                 x-cloak
+                 x-transition:enter="transition ease-out duration-100"
+                 x-transition:enter-start="opacity-0 scale-95"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-75"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95"
+                 role="tooltip"
+                 class="pointer-events-none"
+                 :style="getPopoverStyle()">
+                <div class="w-96 max-h-96 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg dark:border-gray-600 dark:bg-gray-800 pointer-events-auto">
+                    <!-- Popover Header with Close Button -->
+                    <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-600 flex justify-between items-start">
+                        <div>
+                            <h6 class="font-semibold text-gray-900 dark:text-white" x-text="openFindingInfo?.name || openFindingPopover"></h6>
+                            <p class="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1" x-text="openFindingPopover"></p>
+                        </div>
+                        <button @click="closeFindingPopover()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Popover Body -->
+                    <div class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                        <!-- Description -->
+                        <p x-show="openFindingInfo?.description" x-text="openFindingInfo?.description" class="text-gray-600 dark:text-gray-400"></p>
+
+                        <!-- Location (special: has RadLex ID suffix) -->
+                        <div x-show="openFindingInfo?.location?.text">
+                            <span class="font-medium text-gray-900 dark:text-white">Location:</span>
+                            <span x-text="openFindingInfo?.location?.text" class="text-gray-600 dark:text-gray-400"></span>
+                            <span x-show="openFindingInfo?.location?.radlex_id" class="text-xs font-mono text-gray-500 dark:text-gray-500" x-text="'(' + openFindingInfo?.location?.radlex_id + ')'"></span>
+                        </div>
+
+                        <!-- Simple label:value fields from popoverFields config -->
+                        <template x-for="field in popoverFields" :key="field.key">
+                            <div x-show="getInfoFieldValue(openFindingInfo, field.key)">
+                                <span class="font-medium text-gray-900 dark:text-white" x-text="field.label + ':'"></span>
+                                <span x-text="getInfoFieldValue(openFindingInfo, field.key)" class="text-gray-600 dark:text-gray-400"></span>
+                            </div>
+                        </template>
+
+                        <!-- Ontology Codes (special: nested list structure) -->
+                        <div x-show="openFindingInfo?.ontology_codes?.length > 0">
+                            <div class="font-medium text-gray-900 dark:text-white mb-1">Ontology Codes:</div>
+                            <div class="max-h-32 overflow-y-auto space-y-1 pl-2 border-l-2 border-gray-200 dark:border-gray-600">
+                                <template x-for="oc in openFindingInfo?.ontology_codes || []" :key="oc.system + oc.code">
+                                    <div class="text-xs">
+                                        <span class="font-mono text-blue-600 dark:text-blue-400" x-text="oc.system"></span>
+                                        <span class="font-mono text-gray-700 dark:text-gray-300" x-text="oc.code"></span>
+                                        <span class="text-gray-500 dark:text-gray-500" x-text="'- ' + oc.display"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </main>
