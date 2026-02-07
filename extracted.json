@@ -1,0 +1,396 @@
+{
+  "exam_info": {
+    "study_description": "Chest Radiograph (PA and Lateral)",
+    "study_date": "2022-03-15",
+    "modality": "XR",
+    "body_part": "chest"
+  },
+  "findings": [
+    {
+      "finding_name": "pulmonary airspace abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "lungs",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "The lungs are well expanded and clear."
+    },
+    {
+      "finding_name": "pulmonary volume abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "lungs",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "The lungs are well expanded and clear."
+    },
+    {
+      "finding_name": "consolidation",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "lungs",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No focal consolidation, pleural effusion, or pneumothorax."
+    },
+    {
+      "finding_name": "pleural effusion",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "pleura",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No focal consolidation, pleural effusion, or pneumothorax."
+    },
+    {
+      "finding_name": "pneumothorax",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "pleura",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No focal consolidation, pleural effusion, or pneumothorax."
+    },
+    {
+      "finding_name": "pulmonary nodule",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "lungs",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "certainty",
+          "value": "definite"
+        }
+      ],
+      "report_text": "No definite pulmonary nodule identified on radiograph."
+    },
+    {
+      "finding_name": "cardiomegaly",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "heart",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "The cardiac silhouette is normal in size."
+    },
+    {
+      "finding_name": "mitral annular calcification",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "mitral annulus",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "severity",
+          "value": "prominent"
+        }
+      ],
+      "report_text": "Prominent mitral annular calcification is visible."
+    },
+    {
+      "finding_name": "coronary artery calcification",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "coronary arteries",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "Calcification of the coronary arteries is noted."
+    },
+    {
+      "finding_name": "mediastinal contour abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "mediastinum",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "The mediastinal contours are within normal limits."
+    },
+    {
+      "finding_name": "prominent aortic knob",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "aortic knob",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "The aortic knob is prominent with a tortuous descending thoracic aorta, compatible with atherosclerotic disease."
+    },
+    {
+      "finding_name": "aortic tortuosity",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "descending thoracic aorta",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "morphology",
+          "value": "tortuous"
+        }
+      ],
+      "report_text": "The aortic knob is prominent with a tortuous descending thoracic aorta, compatible with atherosclerotic disease."
+    },
+    {
+      "finding_name": "atherosclerotic disease",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "descending thoracic aorta",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "The aortic knob is prominent with a tortuous descending thoracic aorta, compatible with atherosclerotic disease."
+    },
+    {
+      "finding_name": "hilar contour abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "hila",
+        "laterality": "bilateral"
+      },
+      "attributes": [],
+      "report_text": "The hila are normal in size and contour."
+    },
+    {
+      "finding_name": "pleural thickening",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "pleura",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No pleural thickening or effusion."
+    },
+    {
+      "finding_name": "pleural effusion",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "pleura",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No pleural thickening or effusion."
+    },
+    {
+      "finding_name": "spinal degenerative change",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "thoracic spine",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "severity",
+          "value": "extensive"
+        }
+      ],
+      "report_text": "Extensive degenerative changes of the thoracic spine with flowing anterior osteophytes bridging multiple levels, consistent with diffuse idiopathic skeletal hyperostosis."
+    },
+    {
+      "finding_name": "flowing anterior osteophytes",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "thoracic spine",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "morphology",
+          "value": "bridging multiple levels"
+        }
+      ],
+      "report_text": "Extensive degenerative changes of the thoracic spine with flowing anterior osteophytes bridging multiple levels, consistent with diffuse idiopathic skeletal hyperostosis."
+    },
+    {
+      "finding_name": "diffuse idiopathic skeletal hyperostosis",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "thoracic spine",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "Extensive degenerative changes of the thoracic spine with flowing anterior osteophytes bridging multiple levels, consistent with diffuse idiopathic skeletal hyperostosis."
+    },
+    {
+      "finding_name": "vertebral compression fracture",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "T9 superior endplate",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "old"
+        },
+        {
+          "key": "acuity",
+          "value": "chronic/healed"
+        }
+      ],
+      "report_text": "An old superior endplate compression fracture at T9 is noted, now appearing chronic/healed compared to April 2006."
+    },
+    {
+      "finding_name": "rib fracture",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "left 7th rib",
+        "laterality": "left"
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "healed"
+        },
+        {
+          "key": "location",
+          "value": "posterolaterally"
+        },
+        {
+          "key": "morphology",
+          "value": "smooth callus formation"
+        }
+      ],
+      "report_text": "Healed fractures of the left 7th and 8th ribs are present posterolaterally with smooth callus formation."
+    },
+    {
+      "finding_name": "rib fracture",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "left 8th rib",
+        "laterality": "left"
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "healed"
+        },
+        {
+          "key": "location",
+          "value": "posterolaterally"
+        },
+        {
+          "key": "morphology",
+          "value": "smooth callus formation"
+        }
+      ],
+      "report_text": "Healed fractures of the left 7th and 8th ribs are present posterolaterally with smooth callus formation."
+    },
+    {
+      "finding_name": "clavicle fracture",
+      "presence": "present",
+      "location": {
+        "body_region": "upper extremity",
+        "specific_anatomy": "left mid-clavicle",
+        "laterality": "left"
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "old healed"
+        }
+      ],
+      "report_text": "An old healed fracture of the left mid-clavicle is identified."
+    },
+    {
+      "finding_name": "osteopenia",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "bones",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "morphology",
+          "value": "diffuse"
+        }
+      ],
+      "report_text": "Diffuse osteopenia is present."
+    },
+    {
+      "finding_name": "soft tissue abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "soft tissues",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No soft tissue abnormality."
+    },
+    {
+      "finding_name": "acute cardiopulmonary abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "cardiopulmonary",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No acute cardiopulmonary abnormality."
+    }
+  ],
+  "non_finding_text": [
+    {
+      "text": "RADIOLOGY REPORT:\n----------------------------------------\n**Chest Radiograph (PA and Lateral)**\n\n**Date of Exam:** March 15, 2022",
+      "category": "metadata"
+    },
+    {
+      "text": "**Technique:**\nFrontal and lateral views of the chest.",
+      "category": "technique"
+    },
+    {
+      "text": "**Indication:**\n61-year-old male with chronic cough.",
+      "category": "indication"
+    },
+    {
+      "text": "**Comparison:**\nChest radiograph, October 12, 2020.",
+      "category": "comparison"
+    },
+    {
+      "text": "---\n\n### **Findings:**",
+      "category": "other"
+    },
+    {
+      "text": "### **Impression:**\n\n1. No acute cardiopulmonary abnormality.\n\n2. Cardiac calcifications including mitral annular and coronary artery calcification.\n\n3. Extensive DISH with degenerative changes. Old T9 compression fracture, now chronic/healed. Healed left 7th and 8th rib fractures and left clavicular fracture.\n\n4. Diffuse osteopenia.",
+      "category": "impression"
+    },
+    {
+      "text": "----------------------------------------",
+      "category": "other"
+    }
+  ]
+}

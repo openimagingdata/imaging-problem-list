@@ -376,3 +376,62 @@ This addendum captures specific steps to address the issues found in the initial
 1. Add a short section in `README.md` describing supported model IDs and their reasoning-effort options.
 2. Document that Tool Output is the default structured output mode per Pydantic AI (with a link to the docs).
 3. Note when to prefer Responses models for GPT-5 family.
+
+---
+
+## Next Improvements: Prioritized Roadmap
+
+Based on reviewing the current implementation against the addendum, here is the prioritized order of work.
+
+### Priority 1: Output validator with `ModelRetry` (addendum item 1)
+
+**Why first:** This is the single biggest extraction-quality win. Currently `validate_extraction()` runs *after* the agent returns — if the LLM paraphrases instead of quoting verbatim, we detect it but can't do anything about it. An `@agent.output_validator` catches these failures inline and triggers automatic retries, which is exactly what Pydantic AI's validation loop is designed for.
+
+**Current state:** `validate_extraction()` exists as a post-hoc function. No output validator on the agent.
+
+**Implementation notes:**
+- The output validator needs access to the original report text. Since our agent has `deps_type=None`, we'll need to either switch to a deps type that carries the report text, or use a closure/module-level variable.
+- Using a dependency type (e.g., `ExtractorDeps` with a `report_text: str` field) is the cleaner Pydantic AI pattern.
+- Keep `validate_extraction()` for optional post-run diagnostics and coverage warnings — the output validator should only check verbatim correctness (the retry-worthy failure).
+
+### Priority 2: Tighten schema with enums and `extra="forbid"` (addendum items 3 + 4)
+
+**Why second:** Constraining fields to `Literal` types improves both LLM compliance (tool-calling schemas reject invalid values at the API level) and downstream data quality. This is a mechanical change that also resolves the impression-category mismatch (item 4).
+
+**Current state:** `NonFindingText.category`, `FindingLocation.body_region`, and `FindingLocation.laterality` are all free-form `str`. No `extra="forbid"` on any model. The instructions mention `impression` as a category (line 108 in agent.py) but the model's field description doesn't list it.
+
+**Fields to constrain:**
+- `NonFindingText.category` → `Literal["metadata", "technique", "indication", "comparison", "clinical_history", "impression", "other"]`
+- `FindingLocation.body_region` → `Literal["chest", "abdomen", "pelvis", "head", "neck", "spine", "upper extremity", "lower extremity", "breast"]`
+- `FindingLocation.laterality` → `Literal["left", "right", "bilateral"] | None`
+- `FindingAttribute.key` — leave as `str` for now; the set of possible keys is open-ended and constraining it would reject valid but uncommon attributes.
+
+**Also:**
+- Add `model_config = ConfigDict(extra="forbid")` to all models
+- Update tests for invalid values and extra fields
+- Ensure instructions list the exact valid enum values so the LLM knows the constraints
+
+### Priority 3: Date handling (addendum item 6)
+
+**Why third:** Small, low-risk improvement. `study_date: str | None` → `date | None` gives ISO validation for free via Pydantic.
+
+**Current state:** `study_date` is `str | None` everywhere — models, examples, tests.
+
+**Implementation notes:**
+- `from datetime import date`
+- Pydantic accepts ISO strings (`"2021-08-26"`) and converts to `date` objects automatically
+- JSON serialization produces ISO strings by default
+- Update examples and tests to use `date(2021, 8, 26)` or keep ISO strings (both work)
+
+### Lower priority (defer)
+
+**Addendum item 2 — `OpenAIResponsesModelSettings`:** `OpenAIChatModelSettings` works. Revisit only if we hit model-specific issues or want Responses API features.
+
+**Addendum item 5 — File-backed examples:** Embedded examples in `examples.py` work fine. Moving to external JSON files is a maintenance preference, not a functional improvement. Worth doing when we add more example modalities.
+
+**Addendum item 7 — Model compatibility docs:** Nice-to-have. Write a module README when the API stabilizes.
+
+**Other observations:**
+- `conftest.py` is empty — should hold shared fixtures (sample report text, sample `ReportExtraction` instances) to DRY up test files once we expand test coverage
+- No integration test exists (requires API keys) — add one marked `@pytest.mark.skipif` or behind a `--run-integration` flag for manual validation against real reports
+- Build backend says `hatchling` which is correct (`uv` uses hatchling under the hood), but could note this explicitly in the plan for clarity
