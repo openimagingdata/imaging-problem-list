@@ -128,7 +128,7 @@ wheels = [
 
 [[package]]
 name = "anatomic-locations"
-version = "0.2.1"
+version = "0.2.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asyncer" },
@@ -139,9 +139,9 @@ dependencies = [
     { name = "pydantic-settings" },
     { name = "rich" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/45/de/ae64a29a401e2002e3c8ccc4be2b09d9ca1671f14aa87899b90760e24b8b/anatomic_locations-0.2.1.tar.gz", hash = "sha256:f99b6c3e855ba96f5f009c542e9b3e074a932de1a8c7674213a5c9d53a91c7c9", size = 20264, upload-time = "2026-02-03T14:45:36.653Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1d/45/503d07e696bcb1af2f344b2f0e4c3671d33f701b11dac12d44654fb9f3ea/anatomic_locations-0.2.4.tar.gz", hash = "sha256:104892965c2ded79e443a4c1129de01c99ecc3cfa132eb7dd4a75d00201a3ad7", size = 20526, upload-time = "2026-03-01T10:09:38.325Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b9/0e/a83757efba5496883f3806ed114740c117785712b80aea5a20577593bf5a/anatomic_locations-0.2.1-py3-none-any.whl", hash = "sha256:8bc8fa5df0e999258adc3574f7f883912ecf07824bd1d229f275095cc6a81ce3", size = 23828, upload-time = "2026-02-03T14:45:37.875Z" },
+    { url = "https://files.pythonhosted.org/packages/c2/86/4dab3332f9ae3c8a5dbfa98e2864a22977db7412bf3c49f3631b6ae51ef2/anatomic_locations-0.2.4-py3-none-any.whl", hash = "sha256:7823850dd8a77745743d6762fd360f729193eb2ea3e4cd6acc7a44ceed5cefd5", size = 24057, upload-time = "2026-03-01T10:09:37.365Z" },
 ]
 
 [[package]]
@@ -828,7 +828,7 @@ dev = [
 
 [[package]]
 name = "findingmodel"
-version = "1.0.1"
+version = "1.0.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -841,9 +841,9 @@ dependencies = [
     { name = "pydantic-settings" },
     { name = "rich" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/97/33/b2bd07748a0ccb3eff935d35fe675a6cf3dba129e45b2d276a2a2866d818/findingmodel-1.0.1.tar.gz", hash = "sha256:f5287139d6f2494de901c21a226ea15026f938792e4c51fe738c06785d01ac8f", size = 27078, upload-time = "2026-02-03T14:45:27.017Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d6/7d/83560b5f93000cbcea8902ecc6061d1fd20dd504dfdbe0c9268913f5d74a/findingmodel-1.0.3.tar.gz", hash = "sha256:56f6a2272d70d8fab41d9fd0141c1abdd4a6d23c8a0d51a60838be37263c1614", size = 27540, upload-time = "2026-03-01T10:11:05.569Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/32/8e/8fa90e66a3672508c704699c7c6ba4609bc782b8c4038c4d0c728bd2acc1/findingmodel-1.0.1-py3-none-any.whl", hash = "sha256:71d997d4c63d0d9078231f2a24418556d899dea0244c009426e362358af9eaca", size = 34382, upload-time = "2026-02-03T14:45:25.665Z" },
+    { url = "https://files.pythonhosted.org/packages/40/ad/87d031ab4371b176f0a5dedf87ba68d25e45bf11772ae1dbd19cdaeb7e2a/findingmodel-1.0.3-py3-none-any.whl", hash = "sha256:e914611cb52295ee0ed7175775729003c1839d3a567041b27db4fd9cac9617b9", size = 34757, upload-time = "2026-03-01T10:11:04.49Z" },
 ]
 
 [[package]]
@@ -1838,7 +1838,7 @@ wheels = [
 
 [[package]]
 name = "oidm-common"
-version = "0.2.2"
+version = "0.2.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asyncer" },
@@ -1849,9 +1849,9 @@ dependencies = [
     { name = "pooch" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5c/31/a62eaad998c9795e0ce1531f267be4986cb4e733b61e796639769ed17c25/oidm_common-0.2.2.tar.gz", hash = "sha256:481a57cca732c0476e85119d28a8183f295256f3bc783bbca344748bbd37708a", size = 12893, upload-time = "2026-02-03T14:45:07.604Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/bd/1b/1898b5f94543424d851512075b0d1e5ae0c5d8180f70e1fd3baffffddfcf/oidm_common-0.2.5.tar.gz", hash = "sha256:8a33788155bb5d83b5774fe8b46395868a3202258bbea04eca76d0f0bb227b03", size = 14064, upload-time = "2026-03-01T10:09:03.755Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/db/11/7c63fdae4488ec77e227f586f1bb8558ee20ef9f08865c36b3e55a95f7a3/oidm_common-0.2.2-py3-none-any.whl", hash = "sha256:5a2eb68944a73f72d27e4b8fae913ba4662a28bcaef9d2745cee63c2985bceb7", size = 19273, upload-time = "2026-02-03T14:45:06.638Z" },
+    { url = "https://files.pythonhosted.org/packages/14/3b/b1b6537844c649272ade5ce3e61ee69e4c0fbb3253b5e3028b0eaa5a45a8/oidm_common-0.2.5-py3-none-any.whl", hash = "sha256:561f38f6ca54047b25d841c6db90bab83dd67f78455c8ef448462a243546c1d4", size = 20947, upload-time = "2026-03-01T10:09:02.662Z" },
 ]
 
 [[package]]
