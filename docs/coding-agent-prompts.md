@@ -12,7 +12,7 @@ The original combined search term generator has been split into two separate pro
 
 **When called:** Once per coding run, for all findings that did NOT resolve via finding fast-path (`Index.get(finding_name)`). Runs in parallel with the location term generator.
 
-**Input context:** Exam info, full report text (truncated), list of findings needing finding-code search terms.
+**Input context:** Exam info, list of findings needing finding-code search terms (each with per-finding report_text and presence).
 
 **Output:** `FindingTermsBatchOutput` — per-finding list of search terms.
 
@@ -82,9 +82,6 @@ with exam metadata and the report text for context. For each finding, propose
 - Modality: {exam_info.modality or '(unknown)'}
 - Body part: {exam_info.body_part or '(unknown)'}
 
-## REPORT TEXT (reference context)
-{report_text[:3000]}
-
 ## FINDINGS NEEDING FINDING CODES
 
 {for each finding, indexed from 0:}
@@ -104,7 +101,7 @@ Generate 2–3 diverse search terms for each finding above.
 
 **When called:** Once per coding run, for all findings that did NOT resolve via location fast-path (`AnatomicLocationIndex.get(specific_anatomy)`). Runs in parallel with the finding term generator.
 
-**Input context:** Exam info, full report text (truncated), list of findings needing location-code search terms.
+**Input context:** Exam info, list of findings needing location-code search terms (each with per-finding location fields and report_text).
 
 **Output:** `LocationTermsBatchOutput` — per-finding list of search terms.
 
@@ -121,7 +118,7 @@ or across patients. Terms should target the standardized anatomic structure,
 not report-specific phrasing.
 
 You will receive a list of findings extracted from a radiology report, along
-with exam metadata and the report text for context. For each finding, propose
+with exam metadata. For each finding, propose
 1–3 query terms that name the anatomic structure where the finding is located.
 
 ## Term Generation Rules
@@ -166,9 +163,6 @@ with exam metadata and the report text for context. For each finding, propose
 - Study: {exam_info.study_description}
 - Modality: {exam_info.modality or '(unknown)'}
 - Body part: {exam_info.body_part or '(unknown)'}
-
-## REPORT TEXT (reference context)
-{report_text[:3000]}
 
 ## FINDINGS NEEDING LOCATION CODES
 
@@ -369,8 +363,8 @@ if no match is possible.
 - **Four prompts, not three:** Split from the original combined search term generator. The two term generators run in parallel, and each only includes findings that need that axis coded (after fast-path resolution).
 - **Fast-path interaction:** A finding can resolve via fast-path on one axis but not the other. The split ensures each term generator receives only the findings it needs to process.
 - **Batch vs per-finding:** The term generators run once each (batched). The code selectors run once per finding (parallelized per-finding, bounded by concurrency semaphore).
-- **No chunk context in flat mode:** Since we're coding the merged finding list, we provide the full report text as reference context to the term generators, and a compact per-finding context to the selectors. The finding's own `report_text` (verbatim quote) provides the most relevant local context.
+- **No full report text:** Term generators receive only exam info + per-finding fields (`finding_name`, `presence`, `report_text`, `location`). Tested: dropping full report text produces identical results with 22% fewer input tokens.
 - **Output validation:** For both selectors, the selected ID is validated against the candidate set. An ID not present in the candidates is treated as unresolved (same as null).
 - **Tags in finding selector:** Candidate tags (e.g., `["CT", "US", "abdomen"]`) are surfaced to help the LLM choose between similar candidates whose modality/region context differs.
-- **Structured unresolved reasons:** Both selectors return a reason when unresolved. For locations: `no_candidate_match` (know where, no candidate fits — flags index gap) vs `location_unknown` (can't determine location from available context). For findings: `no_candidate_match`.
-- **Multiple locations per finding:** The location selector can return more than one location (e.g., bilateral → left + right, or a finding spanning adjacent structures). This requires a model change: `FindingCodingBundle.location_code` (singular `LocationCode`) → `location_codes: list[LocationCode]`. The `LocationCode` model itself stays the same — each entry represents one matched location. The no-redundant-ancestors rule is enforced in the prompt, not in code.
+- **Structured unresolved reasons:** Both selectors return a reason when unresolved. For locations: `no_candidate_match` (know where, no candidate fits — flags index gap) vs `location_unknown` (can't determine location from available context). For findings: `too_specific`, `too_broad`, `wrong_concept`, or `definition_mismatch` (flags ontology entries needing cleanup).
+- **Multiple locations per finding:** The location selector can return more than one location (e.g., bilateral → left + right, or a finding spanning adjacent structures). `FindingCodingBundle.location_codes: list[LocationCode]`. The no-redundant-ancestors rule is enforced in the prompt, not in code.

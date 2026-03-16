@@ -9,11 +9,12 @@ Runs all 5 phases:
   5. Assembly and output
 
 Usage:
-    uv run --env-file .env python scripts/test_coding_prompts.py [--max-findings N]
+    uv run --env-file .env python scripts/test_coding_prompts.py <input.json> [--max-findings N]
 """
 
 from __future__ import annotations
 
+import argparse
 import asyncio
 import json
 import sys
@@ -32,8 +33,9 @@ from anatomic_locations import AnatomicLocationIndex
 logfire.configure(send_to_logfire="if-token-present", service_name="coding-prompt-test")
 logfire.instrument_pydantic_ai()
 
-MODEL = "google-gla:gemini-3-flash-preview"
-SEARCH_LIMIT = 10
+DEFAULT_MODEL = "openai:gpt-5.2"
+SEARCH_LIMIT = 6
+MAX_CANDIDATES = 12
 MAX_CONCURRENCY = 5
 
 # ══════════════════════════════════════════════════════════════════
@@ -336,8 +338,8 @@ def location_fast_path(loc_index: AnatomicLocationIndex, specific_anatomy: str |
 
 def build_finding_term_user_prompt(
     exam_info: dict,
-    report_text: str,
     findings: list[tuple[int, dict]],
+    report_text: str = "",
 ) -> str:
     lines = [
         "## EXAM INFO",
@@ -345,9 +347,10 @@ def build_finding_term_user_prompt(
         f"- Modality: {exam_info.get('modality') or '(unknown)'}",
         f"- Body part: {exam_info.get('body_part') or '(unknown)'}",
         "",
-        "## REPORT TEXT (reference context)",
-        report_text[:3000],
-        "",
+    ]
+    if report_text:
+        lines += ["## REPORT TEXT (reference context)", report_text[:3000], ""]
+    lines += [
         "## FINDINGS NEEDING FINDING CODES",
         "",
     ]
@@ -363,8 +366,8 @@ def build_finding_term_user_prompt(
 
 def build_location_term_user_prompt(
     exam_info: dict,
-    report_text: str,
     findings: list[tuple[int, dict]],
+    report_text: str = "",
 ) -> str:
     lines = [
         "## EXAM INFO",
@@ -372,9 +375,10 @@ def build_location_term_user_prompt(
         f"- Modality: {exam_info.get('modality') or '(unknown)'}",
         f"- Body part: {exam_info.get('body_part') or '(unknown)'}",
         "",
-        "## REPORT TEXT (reference context)",
-        report_text[:3000],
-        "",
+    ]
+    if report_text:
+        lines += ["## REPORT TEXT (reference context)", report_text[:3000], ""]
+    lines += [
         "## FINDINGS NEEDING LOCATION CODES",
         "",
     ]
@@ -461,13 +465,23 @@ def build_location_selector_user_prompt(
 # ══════════════════════════════════════════════════════════════════
 
 async def main() -> None:
-    t0 = time.perf_counter()
-    max_findings = 20
-    if "--max-findings" in sys.argv:
-        idx = sys.argv.index("--max-findings")
-        max_findings = int(sys.argv[idx + 1])
+    parser = argparse.ArgumentParser(description="Coding pipeline test")
+    parser.add_argument("input", type=Path, help="Input extraction JSON file")
+    parser.add_argument("--max-findings", type=int, default=20)
+    parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument("--reasoning", default="low", help="Reasoning effort (low/medium/high)")
+    parser.add_argument("--fallback-model", default="google-gla:gemini-3.1-flash-lite-preview")
+    parser.add_argument("--with-report-text", action="store_true")
+    args = parser.parse_args()
 
-    output_path = Path("/tmp/coding_pipeline_output.txt")
+    t0 = time.perf_counter()
+    max_findings = args.max_findings
+    data_path: Path = args.input
+    MODEL = args.model
+
+    output_dir = Path(__file__).resolve().parent / "output"
+    output_dir.mkdir(exist_ok=True)
+    output_path = output_dir / f"{data_path.stem}_coded.json"
 
     # Collect output lines for file
     output_lines: list[str] = []
@@ -478,49 +492,66 @@ async def main() -> None:
         output_lines.append(msg)
 
     # ── Load data ────────────────────────────────────────────────
-    data_path = Path("/tmp/validator_demo_output_20260225.json")
     if not data_path.exists():
         print(f"ERROR: {data_path} not found")
         sys.exit(1)
 
+    include_report_text = args.with_report_text
+
     data = json.loads(data_path.read_text())
     exam_info = data["exam_info"]
     findings = data["findings"]
-    report_text = data.get("report_text", "")
-    if not report_text:
-        report_text = " ".join(f["report_text"] for f in findings[:20])
+    report_text = ""
+    if include_report_text:
+        report_text = data.get("report_text", "")
+        if not report_text:
+            report_text = " ".join(f["report_text"] for f in findings[:20])
 
     emit(f"Loaded {len(findings)} findings from extraction")
-    emit(f"Model: {MODEL}")
+    emit(f"Model: {MODEL} (reasoning: {args.reasoning})")
     emit(f"Max findings for LLM phases: {max_findings}")
+    emit(f"Include full report text: {include_report_text}")
 
     # ── Initialize indexes ───────────────────────────────────────
     finding_index = Index()
     location_index = AnatomicLocationIndex()
 
+    # ── Build resilient model runtime ────────────────────────────
+    from finding_extractor.llm.resilience import build_resilient_model
+
+    runtime = build_resilient_model(
+        MODEL,
+        reasoning=args.reasoning,
+        fallback_model_name=args.fallback_model,
+    )
+
     # ── Create named agents once ─────────────────────────────────
     finding_term_agent = Agent(
-        MODEL,
+        runtime.model,
         system_prompt=FINDING_TERM_SYSTEM,
         output_type=FindingTermsBatchOutput,
+        model_settings=runtime.model_settings,
         name="finding_term_generator",
     )
     location_term_agent = Agent(
-        MODEL,
+        runtime.model,
         system_prompt=LOCATION_TERM_SYSTEM,
         output_type=LocationTermsBatchOutput,
+        model_settings=runtime.model_settings,
         name="location_term_generator",
     )
     finding_selector = Agent(
-        MODEL,
+        runtime.model,
         system_prompt=FINDING_CODE_SELECTOR_SYSTEM,
         output_type=FindingCodeSelection,
+        model_settings=runtime.model_settings,
         name="finding_code_selector",
     )
     location_selector = Agent(
-        MODEL,
+        runtime.model,
         system_prompt=LOCATION_CODE_SELECTOR_SYSTEM,
         output_type=LocationCodeSelection,
+        model_settings=runtime.model_settings,
         name="location_code_selector",
     )
 
@@ -644,10 +675,10 @@ async def main() -> None:
             location_count=len(test_location_items),
         ):
             finding_user_prompt = build_finding_term_user_prompt(
-                exam_info, report_text, test_finding_items
+                exam_info, test_finding_items, report_text=report_text
             )
             location_user_prompt = build_location_term_user_prompt(
-                exam_info, report_text, test_location_items
+                exam_info, test_location_items, report_text=report_text
             )
 
             emit(f"  Sending {len(test_finding_items)} findings to finding term generator...")
@@ -710,7 +741,7 @@ async def main() -> None:
                     if entry.oifm_id not in seen_ids:
                         candidates.append(entry)
                         seen_ids.add(entry.oifm_id)
-            finding_candidates[batch_idx] = candidates
+            finding_candidates[batch_idx] = candidates[:MAX_CANDIDATES]
 
         location_candidates: dict[int, list] = {}
         for batch_idx in location_terms_map:
@@ -721,7 +752,7 @@ async def main() -> None:
                     if loc.id not in seen_ids:
                         candidates.append(loc)
                         seen_ids.add(loc.id)
-            location_candidates[batch_idx] = candidates
+            location_candidates[batch_idx] = candidates[:MAX_CANDIDATES]
 
         emit("\n  Finding candidates:")
         for batch_idx, (_orig_idx, f) in enumerate(test_finding_items):
@@ -863,120 +894,231 @@ async def main() -> None:
         emit(f"{'=' * 70}")
 
         with logfire.span("phase5_assembly"):
-            # Summary table — findings
-            emit("\n  FINDING CODE RESULTS:")
-            emit(f"  {'Finding Name':<45} {'Code':<25} {'Name':<30} {'Method'}")
-            emit(f"  {'-'*45} {'-'*25} {'-'*30} {'-'*12}")
+            # Build structured results per finding
+            coded_findings: list[dict] = []
 
-            # Fast-path resolved
-            shown: set[str] = set()
-            for i, oifm_id in sorted(finding_resolved.items()):
-                name = findings[i]["finding_name"]
-                if name not in shown:
-                    entry_name = finding_resolved_name.get(i, "?")
-                    emit(f"  {name:<45} {oifm_id:<25} {entry_name:<30} fast-path")
-                    shown.add(name)
+            for i, finding in enumerate(findings):
+                entry: dict = {
+                    "finding_name": finding["finding_name"],
+                    "presence": finding.get("presence"),
+                    "location": finding.get("location"),
+                    "attributes": finding.get("attributes"),
+                    "report_text": finding.get("report_text"),
+                }
 
-            # LLM-selected
-            for batch_idx, (_orig_idx, f) in enumerate(test_finding_items):
-                name = f["finding_name"]
-                sel = finding_selections.get(batch_idx)
-                if sel and sel.oifm_id:
-                    cands = finding_candidates.get(batch_idx, [])
-                    oifm_name = next(
-                        (c.name for c in cands if c.oifm_id == sel.oifm_id), "?"
+                # Finding code
+                if i in finding_resolved:
+                    entry["finding_code"] = {
+                        "oifm_id": finding_resolved[i],
+                        "display_name": finding_resolved_name.get(i),
+                        "method": "fast-path",
+                    }
+                else:
+                    # Check if this finding was in the LLM batch
+                    batch_idx = next(
+                        (bi for bi, (oi, _f) in enumerate(test_finding_items) if oi == i),
+                        None,
                     )
-                    emit(f"  {name:<45} {sel.oifm_id:<25} {oifm_name:<30} llm")
+                    if batch_idx is not None:
+                        sel = finding_selections.get(batch_idx)
+                        if sel and sel.oifm_id:
+                            cands = finding_candidates.get(batch_idx, [])
+                            oifm_name = next(
+                                (c.name for c in cands if c.oifm_id == sel.oifm_id), None
+                            )
+                            entry["finding_code"] = {
+                                "oifm_id": sel.oifm_id,
+                                "display_name": oifm_name,
+                                "method": "llm",
+                                "reasoning": sel.reasoning,
+                            }
+                        else:
+                            entry["finding_code"] = {
+                                "oifm_id": None,
+                                "method": "llm",
+                                "reasoning": sel.reasoning if sel else None,
+                                "closest_candidate_id": sel.closest_candidate_id if sel else None,
+                                "rejection_reason": sel.rejection_reason if sel else None,
+                            }
+                    else:
+                        entry["finding_code"] = None
+
+                # Location code
+                if i in location_resolved:
+                    entry["location_code"] = {
+                        "radlex_id": location_resolved[i],
+                        "display_name": location_resolved_name.get(i),
+                        "method": "fast-path",
+                    }
                 else:
-                    reason = sel.reasoning[:40] if sel else "no selection"
-                    emit(f"  {name:<45} {'(unresolved)':<25} {reason:<30} llm")
+                    batch_idx = next(
+                        (bi for bi, (oi, _f) in enumerate(test_location_items) if oi == i),
+                        None,
+                    )
+                    if batch_idx is not None:
+                        sel = location_selections.get(batch_idx)
+                        if sel and sel.location_ids:
+                            cands = location_candidates.get(batch_idx, [])
+                            id_to_desc = {c.id: c.description for c in cands}
+                            entry["location_code"] = {
+                                "radlex_ids": [
+                                    {"id": lid, "display_name": id_to_desc.get(lid)}
+                                    for lid in sel.location_ids
+                                ],
+                                "method": "llm",
+                                "reasoning": sel.reasoning,
+                            }
+                        else:
+                            entry["location_code"] = {
+                                "radlex_ids": [],
+                                "method": "llm",
+                                "unresolved_reason": sel.unresolved_reason if sel else None,
+                                "reasoning": sel.reasoning if sel else None,
+                            }
+                    else:
+                        entry["location_code"] = None
 
-            # Rejection analysis for unresolved findings
-            rejections = [
-                (f["finding_name"], sel)
-                for batch_idx, (_orig_idx, f) in enumerate(test_finding_items)
-                if (sel := finding_selections.get(batch_idx)) and not sel.oifm_id
-            ]
-            if rejections:
-                emit("\n  UNRESOLVED FINDING ANALYSIS:")
-                for finding_name, sel in rejections:
-                    emit(f"    {finding_name!r}")
-                    emit(f"      closest: {sel.closest_candidate_id or '(none)'}")
-                    emit(f"      reason:  {sel.rejection_reason or '(not classified)'}")
-                    emit(f"      detail:  {sel.reasoning}")
+                coded_findings.append(entry)
 
-                # Highlight definition mismatches specifically
-                def_mismatches = [
-                    (fn, s) for fn, s in rejections
-                    if s.rejection_reason == "definition_mismatch"
-                ]
-                if def_mismatches:
-                    emit("\n  DEFINITION MISMATCHES (ontology entries needing cleanup):")
-                    for finding_name, sel in def_mismatches:
-                        logfire.warn(
-                            "Definition mismatch: {finding_name} ~> {candidate_id}",
-                            finding_name=finding_name,
-                            candidate_id=sel.closest_candidate_id,
-                            reasoning=sel.reasoning,
-                        )
-                        emit(f"    {finding_name!r} ~> {sel.closest_candidate_id}")
-                        emit(f"      {sel.reasoning}")
-
-            # Summary table — locations
-            emit("\n  LOCATION CODE RESULTS:")
-            emit(f"  {'Finding Name':<35} {'Anatomy':<25} {'Location ID(s)':<35} {'Method'}")
-            emit(f"  {'-'*35} {'-'*25} {'-'*35} {'-'*12}")
-
-            # Fast-path
-            shown_loc: set[str] = set()
-            for i, loc_id in sorted(location_resolved.items()):
-                anat = (findings[i].get("location") or {}).get("specific_anatomy", "?")
-                key = f"{findings[i]['finding_name']}:{anat}"
-                if key not in shown_loc:
-                    emit(f"  {findings[i]['finding_name']:<35} {anat:<25} "
-                         f"{loc_id:<35} fast-path")
-                    shown_loc.add(key)
-
-            # LLM-selected
-            for batch_idx, (_orig_idx, f) in enumerate(test_location_items):
-                sel = location_selections.get(batch_idx)
-                anat = (f.get("location") or {}).get("specific_anatomy", "(none)")
-                if sel and sel.location_ids:
-                    cands = location_candidates.get(batch_idx, [])
-                    id_to_desc = {c.id: c.description for c in cands}
-                    loc_strs = [f"{lid} ({id_to_desc.get(lid, '?')})" for lid in sel.location_ids]
-                    emit(f"  {f['finding_name']:<35} {anat:<25} "
-                         f"{', '.join(sel.location_ids):<35} llm")
-                    for ls in loc_strs:
-                        emit(f"  {'':35} {'':25} -> {ls}")
+            # Print summary table to console
+            emit(f"\n  {'Finding Name':<45} {'Finding Code':<25} {'Location':<25} {'Method'}")
+            emit(f"  {'-'*45} {'-'*25} {'-'*25} {'-'*12}")
+            for cf in coded_findings:
+                fc = cf.get("finding_code") or {}
+                lc = cf.get("location_code") or {}
+                fcode = fc.get("oifm_id") or "(unresolved)"
+                if isinstance(lc.get("radlex_ids"), list):
+                    lcode = ", ".join(r["id"] for r in lc["radlex_ids"]) or "(unresolved)"
                 else:
-                    reason = sel.unresolved_reason if sel else "no selection"
-                    emit(f"  {f['finding_name']:<35} {anat:<25} "
-                         f"{'(unresolved: ' + str(reason) + ')':<35} llm")
+                    lcode = lc.get("radlex_id") or "(unresolved)"
+                method = fc.get("method", "—")
+                emit(f"  {cf['finding_name']:<45} {fcode:<25} {lcode:<25} {method}")
 
         # ══════════════════════════════════════════════════════════
         # USAGE SUMMARY
         # ══════════════════════════════════════════════════════════
-        emit(f"\n{'=' * 70}")
-        emit("USAGE SUMMARY")
-        emit(f"{'=' * 70}")
+        elapsed = time.perf_counter() - t0
 
         f_usage = finding_result.usage()
         l_usage = location_result.usage()
-        emit(f"  Finding term gen:  {f_usage.input_tokens:,} in / {f_usage.output_tokens:,} out")
-        emit(f"  Location term gen: {l_usage.input_tokens:,} in / {l_usage.output_tokens:,} out")
+
+        summary = {
+            "model": MODEL,
+            "input_file": str(data_path),
+            "wall_clock_seconds": round(elapsed, 1),
+            "finding_codes": {
+                "fast_path": len(finding_resolved),
+                "llm": finding_coded,
+                "unresolved": finding_unresolved,
+            },
+            "location_codes": {
+                "fast_path": len(location_resolved),
+                "llm": loc_coded,
+                "unresolved": loc_unresolved,
+            },
+            "token_usage": {
+                "finding_term_gen": {"input": f_usage.input_tokens, "output": f_usage.output_tokens},
+                "location_term_gen": {"input": l_usage.input_tokens, "output": l_usage.output_tokens},
+            },
+        }
 
         emit(f"\n  Finding codes:  {len(finding_resolved)} fast-path + {finding_coded} llm "
              f"= {len(finding_resolved) + finding_coded} coded, {finding_unresolved} unresolved")
         emit(f"  Location codes: {len(location_resolved)} fast-path + {loc_coded} llm "
              f"= {len(location_resolved) + loc_coded} coded, {loc_unresolved} unresolved")
+        emit(f"  Wall clock: {elapsed:.1f}s")
 
-        elapsed = time.perf_counter() - t0
-        emit(f"\n  Wall clock: {elapsed:.1f}s")
+    # ── Write structured JSON output ──────────────────────────────
+    output_data = {
+        "exam_info": exam_info,
+        "findings": coded_findings,
+        "summary": summary,
+    }
+    output_path.write_text(json.dumps(output_data, indent=2))
+    print(f"\nJSON written to {output_path}")
 
-    # ── Write output file ────────────────────────────────────────
-    output_path.write_text("\n".join(output_lines))
-    print(f"\nOutput written to {output_path}")
+    # ── Write human-readable markdown report ──────────────────────
+    report_path = output_path.with_suffix(".md")
+    md: list[str] = []
+    md.append(f"# Coding Pipeline Report: {data_path.name}")
+    md.append("")
+    md.append(f"**Model:** {MODEL}  ")
+    md.append(f"**Findings:** {len(findings)}  ")
+    md.append(f"**Wall clock:** {summary['wall_clock_seconds']}s")
+    md.append("")
+
+    # Exam info
+    md.append("## Exam Info")
+    md.append("")
+    for k, v in exam_info.items():
+        md.append(f"- **{k}:** {v}")
+    md.append("")
+
+    # Finding code results
+    md.append("## Finding Codes")
+    md.append("")
+    md.append("| Finding | Code | Display Name | Method |")
+    md.append("|---------|------|-------------|--------|")
+    for cf in coded_findings:
+        fc = cf.get("finding_code") or {}
+        code = fc.get("oifm_id") or "—"
+        display = fc.get("display_name") or "—"
+        method = fc.get("method") or "—"
+        md.append(f"| {cf['finding_name']} | `{code}` | {display} | {method} |")
+    md.append("")
+
+    # Location code results
+    md.append("## Location Codes")
+    md.append("")
+    md.append("| Finding | Anatomy | RadLex ID(s) | Method |")
+    md.append("|---------|---------|-------------|--------|")
+    for cf in coded_findings:
+        lc = cf.get("location_code") or {}
+        anat = (cf.get("location") or {}).get("specific_anatomy", "—")
+        if isinstance(lc.get("radlex_ids"), list):
+            ids = ", ".join(f'`{r["id"]}` ({r.get("display_name", "?")})' for r in lc["radlex_ids"]) or "—"
+        else:
+            rid = lc.get("radlex_id")
+            ids = f'`{rid}` ({lc.get("display_name", "?")})' if rid else "—"
+        method = lc.get("method") or "—"
+        md.append(f"| {cf['finding_name']} | {anat} | {ids} | {method} |")
+    md.append("")
+
+    # Unresolved findings
+    unresolved = [cf for cf in coded_findings
+                  if (cf.get("finding_code") or {}).get("oifm_id") is None
+                  and cf.get("finding_code") is not None]
+    if unresolved:
+        md.append("## Unresolved Findings")
+        md.append("")
+        for cf in unresolved:
+            fc = cf["finding_code"]
+            md.append(f"### {cf['finding_name']}")
+            md.append("")
+            if fc.get("closest_candidate_id"):
+                md.append(f"- **Closest candidate:** `{fc['closest_candidate_id']}`")
+            if fc.get("rejection_reason"):
+                md.append(f"- **Rejection reason:** {fc['rejection_reason']}")
+            if fc.get("reasoning"):
+                md.append(f"- **Detail:** {fc['reasoning']}")
+            md.append("")
+
+    # Summary
+    md.append("## Summary")
+    md.append("")
+    fc_sum = summary["finding_codes"]
+    lc_sum = summary["location_codes"]
+    md.append(f"- **Finding codes:** {fc_sum['fast_path']} fast-path + {fc_sum['llm']} LLM"
+              f" = {fc_sum['fast_path'] + fc_sum['llm']} coded, {fc_sum['unresolved']} unresolved")
+    md.append(f"- **Location codes:** {lc_sum['fast_path']} fast-path + {lc_sum['llm']} LLM"
+              f" = {lc_sum['fast_path'] + lc_sum['llm']} coded, {lc_sum['unresolved']} unresolved")
+    tu = summary["token_usage"]
+    md.append(f"- **Tokens (finding terms):** {tu['finding_term_gen']['input']:,} in / {tu['finding_term_gen']['output']:,} out")
+    md.append(f"- **Tokens (location terms):** {tu['location_term_gen']['input']:,} in / {tu['location_term_gen']['output']:,} out")
+    md.append("")
+
+    report_path.write_text("\n".join(md))
+    print(f"Report written to {report_path}")
 
 
 if __name__ == "__main__":
