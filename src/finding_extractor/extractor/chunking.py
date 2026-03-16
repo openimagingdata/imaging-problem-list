@@ -246,25 +246,25 @@ def _semantic_candidates(section_text: str, settings: ChunkingSettings) -> tuple
     """Generate semantic chunks with Chonkie SemanticChunker."""
     import warnings
 
+    from chonkie import SemanticChunker
+
     with warnings.catch_warnings():
         warnings.filterwarnings(
             "ignore",
             message=".*unauthenticated requests.*HF Hub.*",
             module="huggingface_hub",
         )
-        from chonkie import SemanticChunker
-
-    chunker = SemanticChunker(
-        embedding_model=settings.semantic_embedding_model,
-        threshold=settings.semantic_threshold,
-        chunk_size=settings.semantic_chunk_size,
-        similarity_window=settings.semantic_similarity_window,
-        min_sentences_per_chunk=1,
-        min_characters_per_sentence=24,
-        delim=DEFAULT_SENTENCE_DELIMITERS,
-        include_delim="prev",
-        skip_window=settings.semantic_skip_window,
-    )
+        chunker = SemanticChunker(
+            embedding_model=settings.semantic_embedding_model,
+            threshold=settings.semantic_threshold,
+            chunk_size=settings.semantic_chunk_size,
+            similarity_window=settings.semantic_similarity_window,
+            min_sentences_per_chunk=1,
+            min_characters_per_sentence=24,
+            delim=DEFAULT_SENTENCE_DELIMITERS,
+            include_delim="prev",
+            skip_window=settings.semantic_skip_window,
+        )
     raw_chunks = chunker.chunk(section_text)
     if not raw_chunks:
         return _single_chunk(section_text)

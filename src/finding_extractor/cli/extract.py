@@ -3,17 +3,16 @@
 Usage:
     finding-extractor <report_file> [OPTIONS]
 
-Options:
-    --exam-type TEXT      Exam description for context
-    --output PATH         Output JSON file (default: stdout)
-    --model TEXT          LLM model override (default: google-gla:gemini-3-flash-preview)
-    --reasoning TEXT      Reasoning effort: "none", "minimal", "low", "medium", "high"
-    --format TEXT         Output: "json" (default) or "table" (summary)
-    --no-validate         Disable post-extraction coverage validation (enabled by default)
-    --store               Persist report/extraction metadata to SQLite
-    --db-path PATH        SQLite path (default: IPL_DB_PATH or .finding_extractor.db)
-    --logfire/--no-logfire  Enable/disable Logfire observability for this run
-    --verbose             Set logging emission level to INFO for this run
+Model configuration is controlled via environment variables (or config.toml):
+
+    IPL_MODEL               Extraction model (default: gemini-3-flash-preview)
+    IPL_FALLBACK_MODEL      Fallback model for resilience (default: gpt-5.2)
+    IPL_REASONING           Default reasoning effort level
+    IPL_REVIEWER_ENABLED    Enable per-chunk review pass (default: true)
+    IPL_REVIEWER_MODEL      Reviewer model (must differ from extraction model)
+    IPL_REVIEWER_REASONING  Reviewer reasoning effort (default: low)
+
+CLI options --model, --reasoning, and --preset override the env var defaults.
 """
 
 import json
@@ -116,7 +115,7 @@ _run_pipeline_sync = runnify(_run_pipeline)
 @click.option(
     "--model",
     "-m",
-    help="LLM model override (default: google-gla:gemini-3-flash-preview or IPL_MODEL env var)",
+    help="LLM model override (default: IPL_MODEL env var)",
 )
 @click.option(
     "--preset",
