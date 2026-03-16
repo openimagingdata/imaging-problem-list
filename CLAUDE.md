@@ -189,7 +189,9 @@ python3 -m http.server 8000
 
 ### CLI
 ```bash
-uv run finding-extractor <report_file> [--model openai:gpt-5-mini] [--reasoning medium] [--validate] [--store]
+uv run finding-extractor <report_file> [--model <provider:model>] [--reasoning medium] [--validate] [--store]
+# Write JSON to file and show table summary:
+uv run finding-extractor <report_file> -o output.json -f table
 ```
 
 ## Finding Extractor Architecture

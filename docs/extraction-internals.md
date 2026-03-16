@@ -191,7 +191,7 @@ Coding (OIFM finding code and anatomic location code assignment) is a separate, 
 
 ## Reviewer Contract
 
-Reviewer runs by default in the V2 runtime. Config controls:
+Reviewer runs inline within each chunk pipeline. Config controls:
 
 1. `IPL_REVIEWER_ENABLED` (default: `true`)
 2. `IPL_REVIEWER_MODEL` (optional override; must differ from extraction model)
@@ -238,8 +238,9 @@ Key denormalized fields on `ExtractionRow`:
 - **Exam info columns**: `study_description`, `study_date`, `modality`, `body_region`,
   `body_part`, `contrast`, `laterality` — avoids JSON deserialization for summary views.
 - **`finding_count`**: computed at persist time from `len(extraction.findings)`.
-- **`diagnostics_json`**: serialized `PipelineDiagnostics` (chunk counts, repair stats,
-  validator stats). Returned in detail API response.
+- **`diagnostics_json`**: serialized `PipelineDiagnostics` (chunk counts, reviewer stats).
+  Returned in detail API response. Legacy fields `repaired_chunks` and `repair_attempts_used`
+  are retained for backward compatibility but always 0 for new extractions.
 - **`trace_id`**: OpenTelemetry trace ID captured at persist time via
   `observability.get_current_trace_id()`. When Logfire is enabled, this links the
   stored extraction to its full Logfire trace (exact prompts, responses, timing).

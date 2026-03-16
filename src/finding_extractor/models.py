@@ -323,12 +323,14 @@ class PipelineDiagnostics(StrictBaseModel):
     mode: str
     total_chunks: int
     initial_failed_chunks: int
-    repaired_chunks: int
     remaining_failed_chunks: int
-    repair_attempts_used: int
     total_chunk_attempts: int
     failed_chunk_ids: tuple[str, ...]
     failed_chunk_error_types: tuple[str, ...]
     reviewer_requested_chunks: int = 0
     reviewer_reextracted_chunks: int = 0
+    # Deprecated — retained for backward compatibility with stored diagnostics JSON.
+    # Always 0 for new extractions (chunk repair was removed).
+    repaired_chunks: int = 0
+    repair_attempts_used: int = 0
 

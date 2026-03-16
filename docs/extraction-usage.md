@@ -111,8 +111,8 @@ finding-extractor <report_file> [OPTIONS]
 
 Options:
   --exam-type TEXT          Exam description for context (e.g., "CT Chest")
-  --output, -o PATH         Write JSON to file instead of stdout
-  --model, -m TEXT          Model string (default: google-gla:gemini-3-flash-preview)
+  --output, -o PATH         Write JSON to file (combine with -f table to also show summary)
+  --model, -m TEXT          Model override (default: IPL_MODEL env var)
   --reasoning, -r LEVEL     none | minimal | low | medium | high
   --format, -f FORMAT       json (default) | table
   --validate / --no-validate  Run post-extraction coverage analysis (default: --validate)
@@ -196,7 +196,7 @@ The JSON output contains:
 - `findings[].coding.finding_code` — OIFM coding status (`coded|unmapped`), selected code, method, candidates
 - `findings[].coding.location_code` — anatomic location coding status (`coded|unmapped`), selected code, method, candidates
 
-Use `--format table` for a human-readable summary instead of JSON.
+Use `--format table` for a human-readable summary instead of JSON. Combine `-o output.json -f table` to write JSON to file and show the table summary on the terminal.
 
 ## Persistence
 

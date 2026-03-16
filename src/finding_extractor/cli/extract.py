@@ -222,24 +222,17 @@ def main(
             source_ref=report_file.name,
         )
 
-        if output_format == "json":
-            output_text = format_json_output(
-                extraction,
-                validation_result,
-                storage_metadata,
-            )
-        else:
-            output_text = format_table_output(
-                extraction,
-                validation_result,
-                storage_metadata,
-            )
-
         if output:
-            output.write_text(output_text)
-            click.echo(f"Output written to {output}")
+            # Always write JSON to file; optionally also show table on terminal
+            json_text = format_json_output(extraction, validation_result, storage_metadata)
+            output.write_text(json_text)
+            click.echo(f"Output written to {output}", err=True)
+            if output_format == "table":
+                click.echo(format_table_output(extraction, validation_result, storage_metadata))
+        elif output_format == "table":
+            click.echo(format_table_output(extraction, validation_result, storage_metadata))
         else:
-            click.echo(output_text)
+            click.echo(format_json_output(extraction, validation_result, storage_metadata))
 
     except Exception as e:
         click.echo(f"Error during extraction: {e}", err=True)
