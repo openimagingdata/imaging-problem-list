@@ -1,22 +1,23 @@
 """baseline_schema
 
 Revision ID: 3d867b54ee78
-Revises: 
+Revises:
 Create Date: 2026-03-11 10:05:16.341681
 
 """
-from typing import Sequence, Union
 
-from alembic import op
+from collections.abc import Sequence
+
 import sqlalchemy as sa
 import sqlmodel
 
+from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = '3d867b54ee78'
-down_revision: Union[str, Sequence[str], None] = None
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+revision: str = "3d867b54ee78"
+down_revision: str | Sequence[str] | None = None
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
@@ -61,6 +62,11 @@ def upgrade() -> None:
     sa.Column('unresolved_finding_count', sa.Integer(), nullable=True),
     sa.Column('diagnostics_json', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('trace_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('coding_model', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('coding_reasoning', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('coding_completed_at', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('coding_duration_ms', sa.Integer(), nullable=True),
+    sa.Column('coding_trace_id', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('extraction_json', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
     sa.Column('validation_json', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('input_tokens', sa.Integer(), nullable=True),

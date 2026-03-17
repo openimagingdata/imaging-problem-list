@@ -51,6 +51,11 @@ class ExtractionRow(SQLModel, table=True):
     finding_count: int = 0
     coded_finding_count: int | None = None
     unresolved_finding_count: int | None = None
+    coding_model: str | None = None
+    coding_reasoning: str | None = None
+    coding_completed_at: str | None = None
+    coding_duration_ms: int | None = None
+    coding_trace_id: str | None = None
     diagnostics_json: str | None = None
     trace_id: str | None = None
     extraction_json: str

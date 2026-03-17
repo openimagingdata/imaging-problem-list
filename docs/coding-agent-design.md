@@ -208,7 +208,7 @@ coding_duration_ms: int | None = None
 coding_trace_id: str | None = None
 ```
 
-**Migration:** Alembic migration adds nullable columns. No data backfill needed.
+**Migration:** because this project does not need to preserve any existing stamped database, the coding columns are folded directly into the current baseline Alembic revision instead of introducing a follow-on revision.
 
 ### Job lifecycle
 
@@ -396,40 +396,44 @@ tests/
 
 ## Implementation Plan
 
+Status legend: `[ ]` not started, `[-]` in progress, `[x]` complete
+
 Work proceeds on the `feature/coding-agent` branch (rebased on `dev`).
 
 ### Phase 1: Foundation
 
-1. **Write this plan** into `docs/coding-agent-design.md` ✅
-2. Update `models.py`: `FindingCodingBundle.location_codes` (list), `CodingMethod`, `FindingUnresolvedReason`, `LocationUnresolvedReason`, reasoning/closest_candidate fields
-3. Add `coding_*` settings to `core/config.py`
-4. Create `coding/types.py`: LLM response models (`FindingTermsBatchOutput`, `LocationTermsBatchOutput`, `FindingCodeSelection`, `LocationCodeSelection`)
+1. [x] **Write this plan** into `docs/coding-agent-design.md`
+2. [x] Update `models.py`: `FindingCodingBundle.location_codes` (list), `CodingMethod`, `FindingUnresolvedReason`, `LocationUnresolvedReason`, reasoning/closest_candidate fields
+3. [x] Add `coding_*` settings to `core/config.py`
+4. [x] Create `coding/types.py`: LLM response models (`FindingTermsBatchOutput`, `LocationTermsBatchOutput`, `FindingCodeSelection`, `LocationCodeSelection`)
 
 ### Phase 2: Agents and Prompts
 
-5. Create `coding/prompt.py`: extract system prompts and user prompt builders from prototype
-6. Create `coding/agents.py`: four agent factories using `build_resilient_model()`
-7. Update `docs/coding-agent-prompts.md` to reflect final prompt text (no report text in term generators, exam info only)
+5. [x] Create `coding/prompt.py`: extract system prompts and user prompt builders from prototype
+6. [x] Create `coding/agents.py`: four agent factories using `build_resilient_model()`
+7. [x] Update `docs/coding-agent-prompts.md` to reflect final prompt text (no full report text in term generators; exam info + per-finding fields only)
 
 ### Phase 3: Runtime
 
-8. Create `coding/runtime.py`: 5-phase orchestrator with Logfire spans, semaphore, progress callbacks
-9. Wire up `coding/__init__.py` public API
-10. Add Alembic migration for coding metadata columns on `ExtractionRow`
+8. [x] Create `coding/runtime.py`: 5-phase orchestrator with Logfire spans, semaphore, progress callbacks
+9. [x] Wire up `coding/__init__.py` public API
+10. [x] Add Alembic migration for coding metadata columns on `ExtractionRow`
 
 ### Phase 4: Integration
 
-11. Create `worker/coding_jobs.py`: TaskIQ task
-12. Add API route `POST /extractions/{id}/code` + schemas + service function, using `resolve_runtime_reasoning()` during enqueue preflight and storing both `report_id` and `extraction_id` on the reused `JobRow`
-13. Update `db/extractions.py`: persist coding results back to extraction
+11. [x] Create `worker/coding_jobs.py`: TaskIQ task
+12. [x] Add API route `POST /extractions/{id}/code` + schemas + service function, using `resolve_runtime_reasoning()` during enqueue preflight and storing both `report_id` and `extraction_id` on the reused `JobRow`
+13. [x] Update `db/extractions.py`: persist coding results back to extraction
 
 ### Phase 5: Tests and Docs
 
-14. Unit tests for types, prompts, fast-path
-15. Integration tests for runtime (mocked LLM), API endpoint
-16. Update `docs/logging-usage.md` with coding-specific structured context
-17. Update `CLAUDE.md` project overview
-18. Mark this plan as complete
+14. [x] Unit tests for types, prompts, fast-path
+15. [x] Integration tests for runtime (mocked LLM), API endpoint
+16. [x] Update `docs/logging-usage.md` with coding-specific structured context
+17. [x] Update `CLAUDE.md` project overview
+18. [x] Mark this plan as complete
+
+Implementation status: complete. The coding package, worker task, API endpoint, extraction persistence updates, migration, observability wiring, and targeted test coverage are now in the codebase.
 
 ## Lessons Learned From Prototyping
 

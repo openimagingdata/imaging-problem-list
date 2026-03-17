@@ -6,7 +6,7 @@ from uuid import uuid4
 import structlog
 from fastapi import HTTPException
 
-from finding_extractor.api.schemas import TriggerExtractionRequest
+from finding_extractor.api.schemas import TriggerCodingRequest, TriggerExtractionRequest
 from finding_extractor.core.config import get_settings
 from finding_extractor.db.store import ExtractionStore
 from finding_extractor.llm.model_settings import resolve_runtime_reasoning
@@ -89,4 +89,70 @@ async def enqueue_extraction_job(
         raise HTTPException(status_code=503, detail="Failed to enqueue extraction job") from exc
 
     logger.info("Extraction job enqueued", job_id=job_id, report_id=report_id)
+    return job_id
+
+
+async def enqueue_coding_job(
+    *,
+    store: ExtractionStore,
+    run_coding_task: Any,
+    extraction_id: str,
+    body: TriggerCodingRequest,
+) -> str:
+    """Create a pending job and enqueue worker coding execution."""
+
+    logger.info("Coding enqueue requested", extraction_id=extraction_id)
+    extraction = await require_extraction(store, extraction_id)
+    settings = get_settings()
+    model_name = body.model or settings.coding_model
+    try:
+        validate_model_id(model_name)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    try:
+        effective_reasoning = resolve_runtime_reasoning(
+            model_name,
+            body.reasoning or settings.coding_reasoning,
+            allow_unknown_model_reasoning=settings.allow_unknown_model_reasoning,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    job_id = str(uuid4())
+    await store.create_job(
+        job_id=job_id,
+        report_id=extraction.report_id,
+        extraction_id=extraction_id,
+        status="pending",
+    )
+    logger.info(
+        "Pending coding job created",
+        job_id=job_id,
+        extraction_id=extraction_id,
+        report_id=extraction.report_id,
+        model_name=model_name,
+    )
+
+    try:
+        await run_coding_task.kiq(
+            job_id,
+            extraction_id,
+            model_name,
+            effective_reasoning,
+        )
+    except Exception as exc:
+        logger.exception(
+            "Coding job enqueue failed",
+            job_id=job_id,
+            extraction_id=extraction_id,
+        )
+        await store.mark_job_failed(
+            job_id,
+            error="enqueue_failed:queue_unavailable",
+            status_message="[stage:coding_failed] enqueue_failed:queue_unavailable",
+        )
+        raise HTTPException(status_code=503, detail="Failed to enqueue coding job") from exc
+
+    logger.info("Coding job enqueued", job_id=job_id, extraction_id=extraction_id)
     return job_id

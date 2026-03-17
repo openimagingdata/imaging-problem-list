@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 
 MODEL_GOOGLE_GEMINI_3_FLASH_PREVIEW = "google-gla:gemini-3-flash-preview"
+MODEL_GOOGLE_GEMINI_3_1_FLASH_LITE_PREVIEW = "google-gla:gemini-3.1-flash-lite-preview"
 MODEL_GOOGLE_GEMINI_3_1_PRO_PREVIEW = "google-gla:gemini-3.1-pro-preview"
 MODEL_OPENAI_GPT_5_2 = "openai:gpt-5.2"
 MODEL_OPENAI_GPT_5_4_MINI = "openai-responses:gpt-5.4-mini"
@@ -41,6 +42,11 @@ COMMON_MODELS: tuple[CommonModel, ...] = (
         model=MODEL_GOOGLE_GEMINI_3_1_PRO_PREVIEW,
         recommended_reasoning="low",
         role="Google quality option",
+    ),
+    CommonModel(
+        model=MODEL_GOOGLE_GEMINI_3_1_FLASH_LITE_PREVIEW,
+        recommended_reasoning="low",
+        role="Google fast low-cost option",
     ),
     CommonModel(
         model=MODEL_OLLAMA_QWEN3_30B_INSTRUCT,

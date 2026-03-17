@@ -20,6 +20,7 @@ from finding_extractor.core.logging_setup import setup_logging
 from finding_extractor.core.observability import configure_logfire, get_current_trace_id
 from finding_extractor.db.store import ExtractionStore
 from finding_extractor.llm.catalog import ModelCatalogService
+from finding_extractor.worker.coding_jobs import register_run_coding_task, run_coding_task
 from finding_extractor.worker.extraction_jobs import register_run_extraction_task, run_extraction
 
 logger = structlog.get_logger(__name__)
@@ -96,6 +97,9 @@ def create_app(store: ExtractionStore | None = None, broker: Any = None) -> Fast
         app.state.model_catalog = ModelCatalogService(settings)
         app.state.run_extraction_task = (
             register_run_extraction_task(app.state.broker) if uses_custom_broker else run_extraction
+        )
+        app.state.run_coding_task = (
+            register_run_coding_task(app.state.broker) if uses_custom_broker else run_coding_task
         )
         await _assert_store_schema_current(app.state.store)
         await app.state.store.init()

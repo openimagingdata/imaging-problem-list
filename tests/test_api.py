@@ -11,6 +11,7 @@ from structlog.contextvars import get_contextvars
 from taskiq import InMemoryBroker
 
 from finding_extractor.api import create_app
+from finding_extractor.coding.runtime import CodingRunResult
 from finding_extractor.core.config import ExtractorSettings
 from finding_extractor.db.store import ExtractionStore
 from finding_extractor.llm.catalog import CatalogModel, ModelCatalog
@@ -446,6 +447,108 @@ async def test_extract_dispatch_job_and_extraction_reads(client: AsyncClient, mo
 async def test_extract_dispatch_not_found(client: AsyncClient):
     """POST /api/reports/{id}/extract returns 404 for unknown report."""
     response = await client.post("/api/reports/missing/extract", json={})
+    assert response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_code_dispatch_job_and_extraction_reads(
+    store: ExtractionStore,
+    client: AsyncClient,
+    monkeypatch,
+):
+    """Coding dispatch endpoint creates a job and updates the target extraction in place."""
+
+    async def fake_run_coding(
+        extraction,
+        *,
+        model=None,
+        reasoning=None,
+        settings=None,
+        progress_callback=None,
+        store=None,
+        extraction_id=None,
+        report_id=None,
+        job_id=None,
+    ):
+        _ = (model, reasoning, settings, report_id, job_id)
+        if progress_callback is not None:
+            await progress_callback("[stage:coding_selection] selecting_codes_1_of_1")
+        updated = extraction.model_copy(
+            update={
+                "findings": [
+                    extraction.findings[0].model_copy(
+                        update={
+                            "coding": FindingCodingBundle(
+                                finding_code=FindingCode(
+                                    status="coded",
+                                    oifm_id="OIFM:123",
+                                    oifm_name="pleural effusion",
+                                    method="llm",
+                                    reasoning="Matched the only candidate.",
+                                ),
+                                location_codes=[],
+                            )
+                        }
+                    )
+                ]
+            }
+        )
+        assert store is not None
+        assert extraction_id is not None
+        await store.update_extraction_coding(
+            extraction_id=extraction_id,
+            extraction=updated,
+            coding_model="openai:gpt-5.2",
+            coding_reasoning="low",
+            coding_duration_ms=12,
+            coding_trace_id=None,
+        )
+        return CodingRunResult(
+            extraction=updated,
+            model_name="openai:gpt-5.2",
+            reasoning_effort="low",
+            duration_ms=12,
+            coded_finding_count=1,
+            unresolved_finding_count=0,
+            trace_id=None,
+        )
+
+    monkeypatch.setattr("finding_extractor.worker.coding_jobs.run_coding", fake_run_coding)
+
+    report = await store.upsert_report("Findings:\nNo pleural effusion.")
+    extraction = await store.create_extraction(
+        report_id=report.id,
+        extraction=_fake_extraction(),
+        model_name="openai:gpt-5-mini",
+    )
+
+    dispatch = await client.post(f"/api/extractions/{extraction.id}/code", json={})
+    assert dispatch.status_code == 202
+    assert dispatch.headers["Location"].startswith("/api/jobs/")
+    job_id = dispatch.json()["job_id"]
+    assert dispatch.json()["extraction_id"] == extraction.id
+
+    job_final = await client.get(f"/api/jobs/{job_id}")
+    assert job_final.status_code == 200
+    assert job_final.json()["status"] == "completed"
+    assert job_final.json()["extraction_id"] == extraction.id
+    assert job_final.json()["status_event"] == {
+        "version": "v2",
+        "stage": "coding_complete",
+        "detail": "coding_complete",
+    }
+
+    extraction_detail = await client.get(f"/api/extractions/{extraction.id}")
+    assert extraction_detail.status_code == 200
+    coding = extraction_detail.json()["extraction"]["findings"][0]["coding"]
+    assert coding["finding_code"]["oifm_id"] == "OIFM:123"
+    assert coding["finding_code"]["method"] == "llm"
+
+
+@pytest.mark.asyncio
+async def test_code_dispatch_not_found(client: AsyncClient):
+    """POST /api/extractions/{id}/code returns 404 for unknown extraction."""
+    response = await client.post("/api/extractions/missing/code", json={})
     assert response.status_code == 404
 
 
@@ -1116,14 +1219,16 @@ async def test_extraction_detail_includes_inline_coding(
                             status="coded",
                             oifm_id="OIFM_GMTS_016552",
                             oifm_name="urinary tract calculus",
-                            method="exact",
+                            method="fast-path",
                         ),
-                        location_code=LocationCode(
-                            status="coded",
-                            location_id="RID29662",
-                            location_name="right kidney",
-                            method="search",
-                        ),
+                        location_codes=[
+                            LocationCode(
+                                status="coded",
+                                location_id="RID29662",
+                                location_name="right kidney",
+                                method="fast-path",
+                            )
+                        ],
                     ),
                 ),
             ]
@@ -1141,8 +1246,8 @@ async def test_extraction_detail_includes_inline_coding(
     assert "coding_result" not in body
     coding = body["extraction"]["findings"][0]["coding"]
     assert coding["finding_code"]["oifm_id"] == "OIFM_GMTS_016552"
-    assert coding["finding_code"]["method"] == "exact"
-    assert coding["location_code"]["location_id"] == "RID29662"
+    assert coding["finding_code"]["method"] == "fast-path"
+    assert coding["location_codes"][0]["location_id"] == "RID29662"
 
 
 @pytest.mark.asyncio
@@ -1180,9 +1285,9 @@ async def test_extraction_summary_includes_coding_counts(
                             status="coded",
                             oifm_id="OIFM_GMTS_016552",
                             oifm_name="urinary tract calculus",
-                            method="exact",
+                            method="fast-path",
                         ),
-                        location_code=LocationCode(),
+                        location_codes=[],
                     ),
                 )
             ]

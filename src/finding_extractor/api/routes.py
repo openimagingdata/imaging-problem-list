@@ -20,11 +20,14 @@ from finding_extractor.api.schemas import (
     JobResponse,
     ModelCatalogResponse,
     SubmitReportRequest,
+    TriggerCodingRequest,
+    TriggerCodingResponse,
     TriggerExtractionRequest,
     TriggerExtractionResponse,
     UserResponse,
 )
 from finding_extractor.api.services import (
+    enqueue_coding_job,
     enqueue_extraction_job,
     require_extraction,
     require_report,
@@ -186,6 +189,30 @@ async def get_extraction(
 ) -> ExtractionDetail:
     extraction = await require_extraction(store, extraction_id)
     return extraction
+
+
+@router.post(
+    "/extractions/{extraction_id}/code",
+    status_code=202,
+    response_model=TriggerCodingResponse,
+)
+async def trigger_coding(
+    extraction_id: str,
+    body: TriggerCodingRequest,
+    request: Request,
+    response: Response,
+    *,
+    store: Annotated[ExtractionStore, Depends(get_store)],
+) -> TriggerCodingResponse:
+    job_id = await enqueue_coding_job(
+        store=store,
+        run_coding_task=request.app.state.run_coding_task,
+        extraction_id=extraction_id,
+        body=body,
+    )
+    response.headers["Location"] = f"/api/jobs/{job_id}"
+    response.headers["Retry-After"] = "2"
+    return TriggerCodingResponse(job_id=job_id, extraction_id=extraction_id, status="pending")
 
 
 @router.post(

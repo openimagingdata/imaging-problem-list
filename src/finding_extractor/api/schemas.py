@@ -41,6 +41,21 @@ class TriggerExtractionResponse(StrictBaseModel):
     status: JobStatus
 
 
+class TriggerCodingRequest(StrictBaseModel):
+    """Payload for queueing coding on an existing extraction."""
+
+    model: str | None = None
+    reasoning: str | None = None
+
+
+class TriggerCodingResponse(StrictBaseModel):
+    """Accepted job response for async coding."""
+
+    job_id: str
+    extraction_id: str
+    status: JobStatus
+
+
 class StatusEventResponse(StrictBaseModel):
     """Structured stage/status event parsed from worker status messages."""
 

@@ -3,7 +3,7 @@
 from datetime import date
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, field_validator, model_validator
 
 from finding_extractor.core.base_model import StrictBaseModel
 
@@ -15,7 +15,6 @@ CorrectionStatus = Literal["pending", "accepted", "rejected", "applied"]
 JobStatus = Literal["pending", "running", "completed", "completed_with_warnings", "failed"]
 Presence = Literal["present", "absent", "indeterminate", "possible"]
 WarningReasonCategory = Literal["validation_failed", "verbatim_mismatch", "coverage_gap"]
-UnresolvedReason = Literal["no_match", "search_low_confidence", "coding_error"]
 
 Modality = Literal["CT", "XR", "MR", "US", "NM", "PET", "FLUORO", "MG", "DXA", "IR"]
 BodyRegion = Literal[
@@ -270,8 +269,22 @@ class ChunkExtractionResult(StrictBaseModel):
     )
 
 
-CodingMethod = Literal["exact", "synonym", "search", "agent", "batch", "unresolved"]
-LocationCodingMethod = Literal["search", "agent", "batch", "unresolved"]
+CodingMethod = Literal["fast-path", "llm", "unresolved"]
+LocationCodingMethod = Literal["fast-path", "llm", "unresolved"]
+FindingUnresolvedReason = Literal[
+    "too_specific",
+    "too_broad",
+    "wrong_concept",
+    "definition_mismatch",
+    "no_candidates",
+    "coding_error",
+]
+LocationUnresolvedReason = Literal[
+    "no_candidate_match",
+    "location_unknown",
+    "no_candidates",
+    "coding_error",
+]
 
 
 class AlternateCode(StrictBaseModel):
@@ -295,8 +308,26 @@ class FindingCode(StrictBaseModel):
     oifm_id: str | None = None
     oifm_name: str | None = None
     method: CodingMethod = "unresolved"
-    reason: UnresolvedReason | None = None
+    reason: FindingUnresolvedReason | None = None
+    reasoning: str | None = None
+    closest_candidate_id: str | None = None
     candidates: list[AlternateCode] = Field(default_factory=list)
+
+    @field_validator("method", mode="before")
+    @classmethod
+    def _normalize_legacy_method(cls, value: str | None) -> str | None:
+        if value in {"exact", "synonym"}:
+            return "fast-path"
+        if value in {"search", "agent", "batch"}:
+            return "llm"
+        return value
+
+    @field_validator("reason", mode="before")
+    @classmethod
+    def _normalize_legacy_reason(cls, value: str | None) -> str | None:
+        if value in {"no_match", "search_low_confidence"}:
+            return "no_candidates"
+        return value
 
 
 class LocationCode(StrictBaseModel):
@@ -306,15 +337,46 @@ class LocationCode(StrictBaseModel):
     location_id: str | None = None
     location_name: str | None = None
     method: LocationCodingMethod = "unresolved"
-    reason: UnresolvedReason | None = None
+    reason: LocationUnresolvedReason | None = None
+    reasoning: str | None = None
     candidates: list[LocationAlternateCode] = Field(default_factory=list)
+
+    @field_validator("method", mode="before")
+    @classmethod
+    def _normalize_legacy_method(cls, value: str | None) -> str | None:
+        if value in {"exact", "synonym"}:
+            return "fast-path"
+        if value in {"search", "agent", "batch"}:
+            return "llm"
+        return value
+
+    @field_validator("reason", mode="before")
+    @classmethod
+    def _normalize_legacy_reason(cls, value: str | None) -> str | None:
+        if value in {"no_match", "search_low_confidence"}:
+            return "no_candidates"
+        return value
 
 
 class FindingCodingBundle(StrictBaseModel):
     """Inline coding payload attached to a finding."""
 
     finding_code: FindingCode = Field(default_factory=FindingCode)
-    location_code: LocationCode = Field(default_factory=LocationCode)
+    location_codes: list[LocationCode] = Field(default_factory=list)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _normalize_legacy_location_code(cls, value: object) -> object:
+        if not isinstance(value, dict):
+            return value
+        if "location_codes" in value:
+            return value
+        legacy = value.pop("location_code", None)
+        if legacy is None:
+            value["location_codes"] = []
+            return value
+        value["location_codes"] = [legacy]
+        return value
 
 
 class PipelineDiagnostics(StrictBaseModel):
@@ -333,4 +395,3 @@ class PipelineDiagnostics(StrictBaseModel):
     # Always 0 for new extractions (chunk repair was removed).
     repaired_chunks: int = 0
     repair_attempts_used: int = 0
-

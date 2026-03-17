@@ -47,6 +47,7 @@ Worker extraction logs include:
 
 - `job_id`
 - `report_id`
+- `extraction_id` for coding jobs
 
 Reliability/modular diagnostics logs include:
 
@@ -63,6 +64,18 @@ Primary events:
 
 - `Modular pipeline diagnostics`
 - `Reliability contract outcome`
+- `Coding pipeline outcome`
+
+Coding pipeline progress/status events include:
+
+- `coding_fast_path`
+- `coding_term_gen`
+- `coding_search`
+- `coding_selection`
+- `coding_assembly`
+- `coding_persist`
+- `coding_complete`
+- `coding_failed`
 
 ## Logfire
 
@@ -79,6 +92,7 @@ Related settings (`IPL_LOGFIRE_*`) are documented in `docs/configuration.md`.
 - Never log raw report text.
 - Never log verbatim quote text from findings.
 - Prefer IDs, counts, statuses, durations, and model names.
+- Do not log coding-selector `reasoning` strings; persist them in extraction JSON only.
 
 ## Operational Alert Hooks
 

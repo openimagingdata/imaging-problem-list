@@ -100,14 +100,16 @@ class TestFormatJsonOutput:
                             status="coded",
                             oifm_id="OIFM:123",
                             oifm_name="pneumonia",
-                            method="exact",
+                            method="fast-path",
                         ),
-                        location_code=LocationCode(
-                            status="coded",
-                            location_id="LOC:1",
-                            location_name="lung",
-                            method="search",
-                        ),
+                        location_codes=[
+                            LocationCode(
+                                status="coded",
+                                location_id="LOC:1",
+                                location_name="lung",
+                                method="fast-path",
+                            )
+                        ],
                     ),
                 )
             ],
@@ -178,9 +180,9 @@ class TestFormatTableOutput:
                             status="coded",
                             oifm_id="OIFM:123",
                             oifm_name="pneumonia",
-                            method="exact",
+                            method="fast-path",
                         ),
-                        location_code=LocationCode(),
+                        location_codes=[],
                     ),
                 ),
                 Finding(
@@ -191,9 +193,9 @@ class TestFormatTableOutput:
                         finding_code=FindingCode(
                             status="unmapped",
                             method="unresolved",
-                            reason="no_match",
+                            reason="no_candidates",
                         ),
-                        location_code=LocationCode(),
+                        location_codes=[],
                     ),
                 ),
             ],

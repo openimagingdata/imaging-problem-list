@@ -22,6 +22,12 @@ from finding_extractor.core.config import (
     DEFAULT_CHUNKING_SEMANTIC_SKIP_WINDOW,
     DEFAULT_CHUNKING_SEMANTIC_THRESHOLD,
     DEFAULT_CHUNKING_SEMANTIC_TRIGGER_SENTENCE_COUNT,
+    DEFAULT_CODING_FALLBACK_MODEL,
+    DEFAULT_CODING_MAX_CANDIDATES,
+    DEFAULT_CODING_MAX_CONCURRENCY,
+    DEFAULT_CODING_MODEL,
+    DEFAULT_CODING_REASONING,
+    DEFAULT_CODING_SEARCH_LIMIT,
     DEFAULT_CORS_ORIGINS,
     DEFAULT_DB_PATH,
     DEFAULT_FALLBACK_MODEL,
@@ -50,6 +56,12 @@ def test_settings_defaults_without_env(tmp_path, monkeypatch):
     assert settings.default_model == DEFAULT_MODEL
     assert settings.fallback_model == DEFAULT_FALLBACK_MODEL
     assert settings.default_reasoning is None
+    assert settings.coding_model == DEFAULT_CODING_MODEL
+    assert settings.coding_reasoning == DEFAULT_CODING_REASONING
+    assert settings.coding_fallback_model == DEFAULT_CODING_FALLBACK_MODEL
+    assert settings.coding_max_concurrency == DEFAULT_CODING_MAX_CONCURRENCY
+    assert settings.coding_search_limit == DEFAULT_CODING_SEARCH_LIMIT
+    assert settings.coding_max_candidates == DEFAULT_CODING_MAX_CANDIDATES
     assert settings.allow_unknown_model_reasoning is False
     assert settings.batch_run_dir == DEFAULT_BATCH_RUN_DIR
     assert settings.batch_workers == DEFAULT_BATCH_WORKERS
@@ -103,6 +115,12 @@ def test_settings_support_ipl_env_names(tmp_path, monkeypatch):
     monkeypatch.setenv("IPL_MODEL", "ollama:llama3")
     monkeypatch.setenv("IPL_FALLBACK_MODEL", "ollama:llama3.3")
     monkeypatch.setenv("IPL_REASONING", "low")
+    monkeypatch.setenv("IPL_CODING_MODEL", "openai:gpt-5-mini")
+    monkeypatch.setenv("IPL_CODING_REASONING", "minimal")
+    monkeypatch.setenv("IPL_CODING_FALLBACK_MODEL", "google-gla:gemini-3.1-flash-lite-preview")
+    monkeypatch.setenv("IPL_CODING_MAX_CONCURRENCY", "7")
+    monkeypatch.setenv("IPL_CODING_SEARCH_LIMIT", "9")
+    monkeypatch.setenv("IPL_CODING_MAX_CANDIDATES", "15")
     monkeypatch.setenv("IPL_ALLOW_UNKNOWN_MODEL_REASONING", "true")
     monkeypatch.setenv("IPL_BATCH_RUN_DIR", "/tmp/batch-runs")
     monkeypatch.setenv("IPL_BATCH_WORKERS", "8")
@@ -137,6 +155,12 @@ def test_settings_support_ipl_env_names(tmp_path, monkeypatch):
     assert settings.default_model == "ollama:llama3"
     assert settings.fallback_model == "ollama:llama3.3"
     assert settings.default_reasoning == "low"
+    assert settings.coding_model == "openai:gpt-5-mini"
+    assert settings.coding_reasoning == "minimal"
+    assert settings.coding_fallback_model == "google-gla:gemini-3.1-flash-lite-preview"
+    assert settings.coding_max_concurrency == 7
+    assert settings.coding_search_limit == 9
+    assert settings.coding_max_candidates == 15
     assert settings.allow_unknown_model_reasoning is True
     assert settings.batch_run_dir == Path("/tmp/batch-runs")
     assert settings.batch_workers == 8
@@ -221,6 +245,24 @@ def test_settings_reject_disallowed_fallback_model_prefix(tmp_path, monkeypatch)
     """`google-vertex:*` fallback models are rejected in env settings."""
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("IPL_FALLBACK_MODEL", "google-vertex:gemini-3-pro")
+
+    with pytest.raises(ValidationError, match="google-vertex models are not allowed"):
+        get_settings()
+
+
+def test_settings_reject_disallowed_coding_model_prefix(tmp_path, monkeypatch):
+    """`google-vertex:*` coding defaults are rejected in env settings."""
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("IPL_CODING_MODEL", "google-vertex:gemini-3-pro")
+
+    with pytest.raises(ValidationError, match="google-vertex models are not allowed"):
+        get_settings()
+
+
+def test_settings_reject_disallowed_coding_fallback_model_prefix(tmp_path, monkeypatch):
+    """`google-vertex:*` coding fallback models are rejected in env settings."""
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("IPL_CODING_FALLBACK_MODEL", "google-vertex:gemini-3-pro")
 
     with pytest.raises(ValidationError, match="google-vertex models are not allowed"):
         get_settings()

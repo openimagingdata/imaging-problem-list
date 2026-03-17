@@ -1,13 +1,8 @@
 """TaskIQ tasks for background extraction processing."""
+
 from typing import Annotated
 
 import structlog
-from fastapi import Request
-from pydantic_ai.exceptions import (
-    FallbackExceptionGroup,
-    ModelAPIError,
-    UnexpectedModelBehavior,
-)
 from structlog.contextvars import bind_contextvars, clear_contextvars
 from taskiq import TaskiqDepends
 
@@ -22,51 +17,24 @@ from finding_extractor.extractor.runtime import (
     ReliabilityContractError,
     run_extraction_runtime,
 )
-from finding_extractor.llm.resilience import (
-    is_retryable_provider_error,
-    is_timeout_provider_error,
-)
 from finding_extractor.models import (
     JobWarningPayload,
     ReliabilityMode,
 )
 from finding_extractor.worker.broker import broker
+from finding_extractor.worker.job_utils import (
+    get_task_store,
+)
+from finding_extractor.worker.job_utils import (
+    to_public_job_error as _to_public_job_error,
+)
 
 logger = structlog.get_logger(__name__)
 
 
-def get_task_store(request: Annotated[Request, TaskiqDepends()]) -> ExtractionStore:
-    """Task dependency that retrieves store from FastAPI app state."""
-    return request.app.state.store
-
-
-def _flatten_exception_group(exc_group: BaseExceptionGroup[BaseException]) -> list[Exception]:
-    flattened: list[Exception] = []
-    for nested in exc_group.exceptions:
-        if isinstance(nested, BaseExceptionGroup):
-            flattened.extend(_flatten_exception_group(nested))
-        elif isinstance(nested, Exception):
-            flattened.append(nested)
-    return flattened
-
-
 def to_public_job_error(exc: Exception) -> str:
-    """Return a stable, non-sensitive job error string for API responses."""
-    if isinstance(exc, ValueError):
-        return "extraction_failed:invalid_request"
-    if isinstance(exc, FallbackExceptionGroup):
-        fallback_errors = _flatten_exception_group(exc)
-        if fallback_errors and all(is_timeout_provider_error(error) for error in fallback_errors):
-            return "extraction_failed:model_timeout"
-        if fallback_errors and all(is_retryable_provider_error(error) for error in fallback_errors):
-            return "extraction_failed:model_provider_error"
-    if isinstance(exc, ModelAPIError):
-        return "extraction_failed:model_provider_error"
-    if isinstance(exc, UnexpectedModelBehavior):
-        return "extraction_failed:model_output_validation_failed"
-    if is_timeout_provider_error(exc):
-        return "extraction_failed:model_timeout"
-    return "extraction_failed:internal_error"
+    """Return a stable, non-sensitive job error string for extraction responses."""
+    return _to_public_job_error(exc, job_name="extraction")
 
 
 def _log_reliability_contract_outcome(

@@ -44,6 +44,12 @@ src/finding_extractor/     # Python package: agent, API, CLI, worker, persistenc
   worker/                  # TaskIQ async processing
     broker.py              # Redis broker configuration
     extraction_jobs.py     # Background extraction task
+    coding_jobs.py         # Background coding task
+  coding/                  # Post-extraction coding pipeline
+    prompt.py              # Coding prompt constants and prompt builders
+    agents.py              # Coding agent factory helpers
+    runtime.py             # Coding runtime orchestration
+    types.py               # Structured-output response models for coding agents
   cli/                     # CLI entry points
     extract.py             # Single-report extraction CLI
     batch.py               # Batch extraction CLI
@@ -208,6 +214,7 @@ uv run finding-extractor <report_file> -o output.json -f table
 - `GET /api/reports` — list reports (paginated)
 - `GET /api/reports/{report_id}` — report with text
 - `POST /api/reports/{report_id}/extract` — queue extraction (returns 202)
+- `POST /api/extractions/{extraction_id}/code` — queue coding (returns 202)
 - `GET /api/jobs/{job_id}` — poll job status
 - `GET /api/reports/{report_id}/extractions` — list extractions
 - `GET /api/extractions/{extraction_id}` — extraction detail
@@ -217,6 +224,7 @@ uv run finding-extractor <report_file> -o output.json -f table
 ### Persistence (SQLite + SQLModel)
 - `reports` table — deduplicated by SHA-256 hash
 - `extractions` table — full JSON payload, model name, reasoning effort
+- extraction rows are updated in place when coding populates `findings[].coding`
 - `corrections` table — user corrections (add_finding, update_finding, comment)
 - `jobs` table — async job lifecycle (pending → running → completed/failed)
 

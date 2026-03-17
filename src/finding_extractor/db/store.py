@@ -118,13 +118,38 @@ class ExtractionStore:
     async def list_extractions(self, report_id: str) -> list[ExtractionSummary]:
         return await extractions.list_extractions(self._runtime, report_id)
 
+    async def update_extraction_coding(
+        self,
+        *,
+        extraction_id: str,
+        extraction: ExtractedReportFindings,
+        coding_model: str,
+        coding_reasoning: str | None,
+        coding_duration_ms: int | None,
+        coding_trace_id: str | None,
+    ) -> ExtractionDetail:
+        return await extractions.update_extraction_coding(
+            self._runtime,
+            extraction_id=extraction_id,
+            extraction=extraction,
+            coding_model=coding_model,
+            coding_reasoning=coding_reasoning,
+            coding_duration_ms=coding_duration_ms,
+            coding_trace_id=coding_trace_id,
+        )
+
     async def create_job(
-        self, job_id: str, report_id: str, status: JobStatus = "pending"
+        self,
+        job_id: str,
+        report_id: str,
+        extraction_id: str | None = None,
+        status: JobStatus = "pending",
     ) -> StoredJob:
         return await jobs.create_job(
             self._runtime,
             job_id=job_id,
             report_id=report_id,
+            extraction_id=extraction_id,
             status=status,
         )
 
@@ -137,20 +162,34 @@ class ExtractionStore:
     async def mark_job_running(self, job_id: str) -> None:
         await jobs.mark_job_running(self._runtime, job_id)
 
-    async def mark_job_completed(self, job_id: str, extraction_id: str) -> None:
-        await jobs.mark_job_completed(self._runtime, job_id, extraction_id)
+    async def mark_job_completed(
+        self,
+        job_id: str,
+        extraction_id: str,
+        *,
+        status_message: str = "[stage:completed] extraction_complete",
+    ) -> None:
+        await jobs.mark_job_completed(
+            self._runtime,
+            job_id,
+            extraction_id,
+            status_message=status_message,
+        )
 
     async def mark_job_completed_with_warnings(
         self,
         job_id: str,
         extraction_id: str,
         warning_payload: JobWarningPayload,
+        *,
+        status_message: str = "[stage:completed_with_warnings] extraction_complete",
     ) -> None:
         await jobs.mark_job_completed_with_warnings(
             self._runtime,
             job_id,
             extraction_id,
             warning_payload,
+            status_message=status_message,
         )
 
     async def mark_job_failed(
@@ -158,8 +197,16 @@ class ExtractionStore:
         job_id: str,
         error: str,
         warning_payload: JobWarningPayload | None = None,
+        *,
+        status_message: str | None = None,
     ) -> None:
-        await jobs.mark_job_failed(self._runtime, job_id, error, warning_payload=warning_payload)
+        await jobs.mark_job_failed(
+            self._runtime,
+            job_id,
+            error,
+            warning_payload=warning_payload,
+            status_message=status_message,
+        )
 
     async def get_finding_path(self, extraction_id: str, finding_index: int) -> str | None:
         return await extractions.get_finding_path(self._runtime, extraction_id, finding_index)

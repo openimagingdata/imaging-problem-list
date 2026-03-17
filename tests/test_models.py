@@ -11,7 +11,10 @@ from finding_extractor.models import (
     ExtractedReportFindings,
     Finding,
     FindingAttribute,
+    FindingCode,
+    FindingCodingBundle,
     FindingLocation,
+    LocationCode,
     NonFindingText,
     ValidationResult,
 )
@@ -222,6 +225,41 @@ class TestExtractedReportFindings:
         assert "findings" in data
         assert "non_finding_text" in data
         assert len(data["findings"]) == 1
+
+
+class TestFindingCodingCompatibility:
+    """Backward-compatibility shims for inline coding payloads."""
+
+    def test_finding_code_normalizes_legacy_method_and_reason(self):
+        """Legacy coding values deserialize into the new enum surface."""
+        code = FindingCode(method=cast(Any, "agent"), reason=cast(Any, "search_low_confidence"))
+
+        assert code.method == "llm"
+        assert code.reason == "no_candidates"
+
+    def test_location_code_normalizes_legacy_method_and_reason(self):
+        """Legacy location-coding values deserialize into the new enum surface."""
+        code = LocationCode(method=cast(Any, "exact"), reason=cast(Any, "no_match"))
+
+        assert code.method == "fast-path"
+        assert code.reason == "no_candidates"
+
+    def test_coding_bundle_normalizes_legacy_location_code_shape(self):
+        """Single legacy `location_code` payloads are lifted into `location_codes`."""
+        bundle = FindingCodingBundle.model_validate(
+            {
+                "finding_code": {"status": "coded", "oifm_id": "OIFM:1", "method": "llm"},
+                "location_code": {
+                    "status": "coded",
+                    "location_id": "LOC:RIGHT_KIDNEY",
+                    "method": "batch",
+                },
+            }
+        )
+
+        assert len(bundle.location_codes) == 1
+        assert bundle.location_codes[0].location_id == "LOC:RIGHT_KIDNEY"
+        assert bundle.location_codes[0].method == "llm"
 
 
 class TestValidationResult:

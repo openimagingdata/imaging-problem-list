@@ -59,12 +59,14 @@ async def create_job(
     *,
     job_id: str,
     report_id: str,
+    extraction_id: str | None = None,
     status: JobStatus = "pending",
 ) -> StoredJob:
     """Create a job row before enqueueing worker execution."""
     job = JobRow(
         id=job_id,
         report_id=report_id,
+        extraction_id=extraction_id,
         status=status,
         created_at=_utc_now_iso(),
     )
@@ -109,7 +111,13 @@ async def mark_job_running(runtime: StoreRuntime, job_id: str) -> None:
         await session.commit()
 
 
-async def mark_job_completed(runtime: StoreRuntime, job_id: str, extraction_id: str) -> None:
+async def mark_job_completed(
+    runtime: StoreRuntime,
+    job_id: str,
+    extraction_id: str,
+    *,
+    status_message: str = "[stage:completed] extraction_complete",
+) -> None:
     """Transition an existing job to completed with extraction id."""
     async with runtime.session() as session:
         row = (await session.exec(select(JobRow).where(JobRow.id == job_id))).first()
@@ -119,7 +127,7 @@ async def mark_job_completed(runtime: StoreRuntime, job_id: str, extraction_id: 
         row.completed_at = _utc_now_iso()
         row.extraction_id = extraction_id
         row.error = None
-        row.status_message = "[stage:completed] extraction_complete"
+        row.status_message = status_message
         row.warning_payload_json = None
         session.add(row)
         await session.commit()
@@ -130,6 +138,8 @@ async def mark_job_completed_with_warnings(
     job_id: str,
     extraction_id: str,
     warning_payload: JobWarningPayload,
+    *,
+    status_message: str = "[stage:completed_with_warnings] extraction_complete",
 ) -> None:
     """Transition an existing job to completed_with_warnings with warning payload."""
     async with runtime.session() as session:
@@ -140,7 +150,7 @@ async def mark_job_completed_with_warnings(
         row.completed_at = _utc_now_iso()
         row.extraction_id = extraction_id
         row.error = None
-        row.status_message = "[stage:completed_with_warnings] extraction_complete"
+        row.status_message = status_message
         row.warning_payload_json = json.dumps(
             warning_payload.model_dump(mode="json"),
             ensure_ascii=False,
@@ -154,6 +164,8 @@ async def mark_job_failed(
     job_id: str,
     error: str,
     warning_payload: JobWarningPayload | None = None,
+    *,
+    status_message: str | None = None,
 ) -> None:
     """Transition an existing job to failed with error details."""
     async with runtime.session() as session:
@@ -163,7 +175,7 @@ async def mark_job_failed(
         row.status = "failed"
         row.completed_at = _utc_now_iso()
         row.error = error
-        row.status_message = f"[stage:failed] {error}"
+        row.status_message = status_message or f"[stage:failed] {error}"
         row.warning_payload_json = (
             json.dumps(warning_payload.model_dump(mode="json"), ensure_ascii=False)
             if warning_payload is not None

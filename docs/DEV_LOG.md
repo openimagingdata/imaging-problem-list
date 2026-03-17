@@ -4,6 +4,36 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-03-16 — Coding agent architecture implementation
+
+Implemented the post-extraction coding pipeline as a first-class runtime flow.
+Added the new `finding_extractor.coding` package (prompt builders, typed LLM
+outputs, agent factories, runtime orchestrator), a TaskIQ coding worker, and
+the `POST /api/extractions/{id}/code` endpoint to run coding independently from
+extraction.
+
+Extended extraction persistence to store inline coding results plus coding
+provenance metadata (`coding_model`, `coding_reasoning`, timing, trace ID).
+Folded those extraction columns into the existing baseline Alembic migration
+and updated migration tests to assert the new schema and current head revision.
+
+Added coding-specific logging/docs updates and targeted test coverage for coding
+types, prompt builders, fast-path runtime behavior, config settings, model
+compatibility shims, and the coding API path.
+
+Follow-up review fixes tightened the runtime in two places: location grouping
+now keeps laterality-distinct findings separate, and batched term generation now
+backfills deterministic fallback terms for any omitted items before search so
+partial LLM outputs do not silently force findings unresolved.
+
+Additional cleanup from follow-up review consolidated duplicated TaskIQ job
+helpers into a shared worker utility module, added typed Protocols for coding
+prompt candidates, clarified the synchronous location fast-path lookup, and
+expanded regression coverage for invalid selector IDs, no-candidate location
+paths, bilateral fallback terms, and the coding API's missing-extraction case.
+
+---
+
 ## 2026-03-16 — Per-chunk pipeline, Logfire observability, review prompt fix
 
 Replaced the sequential extract-all → merge → review-all orchestration with a
@@ -22,7 +52,6 @@ Other changes:
 - Suppressed HuggingFace Hub auth warning during semantic chunking
 
 ---
-
 ## 2026-03-12 — Test workflow: explicit API/Web E2E task names
 
 Renamed the higher-level test tasks to make their scope obvious:

@@ -204,6 +204,47 @@ async def list_extractions(runtime: StoreRuntime, report_id: str) -> list[Extrac
     return [_extraction_summary_from_row(row) for row in rows]
 
 
+async def update_extraction_coding(
+    runtime: StoreRuntime,
+    *,
+    extraction_id: str,
+    extraction: ExtractedReportFindings,
+    coding_model: str,
+    coding_reasoning: str | None,
+    coding_duration_ms: int | None,
+    coding_trace_id: str | None,
+) -> ExtractionDetail:
+    """Persist inline coding updates back onto an existing extraction row."""
+
+    async with runtime.session() as session:
+        row = (await session.exec(select(ExtractionRow).where(ExtractionRow.id == extraction_id))).first()
+        if row is None:
+            raise ValueError(f"Unknown extraction_id: {extraction_id}")
+
+        row.extraction_json = json.dumps(extraction.model_dump(mode="json"), ensure_ascii=False)
+        coded, unresolved = _coding_counts_from_extraction(extraction)
+        row.coded_finding_count = coded
+        row.unresolved_finding_count = unresolved
+        row.coding_model = coding_model
+        row.coding_reasoning = coding_reasoning
+        row.coding_completed_at = _utc_now_iso()
+        row.coding_duration_ms = coding_duration_ms
+        row.coding_trace_id = coding_trace_id
+        session.add(row)
+        await session.commit()
+
+    validation_payload = (
+        ValidationResult.model_validate(json.loads(row.validation_json))
+        if row.validation_json is not None
+        else None
+    )
+    return _extraction_detail_from_row(
+        row,
+        extraction=extraction,
+        validation_result=validation_payload,
+    )
+
+
 async def get_finding_path(
     runtime: StoreRuntime, extraction_id: str, finding_index: int
 ) -> str | None:

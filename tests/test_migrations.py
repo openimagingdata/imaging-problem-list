@@ -11,6 +11,7 @@ from sqlmodel import SQLModel
 
 from alembic import command
 from finding_extractor.db import tables as _tables  # noqa: F401
+from finding_extractor.db.engine import StoreRuntime
 
 
 def _alembic_config() -> Config:
@@ -51,6 +52,11 @@ def test_alembic_upgrade_creates_expected_tables(tmp_path: Path, monkeypatch) ->
     assert "unresolved_finding_count" in extractions_cols
     assert "diagnostics_json" in extractions_cols
     assert "trace_id" in extractions_cols
+    assert "coding_model" in extractions_cols
+    assert "coding_reasoning" in extractions_cols
+    assert "coding_completed_at" in extractions_cols
+    assert "coding_duration_ms" in extractions_cols
+    assert "coding_trace_id" in extractions_cols
 
 
 def test_alembic_check_reports_no_drift_on_upgraded_db(tmp_path: Path, monkeypatch) -> None:
@@ -84,4 +90,4 @@ def test_alembic_stamp_baseline_for_existing_create_all_schema(
         version = conn.execute("SELECT version_num FROM alembic_version").fetchone()
 
     assert version is not None
-    assert version[0] == "3d867b54ee78"
+    assert version[0] == StoreRuntime.EXPECTED_REVISION

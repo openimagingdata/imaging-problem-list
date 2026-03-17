@@ -190,14 +190,16 @@ async def test_create_extraction_with_coding_persists_and_round_trips(store: Ext
                         status="coded",
                         oifm_id="OIFM_GMTS_016552",
                         oifm_name="urinary tract calculus",
-                        method="exact",
+                        method="fast-path",
                     ),
-                    location_code=LocationCode(
-                        status="coded",
-                        location_id="RID29662",
-                        location_name="right kidney",
-                        method="search",
-                    ),
+                    location_codes=[
+                        LocationCode(
+                            status="coded",
+                            location_id="RID29662",
+                            location_name="right kidney",
+                            method="fast-path",
+                        )
+                    ],
                 ),
             ),
         ],
@@ -214,8 +216,8 @@ async def test_create_extraction_with_coding_persists_and_round_trips(store: Ext
     assert detail is not None
     assert detail.extraction.findings[0].coding is not None
     assert detail.extraction.findings[0].coding.finding_code.oifm_id == "OIFM_GMTS_016552"
-    assert detail.extraction.findings[0].coding.finding_code.method == "exact"
-    assert detail.extraction.findings[0].coding.location_code.location_id == "RID29662"
+    assert detail.extraction.findings[0].coding.finding_code.method == "fast-path"
+    assert detail.extraction.findings[0].coding.location_codes[0].location_id == "RID29662"
 
     # Summary view: coding counts
     summaries = await store.list_extractions(report.id)
