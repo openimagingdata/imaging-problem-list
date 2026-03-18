@@ -4,6 +4,57 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-03-18 — Fix TaskIQ worker registration for coding jobs
+
+Fixed the real worker process command so TaskIQ loads both
+`worker/extraction_jobs.py` and `worker/coding_jobs.py`. The API and worker task
+modules already supported coding dispatch, but the Docker/local worker command
+only registered extraction tasks, which would leave queued coding jobs
+unconsumed in the live TaskIQ path.
+
+Updated both `docker-compose.yml` and the non-Docker worker runbook in
+`docs/dev-ops.md` to include the coding task module.
+
+---
+
+## 2026-03-18 — Coding agent production validation and tuning
+
+Ran the production `run_coding()` pipeline against real extraction data with
+full Logfire instrumentation. Verified end-to-end span tree, per-agent token
+accounting, and cost tracking are all working and queryable in Logfire.
+
+Key changes from production testing:
+
+1. **Split-model architecture**: Term generators now use
+   `gemini-3-flash-preview` (no reasoning) while code selectors use
+   `gpt-5.2` (reasoning: low). Logfire traces showed gpt-5.2 was spending
+   reasoning tokens on term generation with no quality benefit. New config
+   setting `IPL_CODING_TERM_MODEL` controls this independently.
+
+2. **Concurrency tuned to 8**: Bumped `MAX_CONCURRENCY` from 5 to 8.
+   Phase 4 (code selection) dropped from 20.1s to 13.9s (31% improvement)
+   with no rate limit issues. Total pipeline wall clock: 27.5s for 26
+   findings ($0.13 total cost).
+
+3. **Production coding CLI**: Added the `finding-extractor-code` command as
+   a first-class wrapper over `coding.run_coding()`, following the existing
+   CLI convention of sending progress to stderr while writing result JSON to
+   stdout or `--output`.
+
+4. **Docs sync**: Updated `coding-agent-design.md` (split-model
+   architecture, concurrency tuning, production run profile),
+   `coding-agent-prompts.md` (no report text, instructions not
+   system_prompt), `configuration.md` (all `IPL_CODING_*` env vars),
+   `logging-usage.md` (coding-specific structured context).
+
+Production run profile (26-finding chest X-ray, split models, concurrency 8):
+- 11 fast-path finding codes, 11 fast-path location codes
+- 29 LLM calls total (2 term gen + 13 finding selectors + 14 location selectors)
+- 20 findings coded, 6 unresolved (ontology gaps)
+- $0.131 total cost, 27.5s wall clock
+
+---
+
 ## 2026-03-16 — Coding agent architecture implementation
 
 Implemented the post-extraction coding pipeline as a first-class runtime flow.

@@ -67,17 +67,28 @@ Full prompt text lives in `docs/coding-agent-prompts.md`. Key decisions from pro
 
 - `SEARCH_LIMIT = 6` — candidates per search term (reduced from 10; no quality loss)
 - `MAX_CANDIDATES = 12` — cap per finding after dedup across terms (reduced from unbounded ~22; no quality loss, ~18% faster)
-- `MAX_CONCURRENCY = 5` — semaphore for parallel LLM selector calls
+- `MAX_CONCURRENCY = 8` — semaphore for parallel LLM selector calls
 
 ## Model Configuration
 
-### Defaults (from prototype benchmarking)
+### Defaults (from production benchmarking)
 
 | Setting | Value | Rationale |
 |---------|-------|-----------|
-| Primary model | `openai:gpt-5.2` | Same quality as gemini-3-flash, 2x faster |
-| Reasoning | `low` | Sufficient for term generation and code selection |
+| Selector model | `openai:gpt-5.2` | Same quality as gemini-3-flash, 2x faster for code selection |
+| Selector reasoning | `low` | Sufficient for code selection judgment calls |
+| Term generation model | `google-gla:gemini-3-flash-preview` | Term generation doesn't need reasoning; gemini-3-flash is fast and cheap |
 | Fallback model | `google-gla:gemini-3.1-flash-lite-preview` | Fast, cheap, adequate for most coding tasks |
+
+### Split-model architecture
+
+Term generators and code selectors use **different models**. Term generation is a simpler task (propose search synonyms) that doesn't benefit from reasoning tokens, while code selection requires judgment about candidate fit. Logfire traces confirmed gpt-5.2 spent 413 reasoning tokens on location term generation with no quality benefit — switching term generators to gemini-3-flash with no reasoning eliminated this overhead.
+
+The runtime builds two `AgentModelRuntime` instances:
+- **Selector runtime** — `coding_model` with `coding_reasoning`, used by finding and location selectors
+- **Term generation runtime** — `coding_term_model` with no reasoning, used by finding and location term generators
+
+Both share the same fallback model and concurrency limiter.
 
 ### Infrastructure
 
@@ -90,10 +101,11 @@ Full prompt text lives in `docs/coding-agent-prompts.md`. Key decisions from pro
 
 New `IPL_CODING_*` env var namespace:
 
-- `coding_model` — default: `openai:gpt-5.2`
-- `coding_reasoning` — default: `low`
+- `coding_model` — default: `openai:gpt-5.2` (selectors)
+- `coding_reasoning` — default: `low` (selectors)
+- `coding_term_model` — default: `google-gla:gemini-3-flash-preview` (term generators; no reasoning)
 - `coding_fallback_model` — default: `google-gla:gemini-3.1-flash-lite-preview`
-- `coding_max_concurrency` — default: `5`
+- `coding_max_concurrency` — default: `8`
 - `coding_search_limit` — default: `6`
 - `coding_max_candidates` — default: `12`
 
@@ -463,6 +475,22 @@ Reducing `SEARCH_LIMIT` from 10→6 and capping deduped candidates at 12 (from u
 
 The deterministic fast-path (blind top-1 from index) was tested for location assignment and proved inadequate. Location assignment requires contextual reasoning even when the finding code resolves via fast-path.
 
-### Concurrency semaphore is essential
+### Term generation doesn't need reasoning
 
-Without `MAX_CONCURRENCY`, large reports with many findings can overwhelm provider rate limits.
+Logfire traces showed gpt-5.2 spent 413 reasoning tokens on location term generation with zero quality benefit (finding term generation used 0 reasoning tokens naturally). Switching term generators to gemini-3-flash-preview with no reasoning cut phase 2 from 14.3s to 8.6s.
+
+### Concurrency 8 is the sweet spot
+
+Bumping `MAX_CONCURRENCY` from 5 to 8 reduced phase 4 (code selection) from 20.1s to 13.9s (31% improvement) with no rate limit issues. The bottleneck is API latency variance — individual calls range from 1.5s to 7s for identical-size prompts due to provider-side queueing, so higher concurrency absorbs the slow outliers.
+
+### Production run profile (26-finding chest X-ray)
+
+| Agent | Model | Calls | Input Tokens | Cost | Time |
+|-------|-------|-------|-------------|------|------|
+| finding_term_generator | gemini-3-flash | 1 | 1,311 | $0.006 | 5.4s |
+| location_term_generator | gemini-3-flash | 1 | 1,533 | $0.006 | 8.4s |
+| finding_code_selector | gpt-5.2 | 13 | 21,047 | $0.076 | 44.6s* |
+| location_code_selector | gpt-5.2 | 14 | 11,696 | $0.044 | 38.5s* |
+| **Total** | — | **29** | **35,587** | **$0.131** | **27.5s** |
+
+*Sum of individual call durations; actual wall clock is lower due to concurrency.

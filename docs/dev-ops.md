@@ -246,5 +246,5 @@ uv run finding-extractor-api
 
 Terminal 3 (Worker):
 ```bash
-uv run taskiq worker --no-configure-logging finding_extractor.worker.broker:broker finding_extractor.worker.extraction_jobs
+uv run taskiq worker --no-configure-logging finding_extractor.worker.broker:broker finding_extractor.worker.extraction_jobs finding_extractor.worker.coding_jobs
 ```

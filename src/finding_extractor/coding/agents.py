@@ -36,23 +36,33 @@ def build_coding_model_runtime(
     )
 
 
-def create_finding_term_agent(runtime: AgentModelRuntime) -> Agent[None, FindingTermsBatchOutput]:
+def create_finding_term_agent(
+    runtime: AgentModelRuntime,
+    *,
+    term_runtime: AgentModelRuntime | None = None,
+) -> Agent[None, FindingTermsBatchOutput]:
+    r = term_runtime or runtime
     return Agent(
-        runtime.model,
-        system_prompt=FINDING_TERM_SYSTEM,
+        r.model,
+        instructions=FINDING_TERM_SYSTEM,
         output_type=FindingTermsBatchOutput,
-        model_settings=runtime.model_settings,
+        model_settings=r.model_settings,
         output_retries=2,
         name="finding_term_generator",
     )
 
 
-def create_location_term_agent(runtime: AgentModelRuntime) -> Agent[None, LocationTermsBatchOutput]:
+def create_location_term_agent(
+    runtime: AgentModelRuntime,
+    *,
+    term_runtime: AgentModelRuntime | None = None,
+) -> Agent[None, LocationTermsBatchOutput]:
+    r = term_runtime or runtime
     return Agent(
-        runtime.model,
-        system_prompt=LOCATION_TERM_SYSTEM,
+        r.model,
+        instructions=LOCATION_TERM_SYSTEM,
         output_type=LocationTermsBatchOutput,
-        model_settings=runtime.model_settings,
+        model_settings=r.model_settings,
         output_retries=2,
         name="location_term_generator",
     )
@@ -61,7 +71,7 @@ def create_location_term_agent(runtime: AgentModelRuntime) -> Agent[None, Locati
 def create_finding_selector_agent(runtime: AgentModelRuntime) -> Agent[None, FindingCodeSelection]:
     return Agent(
         runtime.model,
-        system_prompt=FINDING_CODE_SELECTOR_SYSTEM,
+        instructions=FINDING_CODE_SELECTOR_SYSTEM,
         output_type=FindingCodeSelection,
         model_settings=runtime.model_settings,
         output_retries=2,
@@ -72,7 +82,7 @@ def create_finding_selector_agent(runtime: AgentModelRuntime) -> Agent[None, Fin
 def create_location_selector_agent(runtime: AgentModelRuntime) -> Agent[None, LocationCodeSelection]:
     return Agent(
         runtime.model,
-        system_prompt=LOCATION_CODE_SELECTOR_SYSTEM,
+        instructions=LOCATION_CODE_SELECTOR_SYSTEM,
         output_type=LocationCodeSelection,
         model_settings=runtime.model_settings,
         output_retries=2,

@@ -116,6 +116,13 @@ uv run finding-extractor-batch status --run-id <run_id> --watch
 
 For intentionally long batch runs, pass `--allow-slow` (runtime preflight guard override).
 
+Coding CLI (run the production post-extraction coding pipeline on saved extraction JSON):
+
+```bash
+uv run --env-file .env finding-extractor-code extraction.json
+uv run --env-file .env finding-extractor-code extraction.json --output coded.json
+```
+
 Evaluation harness (measure extraction quality):
 
 ```bash
@@ -128,3 +135,4 @@ See:
 - `docs/human-review-workflow.md`
 - `docs/eval-usage.md`
 - `docs/eval-internals.md`
+- `docs/coding-agent-design.md`

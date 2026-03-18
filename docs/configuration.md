@@ -40,6 +40,13 @@ Configuration sources are applied in this order:
 | `IPL_PRESET` | string \| null | `null` | `default_preset` |
 | `IPL_REASONING` | string \| null | provider default | `default_reasoning` |
 | `IPL_ALLOW_UNKNOWN_MODEL_REASONING` | bool | `false` | `allow_unknown_model_reasoning` |
+| `IPL_CODING_MODEL` | string | `openai:gpt-5.2` | `coding_model` |
+| `IPL_CODING_REASONING` | string \| null | `low` | `coding_reasoning` |
+| `IPL_CODING_TERM_MODEL` | string \| null | `google-gla:gemini-3-flash-preview` | `coding_term_model` |
+| `IPL_CODING_FALLBACK_MODEL` | string \| null | `google-gla:gemini-3.1-flash-lite-preview` | `coding_fallback_model` |
+| `IPL_CODING_MAX_CONCURRENCY` | int | `8` | `coding_max_concurrency` |
+| `IPL_CODING_SEARCH_LIMIT` | int | `6` | `coding_search_limit` |
+| `IPL_CODING_MAX_CANDIDATES` | int | `12` | `coding_max_candidates` |
 | `IPL_BATCH_RUN_DIR` | path | `.batch_runs` | `batch_run_dir` |
 | `IPL_BATCH_WORKERS` | int | `4` | `batch_workers` |
 | `IPL_BATCH_TIMEOUT_SECONDS` | int | `420` | `batch_timeout_seconds` |

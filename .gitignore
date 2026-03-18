@@ -220,3 +220,10 @@ evals/runs/
 .eval_runs/
 
 extracts/
+
+# Script test data and output (local only)
+scripts/test_data/
+scripts/output/
+
+# MCP config (local only)
+.mcp.json

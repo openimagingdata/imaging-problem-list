@@ -1,6 +1,6 @@
 # Pending Refactoring Backlog
 
-Last updated: 2026-03-12
+Last updated: 2026-03-18
 Status: Active
 
 This is the canonical near-term refactoring/cleanup queue. Longer-horizon improvements live in `docs/future-improvements.md`.

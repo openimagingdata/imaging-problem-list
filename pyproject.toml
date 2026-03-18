@@ -29,6 +29,7 @@ dependencies = [
 
 [project.scripts]
 finding-extractor = "finding_extractor.cli.extract:main"
+finding-extractor-code = "finding_extractor.cli.code:main"
 finding-extractor-api = "finding_extractor.api:main"
 finding-extractor-batch = "finding_extractor.cli.batch:cli"
 finding-extractor-eval = "finding_extractor.cli.eval_cmd:cli"

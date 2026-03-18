@@ -1,6 +1,7 @@
 # Coding Agent Prompts — Draft v2
 
-Four LLM prompts used in the coding pipeline. Each is a system prompt for a PydanticAI structured-output agent.
+Four LLM prompts used in the coding pipeline. Each is used as static
+`instructions` for a PydanticAI structured-output agent.
 
 The original combined search term generator has been split into two separate prompts (1a and 1b) so that each batch contains only findings that actually need that axis coded, and the two can run in parallel.
 
@@ -16,7 +17,7 @@ The original combined search term generator has been split into two separate pro
 
 **Output:** `FindingTermsBatchOutput` — per-finding list of search terms.
 
-### System Prompt
+### Static Instructions
 
 ```
 You are a medical informatics assistant. Your task is to propose search query
@@ -105,7 +106,7 @@ Generate 2–3 diverse search terms for each finding above.
 
 **Output:** `LocationTermsBatchOutput` — per-finding list of search terms.
 
-### System Prompt
+### Static Instructions
 
 ```
 You are a medical informatics assistant. Your task is to propose search query
@@ -190,7 +191,7 @@ Generate 1–3 anatomic location search terms for each finding above.
 
 **Output:** `FindingCodeSelection` — selected `oifm_id` or null. When null, includes `closest_candidate_id` and `rejection_reason` classifying why the best candidate was rejected.
 
-### System Prompt
+### Static Instructions
 
 ```
 You are a medical informatics assistant. Your task is to select the best
@@ -277,7 +278,7 @@ Select the best matching candidate, or null if none match.
 
 **Output:** `LocationCodeSelection` — list of selected `location_id`s (one or more), OR empty list with `unresolved_reason`.
 
-### System Prompt
+### Static Instructions
 
 ```
 You are a medical informatics assistant. Your task is to select the best

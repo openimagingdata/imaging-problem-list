@@ -27,8 +27,9 @@ DEFAULT_MODEL = MODEL_GOOGLE_GEMINI_3_FLASH_PREVIEW
 DEFAULT_FALLBACK_MODEL = MODEL_OPENAI_GPT_5_2
 DEFAULT_CODING_MODEL = MODEL_OPENAI_GPT_5_2
 DEFAULT_CODING_REASONING = "low"
+DEFAULT_CODING_TERM_MODEL = MODEL_GOOGLE_GEMINI_3_FLASH_PREVIEW
 DEFAULT_CODING_FALLBACK_MODEL = MODEL_GOOGLE_GEMINI_3_1_FLASH_LITE_PREVIEW
-DEFAULT_CODING_MAX_CONCURRENCY = 5
+DEFAULT_CODING_MAX_CONCURRENCY = 8
 DEFAULT_CODING_SEARCH_LIMIT = 6
 DEFAULT_CODING_MAX_CANDIDATES = 12
 DEFAULT_BATCH_RUN_DIR = Path(".batch_runs")
@@ -187,6 +188,12 @@ class ExtractorSettings(BaseSettings):
         default=DEFAULT_CODING_REASONING,
         validation_alias=AliasChoices(
             "IPL_CODING_REASONING",
+        ),
+    )
+    coding_term_model: str | None = Field(
+        default=DEFAULT_CODING_TERM_MODEL,
+        validation_alias=AliasChoices(
+            "IPL_CODING_TERM_MODEL",
         ),
     )
     coding_fallback_model: str | None = Field(
@@ -563,6 +570,16 @@ class ExtractorSettings(BaseSettings):
     @field_validator("coding_model")
     @classmethod
     def _validate_coding_model(cls, value: str) -> str:
+        from finding_extractor.llm.policy import validate_model_id
+
+        validate_model_id(value)
+        return value
+
+    @field_validator("coding_term_model")
+    @classmethod
+    def _validate_coding_term_model(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
         from finding_extractor.llm.policy import validate_model_id
 
         validate_model_id(value)

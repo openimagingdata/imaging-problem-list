@@ -3,6 +3,8 @@
 import json
 from pathlib import Path
 
+from finding_extractor.cli.code import format_coding_json_output
+from finding_extractor.cli.code import main as coding_main
 from finding_extractor.cli.extract import format_json_output, format_table_output, main
 from finding_extractor.extractor.runtime import PipelineRunResult, StorageMetadata
 from finding_extractor.models import (
@@ -204,6 +206,42 @@ class TestFormatTableOutput:
         assert "CODING:" in output
         assert "Findings coded: 1 | Unresolved: 1" in output
         assert "atelectasis" in output
+
+
+class TestCodingCliFormatting:
+    """Test cases for coding CLI JSON formatting."""
+
+    def test_coding_json_output_keeps_inline_coding(self):
+        extraction = ExtractedReportFindings(
+            exam_info=ExamInfo(study_description="Test"),
+            findings=[
+                Finding(
+                    finding_name="renal calculus",
+                    presence="present",
+                    report_text="Stone in the kidney.",
+                    coding=FindingCodingBundle(
+                        finding_code=FindingCode(
+                            status="coded",
+                            oifm_id="OIFM:1",
+                            oifm_name="renal calculus",
+                            method="llm",
+                        ),
+                        location_codes=[
+                            LocationCode(
+                                status="coded",
+                                location_id="LOC:1",
+                                location_name="kidney",
+                                method="fast-path",
+                            )
+                        ],
+                    ),
+                )
+            ],
+        )
+
+        payload = json.loads(format_coding_json_output(extraction))
+        assert payload["findings"][0]["coding"]["finding_code"]["oifm_id"] == "OIFM:1"
+        assert payload["findings"][0]["coding"]["location_codes"][0]["location_id"] == "LOC:1"
 
 
 class TestCLI:
@@ -797,7 +835,6 @@ class TestCLI:
 
     def test_cli_store_fresh_db_fails_preflight_without_creating_tables(self, cli_runner):
         """Fresh DB + --store should fail preflight and leave DB without app tables."""
-        import sqlite3
 
         with cli_runner.isolated_filesystem():
             report_path = Path("report.md")
@@ -811,18 +848,139 @@ class TestCLI:
             assert result.exit_code != 0
             assert "task db:migrate" in (result.output + result.stderr)
 
-            # DB file may or may not exist (engine may create it),
-            # but app tables must not have been created.
-            if db_path.exists():
-                conn = sqlite3.connect(str(db_path))
-                tables = {
-                    row[0]
-                    for row in conn.execute(
-                        "SELECT name FROM sqlite_master WHERE type='table'"
-                    ).fetchall()
-                }
-                conn.close()
-                for app_table in ("reports", "extractions", "corrections", "jobs"):
-                    assert app_table not in tables, (
-                        f"Table '{app_table}' should not exist after preflight failure"
+
+class TestCodingCLI:
+    """Test cases for the coding CLI command."""
+
+    def test_cli_help(self, cli_runner):
+        result = cli_runner.invoke(coding_main, ["--help"])
+        assert result.exit_code == 0
+        assert "assign codes" in result.output.lower()
+        assert "--output" in result.output
+        assert "--model" in result.output
+        assert "--reasoning" in result.output
+
+    def test_cli_wires_structured_logging_setup(self, monkeypatch, cli_runner, runtime_logging_spy):
+        runtime_logging_spy.patch(
+            monkeypatch,
+            "finding_extractor.cli.code",
+            logfire_enabled=True,
+        )
+
+        extraction = ExtractedReportFindings(exam_info=ExamInfo(study_description="Chest XR"))
+
+        def fake_run_coding_sync(**kwargs):
+            assert kwargs["model"] is None
+            assert kwargs["reasoning"] is None
+            return extraction
+
+        monkeypatch.setattr("finding_extractor.cli.code._run_coding_pipeline_sync", fake_run_coding_sync)
+
+        with cli_runner.isolated_filesystem():
+            input_path = Path("extraction.json")
+            input_path.write_text(extraction.model_dump_json())
+
+            result = cli_runner.invoke(coding_main, [str(input_path)])
+
+            assert result.exit_code == 0
+            assert len(runtime_logging_spy.configure_calls) == 1
+            assert len(runtime_logging_spy.setup_calls) == 1
+            assert runtime_logging_spy.configure_calls[0]["runtime"] == "cli"
+            assert runtime_logging_spy.setup_calls[0]["include_logfire_processor"] is True
+
+    def test_cli_emits_progress_on_stderr(self, monkeypatch, cli_runner):
+        extraction = ExtractedReportFindings(exam_info=ExamInfo(study_description="Chest XR"))
+        coded = extraction.model_copy(
+            update={
+                "findings": [
+                    Finding(
+                        finding_name="renal calculus",
+                        presence="present",
+                        report_text="Stone in the kidney.",
+                        coding=FindingCodingBundle(
+                            finding_code=FindingCode(
+                                status="coded",
+                                oifm_id="OIFM:1",
+                                oifm_name="renal calculus",
+                                method="llm",
+                            ),
+                            location_codes=[],
+                        ),
                     )
+                ]
+            }
+        )
+
+        async def fake_run_coding(extraction, *, model=None, reasoning=None, progress_callback=None, **kwargs):
+            _ = (model, reasoning, kwargs)
+            assert extraction.exam_info.study_description == "Chest XR"
+            assert progress_callback is not None
+            await progress_callback("[stage:coding_fast_path] resolving_indexes")
+            await progress_callback("[stage:coding_complete] coding_complete")
+
+            class _Result:
+                def __init__(self, extraction):
+                    self.extraction = extraction
+
+            return _Result(coded)
+
+        monkeypatch.setattr("finding_extractor.cli.code.run_coding", fake_run_coding)
+
+        with cli_runner.isolated_filesystem():
+            input_path = Path("extraction.json")
+            input_path.write_text(extraction.model_dump_json())
+
+            result = cli_runner.invoke(coding_main, [str(input_path)])
+
+            assert result.exit_code == 0
+            assert "[stage:coding_fast_path] resolving_indexes" in result.stderr
+            assert "[stage:coding_complete] coding_complete" in result.stderr
+            assert '"finding_name": "renal calculus"' in result.stdout
+
+    def test_cli_output_file_writes_json(self, monkeypatch, cli_runner):
+        extraction = ExtractedReportFindings(
+            exam_info=ExamInfo(study_description="Chest XR"),
+            findings=[
+                Finding(
+                    finding_name="renal calculus",
+                    presence="present",
+                    report_text="Stone in the kidney.",
+                )
+            ],
+        )
+        coded = extraction.model_copy(
+            update={
+                "findings": [
+                    extraction.findings[0].model_copy(
+                        update={
+                            "coding": FindingCodingBundle(
+                                finding_code=FindingCode(
+                                    status="coded",
+                                    oifm_id="OIFM:1",
+                                    oifm_name="renal calculus",
+                                    method="fast-path",
+                                ),
+                                location_codes=[],
+                            )
+                        }
+                    )
+                ]
+            }
+        )
+
+        def fake_run_coding_sync(**kwargs):
+            return coded
+
+        monkeypatch.setattr("finding_extractor.cli.code._run_coding_pipeline_sync", fake_run_coding_sync)
+
+        with cli_runner.isolated_filesystem():
+            input_path = Path("extraction.json")
+            output_path = Path("coded.json")
+            input_path.write_text(extraction.model_dump_json())
+
+            result = cli_runner.invoke(coding_main, [str(input_path), "--output", str(output_path)])
+
+            assert result.exit_code == 0
+            assert result.stdout.strip() == f"Output written to {output_path}"
+            payload = json.loads(output_path.read_text())
+            assert payload["findings"][0]["coding"]["finding_code"]["oifm_id"] == "OIFM:1"

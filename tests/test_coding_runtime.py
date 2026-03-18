@@ -23,9 +23,10 @@ def _settings(**overrides):
     base = {
         "coding_model": "openai:gpt-5.2",
         "coding_reasoning": "low",
+        "coding_term_model": None,
         "allow_unknown_model_reasoning": False,
         "coding_fallback_model": "google-gla:gemini-3.1-flash-lite-preview",
-        "coding_max_concurrency": 5,
+        "coding_max_concurrency": 8,
         "coding_search_limit": 6,
         "coding_max_candidates": 12,
     }
@@ -140,11 +141,11 @@ async def test_run_coding_applies_fast_path_to_duplicate_findings(monkeypatch):
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_finding_term_agent",
-        lambda runtime: _UnusedAgent(),
+        lambda runtime, **kw: _UnusedAgent(),
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_location_term_agent",
-        lambda runtime: _UnusedAgent(),
+        lambda runtime, **kw: _UnusedAgent(),
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_finding_selector_agent",
@@ -271,11 +272,11 @@ async def test_run_coding_keeps_lateralized_locations_separate(monkeypatch):
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_finding_term_agent",
-        lambda runtime: _UnusedAgent(),
+        lambda runtime, **kw: _UnusedAgent(),
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_location_term_agent",
-        lambda runtime: _UnusedAgent(),
+        lambda runtime, **kw: _UnusedAgent(),
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_finding_selector_agent",
@@ -413,7 +414,7 @@ async def test_run_coding_backfills_partial_term_generation_outputs(monkeypatch)
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_finding_term_agent",
-        lambda runtime: _FixedOutputAgent(
+        lambda runtime, **kw: _FixedOutputAgent(
             FindingTermsBatchOutput(
                 results=[FindingTerms(finding_index=0, search_terms=["renal stone"])]
             )
@@ -421,7 +422,7 @@ async def test_run_coding_backfills_partial_term_generation_outputs(monkeypatch)
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_location_term_agent",
-        lambda runtime: _FixedOutputAgent(
+        lambda runtime, **kw: _FixedOutputAgent(
             LocationTermsBatchOutput(
                 results=[LocationTerms(finding_index=0, search_terms=["left kidney"])]
             )
@@ -523,7 +524,7 @@ async def test_run_coding_marks_location_no_candidates_without_selector(monkeypa
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_finding_term_agent",
-        lambda runtime: _FixedOutputAgent(
+        lambda runtime, **kw: _FixedOutputAgent(
             FindingTermsBatchOutput(
                 results=[FindingTerms(finding_index=0, search_terms=["renal stone"])]
             )
@@ -531,7 +532,7 @@ async def test_run_coding_marks_location_no_candidates_without_selector(monkeypa
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_location_term_agent",
-        lambda runtime: _FixedOutputAgent(
+        lambda runtime, **kw: _FixedOutputAgent(
             LocationTermsBatchOutput(
                 results=[LocationTerms(finding_index=0, search_terms=["left kidney"])]
             )
@@ -604,7 +605,7 @@ async def test_run_coding_invalid_finding_selector_id_becomes_unmapped(monkeypat
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_finding_term_agent",
-        lambda runtime: _FixedOutputAgent(
+        lambda runtime, **kw: _FixedOutputAgent(
             FindingTermsBatchOutput(
                 results=[FindingTerms(finding_index=0, search_terms=["renal stone"])]
             )
@@ -612,7 +613,7 @@ async def test_run_coding_invalid_finding_selector_id_becomes_unmapped(monkeypat
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_location_term_agent",
-        lambda runtime: _UnusedAgent(),
+        lambda runtime, **kw: _UnusedAgent(),
     )
     monkeypatch.setattr(
         "finding_extractor.coding.runtime.create_finding_selector_agent",

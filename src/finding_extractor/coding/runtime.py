@@ -31,6 +31,7 @@ from finding_extractor.core.observability import get_current_trace_id
 from finding_extractor.db.store import ExtractionStore
 from finding_extractor.extractor.progress import ProgressCallbackType, emit_stage_progress
 from finding_extractor.llm.model_settings import resolve_runtime_reasoning
+from finding_extractor.llm.resilience import AgentModelRuntime
 from finding_extractor.models import (
     AlternateCode,
     ExtractedReportFindings,
@@ -260,16 +261,24 @@ async def run_coding(
         reasoning or resolved_settings.coding_reasoning,
         allow_unknown_model_reasoning=resolved_settings.allow_unknown_model_reasoning,
     )
-    runtime = build_coding_model_runtime(
+    selector_model = build_coding_model_runtime(
         model_name=model_name,
         reasoning=effective_reasoning,
         fallback_model_name=resolved_settings.coding_fallback_model,
         max_concurrency=resolved_settings.coding_max_concurrency,
     )
-    finding_term_agent = create_finding_term_agent(runtime)
-    location_term_agent = create_location_term_agent(runtime)
-    finding_selector = create_finding_selector_agent(runtime)
-    location_selector = create_location_selector_agent(runtime)
+    term_gen_model: AgentModelRuntime | None = None
+    if resolved_settings.coding_term_model and resolved_settings.coding_term_model != model_name:
+        term_gen_model = build_coding_model_runtime(
+            model_name=resolved_settings.coding_term_model,
+            reasoning=None,
+            fallback_model_name=resolved_settings.coding_fallback_model,
+            max_concurrency=resolved_settings.coding_max_concurrency,
+        )
+    finding_term_agent = create_finding_term_agent(selector_model, term_runtime=term_gen_model)
+    location_term_agent = create_location_term_agent(selector_model, term_runtime=term_gen_model)
+    finding_selector = create_finding_selector_agent(selector_model)
+    location_selector = create_location_selector_agent(selector_model)
     finding_index = Index()
     location_index = AnatomicLocationIndex()
     started_at = perf_counter()

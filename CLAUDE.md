@@ -52,6 +52,7 @@ src/finding_extractor/     # Python package: agent, API, CLI, worker, persistenc
     types.py               # Structured-output response models for coding agents
   cli/                     # CLI entry points
     extract.py             # Single-report extraction CLI
+    code.py                # Post-extraction coding CLI
     batch.py               # Batch extraction CLI
     batch_engine.py        # Batch execution engine
     batch_state.py         # Batch run state management
@@ -198,6 +199,7 @@ python3 -m http.server 8000
 uv run finding-extractor <report_file> [--model <provider:model>] [--reasoning medium] [--validate] [--store]
 # Write JSON to file and show table summary:
 uv run finding-extractor <report_file> -o output.json -f table
+uv run finding-extractor-code <extraction_json> [--model openai:gpt-5-mini] [--reasoning medium]
 ```
 
 ## Finding Extractor Architecture
