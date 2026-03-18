@@ -102,6 +102,17 @@ Tested `gpt-5.4-mini` (reviewer) and `gpt-5.4-nano` (extractor) across two CT ab
 
 gpt-5.4-mini catches the same chunk_3 location error that gpt-5.2 catches, at 2.5x the speed (1.7–2.1s vs 4–5s) and lower cost ($0.75/$4.50 per 1M vs gpt-5.2 pricing). **New default reviewer.**
 
+### Reasoning level comparison (gpt-5.4-mini reviewer)
+
+| Reasoning | Reasoning tokens/chunk | Re-extracts | Notes |
+|-----------|----------:|---:|---|
+| `none` | 0 | 3 | Over-flags (chunk_4 got 5 problems); same pattern as gpt-5.2/none |
+| **`low`** | **32–323** | **1–2** | **Correct — small reasoning budget prevents over-flagging** |
+
+gpt-5.4 family defaults to `none` if `reasoning_effort` is omitted. Explicitly setting `low` is necessary for precise reviewer judgment.
+
+**Note:** gpt-5.4-family models require `openai-responses:` prefix (Responses API). The Chat Completions API returns 400 when combining `reasoning_effort` with `tool_choice`.
+
 ### Extractor comparison with gpt-5.4-mini reviewer
 
 | Extractor | Avg call | Findings (2 reports) | Re-extracts | Notes |
