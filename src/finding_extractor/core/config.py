@@ -16,6 +16,7 @@ from pydantic_settings import (
 from finding_extractor.llm.defaults import (
     MODEL_GOOGLE_GEMINI_3_FLASH_PREVIEW,
     MODEL_OPENAI_GPT_5_2,
+    MODEL_OPENAI_GPT_5_4_MINI,
 )
 from finding_extractor.models import ReasoningLevel
 
@@ -360,7 +361,7 @@ class ExtractorSettings(BaseSettings):
         ),
     )
     reviewer_model: str | None = Field(
-        default=None,
+        default=MODEL_OPENAI_GPT_5_4_MINI,
         validation_alias=AliasChoices(
             "IPL_REVIEWER_MODEL",
         ),

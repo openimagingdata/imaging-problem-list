@@ -7,7 +7,7 @@ Status: Active reference
 
 1. Extraction model default: `google-gla:gemini-3-flash-preview`
 2. Extraction fallback default: `openai:gpt-5.2`
-3. Reviewer model: inherits fallback (`openai:gpt-5.2`), reasoning=`low`
+3. Reviewer model: `openai-responses:gpt-5.4-mini`, reasoning=`low`
 4. Provider default reasoning:
    - `google`: `low`
    - `openai`: `medium`
@@ -74,14 +74,41 @@ Key test case: extractor assigns "gallbladder" as location for a finding whose c
 | `gemini-3.1-flash-lite-preview` | 2.0s | 40–42 | Lower quality, needs more corrections |
 | `gpt-5.2` | 7.0s | 43–44 | Good quality, 3.5x slower |
 
-### Best combinations by total runtime
+### Best combinations by total runtime (2026-03-16)
 
 | Extractor | Reviewer | Total | Findings | Re-extractions |
 |-----------|----------|------:|---------:|---:|
 | flash-lite | flash | 10.5s | 42 | 0 (reviewer misses real issues) |
 | flash | flash-lite | 13.3s | 43 | 3 (reviewer over-triggers) |
-| **flash** | **gpt-5.2** | **19.4s** | **44** | **1** (current default, best quality) |
+| **flash** | **gpt-5.2** | **19.4s** | **44** | **1** (previous default) |
 | gpt-5.2 | flash | 20.8s | 44 | 0 (slow extractor, permissive reviewer) |
+
+## GPT-5.4-mini/nano Evaluation (2026-03-18)
+
+Tested `gpt-5.4-mini` (reviewer) and `gpt-5.4-nano` (extractor) across two CT abdomen reports. Both require `openai-responses:` prefix (Responses API) for reasoning + tools.
+
+### gpt-5.4-mini as reviewer
+
+| Extractor | Total | Findings | Re-extracts | Review avg |
+|-----------|------:|---------:|------------:|-----------:|
+| flash (report 1, run 1) | 15.9s | 42 | 3 | 2.1s |
+| flash (report 1, run 2) | 12.4s | 43 | 1 | 1.8s |
+| flash (report 2) | 14.6s | 69 | 3 | 1.8s |
+| nano (report 1, run 1) | 13.1s | 43 | 1 | 1.7s |
+| nano (report 1, run 2) | 15.6s | 42 | 2 | 1.9s |
+| nano (report 2) | 18.6s | 70 | 2 | 1.9s |
+| flash-lite (report 1) | 11.0s | 40 | 2 | 2.0s |
+| flash-lite (report 2) | 17.1s | 69 | 5 | 2.0s |
+
+gpt-5.4-mini catches the same chunk_3 location error that gpt-5.2 catches, at 2.5x the speed (1.7–2.1s vs 4–5s) and lower cost ($0.75/$4.50 per 1M vs gpt-5.2 pricing). **New default reviewer.**
+
+### Extractor comparison with gpt-5.4-mini reviewer
+
+| Extractor | Avg call | Findings (2 reports) | Re-extracts | Notes |
+|-----------|----------:|---:|---:|---|
+| `gemini-3-flash-preview` | 2.2s | 42–43 / 69 | 1–3 | Best speed/quality balance, remains default |
+| `gpt-5.4-nano` | 2.9–3.1s | 42–43 / 70 | 1–2 | Good quality, ~30% slower, viable all-OpenAI option |
+| `gemini-3.1-flash-lite-preview` | 1.8s | 40 / 69 | 2–5 | Fastest per-call but more corrections needed |
 
 ## Operational Guidance
 

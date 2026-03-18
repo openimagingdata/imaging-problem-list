@@ -9,7 +9,7 @@ Model configuration is controlled via environment variables (or config.toml):
     IPL_FALLBACK_MODEL      Fallback model for resilience (default: gpt-5.2)
     IPL_REASONING           Default reasoning effort level
     IPL_REVIEWER_ENABLED    Enable per-chunk review pass (default: true)
-    IPL_REVIEWER_MODEL      Reviewer model (must differ from extraction model)
+    IPL_REVIEWER_MODEL      Reviewer model (default: gpt-5.4-mini via Responses API)
     IPL_REVIEWER_REASONING  Reviewer reasoning effort (default: low)
 
 CLI options --model, --reasoning, and --preset override the env var defaults.

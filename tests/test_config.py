@@ -67,7 +67,7 @@ def test_settings_defaults_without_env(tmp_path, monkeypatch):
     assert settings.log_json is DEFAULT_LOG_JSON
     assert settings.logfire_enabled is False
     assert settings.logfire_send == "auto"
-    assert settings.reviewer_model is None
+    assert settings.reviewer_model == "openai-responses:gpt-5.4-mini"
     assert settings.reviewer_reasoning == "low"
     assert settings.reviewer_reextract_enabled is True
     assert (

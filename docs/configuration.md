@@ -32,7 +32,7 @@ Configuration sources are applied in this order:
 | `IPL_CHUNKING_IMPRESSION_LIST_MAX_ITEMS_PER_CHUNK` | int | `3` | `chunking_impression_list_max_items_per_chunk` |
 | `IPL_CHUNKING_IMPRESSION_LIST_MIN_ITEMS_PER_CHUNK` | int | `2` | `chunking_impression_list_min_items_per_chunk` |
 | `IPL_REVIEWER_ENABLED` | bool | `true` | `reviewer_enabled` |
-| `IPL_REVIEWER_MODEL` | string \| null | `null` | `reviewer_model` |
+| `IPL_REVIEWER_MODEL` | string \| null | `openai-responses:gpt-5.4-mini` | `reviewer_model` |
 | `IPL_REVIEWER_REASONING` | string \| null | `low` | `reviewer_reasoning` |
 | `IPL_REVIEWER_REEXTRACT_ENABLED` | bool | `true` | `reviewer_reextract_enabled` |
 | `IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY` | int | `5` | `extractor_max_subagent_concurrency` |
