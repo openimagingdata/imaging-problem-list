@@ -91,7 +91,7 @@ tasks:
       - sh: /bin/sh -ec 'BASE_URL="${BASE_URL:-http://localhost:8001}"; curl -fsS --max-time 5 "$BASE_URL/api/readyz" >/dev/null'
         msg: API end-to-end tests require a running backend stack. Start it first with `task stack:up`, then rerun `task test:api:e2e`.
     cmds:
-      - /bin/sh -ec 'SMOKE_MODEL="${SMOKE_MODEL:-openai:gpt-5-nano}" SMOKE_REASONING="${SMOKE_REASONING:-minimal}" uv run python -m finding_extractor.smoke'
+      - /bin/sh -ec 'SMOKE_MODEL="${SMOKE_MODEL:-openai:gpt-5.4-nano}" SMOKE_REASONING="${SMOKE_REASONING:-low}" uv run python -m finding_extractor.smoke'
 
   test:smoke:
     desc: Alias for test:api:e2e

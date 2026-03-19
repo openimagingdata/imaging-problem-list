@@ -28,6 +28,7 @@ services:
     environment:
       IPL_REDIS_URL: redis://redis:6379
       IPL_DB_PATH: /data/finding_extractor.db
+      IPL_LOGFIRE_ENABLED: ${IPL_LOGFIRE_ENABLED:-false}
     volumes:
       - finding_extractor_db:/data
     depends_on:
@@ -48,6 +49,7 @@ services:
     environment:
       IPL_REDIS_URL: redis://redis:6379
       IPL_DB_PATH: /data/finding_extractor.db
+      IPL_LOGFIRE_ENABLED: ${IPL_LOGFIRE_ENABLED:-false}
     volumes:
       - finding_extractor_db:/data
     depends_on:

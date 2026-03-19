@@ -116,11 +116,6 @@ def _instrument_core(logfire: Any, settings: ExtractorSettings) -> None:
         capture_headers=settings.logfire_capture_headers,
     )
     _instrument_once("sqlalchemy", logfire.instrument_sqlalchemy)
-    _instrument_once(
-        "redis",
-        logfire.instrument_redis,
-        capture_statement=False,
-    )
 
     if settings.logfire_instrument_provider_sdks:
         _instrument_once("openai_sdk", logfire.instrument_openai)
@@ -139,6 +134,7 @@ def _instrument_fastapi(logfire: Any, settings: ExtractorSettings, app: Any) -> 
         logfire.instrument_fastapi,
         app,
         capture_headers=settings.logfire_capture_headers,
+        excluded_urls="/api/healthz,/api/readyz",
     )
 
 

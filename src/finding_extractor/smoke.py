@@ -213,6 +213,65 @@ def run_smoke(config: SmokeConfig) -> None:
         print(f"extraction_id={extraction_id}")
         print(f"extraction_model={extraction_json.get('model_name')}")
 
+        # ── Coding ────────────────────────────────────────────────
+        print("Triggering coding...")
+        coding_dispatch = _expect_dict(
+            _request_json(
+                client,
+                method="POST",
+                path=f"/api/extractions/{extraction_id}/code",
+                payload={},
+            ),
+            "POST /api/extractions/{id}/code",
+        )
+        coding_job_id = str(coding_dispatch.get("job_id") or "")
+        if not coding_job_id:
+            raise RuntimeError("POST /api/extractions/{id}/code missing job_id")
+        print(f"coding_job_id={coding_job_id}")
+
+        print("Polling coding job state...")
+
+        def fetch_terminal_coding_job() -> dict[str, Any] | None:
+            current = _expect_dict(
+                _request_json(client, method="GET", path=f"/api/jobs/{coding_job_id}"),
+                "GET /api/jobs/{id} (coding)",
+            )
+            status = str(current.get("status") or "")
+            if status in {"completed", "completed_with_warnings", "failed"}:
+                return current
+            return None
+
+        coding_job_json = _expect_dict(
+            _wait_for(
+                fetch_terminal_coding_job,
+                timeout_seconds=config.poll_seconds,
+                interval_seconds=1.0,
+                timeout_message=f"Timed out waiting for coding job after {config.poll_seconds}s",
+            ),
+            "GET /api/jobs/{id} (coding)",
+        )
+        coding_state = str(coding_job_json.get("status") or "unknown")
+        print(f"coding_job_state={coding_state}")
+        if coding_state == "failed":
+            raise RuntimeError(f"Coding job failed: {coding_job_json.get('error')}")
+
+        print("Verifying coded extraction...")
+        coded_extraction = _expect_dict(
+            _request_json(client, method="GET", path=f"/api/extractions/{extraction_id}"),
+            "GET /api/extractions/{id} (post-coding)",
+        )
+        findings = coded_extraction.get("extraction", {}).get("findings", [])
+        coded_count = sum(
+            1 for f in findings
+            if (f.get("coding") or {}).get("finding_code", {}).get("status") == "coded"
+        )
+        total_with_coding = sum(1 for f in findings if f.get("coding") is not None)
+        print(f"findings_total={len(findings)}")
+        print(f"findings_with_coding={total_with_coding}")
+        print(f"findings_coded={coded_count}")
+        if total_with_coding == 0:
+            raise RuntimeError("Coding completed but no findings have coding data")
+
         print("Creating + listing one correction...")
         correction_json = _expect_dict(
             _request_json(
