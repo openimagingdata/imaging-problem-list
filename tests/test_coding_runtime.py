@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from types import SimpleNamespace
+from typing import Any, cast
 
 import pytest
 
@@ -205,7 +206,7 @@ async def test_run_coding_applies_fast_path_to_duplicate_findings(monkeypatch):
         extraction,
         settings=_settings(),
         progress_callback=_progress_callback,
-        store=store,
+        store=cast(Any, store),
         extraction_id="ext-123",
         report_id="rep-123",
         job_id="job-123",
@@ -571,7 +572,9 @@ async def test_run_coding_marks_location_no_candidates_without_selector(monkeypa
 
     result = await run_coding(extraction, settings=_settings())
 
-    location_code = result.extraction.findings[0].coding.location_codes[0]
+    coding = result.extraction.findings[0].coding
+    assert coding is not None
+    location_code = coding.location_codes[0]
     assert location_code.status == "unmapped"
     assert location_code.reason == "no_candidates"
 
@@ -648,7 +651,9 @@ async def test_run_coding_invalid_finding_selector_id_becomes_unmapped(monkeypat
 
     result = await run_coding(extraction, settings=_settings())
 
-    finding_code = result.extraction.findings[0].coding.finding_code
+    coding = result.extraction.findings[0].coding
+    assert coding is not None
+    finding_code = coding.finding_code
     assert finding_code.status == "unmapped"
     assert finding_code.reason == "no_candidates"
     assert finding_code.oifm_id is None

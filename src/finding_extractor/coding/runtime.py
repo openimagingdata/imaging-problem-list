@@ -6,11 +6,13 @@ import asyncio
 from collections.abc import Callable
 from dataclasses import dataclass
 from time import perf_counter
+from typing import TypeVar
 
 import logfire
 import structlog
-from anatomic_locations import AnatomicLocationIndex
+from anatomic_locations import AnatomicLocation, AnatomicLocationIndex
 from findingmodel import Index
+from findingmodel.index import IndexEntry
 
 from finding_extractor.coding.agents import (
     build_coding_model_runtime,
@@ -115,18 +117,18 @@ def _location_term_fallback(finding: Finding) -> list[str]:
     return []
 
 
-def _location_alternates(candidates: list[object]) -> list[LocationAlternateCode]:
+def _location_alternates(candidates: list[AnatomicLocation]) -> list[LocationAlternateCode]:
     return [
         LocationAlternateCode(location_id=candidate.id, location_name=candidate.description)
         for candidate in candidates
     ]
 
 
-def _finding_alternates(candidates: list[object]) -> list[AlternateCode]:
+def _finding_alternates(candidates: list[IndexEntry]) -> list[AlternateCode]:
     return [AlternateCode(oifm_id=candidate.oifm_id, name=candidate.name) for candidate in candidates]
 
 
-def _build_finding_code_from_fast_path(candidate: object) -> FindingCode:
+def _build_finding_code_from_fast_path(candidate: IndexEntry) -> FindingCode:
     return FindingCode(
         status="coded",
         oifm_id=candidate.oifm_id,
@@ -135,7 +137,7 @@ def _build_finding_code_from_fast_path(candidate: object) -> FindingCode:
     )
 
 
-def _build_location_codes_from_fast_path(candidate: object) -> list[LocationCode]:
+def _build_location_codes_from_fast_path(candidate: AnatomicLocation) -> list[LocationCode]:
     return [
         LocationCode(
             status="coded",
@@ -148,7 +150,7 @@ def _build_location_codes_from_fast_path(candidate: object) -> list[LocationCode
 
 def _build_finding_code_from_selection(
     selection: FindingCodeSelection | None,
-    candidates: list[object],
+    candidates: list[IndexEntry],
 ) -> FindingCode:
     alternates = _finding_alternates(candidates)
     if selection is None:
@@ -184,7 +186,7 @@ def _build_finding_code_from_selection(
 
 def _build_location_codes_from_selection(
     selection: LocationCodeSelection | None,
-    candidates: list[object],
+    candidates: list[AnatomicLocation],
 ) -> list[LocationCode]:
     alternates = _location_alternates(candidates)
     if selection is None:
@@ -220,9 +222,12 @@ def _build_location_codes_from_selection(
     ]
 
 
+_K = TypeVar("_K")
+
+
 def _backfill_missing_terms(
-    term_inputs: list[tuple[object, Finding]],
-    terms_by_key: dict[object, list[str]],
+    term_inputs: list[tuple[_K, Finding]],
+    terms_by_key: dict[_K, list[str]],
     *,
     fallback_for: Callable[[Finding], list[str]],
     axis: str,
@@ -309,8 +314,8 @@ async def run_coding(
             finding_groups.setdefault(finding.finding_name, []).append(index)
             location_groups.setdefault(_location_group_key(finding), []).append(index)
 
-        finding_fast_path: dict[str, object] = {}
-        location_fast_path: dict[LocationGroupKey, object] = {}
+        finding_fast_path: dict[str, IndexEntry] = {}
+        location_fast_path: dict[LocationGroupKey, AnatomicLocation] = {}
         finding_term_inputs: list[tuple[str, Finding]] = []
         location_term_inputs: list[tuple[LocationGroupKey, Finding]] = []
 
@@ -403,8 +408,8 @@ async def run_coding(
             await asyncio.gather(_generate_finding_terms(), _generate_location_terms())
 
         await emit_stage_progress(progress_callback, "coding_search", "searching_indexes")
-        finding_candidates_by_key: dict[str, list[object]] = {}
-        location_candidates_by_key: dict[LocationGroupKey, list[object]] = {}
+        finding_candidates_by_key: dict[str, list[IndexEntry]] = {}
+        location_candidates_by_key: dict[LocationGroupKey, list[AnatomicLocation]] = {}
         with logfire.span("phase3_index_search") as phase_span:
             finding_queries = sorted({term for terms in finding_terms_by_key.values() for term in terms})
             location_queries = sorted({term for terms in location_terms_by_key.values() for term in terms})
@@ -438,7 +443,7 @@ async def run_coding(
 
             for key, terms in finding_terms_by_key.items():
                 seen: set[str] = set()
-                deduped: list[object] = []
+                deduped: list[IndexEntry] = []
                 for term in terms:
                     for candidate in finding_search.get(term, []):
                         if candidate.oifm_id in seen:
@@ -448,15 +453,15 @@ async def run_coding(
                 finding_candidates_by_key[key] = deduped[: resolved_settings.coding_max_candidates]
 
             for key, terms in location_terms_by_key.items():
-                seen = set()
-                deduped = []
+                seen: set[str] = set()
+                deduped_locs: list[AnatomicLocation] = []
                 for term in terms:
                     for candidate in location_search.get(term, []):
                         if candidate.id in seen:
                             continue
                         seen.add(candidate.id)
-                        deduped.append(candidate)
-                location_candidates_by_key[key] = deduped[: resolved_settings.coding_max_candidates]
+                        deduped_locs.append(candidate)
+                location_candidates_by_key[key] = deduped_locs[: resolved_settings.coding_max_candidates]
 
         await emit_stage_progress(progress_callback, "coding_selection", "selecting_codes")
         finding_selections_by_key: dict[str, FindingCodeSelection | None] = {}
@@ -536,7 +541,7 @@ async def run_coding(
                         span.set_attribute("selected_oifm_id", selection.oifm_id if selection else None)
                         await _mark_selection_progress()
 
-            async def _select_location(key: str, finding: Finding) -> None:
+            async def _select_location(key: LocationGroupKey, finding: Finding) -> None:
                 candidates = location_candidates_by_key.get(key, [])
                 if not candidates:
                     location_selections_by_key[key] = None

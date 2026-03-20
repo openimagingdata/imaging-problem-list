@@ -1,7 +1,7 @@
 """Pydantic models for radiology report finding extraction."""
 
 from datetime import date
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import Field, field_validator, model_validator
 
@@ -366,7 +366,7 @@ class FindingCodingBundle(StrictBaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def _normalize_legacy_location_code(cls, value: object) -> object:
+    def _normalize_legacy_location_code(cls, value: Any) -> Any:
         if not isinstance(value, dict):
             return value
         if "location_codes" in value:

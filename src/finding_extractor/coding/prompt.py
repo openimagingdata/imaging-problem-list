@@ -3,9 +3,13 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
 
 from finding_extractor.models import ExamInfo, Finding
+
+if TYPE_CHECKING:
+    from anatomic_locations import AnatomicLocation
+    from findingmodel.index import IndexEntry
 
 
 class FindingCodeCandidate(Protocol):
@@ -248,7 +252,7 @@ def build_location_term_user_prompt(exam_info: ExamInfo, findings: Sequence[Find
 def build_finding_selector_user_prompt(
     finding: Finding,
     exam_info: ExamInfo,
-    candidates: Sequence[FindingCodeCandidate],
+    candidates: Sequence[FindingCodeCandidate] | Sequence[IndexEntry],
 ) -> str:
     lines = [
         "## FINDING",
@@ -280,7 +284,7 @@ def build_finding_selector_user_prompt(
 def build_location_selector_user_prompt(
     finding: Finding,
     exam_info: ExamInfo,
-    candidates: Sequence[LocationCodeCandidate],
+    candidates: Sequence[LocationCodeCandidate] | Sequence[AnatomicLocation],
 ) -> str:
     location = finding.location
     lines = [
