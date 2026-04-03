@@ -511,12 +511,17 @@ class TestOutputValidator:
                 Finding(
                     finding_name="clear lungs",
                     presence="absent",
-                    report_text="Lungs are clear.",  # paraphrased
+                    report_text="Lungs are clear.",  # minor case/article difference — accepted
                 ),
                 Finding(
                     finding_name="pleural effusion",
                     presence="absent",
-                    report_text="No pleural effusion.",  # paraphrased
+                    report_text="No pleural effusion.",  # "pleural" not in source — rejected
+                ),
+                Finding(
+                    finding_name="pneumothorax",
+                    presence="absent",
+                    report_text="No pneumothorax seen.",  # "pneumothorax" not in source — rejected
                 ),
             ],
         )

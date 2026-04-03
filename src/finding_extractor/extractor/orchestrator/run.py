@@ -191,29 +191,9 @@ async def run_orchestrated_extraction(
 ) -> OrchestrationResult:
     """Run extraction with per-chunk pipeline: extract → review → correct."""
 
-    # --- Start exam_info concurrently with sectionize ---
-    exam_info_task: asyncio.Task[ExamInfo] | None = None
-    if extract_exam_info_fn is not None:
-        await emit_stage_progress(emit_progress, "extract_exam_info", "start")
-
-        async def _run_exam_info() -> ExamInfo:
-            with observation_span("extraction.exam_info", model_name=model_name):
-                return await extract_exam_info_fn(
-                    report_text=report_text,
-                    study_description=study_description,
-                    source_ref=source_ref,
-                    external_metadata=external_metadata,
-                )
-
-        exam_info_task = asyncio.create_task(_run_exam_info())
-
-    # --- Sectionize (runs while exam_info is in flight) ---
+    # --- Sectionize first (no LLM call) ---
     base_chunks = build_section_chunks(report_text)
     if not base_chunks:
-        if exam_info_task is not None:
-            exam_info_task.cancel()
-            with contextlib.suppress(asyncio.CancelledError, Exception):
-                await exam_info_task
         raise ValueError("No extractable `findings` or `impression` sections found in report text.")
 
     if chunking_settings is None:
@@ -240,6 +220,26 @@ async def run_orchestrated_extraction(
             ),
         )
 
+    # --- Shared semaphore for ALL model calls (exam_info + chunks) ---
+    semaphore = asyncio.Semaphore(max(1, max_subagent_concurrency))
+
+    # --- Start exam_info behind the shared semaphore ---
+    exam_info_task: asyncio.Task[ExamInfo] | None = None
+    if extract_exam_info_fn is not None:
+        await emit_stage_progress(emit_progress, "extract_exam_info", "start")
+
+        async def _run_exam_info() -> ExamInfo:
+            async with semaphore:
+                with observation_span("extraction.exam_info", model_name=model_name):
+                    return await extract_exam_info_fn(
+                        report_text=report_text,
+                        study_description=study_description,
+                        source_ref=source_ref,
+                        external_metadata=external_metadata,
+                    )
+
+        exam_info_task = asyncio.create_task(_run_exam_info())
+
     # --- Wrap exam_info resolution as a shared future ---
     exam_info_resolved: asyncio.Task[ExamInfo | None] = asyncio.ensure_future(
         _resolve_exam_info(
@@ -256,8 +256,6 @@ async def run_orchestrated_extraction(
         "extract_sections",
         f"start chunks={len(chunks)} max_concurrency={max(1, max_subagent_concurrency)}",
     )
-
-    semaphore = asyncio.Semaphore(max(1, max_subagent_concurrency))
 
     with observation_span(
         "extraction.chunk_pipelines",

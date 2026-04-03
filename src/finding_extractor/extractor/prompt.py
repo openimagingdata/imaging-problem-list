@@ -5,7 +5,6 @@ tested and evolved independently. Examples are loaded from the ``examples``
 package and formatted for inclusion in the prompt.
 """
 
-import json
 from typing import Any, cast
 
 from finding_extractor.models import ExtractedReportFindings
@@ -167,12 +166,12 @@ _PROMPT_BLOCKS = [
 
 
 def _format_example_for_prompt(report_text: str, extraction: ExtractedReportFindings) -> str:
-    """Format a single example as JSON for the system prompt."""
-    example = {
-        "input_report": report_text,
-        "output": extraction.model_dump(mode="json"),
-    }
-    return json.dumps(example, indent=2)
+    """Format a single example for the system prompt."""
+    output_json = extraction.model_dump_json(indent=2)
+    return (
+        f"Input report:\n{report_text}\n\n"
+        f"Expected output (ExtractedReportFindings JSON):\n```json\n{output_json}\n```"
+    )
 
 
 def format_examples(examples: list[tuple[str, ExtractedReportFindings]]) -> str:
@@ -234,27 +233,18 @@ CHUNK_RULES_BLOCK = """\
 4. Try to use concise, STANDARD clinical finding names regardless of report phrasing.
 5. Use loose key/value attributes. Preferred keys when those concepts are present (even if phrased differently):
    size, change_from_prior, severity, count, morphology, acuity.
-6. Never paraphrase evidence quotes; use exact text spans from TARGET CHUNK.
-7. If a sentence states a general finding and then names specific instances (for example with "including", "for example", or "such as"), extract both the general finding and each specific instance, and apply this for both present and absent statements."""
+6. The `report_text` field for each finding must be a substring copied from the TARGET CHUNK \
+that supports the finding. Do not paraphrase or reword it.
+7. If a sentence states a general finding and then names specific instances (for example with \
+"including", "for example", or "such as"), extract both the general finding and each specific \
+instance, and apply this for both present and absent statements.
 
+## ALLOWED VALUES
 
-def _safe_str(value: Any) -> str:
-    if value is None:
-        return "null"
-    return str(value)
-
-
-def _format_attrs(attrs: Any) -> str:
-    if not isinstance(attrs, list) or not attrs:
-        return "none"
-    pairs: list[str] = []
-    for attr in attrs:
-        if not isinstance(attr, dict):
-            continue
-        key = _safe_str(attr.get("key"))
-        val = _safe_str(attr.get("value"))
-        pairs.append(f"{key}={val}")
-    return ", ".join(pairs) if pairs else "none"
+- **presence**: "present", "absent", "possible", "indeterminate"
+- **body_region**: "chest", "abdomen", "pelvis", "head", "neck", "spine", \
+"upper extremity", "lower extremity", "breast"
+- **laterality**: "left", "right", "bilateral", or null"""
 
 
 def _slice_span_text(chunk_text: str, start: Any, end: Any) -> str:
@@ -262,7 +252,41 @@ def _slice_span_text(chunk_text: str, start: Any, end: Any) -> str:
         return ""
     if start < 0 or end <= start:
         return ""
-    return chunk_text[start:end].replace("\n", " ").strip()
+    return chunk_text[start:end]
+
+
+def _build_chunk_finding(finding: dict[str, Any], chunk_text: str) -> Any:
+    """Build a validated ChunkFinding from a YAML example finding."""
+    from finding_extractor.models import ChunkFinding, FindingAttribute, FindingLocation
+
+    location_raw = finding.get("location")
+    location: FindingLocation | None = None
+    if isinstance(location_raw, dict):
+        location = FindingLocation(
+            body_region=location_raw["body_region"],
+            specific_anatomy=location_raw.get("specific_anatomy"),
+            laterality=location_raw.get("laterality"),
+        )
+
+    attrs: list[FindingAttribute] = []
+    for attr in finding.get("attributes") or []:
+        if isinstance(attr, dict) and "key" in attr and "value" in attr:
+            attrs.append(FindingAttribute(key=str(attr["key"]), value=str(attr["value"])))
+
+    # Derive report_text from explicit field or evidence span
+    report_text = finding.get("report_text")
+    if report_text is None:
+        report_text = _slice_span_text(
+            chunk_text, finding.get("evidence_start"), finding.get("evidence_end")
+        )
+
+    return ChunkFinding(
+        finding_name=finding.get("finding_name", ""),
+        presence=finding.get("presence", "present"),
+        location=location,
+        attributes=attrs,
+        report_text=report_text or "",
+    )
 
 
 def _format_chunk_example(example: dict[str, Any], index: int) -> str:
@@ -270,10 +294,10 @@ def _format_chunk_example(example: dict[str, Any], index: int) -> str:
     source: dict[str, Any] = (
         cast(dict[str, Any], source_raw) if isinstance(source_raw, dict) else {}
     )
-    section = _safe_str(source.get("section"))
-    chunk_label = _safe_str(source.get("chunk_label"))
-    example_id = _safe_str(example.get("id"))
-    target_chunk = _safe_str(example.get("target_chunk_text"))
+    section = source.get("section", "findings")
+    chunk_label = source.get("chunk_label", "")
+    example_id = example.get("id", "")
+    target_chunk = example.get("target_chunk_text", "")
     expected_raw = example.get("expected_response")
     expected: dict[str, Any] = (
         cast(dict[str, Any], expected_raw) if isinstance(expected_raw, dict) else {}
@@ -285,36 +309,25 @@ def _format_chunk_example(example: dict[str, Any], index: int) -> str:
             cast(dict[str, Any], finding) for finding in findings_raw if isinstance(finding, dict)
         ]
 
+    from finding_extractor.models import ExtractedChunkFindings
+
+    chunk_finding_models = [
+        _build_chunk_finding(f, target_chunk) for f in findings
+    ]
+    expected_output = ExtractedChunkFindings(findings=chunk_finding_models)
+    expected_json = expected_output.model_dump_json(indent=2)
+
     lines = [
         f"### Example {index}: {example_id}",
         f"section={section}; chunk_label={chunk_label}",
         "TARGET CHUNK:",
         target_chunk,
         "",
-        "Expected extracted pieces:",
+        "Expected output (ExtractedChunkFindings JSON):",
+        "```json",
+        expected_json,
+        "```",
     ]
-
-    for finding in findings:
-        location_raw = finding.get("location")
-        location: dict[str, Any] = (
-            cast(dict[str, Any], location_raw) if isinstance(location_raw, dict) else {}
-        )
-        start = finding.get("evidence_start")
-        end = finding.get("evidence_end")
-        evidence_text = _slice_span_text(target_chunk, start, end)
-        lines.append(
-            "- "
-            f"finding_name={_safe_str(finding.get('finding_name'))}; "
-            f"presence={_safe_str(finding.get('presence'))}; "
-            "location("
-            f"body_region={_safe_str(location.get('body_region'))}, "
-            f"specific_anatomy={_safe_str(location.get('specific_anatomy'))}, "
-            f"laterality={_safe_str(location.get('laterality'))}"
-            "); "
-            f"attributes=[{_format_attrs(finding.get('attributes'))}]; "
-            f"evidence_span=[{_safe_str(start)}, {_safe_str(end)})"
-            + (f"; evidence_text={evidence_text}" if evidence_text else "")
-        )
 
     return "\n".join(lines)
 

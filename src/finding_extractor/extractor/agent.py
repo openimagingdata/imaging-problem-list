@@ -84,10 +84,7 @@ def create_agent(
                 ctx.deps,
                 f"Retrying: verbatim validation failed ({len(errors)} error(s))",
             )
-            msg = "Verbatim check failed. " + errors[0]
-            if len(errors) > 1:
-                msg += f" (and {len(errors) - 1} more)"
-            msg += ". Quote EXACTLY from the report text."
+            msg = "\n".join(errors)
             raise ModelRetry(msg)
         return output
 
@@ -123,14 +120,17 @@ def create_chunk_agent(
                 ctx.deps,
                 f"Retrying: verbatim validation failed ({len(errors)} error(s))",
             )
-            msg = "Chunk verbatim check failed. " + errors[0]
-            if len(errors) > 1:
-                msg += f" (and {len(errors) - 1} more)"
-            msg += ". Quote EXACTLY from the target chunk text."
+            msg = "\n".join(errors)
             raise ModelRetry(msg)
         return output
 
     return agent
+
+
+def _truncate(text: str, max_len: int = 80) -> str:
+    if len(text) <= max_len:
+        return text
+    return text[:max_len] + "..."
 
 
 def check_verbatim(report_text: str, output: ExtractedReportFindings) -> list[str]:
@@ -146,10 +146,16 @@ def check_verbatim(report_text: str, output: ExtractedReportFindings) -> list[st
     errors = []
     for finding in output.findings:
         if not verbatim_match(finding.report_text, report_text):
-            errors.append(f"Finding '{finding.finding_name}': quote not found verbatim")
+            errors.append(
+                f"Finding '{finding.finding_name}': report_text is not a substring of the "
+                f"report. You provided: \"{_truncate(finding.report_text)}\""
+            )
     for nft in output.non_finding_text:
         if not verbatim_match(nft.text, report_text):
-            errors.append(f"Non-finding ({nft.category}): text not found verbatim")
+            errors.append(
+                f"Non-finding ({nft.category}): text is not a substring of the "
+                f"report. You provided: \"{_truncate(nft.text)}\""
+            )
     return errors
 
 
@@ -158,7 +164,10 @@ def check_chunk_verbatim(report_text: str, output: ExtractedChunkFindings) -> li
     errors = []
     for finding in output.findings:
         if not verbatim_match(finding.report_text, report_text):
-            errors.append(f"Finding '{finding.finding_name}': quote not found verbatim")
+            errors.append(
+                f"Finding '{finding.finding_name}': report_text is not a substring of the "
+                f"target chunk. You provided: \"{_truncate(finding.report_text)}\""
+            )
     return errors
 
 

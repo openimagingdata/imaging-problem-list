@@ -129,8 +129,8 @@ class TestFormatExamples:
     def test_format_contains_json(self):
         examples = load_examples()
         formatted = format_examples(examples)
-        assert '"input_report"' in formatted
-        assert '"output"' in formatted
+        assert "Input report:" in formatted
+        assert "ExtractedReportFindings JSON" in formatted
 
 
 class TestBuildSystemPrompt:
