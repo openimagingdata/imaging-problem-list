@@ -18,7 +18,11 @@ from finding_extractor.coding.types import (
     LocationCodeSelection,
     LocationTermsBatchOutput,
 )
-from finding_extractor.llm.resilience import AgentModelRuntime, build_resilient_model
+from finding_extractor.llm.resilience import (
+    AgentModelRuntime,
+    build_resilient_model,
+    resolve_output_type,
+)
 
 
 def build_coding_model_runtime(
@@ -49,7 +53,7 @@ def create_finding_term_agent(
         Agent(
             r.model,
             instructions=FINDING_TERM_SYSTEM,
-            output_type=FindingTermsBatchOutput,
+            output_type=resolve_output_type(FindingTermsBatchOutput, r.model_name, r.fallback_model_name),
             model_settings=r.model_settings,
             output_retries=2,
             name="finding_term_generator",
@@ -68,7 +72,7 @@ def create_location_term_agent(
         Agent(
             r.model,
             instructions=LOCATION_TERM_SYSTEM,
-            output_type=LocationTermsBatchOutput,
+            output_type=resolve_output_type(LocationTermsBatchOutput, r.model_name, r.fallback_model_name),
             model_settings=r.model_settings,
             output_retries=2,
             name="location_term_generator",
@@ -82,7 +86,7 @@ def create_finding_selector_agent(runtime: AgentModelRuntime) -> Agent[None, Fin
         Agent(
             runtime.model,
             instructions=FINDING_CODE_SELECTOR_SYSTEM,
-            output_type=FindingCodeSelection,
+            output_type=resolve_output_type(FindingCodeSelection, runtime.model_name, runtime.fallback_model_name),
             model_settings=runtime.model_settings,
             output_retries=2,
             name="finding_code_selector",
@@ -96,7 +100,7 @@ def create_location_selector_agent(runtime: AgentModelRuntime) -> Agent[None, Lo
         Agent(
             runtime.model,
             instructions=LOCATION_CODE_SELECTOR_SYSTEM,
-            output_type=LocationCodeSelection,
+            output_type=resolve_output_type(LocationCodeSelection, runtime.model_name, runtime.fallback_model_name),
             model_settings=runtime.model_settings,
             output_retries=2,
             name="location_code_selector",

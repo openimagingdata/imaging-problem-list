@@ -2,6 +2,7 @@
 
 import pytest
 
+from finding_extractor.llm.model_settings import ollama_needs_native_output
 from finding_extractor.llm.policy import validate_model_id
 
 
@@ -47,3 +48,54 @@ def test_validate_model_id_accepts_openrouter_openai_model():
 def test_validate_model_id_rejects_bad_format():
     with pytest.raises(ValueError, match="model must use"):
         validate_model_id("gpt-5-mini")
+
+
+# ---------------------------------------------------------------------------
+# ollama_needs_native_output
+# ---------------------------------------------------------------------------
+
+
+class TestOllamaNeedsNativeOutput:
+    """Detect which Ollama families need NativeOutput mode."""
+
+    def test_non_ollama_models_never_need_native(self):
+        assert ollama_needs_native_output("openai:gpt-5.2") is False
+        assert ollama_needs_native_output("anthropic:claude-opus-4-6") is False
+        assert ollama_needs_native_output("google-gla:gemini-3-flash-preview") is False
+
+    def test_gpt_oss_uses_tools(self):
+        assert ollama_needs_native_output("ollama:gpt-oss:120b") is False
+        assert ollama_needs_native_output("ollama:gpt-oss:20b") is False
+
+    def test_llama_uses_tools(self):
+        assert ollama_needs_native_output("ollama:llama3.3:latest") is False
+        assert ollama_needs_native_output("ollama:llama4:latest") is False
+
+    def test_qwen_uses_tools(self):
+        assert ollama_needs_native_output("ollama:qwen3:30b-instruct") is False
+        assert ollama_needs_native_output("ollama:qwen3.5:27b") is False
+        assert ollama_needs_native_output("ollama:qwen3.5:35b-a3b-mlx-bf16") is False
+
+    def test_nemotron_uses_tools(self):
+        assert ollama_needs_native_output("ollama:nemotron-3-super:120b") is False
+
+    def test_gemma4_needs_native(self):
+        assert ollama_needs_native_output("ollama:gemma4:26b") is True
+        assert ollama_needs_native_output("ollama:gemma4:31b") is True
+
+    def test_gemma3_needs_native(self):
+        assert ollama_needs_native_output("ollama:gemma3:27b") is True
+
+    def test_deepseek_needs_native(self):
+        assert ollama_needs_native_output("ollama:deepseek-r1:70b") is True
+        assert ollama_needs_native_output("ollama:deepseek-r1:32b") is True
+
+    def test_medgemma_needs_native(self):
+        assert ollama_needs_native_output("ollama:MedAIBase/MedGemma1.0:27b") is True
+        assert ollama_needs_native_output("ollama:alibayram/medgemma:27b") is True
+
+    def test_custom_modelfile_names_need_native(self):
+        assert ollama_needs_native_output("ollama:gemma4-radextract") is True
+
+    def test_unknown_ollama_family_conservative_default(self):
+        assert ollama_needs_native_output("ollama:some-unknown-model:7b") is True

@@ -276,6 +276,34 @@ def _openai_supported_reasoning_for_model(model: str) -> set[str] | None:
     return None
 
 
+def ollama_needs_native_output(model_name: str) -> bool:
+    """Return True if this Ollama model needs PydanticAI's NativeOutput mode.
+
+    Some Ollama model families don't handle tool-calling reliably (empty
+    responses, text-instead-of-tool-call, or Ollama rejecting tools entirely).
+    For these models, PydanticAI's ``NativeOutput`` (JSON schema mode) works.
+
+    Returns False for non-Ollama models.
+    """
+    provider = provider_from_model_id(model_name)
+    if provider != "ollama":
+        return False
+    if ":" not in model_name:
+        return True  # unknown Ollama model — conservative default
+    _, raw_model_id = model_name.split(":", maxsplit=1)
+    lowered = raw_model_id.lower()
+
+    # Families known to work with tool calling
+    tool_capable_prefixes = (
+        "gpt-oss",
+        "llama3", "llama4",
+        "qwen3", "qwen3.5",
+        "nemotron",
+    )
+    # Everything else (gemma3, gemma4 MoE, deepseek-r1, medgemma, unknown) — use native
+    return all(not lowered.startswith(prefix) for prefix in tool_capable_prefixes)
+
+
 def _ollama_supported_reasoning_for_model(model: str) -> set[str] | None:
     """Return supported reasoning levels for known Ollama model families."""
     if ":" not in model:

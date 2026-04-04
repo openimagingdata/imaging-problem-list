@@ -34,6 +34,8 @@ class AgentModelRuntime:
 
     model: Model
     model_settings: ModelSettings | None
+    model_name: str = ""
+    fallback_model_name: str | None = None
 
 
 class PinnedModelSettingsModel(WrapperModel):
@@ -202,6 +204,29 @@ def _wrap_with_provider_concurrency(
     return ProviderConcurrencyLimitedModel(model, limiter=limiter)
 
 
+def resolve_output_type(
+    output_type: Any,
+    model_name: str,
+    fallback_model_name: str | None = None,
+) -> Any:
+    """Wrap output_type in NativeOutput if any configured Ollama model needs it.
+
+    When primary and fallback use different output modes (e.g. gpt-oss with tools +
+    gemma4 needing native), bias to native — native output works for all models,
+    while tool mode doesn't.
+    """
+    from finding_extractor.llm.model_settings import ollama_needs_native_output
+
+    needs_native = ollama_needs_native_output(model_name)
+    if fallback_model_name and not needs_native:
+        needs_native = ollama_needs_native_output(fallback_model_name)
+    if needs_native:
+        from pydantic_ai import NativeOutput
+
+        return NativeOutput(output_type)
+    return output_type
+
+
 def build_resilient_model(
     model_name: str,
     *,
@@ -220,6 +245,8 @@ def build_resilient_model(
         return AgentModelRuntime(
             model=primary_model,
             model_settings=primary_model_settings,
+            model_name=model_name,
+            fallback_model_name=None,
         )
 
     fallback_model_settings = get_model_settings(fallback_model_name, reasoning)
@@ -233,7 +260,12 @@ def build_resilient_model(
         PinnedModelSettingsModel(fallback_model, fallback_model_settings),
         fallback_on=should_fallback_on_exception,
     )
-    return AgentModelRuntime(model=model_stack, model_settings=None)
+    return AgentModelRuntime(
+        model=model_stack,
+        model_settings=None,
+        model_name=model_name,
+        fallback_model_name=fallback_model_name,
+    )
 
 
 def create_resilient_agent(
@@ -247,23 +279,25 @@ def create_resilient_agent(
 ) -> Agent[Any, Any]:
     """Create an Agent with shared fallback/concurrency runtime wiring."""
     settings = get_settings()
+    fallback = settings.fallback_model
     runtime = build_resilient_model(
         model_name,
         reasoning=reasoning,
-        fallback_model_name=settings.fallback_model,
+        fallback_model_name=fallback,
     )
+    resolved_output = resolve_output_type(output_type, model_name, fallback)
     if deps_type is None:
         return Agent(
             runtime.model,
             instructions=instructions,
-            output_type=output_type,
+            output_type=resolved_output,
             output_retries=output_retries,
             model_settings=runtime.model_settings,
         )
     return Agent(
         runtime.model,
         instructions=instructions,
-        output_type=output_type,
+        output_type=resolved_output,
         deps_type=deps_type,
         output_retries=output_retries,
         model_settings=runtime.model_settings,
