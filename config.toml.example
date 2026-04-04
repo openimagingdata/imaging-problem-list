@@ -34,6 +34,17 @@ eval_dataset_dir = "evals/datasets"
 log_level = "WARNING"
 log_json = false
 
+# --- Local Ollama configuration ---
+# For local Ollama extraction, uncomment and adjust these settings:
+# default_model = "ollama:gpt-oss:20b"
+# fallback_model = "ollama:gpt-oss:20b"
+# reviewer_model = "ollama:gpt-oss:120b"
+# subagent_timeout_seconds = 300
+# extractor_max_subagent_concurrency = 1
+# allow_unknown_model_reasoning = true
+# Note: also set OLLAMA_BASE_URL=http://localhost:11434/v1 in .env
+# Note: set OLLAMA_MAX_LOADED_MODELS=4 in your environment for multi-model runs
+
 logfire_enabled = false
 logfire_send = "auto"
 logfire_service_name = "finding-extractor"

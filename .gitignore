@@ -139,6 +139,7 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
 .envrc
 .venv
 env/
@@ -218,6 +219,7 @@ node_modules
 # Eval run results (generated, not committed)
 evals/runs/
 .eval_runs/
+eval_ollama_run/
 
 extracts/
 

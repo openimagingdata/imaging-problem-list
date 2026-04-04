@@ -60,9 +60,9 @@ uv run finding-extractor report.txt -m google-gla:gemini-3.1-pro-preview
 uv run finding-extractor report.txt -m openrouter:meta-llama/llama-3.1-70b
 
 # Local Ollama (see Ollama setup below)
-uv run finding-extractor report.txt -m ollama:qwen3:30b-instruct
-uv run finding-extractor report.txt -m ollama:qwen3:30b-thinking --reasoning low
+uv run finding-extractor report.txt -m ollama:gpt-oss:20b
 uv run finding-extractor report.txt -m ollama:gpt-oss:120b --reasoning medium
+uv run finding-extractor report.txt -m ollama:gemma4-radextract
 ```
 
 ### Ollama Setup
@@ -71,17 +71,30 @@ Ollama runs models locally without API keys. You must:
 
 1. **Install and start Ollama:** Follow [ollama.com](https://ollama.com)
 2. **Pull model(s):**
-   - `ollama pull qwen3:30b-instruct`
-   - `ollama pull qwen3:30b-thinking`
-   - `ollama pull gpt-oss:120b`
-3. **Set base URL:** `export OLLAMA_BASE_URL=http://localhost:11434`
+   - `ollama pull gpt-oss:120b` — fast (MXFP4), recommended
+   - `ollama pull gpt-oss:20b` — fast, lightweight
+   - `ollama pull gemma4:26b` — for custom Modelfile builds (see `ollama/README.md`)
+   - `ollama pull nemotron-3-super:120b` — MoE, good quality
+   - `ollama pull qwen3.5:27b` — general-purpose
+3. **Set base URL:** Add `OLLAMA_BASE_URL=http://localhost:11434/v1` to your `.env`
+4. **For multi-model runs** (extraction + reviewer): `export OLLAMA_MAX_LOADED_MODELS=4`
 
-The `OLLAMA_BASE_URL` environment variable is required — Ollama uses an OpenAI-compatible API, and PydanticAI needs to know where to find it.
+See `config.toml.example` for recommended local Ollama settings (timeout, concurrency, model selection).
 
 ```bash
-export OLLAMA_BASE_URL=http://localhost:11434
-uv run finding-extractor report.txt -m ollama:qwen3:30b-instruct
+# Add to .env:
+OLLAMA_BASE_URL=http://localhost:11434/v1
+
+uv run finding-extractor report.txt -m ollama:gpt-oss:20b
 ```
+
+#### NativeOutput for models without tool support
+
+Some Ollama model families (gemma4 MoE, gemma3, deepseek-r1, MedGemma) don't support PydanticAI's tool-calling protocol. The extractor automatically detects these and uses PydanticAI's `NativeOutput` (JSON schema mode) instead. No manual configuration needed.
+
+#### Custom Modelfiles
+
+For models that benefit from conservative decoding (low temperature, fixed seed), custom Modelfiles are available in `ollama/`. See `ollama/README.md` for build instructions.
 
 ## Reasoning / Thinking Level
 
@@ -97,9 +110,11 @@ Levels: `none`, `minimal`, `low`, `medium`, `high`
 Reasoning defaults are provider-specific (`openai=medium`, `anthropic=medium`, `google=low`, `openrouter=medium`, `ollama=none`). You can override with `--reasoning` or `IPL_REASONING`.
 
 For Ollama, reasoning is model-specific:
+- `ollama:gpt-oss:120b`: `none|low|medium|high` (`minimal` normalizes to `low`)
+- `ollama:qwen3.5:27b`: `none` (default)
+- `ollama:nemotron-3-super:120b`: `none` (default)
 - `ollama:qwen3:30b-thinking`: `none|minimal|low|medium|high` (mapped to `think=false|true`)
 - `ollama:qwen3:30b-instruct`: `none` only
-- `ollama:gpt-oss:120b`: `none|low|medium|high` (`minimal` normalizes to `low`)
 
 Configuration details (env vars, `config.toml`, precedence, and secrets policy):
 - `docs/configuration.md`

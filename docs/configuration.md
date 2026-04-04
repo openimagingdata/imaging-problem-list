@@ -107,7 +107,16 @@ These are intentionally not `IPL_`-prefixed and are env-only:
 
 Ollama runs models locally without API keys. Set the base URL to connect:
 
-- `OLLAMA_BASE_URL` — Ollama server URL (default: `http://localhost:11434`)
+- `OLLAMA_BASE_URL` — Ollama server URL. Add to `.env`: `OLLAMA_BASE_URL=http://localhost:11434/v1`
+- `OLLAMA_MAX_LOADED_MODELS` — Set to 4+ for multi-model runs (extraction + reviewer). This is an Ollama server env var, not an app setting.
+
+#### NativeOutput auto-detection
+
+Some Ollama model families (gemma4 MoE, gemma3, deepseek-r1, MedGemma) can't use PydanticAI's tool-calling protocol. The extractor auto-detects these and uses `NativeOutput` (JSON schema mode). Tool-capable families (gpt-oss, llama3/4, qwen3/3.5, nemotron) use the default tool mode. See `ollama_needs_native_output()` in `src/finding_extractor/llm/model_settings.py`.
+
+#### Recommended local config
+
+See `config.toml.example` for Ollama-specific settings (timeout, concurrency, model selection). Custom Modelfiles with extraction-optimized defaults are in `ollama/`.
 
 See `docs/extraction-usage.md` for Ollama setup instructions.
 

@@ -4,6 +4,40 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-04-04 — Local Ollama model support
+
+Evaluated local Ollama models for extraction and added proper support for models
+that can't use PydanticAI's tool-calling protocol.
+
+Key changes:
+
+1. **Chunk prompt fixes**: Few-shot examples now render as validated Pydantic JSON
+   matching the actual schema (was using non-existent field names). Added explicit
+   allowed values for enums. Clarified `report_text` field semantics.
+
+2. **NativeOutput auto-detection**: Models like gemma4 MoE, gemma3, deepseek-r1,
+   and MedGemma need PydanticAI's `NativeOutput` (JSON schema mode) instead of
+   tool calling. `ollama_needs_native_output()` detects these per-family, and
+   `resolve_output_type()` wraps output types automatically in both extraction and
+   coding agents.
+
+3. **Verbatim validation**: Now case/markdown/punctuation-forgiving. Retry error
+   messages name the field and show what was provided.
+
+4. **Concurrency fix**: Exam-info sub-agent shares the chunk semaphore so Ollama
+   doesn't get concurrent requests.
+
+5. **Custom Modelfiles**: `ollama/` directory with extraction-optimized configs
+   (low temperature, fixed seed, extraction system prompt).
+
+Tested: gpt-oss:120b (MXFP4, ~72 tok/s), gpt-oss:20b, nemotron-3-super:120b,
+gemma4:31b, gemma4:26b (via NativeOutput), qwen3.5:27b, llama3.3. All produce
+clinically reasonable extractions. gpt-oss models are fastest on Apple Silicon.
+
+Plan: `docs/plans/ollama-local-model-support.md`
+
+---
+
 ## 2026-03-18 — Fix TaskIQ worker registration for coding jobs
 
 Fixed the real worker process command so TaskIQ loads both
