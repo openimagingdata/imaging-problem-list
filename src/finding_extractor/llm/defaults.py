@@ -11,6 +11,9 @@ MODEL_ANTHROPIC_CLAUDE_OPUS_4_6 = "anthropic:claude-opus-4-6"
 MODEL_OLLAMA_QWEN3_30B_INSTRUCT = "ollama:qwen3:30b-instruct"
 MODEL_OLLAMA_QWEN3_30B_THINKING = "ollama:qwen3:30b-thinking"
 MODEL_OLLAMA_GPT_OSS_120B = "ollama:gpt-oss:120b"
+MODEL_OLLAMA_QWEN35_35B_A3B = "ollama:qwen3.5:35b-a3b"
+MODEL_OLLAMA_QWEN35_27B = "ollama:qwen3.5:27b"
+MODEL_OLLAMA_QWEN35_9B = "ollama:qwen3.5:9b"
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,9 +52,24 @@ COMMON_MODELS: tuple[CommonModel, ...] = (
         role="Google fast low-cost option",
     ),
     CommonModel(
+        model=MODEL_OLLAMA_QWEN35_35B_A3B,
+        recommended_reasoning="none",
+        role="local default (fast MoE, 23GB)",
+    ),
+    CommonModel(
+        model=MODEL_OLLAMA_QWEN35_9B,
+        recommended_reasoning="none",
+        role="local ultralight (6GB)",
+    ),
+    CommonModel(
+        model=MODEL_OLLAMA_QWEN35_27B,
+        recommended_reasoning="none",
+        role="local quality option (17GB)",
+    ),
+    CommonModel(
         model=MODEL_OLLAMA_QWEN3_30B_INSTRUCT,
         recommended_reasoning="none",
-        role="local baseline",
+        role="local Qwen3 baseline",
     ),
     CommonModel(
         model=MODEL_OLLAMA_QWEN3_30B_THINKING,

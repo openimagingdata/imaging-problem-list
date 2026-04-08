@@ -4,6 +4,30 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-04-08 — Qwen3.5 thinking-mode fix and model evaluation
+
+Qwen3.5 models were appearing to hang during extraction — the root cause was that
+Qwen3.5 thinks by default, sending output as reasoning tokens (invisible to PydanticAI's
+tool-calling protocol) instead of content. Fixed by sending `reasoning_effort: "none"`
+via the OpenAI-compatible API.
+
+With the fix, Qwen3.5 Q4_K_M models now outperform gpt-oss:
+
+- **qwen3.5:35b-a3b** (23GB): ~12s/chunk, 41 findings on CT abdomen — new recommended default
+- **qwen3.5:9b** (6GB): ~11s/chunk, 42 findings — ultralight option
+- **qwen3.5:27b** (17GB): ~28s/chunk, 45 findings — most thorough extraction
+- gpt-oss:120b (86GB): ~16s/chunk, 38 findings — prior default
+
+Also tested MLX-bf16 variants (27b, 9b, 35b-a3b) — all impractical due to memory
+bandwidth bottleneck at full bf16 precision.
+
+Changes: `model_settings.py` — `build_ollama_settings()` and
+`_ollama_supported_reasoning_for_model()` now handle Qwen3.5.
+
+Report: `docs/eval-ollama-models-report.md`
+
+---
+
 ## 2026-04-04 — Local Ollama model support
 
 Evaluated local Ollama models for extraction and added proper support for models

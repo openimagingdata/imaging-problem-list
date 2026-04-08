@@ -1,41 +1,57 @@
 # Local Ollama Model Extraction Evaluation
 
-**Date:** 2026-04-03
+**Date:** 2026-04-03 (updated 2026-04-08)
 **Hardware:** Mac Studio M3 Ultra, 192GB unified memory
-**Ollama version:** 0.20.0
+**Ollama version:** 0.20.0 (updated 0.20.3)
 
 ## Summary
 
-We evaluated local Ollama models for radiology report finding extraction using the IPL extractor pipeline. **gpt-oss:120b (MXFP4) and gpt-oss:20b (MXFP4) are the recommended local models.** Both produce high-quality extractions at high speed with 100% reliability across all test reports.
+We evaluated local Ollama models for radiology report finding extraction using the IPL extractor pipeline. **Qwen3.5 models (Q4_K_M quantization) are now the recommended local models**, outperforming gpt-oss in both extraction quality and memory efficiency after fixing a critical thinking-mode compatibility issue.
 
 ## Models Tested
 
 | Model | Params | Quant | Tool Support | Extraction Quality | Speed | Verdict |
 |---|---|---|---|---|---|---|
-| gpt-oss:120b | 120B | MXFP4 | yes | Excellent | ~72 tok/s | **Recommended** |
-| gpt-oss:20b | 20B | MXFP4 | yes | Very good | ~65 tok/s | **Recommended (lightweight)** |
+| **qwen3.5:35b-a3b** | **35B (3B active)** | **Q4_K_M** | **yes** | **Excellent** | **~12s/chunk** | **Recommended** |
+| **qwen3.5:9b** | **9B** | **Q4_K_M** | **yes** | **Excellent** | **~11s/chunk** | **Recommended (lightweight)** |
+| **qwen3.5:27b** | **27B** | **Q4_K_M** | **yes** | **Excellent** | **~28s/chunk** | **Recommended (quality)** |
+| gpt-oss:120b | 120B | MXFP4 | yes | Excellent | ~16s/chunk | Good, but 86GB footprint |
+| gpt-oss:20b | 20B | MXFP4 | yes | Very good | ~14.5s/chunk | Good lightweight option |
 | nemotron-3-super:120b | 120B (12B active) | Q4_K_M | yes | Excellent | ~35 tok/s | Viable but slower |
-| qwen3.5:27b-mlx-bf16 | 27B | MLX bf16 | yes | Good | ~12 tok/s | Too slow, timeouts |
-| qwen3.5:35b-a3b | 35B (3B active) | Q4_K_M | yes | Good | ~40 tok/s | Viable MoE option |
+| qwen3.5:27b-mlx-bf16 | 27B | MLX bf16 | yes | Good | ~82s/chunk | Too slow for practical use |
+| qwen3.5:35b-a3b-mlx-bf16 | 35B (3B active) | MLX bf16 | yes | Not tested | >240s/chunk | Impractical |
+| qwen3.5:9b-mlx-bf16 | 9B | MLX bf16 | yes | Fair | ~20s/chunk | 40% chunk timeout rate |
 | gemma4:31b | 31B | Q4_K_M | yes | Good | ~23 tok/s | Slow on this hardware |
 | llama3.3 | 70B | Q4_K_M | yes | Good | ~17 tok/s | Slow on this hardware |
 | deepseek-r1:70b/32b | 70B/32B | Q4_K_M | **no** | Not tested | N/A | No tool support in Ollama |
 | gemma3:27b | 27B | Q4_K_M | **no** | Not tested | N/A | No tool support in Ollama |
 | MedGemma variants | 27B | various | **no** | Not tested | N/A | No tool support; NativeOutput works |
 
-## Speed: MXFP4 Dominates on Apple Silicon
+## Speed Comparison
 
-The MXFP4 quantization format used by gpt-oss models runs dramatically faster than Q4_K_M on Apple Silicon M3 Ultra. This is the single biggest factor in model selection for local use.
+### Qwen3.5 Q4_K_M vs gpt-oss MXFP4 (CT Abdomen, 10 chunks)
 
-**Ollama raw eval rates (tok/s):**
-- gpt-oss:120b (MXFP4): 72 tok/s
-- gpt-oss:20b (MXFP4): ~65 tok/s (estimated)
-- nemotron-3-super:120b (Q4_K_M): 35 tok/s
-- gemma4:31b (Q4_K_M): 23 tok/s
-- qwen3.5:27b (Q4_K_M): 19 tok/s
-- llama3.3 (Q4_K_M): 17 tok/s
+| Model | Quant | Size | Avg chunk | Total | Findings |
+|---|---|---|---|---|---|
+| qwen3.5:35b-a3b | Q4_K_M | 23GB | ~12s | ~2.5 min | 41 |
+| qwen3.5:9b | Q4_K_M | 6GB | ~11s | ~2.5 min | 42 |
+| gpt-oss:120b | MXFP4 | 86GB | ~16s | ~2.6 min | 38 |
+| qwen3.5:27b | Q4_K_M | 17GB | ~28s | ~5.1 min | 45 |
+| gpt-oss:20b | MXFP4 | 86GB | ~14.5s | ~2.2 min | 34 |
 
-## Per-Report Timing (Full Pipeline)
+The Qwen3.5 MoE (35b-a3b) and 9b models match or beat gpt-oss:120b on speed while using a fraction of the memory. The 27b dense model is slower but extracts the most findings.
+
+### MLX-bf16 Variants (Not Recommended)
+
+MLX-bf16 models run at full 16-bit precision but are bottlenecked by memory bandwidth:
+
+| Model | Size | Avg chunk | Reliability |
+|---|---|---|---|
+| qwen3.5:27b-mlx-bf16 | 54GB | ~82s | 100% (very slow) |
+| qwen3.5:9b-mlx-bf16 | 18GB | ~20s | ~60% (frequent hangs) |
+| qwen3.5:35b-a3b-mlx-bf16 | 70GB | >240s | Impractical |
+
+### gpt-oss Per-Report Timing (Full Pipeline, from 2026-04-03)
 
 Reports tested from `sample_data/example2/`:
 
@@ -54,10 +70,11 @@ Average chunk time: gpt-oss:120b ~16s/chunk, gpt-oss:20b ~14.5s/chunk.
 
 ### Reliability
 
-Both gpt-oss models achieved **10/10 successful extractions** (5 reports x 2 models). No timeouts, no schema failures, no retries needed for schema compliance.
+All three Qwen3.5 Q4_K_M models achieved **10/10 successful chunks** on CT abdomen with the `reasoning_effort` fix. The 9b model needed more retries (5 across the run) but completed everything. Both gpt-oss models also achieved 10/10 across 5 reports.
 
-Other models had issues:
-- qwen3.5:27b-mlx-bf16: timed out on CT abdomen chunk (>300s)
+Historical issues (resolved):
+- qwen3.5 models initially appeared broken — **all hangs were caused by Qwen3.5's default thinking mode**, not model quality (see "Qwen3.5 Thinking Mode Fix" below)
+- qwen3.5:27b-mlx-bf16: too slow at bf16 precision (~82s/chunk)
 - Earlier runs (before prompt fixes): gpt-oss:120b failed 3/5 reports due to schema confusion from mismatched few-shot examples
 
 ### Quality Comparison: gpt-oss:120b vs gpt-oss:20b
@@ -125,13 +142,30 @@ Several Ollama model families (gemma4 MoE, gemma3, deepseek-r1, MedGemma) can't 
 
 When primary and fallback models have different output mode requirements, the system biases to native output (which works for all models).
 
+## Qwen3.5 Thinking Mode Fix (2026-04-08)
+
+Qwen3.5 models think by default — unlike Qwen3 (which had separate `-instruct` and `-thinking` tags), Qwen3.5 always emits reasoning tokens before responding. On Ollama's OpenAI-compatible API (`/v1/chat/completions`), these tokens go into the `reasoning` field, leaving `content` empty. This causes:
+
+- Tool-calling responses with empty content → infinite retries → timeouts
+- The model appears "stuck" but is actually generating reasoning tokens that PydanticAI can't see
+
+**Fix:** Send `reasoning_effort: "none"` via the OpenAI-compatible API. This is implemented in `build_ollama_settings()` in `model_settings.py`, which sets `openai_reasoning_effort` for all Qwen3.5 models. Higher reasoning levels (`low`, `medium`, `high`) are also supported.
+
+Key details:
+- The native Ollama API (`/api/chat`) uses `"think": false` — but PydanticAI uses the OpenAI-compatible endpoint
+- The OpenAI-compatible endpoint ignores `"think"` and `extra_body.think` — only `reasoning_effort` works
+- Qwen3's `/nothink` token does not work with Qwen3.5
+- `_ollama_supported_reasoning_for_model()` now recognizes `qwen3.5` as supporting `none/low/medium/high`
+
 ## Recommendations
 
-1. **Use gpt-oss:120b as the default local extraction model** — best quality, fast, reliable
-2. **Use gpt-oss:20b as the lightweight/reviewer option** — nearly identical quality, slightly faster
-3. **NativeOutput auto-detection is implemented** — models without tool support (gemma4 MoE, gemma3, deepseek-r1, MedGemma) are automatically detected and use JSON schema mode
-4. **Custom Modelfiles** in `ollama/` provide extraction-optimized defaults for gemma4 variants
-5. **Monitor MXFP4 availability** — as more models ship MXFP4 quantizations, they become viable local options
+1. **Use qwen3.5:35b-a3b (Q4_K_M) as the default local extraction model** — fastest, excellent quality, only 23GB memory
+2. **Use qwen3.5:9b (Q4_K_M) as the ultralight option** — 6GB footprint, competitive speed/quality, more retries needed
+3. **Use qwen3.5:27b (Q4_K_M) for maximum extraction thoroughness** — extracts the most findings, 2x slower
+4. **gpt-oss:120b remains a solid option** if already downloaded — reliable, well-tested
+5. **Avoid MLX-bf16 variants** — memory bandwidth bottleneck makes them 3-15x slower than Q4_K_M
+6. **NativeOutput auto-detection is implemented** — models without tool support (gemma4 MoE, gemma3, deepseek-r1, MedGemma) are automatically detected and use JSON schema mode
+7. **Custom Modelfiles** in `ollama/` provide extraction-optimized defaults for gemma4 variants
 
 ## Logfire
 

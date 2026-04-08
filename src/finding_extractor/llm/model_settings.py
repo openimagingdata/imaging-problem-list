@@ -37,7 +37,7 @@ from finding_extractor.core.config import get_settings
 from finding_extractor.llm.defaults import (
     MODEL_ANTHROPIC_CLAUDE_OPUS_4_6,
     MODEL_GOOGLE_GEMINI_3_FLASH_PREVIEW,
-    MODEL_OLLAMA_QWEN3_30B_INSTRUCT,
+    MODEL_OLLAMA_QWEN35_35B_A3B,
     MODEL_OPENAI_GPT_5_2,
 )
 from finding_extractor.llm.policy import (
@@ -137,9 +137,9 @@ EXTRACTION_PRESETS: dict[str, ExtractionPreset] = {
     ),
     "local": ExtractionPreset(
         name="local",
-        model=MODEL_OLLAMA_QWEN3_30B_INSTRUCT,
+        model=MODEL_OLLAMA_QWEN35_35B_A3B,
         reasoning="none",
-        description="Local baseline (Qwen3 30b Instruct), no API keys needed",
+        description="Local default (Qwen3.5 35b MoE, 23GB), no API keys needed",
     ),
 }
 
@@ -310,6 +310,9 @@ def _ollama_supported_reasoning_for_model(model: str) -> set[str] | None:
         return None
     _, raw_model_id = model.split(":", maxsplit=1)
     lowered = raw_model_id.lower()
+    if lowered.startswith("qwen3.5"):
+        # Qwen3.5 thinks by default; reasoning_effort controls it via OpenAI-compat API
+        return {"none", "low", "medium", "high"}
     if lowered.startswith("qwen3:30b") and "thinking" in lowered:
         return set(VALID_REASONING_LEVELS)
     if lowered.startswith("qwen3:30b") and "instruct" in lowered:
@@ -485,12 +488,24 @@ def build_openrouter_settings(reasoning_level: str) -> OpenRouterModelSettings:
 
 
 def build_ollama_settings(model: str, reasoning_level: str) -> OpenAIChatModelSettings | None:
-    """Build Ollama settings using model-specific ``extra_body.think`` support."""
+    """Build Ollama settings using model-specific thinking support.
+
+    Qwen3.5 thinks by default; uses ``reasoning_effort`` on the OpenAI-compat API
+    to control or disable thinking.  Qwen3 and gpt-oss use ``extra_body.think``.
+    """
     if ":" not in model:
         return None
 
     _, raw_model_id = model.split(":", maxsplit=1)
     lowered = raw_model_id.lower()
+
+    if lowered.startswith("qwen3.5"):
+        # Qwen3.5 thinks by default — must explicitly set reasoning_effort
+        # to "none" to disable, or to "low"/"medium"/"high" to control level.
+        effort = "none" if reasoning_level == "none" else reasoning_level
+        if effort == "minimal":
+            effort = "low"
+        return OpenAIChatModelSettings(openai_reasoning_effort=effort)  # type: ignore[typeddict-item]
 
     if lowered.startswith("qwen3:30b") and "thinking" in lowered:
         return OpenAIChatModelSettings(extra_body={"think": reasoning_level != "none"})
