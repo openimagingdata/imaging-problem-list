@@ -212,33 +212,71 @@ def build_prompt(report_text: str, study_description: str | None = None) -> str:
     return "\n".join(prompt_parts)
 
 
+def format_exam_context(exam_info: ExamInfo | None, study_description: str | None = None) -> str | None:
+    """Build a concise exam context string from ExamInfo for chunk prompts."""
+    if exam_info is None and not study_description:
+        return None
+    if exam_info is None:
+        return study_description
+
+    parts = []
+    if exam_info.modality:
+        parts.append(exam_info.modality)
+    if exam_info.body_part:
+        part = exam_info.body_part
+        if exam_info.laterality:
+            part = f"{exam_info.laterality} {part}"
+        parts.append(part)
+    elif exam_info.body_region:
+        region = exam_info.body_region
+        if exam_info.laterality:
+            region = f"{exam_info.laterality} {region}"
+        parts.append(region)
+    if exam_info.contrast:
+        parts.append(f"{exam_info.contrast} contrast")
+
+    if parts:
+        return ", ".join(parts)
+    return exam_info.study_description or study_description
+
+
 def build_chunk_prompt(
     *,
     chunk_text: str,
     section_name: str,
     study_description: str | None = None,
+    exam_context: str | None = None,
     preceding_chunk_context: str | None = None,
     following_chunk_context: str | None = None,
     feedback: str | None = None,
 ) -> str:
     """Build the user prompt for chunk-scoped extraction."""
     prompt_parts = []
-    if study_description:
-        prompt_parts.append(f"Exam Description: {study_description}")
-        prompt_parts.append("")
 
-    prompt_parts.append(f"Section: {section_name}")
-    if preceding_chunk_context:
-        prompt_parts.append(f"Context before (reference-only): {preceding_chunk_context}")
-    if following_chunk_context:
-        prompt_parts.append(f"Context after (reference-only): {following_chunk_context}")
+    # Lead with the task and target chunk — the most important content first
+    exam_note = exam_context or study_description
+    header = f"Extract findings from this chunk of a radiology report (section: {section_name})."
+    if exam_note:
+        header += f"\nExam: {exam_note}"
+    prompt_parts.append(header)
     prompt_parts.append("")
     prompt_parts.append("TARGET CHUNK:")
-    prompt_parts.append("-" * 40)
+    prompt_parts.append("=" * 40)
     prompt_parts.append(chunk_text)
-    prompt_parts.append("-" * 40)
-    prompt_parts.append("")
-    prompt_parts.append("Extract findings only from TARGET CHUNK.")
+    prompt_parts.append("=" * 40)
+
+    # Context after the target chunk, clearly separated
+    if preceding_chunk_context or following_chunk_context:
+        prompt_parts.append("")
+        prompt_parts.append(
+            "CONTEXT (reference only \u2014 do NOT extract findings from context):"
+        )
+        prompt_parts.append("")
+        prompt_parts.append("--- text before target chunk ---")
+        prompt_parts.append(preceding_chunk_context or "(none)")
+        prompt_parts.append("")
+        prompt_parts.append("--- text after target chunk ---")
+        prompt_parts.append(following_chunk_context or "(none)")
 
     if feedback:
         prompt_parts.append("")
@@ -300,6 +338,7 @@ async def extract_chunk(
     *,
     section_name: str,
     study_description: str | None = None,
+    exam_context: str | None = None,
     model: str | None = None,
     reasoning: str | None = None,
     preceding_chunk_context: str | None = None,
@@ -315,6 +354,7 @@ async def extract_chunk(
         chunk_text=report_text,
         section_name=section_name,
         study_description=study_description,
+        exam_context=exam_context,
         preceding_chunk_context=preceding_chunk_context,
         following_chunk_context=following_chunk_context,
         feedback=feedback,
@@ -340,6 +380,7 @@ async def extract_chunk_findings(
     reasoning: str | None = None,
     *,
     section_name: str = "findings",
+    exam_context: str | None = None,
     preceding_chunk_context: str | None = None,
     following_chunk_context: str | None = None,
     feedback: str | None = None,
@@ -350,6 +391,7 @@ async def extract_chunk_findings(
         report_text=report_text,
         section_name=section_name,
         study_description=study_description,
+        exam_context=exam_context,
         model=model,
         reasoning=reasoning,
         preceding_chunk_context=preceding_chunk_context,

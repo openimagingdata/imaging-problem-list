@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import asyncio
-import contextlib
 
 from finding_extractor.core.observability import observation_span
 from finding_extractor.extractor.chunking import ChunkingSettings
@@ -29,6 +28,25 @@ from .types import (
     ReviewChunksFn,
     ValidateExtractionFn,
 )
+
+
+async def _run_exam_info_with_span(
+    extract_exam_info_fn: ExtractExamInfoFn,
+    *,
+    report_text: str,
+    study_description: str | None,
+    source_ref: str | None,
+    external_metadata: dict[str, str] | None,
+    model_name: str,
+) -> ExamInfo:
+    """Run exam_info extraction inside an observation span."""
+    with observation_span("extraction.exam_info", model_name=model_name):
+        return await extract_exam_info_fn(
+            report_text=report_text,
+            study_description=study_description,
+            source_ref=source_ref,
+            external_metadata=external_metadata,
+        )
 
 
 async def _resolve_exam_info(
@@ -78,8 +96,9 @@ async def _run_chunk_pipeline(
     *,
     chunk: ReportChunk,
     semaphore: asyncio.Semaphore,
-    exam_info_future: asyncio.Task[ExamInfo | None],
+    exam_info_future: asyncio.Task[ExamInfo | None] | asyncio.Future[ExamInfo | None],
     study_description: str | None,
+    exam_context: str | None,
     model_name: str,
     reasoning: str | None,
     emit_progress: ProgressCallbackType,
@@ -101,6 +120,7 @@ async def _run_chunk_pipeline(
             attempt=1,
             stage="extract_sections",
             study_description=study_description,
+            exam_context=exam_context,
             model_name=model_name,
             reasoning=reasoning,
             emit_progress=emit_progress,
@@ -144,6 +164,7 @@ async def _run_chunk_pipeline(
             attempt=2,
             stage="review",
             study_description=study_description,
+            exam_context=exam_context,
             model_name=model_name,
             reasoning=reasoning,
             emit_progress=emit_progress,
@@ -220,35 +241,38 @@ async def run_orchestrated_extraction(
             ),
         )
 
-    # --- Shared semaphore for ALL model calls (exam_info + chunks) ---
+    # --- Shared semaphore for ALL model calls ---
     semaphore = asyncio.Semaphore(max(1, max_subagent_concurrency))
 
-    # --- Start exam_info behind the shared semaphore ---
-    exam_info_task: asyncio.Task[ExamInfo] | None = None
+    # --- Extract exam_info FIRST — knowing the exam type is essential for chunk extraction ---
+    resolved_exam_info: ExamInfo | None = None
     if extract_exam_info_fn is not None:
         await emit_stage_progress(emit_progress, "extract_exam_info", "start")
-
-        async def _run_exam_info() -> ExamInfo:
-            async with semaphore:
-                with observation_span("extraction.exam_info", model_name=model_name):
-                    return await extract_exam_info_fn(
-                        report_text=report_text,
-                        study_description=study_description,
-                        source_ref=source_ref,
-                        external_metadata=external_metadata,
-                    )
-
-        exam_info_task = asyncio.create_task(_run_exam_info())
-
-    # --- Wrap exam_info resolution as a shared future ---
-    exam_info_resolved: asyncio.Task[ExamInfo | None] = asyncio.ensure_future(
-        _resolve_exam_info(
+        exam_info_task: asyncio.Task[ExamInfo] = asyncio.create_task(
+            _run_exam_info_with_span(
+                extract_exam_info_fn,
+                report_text=report_text,
+                study_description=study_description,
+                source_ref=source_ref,
+                external_metadata=external_metadata,
+                model_name=model_name,
+            )
+        )
+        resolved_exam_info = await _resolve_exam_info(
             exam_info_task,
             subagent_timeout_seconds=subagent_timeout_seconds,
             emit_progress=emit_progress,
             logger=logger,
         )
-    )
+
+    # Build exam context string for chunk prompts
+    from finding_extractor.extractor.agent import format_exam_context
+
+    exam_context = format_exam_context(resolved_exam_info, study_description)
+
+    # Wrap resolved exam_info as a pre-resolved future for the review step
+    _exam_info_future: asyncio.Future[ExamInfo | None] = asyncio.get_event_loop().create_future()
+    _exam_info_future.set_result(resolved_exam_info)
 
     # --- Per-chunk pipelines ---
     await emit_stage_progress(
@@ -268,8 +292,9 @@ async def run_orchestrated_extraction(
                     _run_chunk_pipeline(
                         chunk=chunk,
                         semaphore=semaphore,
-                        exam_info_future=exam_info_resolved,
+                        exam_info_future=_exam_info_future,
                         study_description=study_description,
+                        exam_context=exam_context,
                         model_name=model_name,
                         reasoning=reasoning,
                         emit_progress=emit_progress,
@@ -295,10 +320,6 @@ async def run_orchestrated_extraction(
 
     # --- Handle all-failed case ---
     if not successful:
-        if exam_info_task is not None and not exam_info_task.done():
-            exam_info_task.cancel()
-            with contextlib.suppress(asyncio.CancelledError, Exception):
-                await exam_info_task
         first_error = next(
             (r.outcome.error for r in results if r.outcome.error is not None), None
         )
@@ -325,7 +346,6 @@ async def run_orchestrated_extraction(
     )
 
     # Apply resolved exam_info only if the dedicated pass succeeded
-    resolved_exam_info = await exam_info_resolved
     if resolved_exam_info is not None:
         extraction = extraction.model_copy(update={"exam_info": resolved_exam_info})
 

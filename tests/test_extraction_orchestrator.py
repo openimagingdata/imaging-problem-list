@@ -1024,10 +1024,9 @@ Right renal stone.
             max_subagent_concurrency=2,
         )
 
-    # Give the event loop a moment to process the cancellation
-    await asyncio.sleep(0.05)
-    # The exam-info task should have been cancelled, not completed
-    assert not exam_info_completed
+    # Exam-info now runs and completes BEFORE chunk extraction starts,
+    # so it should always complete regardless of chunk failures.
+    assert exam_info_completed
 
 
 @pytest.mark.asyncio

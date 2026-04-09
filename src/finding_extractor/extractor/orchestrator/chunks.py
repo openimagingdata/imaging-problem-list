@@ -87,6 +87,7 @@ async def run_section_attempt(
     attempt: int,
     stage: str,
     study_description: str | None,
+    exam_context: str | None = None,
     model_name: str,
     reasoning: str | None,
     emit_progress: ProgressCallbackType,
@@ -120,6 +121,7 @@ async def run_section_attempt(
                     extraction_result = await extract_findings_fn(
                         report_text=chunk.text,
                         study_description=study_description,
+                        exam_context=exam_context,
                         model=model_name,
                         reasoning=reasoning,
                         section_name=chunk.section_name,
@@ -132,6 +134,7 @@ async def run_section_attempt(
                 extraction_result = await extract_findings_fn(
                     report_text=chunk.text,
                     study_description=study_description,
+                    exam_context=exam_context,
                     model=model_name,
                     reasoning=reasoning,
                     section_name=chunk.section_name,

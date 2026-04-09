@@ -355,7 +355,7 @@ def test_batch_status_shows_worker_elapsed_time(cli_runner):
 def test_batch_run_rejects_invalid_run_id(monkeypatch, cli_runner):
     """Run id should be restricted to safe filesystem-friendly characters."""
 
-    async def fake_extract_findings(report_text, study_description=None, model=None, reasoning=None):
+    async def fake_extract_findings(report_text, study_description=None, model=None, reasoning=None, **kwargs):
         _ = (report_text, study_description, model, reasoning)
         return ExtractedReportFindings(
             exam_info=ExamInfo(study_description="Chest XR"),
