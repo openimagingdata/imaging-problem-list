@@ -5,7 +5,7 @@ from __future__ import annotations
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import AliasChoices, Field, ValidationInfo, field_validator
+from pydantic import AliasChoices, Field, ValidationInfo, field_validator, model_validator
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
@@ -518,6 +518,36 @@ class ExtractorSettings(BaseSettings):
             "IPL_CHUNKING_IMPRESSION_LIST_MIN_ITEMS_PER_CHUNK",
         ),
     )
+    local_only_mode: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "IPL_LOCAL_ONLY",
+        ),
+    )
+
+    @model_validator(mode="after")
+    def _enforce_local_only(self) -> ExtractorSettings:
+        """When local_only_mode is True, validate all egress points are locked down."""
+        if not self.local_only_mode:
+            return self
+
+        from finding_extractor.llm.policy import provider_from_model_id
+
+        # 1. Neutralize implicit model fields that would send data to cloud
+        #    providers. The primary model is validated in the CLI layer (Layer 2)
+        #    after --model/--preset resolution.
+        #    Coding models are skipped — coding is blocked entirely in local-only mode.
+        if self.fallback_model is not None and provider_from_model_id(self.fallback_model) != "ollama":
+            self.fallback_model = None
+        if self.reviewer_model is not None and provider_from_model_id(self.reviewer_model) != "ollama":
+            self.reviewer_enabled = False
+            self.reviewer_model = None
+
+        # 2. Force-disable Logfire
+        self.logfire_enabled = False
+        self.logfire_token = None
+
+        return self
 
     @field_validator("logfire_send")
     @classmethod
@@ -644,12 +674,33 @@ class ExtractorSettings(BaseSettings):
         return value
 
 
+_settings_override: ExtractorSettings | None = None
+
+
 @lru_cache(maxsize=1)
-def get_settings() -> ExtractorSettings:
-    """Return process-global settings instance."""
+def _load_settings() -> ExtractorSettings:
     return ExtractorSettings()
 
 
+def get_settings() -> ExtractorSettings:
+    """Return process-global settings instance."""
+    if _settings_override is not None:
+        return _settings_override
+    return _load_settings()
+
+
 def clear_settings_cache() -> None:
-    """Clear cached settings (primarily for tests)."""
-    get_settings.cache_clear()
+    """Clear cached settings and any override (primarily for tests)."""
+    global _settings_override
+    _settings_override = None
+    _load_settings.cache_clear()
+
+
+def override_settings(settings: ExtractorSettings) -> None:
+    """Replace the settings singleton with a pre-built instance.
+
+    Used by the CLI to inject settings with overrides (e.g. ``--local-only``)
+    so that downstream code calling ``get_settings()`` picks up the validated copy.
+    """
+    global _settings_override
+    _settings_override = settings

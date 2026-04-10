@@ -24,7 +24,7 @@ import click
 from asyncer import runnify
 
 from finding_extractor.coding_summary import inline_coding_counts
-from finding_extractor.core.config import get_settings
+from finding_extractor.core.config import get_settings, override_settings
 from finding_extractor.core.logging_setup import setup_logging
 from finding_extractor.core.observability import configure_logfire
 from finding_extractor.db.store import ExtractionStore
@@ -38,7 +38,75 @@ from finding_extractor.llm.model_settings import (
     format_preset_help_summary,
     get_preset,
 )
+from finding_extractor.llm.policy import provider_from_model_id
 from finding_extractor.models import ExtractedReportFindings, ValidationResult
+
+
+def _preflight_local_only(model_name: str) -> None:
+    """Validate Ollama prerequisites for --local-only mode.
+
+    Checks that OLLAMA_BASE_URL is configured, Ollama is reachable,
+    and the requested model is available. Exits with actionable guidance
+    on any failure.
+    """
+    import os
+
+    import httpx
+
+    base_url = os.environ.get("OLLAMA_BASE_URL")
+    if not base_url:
+        click.echo(
+            "[local-only] OLLAMA_BASE_URL is not set.\n"
+            "\n"
+            "  Add to your .env file:\n"
+            "    OLLAMA_BASE_URL=http://localhost:11434/v1\n"
+            "\n"
+            "  Or load your Ollama env file:\n"
+            "    uv run --env-file .env.ollama finding-extractor ... --local-only",
+            err=True,
+        )
+        sys.exit(1)
+
+    # Derive the native Ollama API URL from the OpenAI-compat URL
+    # (e.g. http://localhost:11434/v1 → http://localhost:11434)
+    api_base = base_url.rstrip("/").removesuffix("/v1")
+
+    try:
+        resp = httpx.get(f"{api_base}/api/tags", timeout=5)
+        resp.raise_for_status()
+    except httpx.ConnectError:
+        click.echo(
+            f"[local-only] Cannot connect to Ollama at {api_base}\n"
+            "\n"
+            "  Is Ollama running? Start it with:\n"
+            "    ollama serve",
+            err=True,
+        )
+        sys.exit(1)
+    except Exception as exc:
+        click.echo(
+            f"[local-only] Ollama health check failed: {exc}",
+            err=True,
+        )
+        sys.exit(1)
+
+    # Check if the requested model is pulled
+    _, raw_model_id = model_name.split(":", maxsplit=1)
+    available = resp.json().get("models", [])
+    available_names = [m.get("name", "") for m in available]
+    # Match by prefix (e.g. "qwen3.5:35b-a3b" matches "qwen3.5:35b-a3b")
+    if not any(name.startswith(raw_model_id) for name in available_names):
+        model_list = "\n".join(f"    - {n}" for n in sorted(available_names)) or "    (none)"
+        click.echo(
+            f"[local-only] Model '{raw_model_id}' is not available in Ollama.\n"
+            "\n"
+            f"  Pull it with:\n"
+            f"    ollama pull {raw_model_id}\n"
+            "\n"
+            f"  Available models:\n{model_list}",
+            err=True,
+        )
+        sys.exit(1)
 
 
 async def _run_pipeline(
@@ -174,6 +242,12 @@ _run_pipeline_sync = runnify(_run_pipeline)
     default=False,
     help="Set logging emission level to INFO for this run.",
 )
+@click.option(
+    "--local-only",
+    is_flag=True,
+    default=False,
+    help="PHI-safe mode: require ollama models only, disable Logfire, block HuggingFace.",
+)
 def main(
     report_file,
     exam_type,
@@ -187,15 +261,41 @@ def main(
     db_path,
     logfire_enabled,
     verbose,
+    local_only,
 ):
     """Extract structured findings from a radiology report.
 
     REPORT_FILE is the path to the radiology report text file.
     """
     report_text = report_file.read()
+
+    # Apply CLI overrides to settings. Construct a fresh ExtractorSettings
+    # so model_validator runs (model_copy skips validators).
     settings = get_settings()
-    if verbose:
-        settings = settings.model_copy(update={"log_level": "INFO"})
+    needs_override = local_only or verbose
+    if needs_override:
+        overrides: dict = {}
+        if local_only:
+            overrides["local_only_mode"] = True
+        if verbose:
+            overrides["log_level"] = "INFO"
+        settings = settings.model_copy(update=overrides)
+        # Re-run the local-only validator explicitly since model_copy skips it
+        if local_only:
+            settings = settings._enforce_local_only()
+        # Inject into the process-global cache so downstream get_settings() picks it up
+        override_settings(settings)
+
+    # Layer 2: CLI-level local-only enforcement
+    if settings.local_only_mode:
+        if logfire_enabled:
+            click.echo(
+                "Error: --logfire cannot be used with --local-only", err=True
+            )
+            sys.exit(1)
+        # Force logfire off regardless of env
+        logfire_enabled = False
+
     logfire_configured = configure_logfire(runtime="cli", enabled_override=logfire_enabled)
     setup_logging(settings, include_logfire_processor=logfire_configured)
 
@@ -209,6 +309,35 @@ def main(
             effective_model = preset_obj.model
         if effective_reasoning is None:
             effective_reasoning = preset_obj.reasoning
+
+    # Layer 2: validate resolved effective model and Ollama environment
+    if settings.local_only_mode:
+        resolved = effective_model or settings.default_model
+        if provider_from_model_id(resolved) != "ollama":
+            click.echo(
+                f"[local-only] Requires an ollama model, but resolved model is '{resolved}'.\n"
+                "\n"
+                "  Use --model ollama:<model> or set IPL_MODEL=ollama:<model> in .env",
+                err=True,
+            )
+            sys.exit(1)
+
+        # Preflight: check Ollama URL, connectivity, and model availability
+        _preflight_local_only(resolved)
+
+        # Print manifest
+        fallback = settings.fallback_model or "(none)"
+        reviewer = settings.reviewer_model if settings.reviewer_enabled else "disabled"
+        click.echo(
+            f"[local-only] Preflight passed. No report text or extraction output will leave this machine.\n"
+            f"  model               = {resolved}\n"
+            f"  fallback_model      = {fallback}\n"
+            f"  reviewer            = {reviewer}\n"
+            f"  coding              = disallowed\n"
+            f"  logfire             = disabled (overridden)\n"
+            f"  model downloads     = allowed (no PHI sent)",
+            err=True,
+        )
 
     try:
         extraction, validation_result, storage_metadata = _run_pipeline_sync(

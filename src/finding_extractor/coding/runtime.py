@@ -260,6 +260,12 @@ async def run_coding(
     """Run the coding pipeline against a completed extraction."""
 
     resolved_settings = settings or get_settings()
+
+    if getattr(resolved_settings, "local_only_mode", False):
+        raise RuntimeError(
+            "Coding is not permitted in local-only mode. The findingmodel and "
+            "anatomic_locations packages have not been audited for network egress."
+        )
     model_name = model or resolved_settings.coding_model
     effective_reasoning = resolve_runtime_reasoning(
         model_name,

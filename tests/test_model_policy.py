@@ -1,7 +1,8 @@
-"""Tests for runtime model-id validation policy."""
+"""Tests for runtime model-id validation policy and local-only mode."""
 
 import pytest
 
+from finding_extractor.core.config import ExtractorSettings, clear_settings_cache
 from finding_extractor.llm.model_settings import ollama_needs_native_output
 from finding_extractor.llm.policy import validate_model_id
 
@@ -99,3 +100,76 @@ class TestOllamaNeedsNativeOutput:
 
     def test_unknown_ollama_family_conservative_default(self):
         assert ollama_needs_native_output("ollama:some-unknown-model:7b") is True
+
+
+# ---------------------------------------------------------------------------
+# Local-only mode tests
+# ---------------------------------------------------------------------------
+
+
+class TestLocalOnlyMode:
+    """Tests for the local_only_mode settings enforcement."""
+
+    @pytest.fixture(autouse=True)
+    def _clear_cache(self):
+        clear_settings_cache()
+        yield
+        clear_settings_cache()
+
+    def _make_settings(self, **overrides) -> ExtractorSettings:
+        """Build settings with local-only defaults, applying overrides."""
+        defaults = {
+            "local_only_mode": True,
+            "default_model": "ollama:qwen3.5:35b-a3b",
+            "fallback_model": None,
+            "reviewer_model": None,
+            "coding_model": "ollama:qwen3.5:35b-a3b",
+            "coding_term_model": None,
+            "coding_fallback_model": None,
+        }
+        defaults.update(overrides)
+        return ExtractorSettings(**defaults)
+
+    def test_accepts_all_ollama_models(self):
+        settings = self._make_settings()
+        assert settings.local_only_mode is True
+
+    def test_clears_cloud_fallback_model(self):
+        settings = self._make_settings(fallback_model="openai:gpt-5.2")
+        assert settings.fallback_model is None
+
+    def test_keeps_ollama_fallback_model(self):
+        settings = self._make_settings(fallback_model="ollama:qwen3.5:9b")
+        assert settings.fallback_model == "ollama:qwen3.5:9b"
+
+    def test_disables_cloud_reviewer(self):
+        settings = self._make_settings(
+            reviewer_enabled=True,
+            reviewer_model="anthropic:claude-opus-4-6",
+        )
+        assert settings.reviewer_enabled is False
+        assert settings.reviewer_model is None
+
+    def test_keeps_ollama_reviewer(self):
+        settings = self._make_settings(
+            reviewer_enabled=True,
+            reviewer_model="ollama:qwen3.5:27b",
+        )
+        assert settings.reviewer_enabled is True
+        assert settings.reviewer_model == "ollama:qwen3.5:27b"
+
+    def test_forces_logfire_disabled(self):
+        settings = self._make_settings(logfire_enabled=True)
+        assert settings.logfire_enabled is False
+
+    def test_clears_logfire_token(self):
+        settings = self._make_settings(logfire_token="pylf_v1_test_token")
+        assert settings.logfire_token is None
+
+    def test_does_not_enforce_when_disabled(self):
+        """When local_only_mode is False, cloud models are allowed."""
+        settings = ExtractorSettings(
+            local_only_mode=False,
+            default_model="openai:gpt-5.2",
+        )
+        assert settings.local_only_mode is False

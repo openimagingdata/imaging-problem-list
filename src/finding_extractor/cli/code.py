@@ -87,6 +87,12 @@ def format_coding_json_output(extraction: ExtractedReportFindings) -> str:
     default=False,
     help="Set logging emission level to INFO for this run.",
 )
+@click.option(
+    "--local-only",
+    is_flag=True,
+    default=False,
+    help="PHI-safe mode (coding is not permitted in this mode).",
+)
 def main(
     extraction_json,
     output,
@@ -94,10 +100,27 @@ def main(
     reasoning,
     logfire_enabled,
     verbose,
+    local_only,
 ):
     """Assign codes to an extracted report JSON payload."""
 
+    if local_only:
+        click.echo(
+            "Error: coding is not permitted in --local-only mode. The findingmodel "
+            "and anatomic_locations packages have not been audited for network egress.",
+            err=True,
+        )
+        sys.exit(1)
+
     settings = get_settings()
+    if settings.local_only_mode:
+        click.echo(
+            "Error: coding is not permitted in local-only mode (IPL_LOCAL_ONLY=true). "
+            "The findingmodel and anatomic_locations packages have not been audited "
+            "for network egress.",
+            err=True,
+        )
+        sys.exit(1)
     if verbose:
         settings = settings.model_copy(update={"log_level": "INFO"})
     logfire_configured = configure_logfire(runtime="cli", enabled_override=logfire_enabled)
