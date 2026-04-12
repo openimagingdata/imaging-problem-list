@@ -213,6 +213,30 @@ def run_command(
         run_id=run_id,
         input_files=input_files,
     )
+    # Layer 2: enforce local-only on the resolved model before spending any
+    # effort on preflight / state-dir creation.
+    settings = get_settings()
+    if settings.local_only_mode:
+        try:
+            enforce_local_only(
+                config.model,
+                local_only_mode=True,
+                ollama_base_url=settings.ollama_base_url,
+                allow_hosts=settings.local_only_allow_hosts,
+                context="batch CLI --local-only",
+            )
+        except LocalOnlyViolationError as exc:
+            raise click.ClickException(str(exc)) from exc
+
+        click.echo(
+            f"[local-only] Preflight passed. No report text or extraction output will leave this machine.\n"
+            f"  model               = {config.model}\n"
+            f"  ollama endpoint     = {settings.ollama_base_url}\n"
+            f"  allow hosts         = {settings.local_only_allow_hosts or '(loopback only)'}\n"
+            f"  inputs              = {len(config.inputs)}",
+            err=True,
+        )
+
     resolved_max_predicted_runtime = (
         max_predicted_runtime_seconds
         if max_predicted_runtime_seconds is not None
@@ -239,29 +263,6 @@ def run_command(
     paths = run_paths(Path(config.run_dir), config.run_id)
     ensure_run_dir(paths)
     write_json_atomic(paths.config_path, build_config_dict(config))
-
-    # Layer 2: enforce local-only on the resolved model after option resolution.
-    settings = get_settings()
-    if settings.local_only_mode:
-        try:
-            enforce_local_only(
-                config.model,
-                local_only_mode=True,
-                ollama_base_url=settings.ollama_base_url,
-                allow_hosts=settings.local_only_allow_hosts,
-                context="batch CLI --local-only",
-            )
-        except LocalOnlyViolationError as exc:
-            raise click.ClickException(str(exc)) from exc
-
-        click.echo(
-            f"[local-only] Preflight passed. No report text or extraction output will leave this machine.\n"
-            f"  model               = {config.model}\n"
-            f"  ollama endpoint     = {settings.ollama_base_url}\n"
-            f"  allow hosts         = {settings.local_only_allow_hosts or '(loopback only)'}\n"
-            f"  inputs              = {len(config.inputs)}",
-            err=True,
-        )
 
     click.echo(
         "BATCH "

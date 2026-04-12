@@ -63,6 +63,44 @@ async def test_run_extraction_impl_sanitizes_task_error(store: ExtractionStore, 
     assert "sk-proj" not in (job.error or "")
 
 
+@pytest.mark.asyncio
+async def test_run_extraction_impl_rejects_cloud_model_under_local_only(
+    store: ExtractionStore,
+):
+    """Worker must refuse cloud models and mark the job LOCAL_ONLY_VIOLATION."""
+    from finding_extractor.core.config import ExtractorSettings, override_settings
+
+    override_settings(
+        ExtractorSettings(
+            local_only_mode=True,
+            default_model="ollama:qwen3.5:35b-a3b",
+            fallback_model=None,
+            reviewer_model=None,
+            coding_model="ollama:qwen3.5:35b-a3b",
+            coding_term_model=None,
+            coding_fallback_model=None,
+            ollama_base_url="http://localhost:11434/v1",
+        )
+    )
+
+    report = await store.upsert_report("FINDINGS: No pleural effusion.")
+    await store.create_job(job_id="job-local-only", report_id=report.id)
+
+    result = await _run_extraction_impl(
+        job_id="job-local-only",
+        report_id=report.id,
+        store=store,
+        model="openai:gpt-5.2",
+    )
+
+    assert result["status"] == "failed"
+    assert result["error"] == "LOCAL_ONLY_VIOLATION"
+    job = await store.get_job("job-local-only")
+    assert job is not None
+    assert job.status == "failed"
+    assert job.error == "LOCAL_ONLY_VIOLATION"
+
+
 def test_to_public_job_error_uses_typed_exception_mapping():
     """Public error mapping should use typed PydanticAI exceptions."""
     provider_err = ModelHTTPError(status_code=429, model_name="openai:gpt-5-mini")

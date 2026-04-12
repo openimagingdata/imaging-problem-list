@@ -568,6 +568,112 @@ async def test_extract_dispatch_rejects_disallowed_model_prefix(client: AsyncCli
 
 
 @pytest.mark.asyncio
+async def test_extract_dispatch_rejects_cloud_model_under_local_only(
+    client: AsyncClient, monkeypatch
+):
+    """Request body that specifies a cloud model must be 422 when IPL_LOCAL_ONLY=true."""
+    from finding_extractor.core.config import ExtractorSettings, override_settings
+
+    settings = ExtractorSettings(
+        local_only_mode=True,
+        default_model="ollama:qwen3.5:35b-a3b",
+        fallback_model=None,
+        reviewer_model=None,
+        coding_model="ollama:qwen3.5:35b-a3b",
+        coding_term_model=None,
+        coding_fallback_model=None,
+        ollama_base_url="http://localhost:11434/v1",
+    )
+    override_settings(settings)
+    monkeypatch.setattr(
+        "finding_extractor.core.config._settings_override", settings, raising=False
+    )
+
+    report = await client.post("/api/reports", json={"report_text": "No focal consolidation."})
+    report_id = report.json()["id"]
+
+    response = await client.post(
+        f"/api/reports/{report_id}/extract",
+        json={"model": "openai:gpt-5.2"},
+    )
+    assert response.status_code == 422
+    assert "not an Ollama model" in response.json()["detail"]
+
+
+@pytest.mark.asyncio
+async def test_extract_dispatch_accepts_ollama_model_under_local_only(
+    app,
+    client: AsyncClient,
+    monkeypatch,
+):
+    """Local Ollama model should still work when IPL_LOCAL_ONLY=true."""
+    from finding_extractor.core.config import ExtractorSettings, override_settings
+
+    settings = ExtractorSettings(
+        local_only_mode=True,
+        default_model="ollama:qwen3.5:35b-a3b",
+        fallback_model=None,
+        reviewer_model=None,
+        coding_model="ollama:qwen3.5:35b-a3b",
+        coding_term_model=None,
+        coding_fallback_model=None,
+        ollama_base_url="http://localhost:11434/v1",
+    )
+    override_settings(settings)
+
+    async def _ok_kiq(*args, **kwargs):
+        _ = (args, kwargs)
+        return None
+
+    monkeypatch.setattr(app.state.run_extraction_task, "kiq", _ok_kiq)
+
+    report = await client.post("/api/reports", json={"report_text": "No focal consolidation."})
+    report_id = report.json()["id"]
+
+    response = await client.post(
+        f"/api/reports/{report_id}/extract",
+        json={"model": "ollama:qwen3.5:35b-a3b"},
+    )
+    assert response.status_code == 202
+
+
+@pytest.mark.asyncio
+async def test_code_dispatch_rejected_under_local_only(
+    store: ExtractionStore, client: AsyncClient
+):
+    """POST /api/extractions/{id}/code must 422 when local-only is active."""
+    from finding_extractor.core.config import ExtractorSettings, override_settings
+
+    settings = ExtractorSettings(
+        local_only_mode=True,
+        default_model="ollama:qwen3.5:35b-a3b",
+        fallback_model=None,
+        reviewer_model=None,
+        coding_model="ollama:qwen3.5:35b-a3b",
+        coding_term_model=None,
+        coding_fallback_model=None,
+        ollama_base_url="http://localhost:11434/v1",
+    )
+    override_settings(settings)
+
+    # Submit a report + fake extraction so the endpoint reaches the services layer.
+    report = await client.post("/api/reports", json={"report_text": "No focal consolidation."})
+    report_id = report.json()["id"]
+    stored = await store.create_extraction(
+        report_id=report_id,
+        extraction=_fake_extraction(),
+        model_name="ollama:qwen3.5:35b-a3b",
+    )
+
+    response = await client.post(
+        f"/api/extractions/{stored.id}/code",
+        json={"model": "ollama:qwen3.5:35b-a3b"},
+    )
+    assert response.status_code == 422
+    assert "local-only" in response.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
 async def test_extract_dispatch_enqueue_failure_marks_job_failed(
     app,
     client: AsyncClient,

@@ -54,6 +54,90 @@ def _runtime_result(
     )
 
 
+def test_batch_run_local_only_rejects_cloud_model(monkeypatch, cli_runner):
+    """--local-only with a cloud --model should fail before starting the run."""
+    # Simulate a realistic local-only env so Layer 1 validation passes.
+    monkeypatch.setenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+    monkeypatch.setenv("IPL_MODEL", "ollama:qwen3.5:35b-a3b")
+    monkeypatch.setenv("IPL_FALLBACK_MODEL", "ollama:qwen3.5:9b")
+    monkeypatch.setenv("IPL_REVIEWER_MODEL", "ollama:qwen3.5:27b")
+    monkeypatch.setenv("IPL_CODING_MODEL", "ollama:qwen3.5:35b-a3b")
+    with cli_runner.isolated_filesystem():
+        reports_dir = Path("reports")
+        reports_dir.mkdir(parents=True, exist_ok=True)
+        (reports_dir / "a.txt").write_text("No pleural effusion.", encoding="utf-8")
+
+        result = cli_runner.invoke(
+            cli,
+            [
+                "run",
+                str(reports_dir),
+                "--glob",
+                "*.txt",
+                "--run-id",
+                "batch-local-only-reject",
+                "--run-dir",
+                ".runs",
+                "--workers",
+                "1",
+                "--timeout-seconds",
+                "60",
+                "--retries",
+                "0",
+                "--allow-slow",
+                "--local-only",
+                "--model",
+                "openai:gpt-5.2",
+            ],
+        )
+
+        assert result.exit_code != 0
+        assert "not an Ollama model" in result.output
+        # No run dir should be created.
+        assert not (Path(".runs") / "batch-local-only-reject").exists()
+
+
+def test_batch_run_local_only_rejects_cloud_suffix(monkeypatch, cli_runner):
+    """--local-only with an ollama :cloud-tagged model must be rejected."""
+    # Simulate a realistic local-only env so Layer 1 validation passes.
+    monkeypatch.setenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+    monkeypatch.setenv("IPL_MODEL", "ollama:qwen3.5:35b-a3b")
+    monkeypatch.setenv("IPL_FALLBACK_MODEL", "ollama:qwen3.5:9b")
+    monkeypatch.setenv("IPL_REVIEWER_MODEL", "ollama:qwen3.5:27b")
+    monkeypatch.setenv("IPL_CODING_MODEL", "ollama:qwen3.5:35b-a3b")
+    with cli_runner.isolated_filesystem():
+        reports_dir = Path("reports")
+        reports_dir.mkdir(parents=True, exist_ok=True)
+        (reports_dir / "a.txt").write_text("No pleural effusion.", encoding="utf-8")
+
+        result = cli_runner.invoke(
+            cli,
+            [
+                "run",
+                str(reports_dir),
+                "--glob",
+                "*.txt",
+                "--run-id",
+                "batch-local-only-cloud-suffix",
+                "--run-dir",
+                ".runs",
+                "--workers",
+                "1",
+                "--timeout-seconds",
+                "60",
+                "--retries",
+                "0",
+                "--allow-slow",
+                "--local-only",
+                "--model",
+                "ollama:qwen3.5:cloud",
+            ],
+        )
+
+        assert result.exit_code != 0
+        assert "cloud-routed" in result.output
+
+
 def test_batch_run_fail_fast_runtime_guard_blocks_run(cli_runner):
     """Runtime guard should fail fast before starting a risky batch run."""
     with cli_runner.isolated_filesystem():
