@@ -38,34 +38,21 @@ from finding_extractor.llm.model_settings import (
     format_preset_help_summary,
     get_preset,
 )
-from finding_extractor.llm.policy import provider_from_model_id
+from finding_extractor.llm.policy import (
+    LocalOnlyViolationError,
+    enforce_local_only,
+    provider_from_model_id,
+)
 from finding_extractor.models import ExtractedReportFindings, ValidationResult
 
 
-def _preflight_local_only(model_name: str) -> None:
-    """Validate Ollama prerequisites for --local-only mode.
+def _preflight_local_only(base_url: str, model_name: str) -> None:
+    """Verify Ollama is reachable and the requested model is pulled.
 
-    Checks that OLLAMA_BASE_URL is configured, Ollama is reachable,
-    and the requested model is available. Exits with actionable guidance
-    on any failure.
+    Assumes the policy-level locality checks have already passed. Exits with
+    actionable guidance on HTTP-level failures.
     """
-    import os
-
     import httpx
-
-    base_url = os.environ.get("OLLAMA_BASE_URL")
-    if not base_url:
-        click.echo(
-            "[local-only] OLLAMA_BASE_URL is not set.\n"
-            "\n"
-            "  Add to your .env file:\n"
-            "    OLLAMA_BASE_URL=http://localhost:11434/v1\n"
-            "\n"
-            "  Or load your Ollama env file:\n"
-            "    uv run --env-file .env.ollama finding-extractor ... --local-only",
-            err=True,
-        )
-        sys.exit(1)
 
     # Derive the native Ollama API URL from the OpenAI-compat URL
     # (e.g. http://localhost:11434/v1 → http://localhost:11434)
@@ -269,20 +256,19 @@ def main(
     """
     report_text = report_file.read()
 
-    # Apply CLI overrides to settings. Construct a fresh ExtractorSettings
+    # Apply CLI overrides to settings. Round-trip through ExtractorSettings
     # so model_validator runs (model_copy skips validators).
     settings = get_settings()
     needs_override = local_only or verbose
     if needs_override:
-        overrides: dict = {}
+        overrides: dict = settings.model_dump()
         if local_only:
             overrides["local_only_mode"] = True
         if verbose:
             overrides["log_level"] = "INFO"
-        settings = settings.model_copy(update=overrides)
-        # Re-run the local-only validator explicitly since model_copy skips it
-        if local_only:
-            settings = settings._enforce_local_only()
+        from finding_extractor.core.config import ExtractorSettings
+
+        settings = ExtractorSettings.model_validate(overrides)
         # Inject into the process-global cache so downstream get_settings() picks it up
         override_settings(settings)
 
@@ -313,17 +299,34 @@ def main(
     # Layer 2: validate resolved effective model and Ollama environment
     if settings.local_only_mode:
         resolved = effective_model or settings.default_model
-        if provider_from_model_id(resolved) != "ollama":
+
+        # Reject cloud-backed presets explicitly so the user sees a useful
+        # error rather than a generic "not an ollama model" rejection below.
+        if effective_preset is not None and provider_from_model_id(resolved) != "ollama":
             click.echo(
-                f"[local-only] Requires an ollama model, but resolved model is '{resolved}'.\n"
-                "\n"
-                "  Use --model ollama:<model> or set IPL_MODEL=ollama:<model> in .env",
+                f"[local-only] Preset {effective_preset!r} selects cloud model "
+                f"'{resolved}'. Use --preset local (or omit --preset).",
                 err=True,
             )
             sys.exit(1)
 
-        # Preflight: check Ollama URL, connectivity, and model availability
-        _preflight_local_only(resolved)
+        try:
+            enforce_local_only(
+                resolved,
+                local_only_mode=True,
+                ollama_base_url=settings.ollama_base_url,
+                allow_hosts=settings.local_only_allow_hosts,
+                context="CLI --local-only",
+            )
+        except LocalOnlyViolationError as exc:
+            click.echo(str(exc), err=True)
+            sys.exit(1)
+
+        # Policy-level checks passed. Verify the endpoint is actually up and
+        # the model is pulled.
+        # settings.ollama_base_url is guaranteed non-empty by enforce_local_only.
+        assert settings.ollama_base_url is not None
+        _preflight_local_only(settings.ollama_base_url, resolved)
 
         # Print manifest
         fallback = settings.fallback_model or "(none)"
@@ -331,6 +334,8 @@ def main(
         click.echo(
             f"[local-only] Preflight passed. No report text or extraction output will leave this machine.\n"
             f"  model               = {resolved}\n"
+            f"  ollama endpoint     = {settings.ollama_base_url}\n"
+            f"  allow hosts         = {settings.local_only_allow_hosts or '(loopback only)'}\n"
             f"  fallback_model      = {fallback}\n"
             f"  reviewer            = {reviewer}\n"
             f"  coding              = disallowed\n"
