@@ -17,6 +17,7 @@ from finding_extractor.extractor.runtime import (
     ReliabilityContractError,
     run_extraction_runtime,
 )
+from finding_extractor.llm.policy import LocalOnlyViolationError, enforce_local_only
 from finding_extractor.models import (
     JobWarningPayload,
     ReliabilityMode,
@@ -88,6 +89,28 @@ async def _run_extraction_impl(
             await store.update_job_status_message(job_id, message)
 
         settings = get_settings()
+
+        # Defense in depth: if local-only mode is active and the job was
+        # enqueued (somehow) with a cloud model, fail the job with a stable
+        # public error code rather than executing the cloud call.
+        resolved_model = model or settings.default_model
+        try:
+            enforce_local_only(
+                resolved_model,
+                local_only_mode=settings.local_only_mode,
+                ollama_base_url=settings.ollama_base_url,
+                allow_hosts=settings.local_only_allow_hosts,
+                context="worker extraction job",
+            )
+        except LocalOnlyViolationError as exc:
+            logger.warning(
+                "Extraction job rejected by local-only enforcement",
+                job_id=job_id,
+                model=resolved_model,
+                reason=str(exc),
+            )
+            await store.mark_job_failed(job_id, error="LOCAL_ONLY_VIOLATION")
+            return {"job_id": job_id, "status": "failed", "error": "LOCAL_ONLY_VIOLATION"}
 
         result = await run_extraction_runtime(
             report_text=report.report_text,

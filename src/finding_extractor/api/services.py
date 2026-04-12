@@ -10,7 +10,11 @@ from finding_extractor.api.schemas import TriggerCodingRequest, TriggerExtractio
 from finding_extractor.core.config import get_settings
 from finding_extractor.db.store import ExtractionStore
 from finding_extractor.llm.model_settings import resolve_runtime_reasoning
-from finding_extractor.llm.policy import validate_model_id
+from finding_extractor.llm.policy import (
+    LocalOnlyViolationError,
+    enforce_local_only,
+    validate_model_id,
+)
 from finding_extractor.read_models import ExtractionDetail, ReportDetail
 
 logger = structlog.get_logger(__name__)
@@ -47,6 +51,17 @@ async def enqueue_extraction_job(
     try:
         validate_model_id(model_name)
     except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    try:
+        enforce_local_only(
+            model_name,
+            local_only_mode=settings.local_only_mode,
+            ollama_base_url=settings.ollama_base_url,
+            allow_hosts=settings.local_only_allow_hosts,
+            context="API extraction request",
+        )
+    except LocalOnlyViolationError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     try:
@@ -104,6 +119,20 @@ async def enqueue_coding_job(
     logger.info("Coding enqueue requested", extraction_id=extraction_id)
     extraction = await require_extraction(store, extraction_id)
     settings = get_settings()
+
+    # Coding is disallowed entirely in local-only mode — fail fast at enqueue
+    # rather than letting the worker error out later. Mirrors the CLI guard
+    # and coding/runtime.py defense in depth.
+    if settings.local_only_mode:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "Coding is not permitted in local-only mode. The findingmodel "
+                "and anatomic_locations packages have not been audited for "
+                "network egress."
+            ),
+        )
+
     model_name = body.model or settings.coding_model
     try:
         validate_model_id(model_name)

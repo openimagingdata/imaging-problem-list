@@ -77,6 +77,19 @@ def configure_logfire(
     Returns True when logfire is enabled and configured for this process.
     """
     settings = get_settings()
+
+    # Hard short-circuit under local-only mode, regardless of enabled_override.
+    # Layer 1 already force-disables logfire_enabled/logfire_token at settings
+    # load; this second check protects against any future code path that
+    # passes enabled_override=True.
+    if settings.local_only_mode:
+        if enabled_override:
+            logger.warning(
+                "Logfire enable request ignored under local-only mode",
+                runtime=runtime,
+            )
+        return False
+
     enabled = settings.logfire_enabled if enabled_override is None else enabled_override
     if not enabled:
         return False
