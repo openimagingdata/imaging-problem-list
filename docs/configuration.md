@@ -205,6 +205,47 @@ Rejected TOML keys include:
 - `OPENROUTER_API_KEY`
 - `LOGFIRE_TOKEN`
 
+## Local-Only Mode (PHI-Safe)
+
+Set `IPL_LOCAL_ONLY=true` (or pass `--local-only` to `finding-extractor` / `finding-extractor-batch`) to guarantee no report text or extraction output leaves the machine.
+
+### What it enforces
+
+Every entry point below validates the resolved model, cloud-suffix tag, and Ollama endpoint before any model call:
+
+| Entry point | Enforcement |
+|---|---|
+| Settings load | Rejects cloud `IPL_MODEL` / `IPL_FALLBACK_MODEL` / `IPL_REVIEWER_MODEL`; rejects missing or non-local `OLLAMA_BASE_URL` |
+| `finding-extractor` CLI | Rejects cloud `--model`, cloud `--preset`, and `--logfire`; prints manifest with resolved endpoint |
+| `finding-extractor-batch` CLI | Same as above; detached child inherits `IPL_LOCAL_ONLY=true` via subprocess env |
+| API `POST /reports/{id}/extract` | 422 if `body.model` is non-Ollama, cloud-routed, or endpoint is remote |
+| API `POST /extractions/{id}/code` | 422 — coding is disallowed entirely in local-only mode |
+| Extraction worker | Fails the job with `LOCAL_ONLY_VIOLATION` if it reaches here with a cloud model |
+| Logfire | Short-circuited; no traces sent regardless of other flags |
+
+### What counts as "local"
+
+- `OLLAMA_BASE_URL` host must be a loopback literal (`127.0.0.1`, `::1`), a loopback name (`localhost`), or listed in `IPL_LOCAL_ONLY_ALLOW_HOSTS`.
+- Names resolve via `socket.getaddrinfo`; every returned address must be loopback. If any public address appears, the request is rejected.
+- Models with an Ollama cloud-routed tag (`:cloud` or `-cloud` suffix, e.g. `qwen3.5:cloud`, `gpt-oss:120b-cloud`) are rejected — these get proxied to `ollama.com` through the local `ollama serve` process and would leak PHI despite the local wire endpoint.
+
+### `IPL_LOCAL_ONLY_ALLOW_HOSTS`
+
+Comma-separated list of hostnames (not IPs) that bypass the loopback check. Intended for air-gapped deployments where Ollama runs on a private-network host reachable only by name. Each name must be opted in explicitly; we don't assume any private IP range is safe.
+
+Example:
+
+```bash
+export IPL_LOCAL_ONLY=true
+export OLLAMA_BASE_URL=http://ollama.internal:11434/v1
+export IPL_LOCAL_ONLY_ALLOW_HOSTS=ollama.internal,ollama-backup.internal
+```
+
+### What is NOT covered
+
+- `finding-extractor-eval` does not enforce local-only. Eval datasets are fixture data curated in-repo; they are not PHI. Running eval with a cloud model is a valid workflow.
+- Modelfile aliases that point at a `:cloud`/`-cloud` source are not inspected. Creating a local-looking alias (`FROM qwen3.5:cloud`) would bypass the tag-suffix check. Avoid building cloud-backed Modelfiles on machines used for PHI.
+
 ## Common Setup
 
 ```bash

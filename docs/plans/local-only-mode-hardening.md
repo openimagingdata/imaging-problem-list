@@ -1,6 +1,6 @@
 # Plan: Harden `--local-only` / `IPL_LOCAL_ONLY` Enforcement for PHI Workloads
 
-**Status:** Drafted, not started
+**Status:** Completed 2026-04-12 (see `docs/DEV_LOG.md`)
 **Depends on:** `docs/plans/local-only-mode.md` (merged as commit `23dfc91`)
 **Context:** PHI workloads are the next use case. Current enforcement only covers the single-report `finding-extractor` CLI. Batch, API, and worker paths can still reach cloud providers with `IPL_LOCAL_ONLY=true` set. This plan closes those gaps so the guarantee holds on every **PHI-eligible** entry point.
 
@@ -159,16 +159,21 @@ Add to `tests/test_batch_cli.py`:
 
 ## Completion checklist
 
-- [ ] Add `enforce_local_only` helper (model + cloud-suffix + endpoint locality) with tests
-- [ ] Add `IPL_LOCAL_ONLY_ALLOW_HOSTS` setting
-- [ ] Layer 1: validate `default_model` and `OLLAMA_BASE_URL` in `_enforce_local_only`
-- [ ] `cli/batch.py`: `--local-only` flag + preflight
-- [ ] ~~`cli/eval_cmd.py`~~ — out of scope; eval is not a PHI path
-- [ ] `api/services.py`: enforce in both extraction and coding enqueue paths
-- [ ] `worker/extraction_jobs.py`: defence-in-depth check
-- [ ] `core/observability.py`: short-circuit logfire under local-only
-- [ ] CLI: reject cloud-backed presets under local-only
-- [ ] Extend `extract.py` manifest to include resolved Ollama host/IP
-- [ ] Tests 1-10 (including 4a-4d endpoint-locality cases) added and passing
-- [ ] `docs/configuration.md`, `docs/plans/local-only-mode.md`, `DEV_LOG.md`, `CHANGELOG.md` updated
-- [ ] Mark this plan complete
+- [x] Add `enforce_local_only` helper (model + cloud-suffix + endpoint locality) with tests
+- [x] Add `IPL_LOCAL_ONLY_ALLOW_HOSTS` setting
+- [x] Layer 1: validate `default_model` and `OLLAMA_BASE_URL` in `_enforce_local_only`
+- [x] `cli/batch.py`: `--local-only` flag + preflight
+- [x] ~~`cli/eval_cmd.py`~~ — out of scope; eval is not a PHI path
+- [x] `api/services.py`: enforce in both extraction and coding enqueue paths
+- [x] `worker/extraction_jobs.py`: defence-in-depth check
+- [x] `core/observability.py`: short-circuit logfire under local-only
+- [x] CLI: reject cloud-backed presets under local-only
+- [x] Extend `extract.py` manifest to include resolved Ollama host/IP
+- [x] Tests 1-10 (including 4a-4d endpoint-locality cases, 4e-4f cloud-suffix cases) added and passing
+- [x] `docs/configuration.md`, `DEV_LOG.md` updated. (No `CHANGELOG.md` in repo yet; skipped.) `docs/plans/local-only-mode.md` cross-references this plan.
+- [x] Mark this plan complete (see `docs/DEV_LOG.md` 2026-04-12 entry)
+
+## Deferred / limitations (for future follow-up)
+
+- Modelfile alias detection: a local Ollama model whose `FROM` points at a `:cloud`/`-cloud` source is not inspected. The tag-suffix check catches direct references; best-effort `/api/show` parent-model inspection is not yet implemented.
+- Test 4g (aliased cloud model) — covered by the above limitation.

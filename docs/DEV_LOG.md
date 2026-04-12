@@ -4,6 +4,25 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-04-12 — Local-only mode hardening for PHI workloads
+
+An audit of the existing `--local-only` feature (commit `23dfc91`) found it only enforced at the single-report CLI. Batch CLI, API, worker, and Layer 1 settings all had paths where `IPL_LOCAL_ONLY=true` could silently pair with a cloud model. Ollama's cloud-routed models (`:cloud` / `-cloud` tag suffixes, proxied through ollama.com via the local server) were not recognized at all — endpoint-locality alone isn't sufficient since the wire destination stays `localhost`.
+
+Closed those gaps:
+
+- New `enforce_local_only()` / `enforce_endpoint_locality()` / `has_cloud_suffix()` helpers in `llm/policy.py`. Three gates: provider != ollama, cloud-suffix tag, non-local `OLLAMA_BASE_URL` (with DNS resolution check).
+- New `IPL_LOCAL_ONLY_ALLOW_HOSTS` setting for air-gapped deployments where Ollama runs on a named private-network host.
+- Layer 1 settings validator now rejects cloud `default_model` and non-loopback `OLLAMA_BASE_URL` at load time.
+- Wired into `finding-extractor-batch` (with detached-child env propagation), API extraction + coding enqueue paths, and the extraction worker (fails job with `LOCAL_ONLY_VIOLATION`).
+- `core/observability.py::configure_logfire` hard short-circuits under local-only regardless of any `enabled_override`.
+- Cloud-preset rejection in CLI (`--preset fast/balanced/quality` now errors under local-only).
+- Tests cover the helper, all three gates, all entry points, and parametrized cloud-suffix detection.
+- Also hardened `scripts/split_reports_csv.py` against path traversal from CSV `ID` column (Codex adversarial review finding).
+
+Plan: `docs/plans/local-only-mode-hardening.md` (completed). Out of scope: eval CLI (not a PHI path by design) and Modelfile-alias detection (documented limitation).
+
+---
+
 ## 2026-04-08 — Qwen3.5 thinking-mode fix and model evaluation
 
 Qwen3.5 models were appearing to hang during extraction — the root cause was that
