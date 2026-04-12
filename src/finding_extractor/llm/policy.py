@@ -11,8 +11,11 @@ detection logic from this module to avoid duplication.
 
 from __future__ import annotations
 
+import ipaddress
 import re
-from collections.abc import Callable
+import socket
+from collections.abc import Callable, Sequence
+from urllib.parse import urlparse
 
 OPENAI_SKIP_TOKENS = (
     "audio",
@@ -240,3 +243,177 @@ def validate_model_id(model_id: str) -> None:
 
     if provider == "google" and not select_sota_model_ids("google", {raw_model_id}):
         raise ValueError("google model must be gemini-3* pro/flash with google-gla prefix")
+
+
+# ---------------------------------------------------------------------------
+# Local-only enforcement
+# ---------------------------------------------------------------------------
+
+_LOOPBACK_HOSTNAMES = {"localhost", "localhost.localdomain", "ip6-localhost", "ip6-loopback"}
+
+
+class LocalOnlyViolationError(ValueError):
+    """Raised when local-only mode would be violated by a model or endpoint."""
+
+
+def has_cloud_suffix(model_id: str) -> bool:
+    """Return True if an Ollama model reference routes through Ollama's cloud.
+
+    Ollama's cloud/Turbo feature proxies cloud-resolved models through the
+    local `ollama serve` process to ollama.com. The local wire endpoint stays
+    at localhost, but the prompt still leaves the machine. The only reliable
+    pre-request signal is the model tag: `:cloud` or a `-cloud`-suffixed tag
+    (e.g. ``qwen3.5:cloud``, ``gpt-oss:120b-cloud``).
+
+    Accepts references either bare (``qwen3.5:cloud``) or prefixed
+    (``ollama:qwen3.5:cloud``).
+    """
+    if not model_id:
+        return False
+    # Strip an optional provider prefix: ollama:<repo>[:<tag>]
+    reference = model_id.split(":", maxsplit=1)[1] if model_id.startswith("ollama:") else model_id
+    # Split repo:tag — tag is the last :-separated segment.
+    tag = (
+        reference.rsplit(":", maxsplit=1)[1].lower()
+        if ":" in reference
+        else reference.lower()
+    )
+    return tag == "cloud" or tag.endswith("-cloud")
+
+
+def _is_loopback_address(host: str) -> bool:
+    try:
+        addr = ipaddress.ip_address(host)
+    except ValueError:
+        return False
+    return addr.is_loopback
+
+
+def _resolve_host_addresses(host: str) -> list[ipaddress.IPv4Address | ipaddress.IPv6Address]:
+    try:
+        infos = socket.getaddrinfo(host, None)
+    except socket.gaierror as exc:
+        raise LocalOnlyViolationError(
+            f"cannot resolve OLLAMA_BASE_URL host {host!r} under --local-only: {exc}"
+        ) from exc
+    addresses: list[ipaddress.IPv4Address | ipaddress.IPv6Address] = []
+    for info in infos:
+        sockaddr = info[4]
+        if not sockaddr:
+            continue
+        try:
+            addresses.append(ipaddress.ip_address(sockaddr[0]))
+        except ValueError:
+            continue
+    return addresses
+
+
+def enforce_endpoint_locality(
+    ollama_base_url: str | None,
+    *,
+    allow_hosts: Sequence[str] = (),
+    context: str = "local-only",
+) -> str:
+    """Assert that ``OLLAMA_BASE_URL`` points at a loopback/allowlisted host.
+
+    Returns the resolved host (for logging/manifest purposes).
+
+    Raises :class:`LocalOnlyViolationError` if the URL is missing, has a non-HTTP
+    scheme, is a hostname that resolves to any public address, or is a public
+    IP literal.
+    """
+    if not ollama_base_url:
+        raise LocalOnlyViolationError(
+            f"[{context}] OLLAMA_BASE_URL is not set. "
+            "Set OLLAMA_BASE_URL to a local Ollama endpoint "
+            "(e.g. http://localhost:11434/v1) to use local-only mode."
+        )
+
+    parsed = urlparse(ollama_base_url)
+    if parsed.scheme not in {"http", "https"}:
+        raise LocalOnlyViolationError(
+            f"[{context}] OLLAMA_BASE_URL must use http or https, got scheme "
+            f"{parsed.scheme!r}"
+        )
+    host = parsed.hostname
+    if not host:
+        raise LocalOnlyViolationError(
+            f"[{context}] OLLAMA_BASE_URL {ollama_base_url!r} has no host component"
+        )
+
+    host_lower = host.lower()
+    allow_set = {h.strip().lower() for h in allow_hosts if h.strip()}
+
+    # Loopback name?
+    if host_lower in _LOOPBACK_HOSTNAMES:
+        return host_lower
+
+    # Explicit allowlist hit on the name as given.
+    if host_lower in allow_set:
+        return host_lower
+
+    # IP literal?
+    if _is_loopback_address(host):
+        return host
+
+    # Resolve hostname and require every address to be loopback (or the name
+    # itself to be on the allowlist — already handled above).
+    addresses = _resolve_host_addresses(host)
+    if not addresses:
+        raise LocalOnlyViolationError(
+            f"[{context}] OLLAMA_BASE_URL host {host!r} did not resolve to any address"
+        )
+    non_loopback = [str(a) for a in addresses if not a.is_loopback]
+    if non_loopback:
+        raise LocalOnlyViolationError(
+            f"[{context}] OLLAMA_BASE_URL host {host!r} resolves to non-local addresses "
+            f"{non_loopback!r}; add it to IPL_LOCAL_ONLY_ALLOW_HOSTS if you trust this endpoint"
+        )
+    return host
+
+
+def enforce_local_only(
+    model_name: str,
+    *,
+    local_only_mode: bool,
+    ollama_base_url: str | None = None,
+    allow_hosts: Sequence[str] = (),
+    context: str = "local-only",
+) -> None:
+    """Reject any extraction request that could leave the machine.
+
+    No-op when ``local_only_mode`` is False. When True, raises
+    :class:`LocalOnlyViolationError` if any of the following is true:
+
+    1. The model's provider is not ``ollama``.
+    2. The model reference carries an Ollama cloud suffix
+       (``:cloud`` or ``-cloud`` tag suffix).
+    3. ``ollama_base_url`` is unset, malformed, or resolves to a non-local
+       host that isn't on ``allow_hosts``.
+
+    Callers pass ``context`` (e.g. ``"API request"``, ``"batch CLI"``,
+    ``"worker"``) so the error message names the enforcement path. Settings
+    coupling is kept out on purpose so this can be reused anywhere.
+    """
+    if not local_only_mode:
+        return
+
+    provider = provider_from_model_id(model_name)
+    if provider != "ollama":
+        raise LocalOnlyViolationError(
+            f"[{context}] model {model_name!r} is not an Ollama model "
+            "(local-only mode requires an ollama:<model> reference)"
+        )
+
+    if has_cloud_suffix(model_name):
+        raise LocalOnlyViolationError(
+            f"[{context}] model {model_name!r} is an Ollama cloud-routed model "
+            "(`:cloud` / `-cloud` suffix). Cloud-routed models proxy through "
+            "ollama.com and are not permitted under local-only."
+        )
+
+    enforce_endpoint_locality(
+        ollama_base_url,
+        allow_hosts=allow_hosts,
+        context=context,
+    )

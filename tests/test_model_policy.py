@@ -80,6 +80,9 @@ class TestOllamaNeedsNativeOutput:
     def test_nemotron_uses_tools(self):
         assert ollama_needs_native_output("ollama:nemotron-3-super:120b") is False
 
+    def test_nemotron_cascade_2_needs_native(self):
+        assert ollama_needs_native_output("ollama:nemotron-cascade-2") is True
+
     def test_gemma4_needs_native(self):
         assert ollama_needs_native_output("ollama:gemma4:26b") is True
         assert ollama_needs_native_output("ollama:gemma4:31b") is True
@@ -126,6 +129,7 @@ class TestLocalOnlyMode:
             "coding_model": "ollama:qwen3.5:35b-a3b",
             "coding_term_model": None,
             "coding_fallback_model": None,
+            "ollama_base_url": "http://localhost:11434/v1",
         }
         defaults.update(overrides)
         return ExtractorSettings(**defaults)
