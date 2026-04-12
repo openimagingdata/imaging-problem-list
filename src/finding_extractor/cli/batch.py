@@ -37,9 +37,10 @@ from finding_extractor.cli.runtime_budget import (
     DEFAULT_MAX_PREDICTED_RUNTIME_SECONDS,
     build_runtime_preflight,
 )
-from finding_extractor.core.config import get_settings
+from finding_extractor.core.config import ExtractorSettings, get_settings, override_settings
 from finding_extractor.core.logging_setup import setup_logging
 from finding_extractor.core.observability import configure_logfire
+from finding_extractor.llm.policy import LocalOnlyViolationError, enforce_local_only
 
 
 @click.group(name="finding-extractor-batch")
@@ -145,6 +146,12 @@ def cli() -> None:
     default=None,
     help="Directory for run state files.",
 )
+@click.option(
+    "--local-only",
+    is_flag=True,
+    default=False,
+    help="Enforce PHI-safe mode: only Ollama models on a local endpoint, no cloud fallback, no logfire.",
+)
 def run_command(
     inputs: tuple[Path, ...],
     glob_pattern: str,
@@ -168,10 +175,19 @@ def run_command(
     status_interval_seconds: float | None,
     manifest: Path | None,
     run_dir: Path | None,
+    local_only: bool,
 ) -> None:
     """Run batch extraction over files or directories."""
     if not inputs:
         raise click.ClickException("Provide at least one file or directory input.")
+
+    # Apply --local-only override early so the Layer 1 validator runs.
+    if local_only:
+        base_settings = get_settings()
+        overrides = base_settings.model_dump()
+        overrides["local_only_mode"] = True
+        settings_with_override = ExtractorSettings.model_validate(overrides)
+        override_settings(settings_with_override)
 
     input_files = collect_input_files(inputs, glob_pattern=glob_pattern, recursive=recursive)
     if not input_files:
@@ -224,6 +240,29 @@ def run_command(
     ensure_run_dir(paths)
     write_json_atomic(paths.config_path, build_config_dict(config))
 
+    # Layer 2: enforce local-only on the resolved model after option resolution.
+    settings = get_settings()
+    if settings.local_only_mode:
+        try:
+            enforce_local_only(
+                config.model,
+                local_only_mode=True,
+                ollama_base_url=settings.ollama_base_url,
+                allow_hosts=settings.local_only_allow_hosts,
+                context="batch CLI --local-only",
+            )
+        except LocalOnlyViolationError as exc:
+            raise click.ClickException(str(exc)) from exc
+
+        click.echo(
+            f"[local-only] Preflight passed. No report text or extraction output will leave this machine.\n"
+            f"  model               = {config.model}\n"
+            f"  ollama endpoint     = {settings.ollama_base_url}\n"
+            f"  allow hosts         = {settings.local_only_allow_hosts or '(loopback only)'}\n"
+            f"  inputs              = {len(config.inputs)}",
+            err=True,
+        )
+
     click.echo(
         "BATCH "
         f"run_id={config.run_id} mode={config.mode} inputs={len(config.inputs)} "
@@ -234,6 +273,11 @@ def run_command(
         starting_state = initial_state(config)
         starting_state["status"] = "starting"
         write_json_atomic(paths.state_path, starting_state)
+        # Propagate local-only into the detached child so its Layer 1 validator
+        # rejects any cloud fallback the same way the parent does.
+        child_env = os.environ.copy()
+        if settings.local_only_mode:
+            child_env["IPL_LOCAL_ONLY"] = "true"
         with paths.log_path.open("a", encoding="utf-8") as log_handle:
             cmd = [
                 sys.executable,
@@ -250,6 +294,7 @@ def run_command(
                 stdin=subprocess.DEVNULL,
                 start_new_session=True,
                 cwd=os.getcwd(),
+                env=child_env,
             )
         paths.pid_path.write_text(str(proc.pid), encoding="utf-8")
         click.echo(f"STARTED run_id={config.run_id} pid={proc.pid}")
