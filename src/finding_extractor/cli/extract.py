@@ -23,8 +23,12 @@ from pathlib import Path
 import click
 from asyncer import runnify
 
+from finding_extractor.cli._local_only import (
+    apply_cli_override,
+    assert_local_only_model,
+    print_manifest,
+)
 from finding_extractor.coding_summary import inline_coding_counts
-from finding_extractor.core.config import get_settings, override_settings
 from finding_extractor.core.logging_setup import setup_logging
 from finding_extractor.core.observability import configure_logfire
 from finding_extractor.db.store import ExtractionStore
@@ -37,11 +41,6 @@ from finding_extractor.llm.model_settings import (
     PRESET_NAMES,
     format_preset_help_summary,
     get_preset,
-)
-from finding_extractor.llm.policy import (
-    LocalOnlyViolationError,
-    enforce_local_only,
-    provider_from_model_id,
 )
 from finding_extractor.models import ExtractedReportFindings, ValidationResult
 
@@ -256,29 +255,13 @@ def main(
     """
     report_text = report_file.read()
 
-    # Apply CLI overrides to settings. Round-trip through ExtractorSettings
-    # so model_validator runs (model_copy skips validators).
-    settings = get_settings()
-    needs_override = local_only or verbose
-    if needs_override:
-        overrides: dict = settings.model_dump()
-        if local_only:
-            overrides["local_only_mode"] = True
-        if verbose:
-            overrides["log_level"] = "INFO"
-        from finding_extractor.core.config import ExtractorSettings
+    # Apply CLI overrides so the Layer 1 validator runs with --local-only on.
+    extra: dict = {"log_level": "INFO"} if verbose else {}
+    settings = apply_cli_override(local_only=local_only, extra_overrides=extra)
 
-        settings = ExtractorSettings.model_validate(overrides)
-        # Inject into the process-global cache so downstream get_settings() picks it up
-        override_settings(settings)
-
-    # Layer 2: CLI-level local-only enforcement
     if settings.local_only_mode:
         if logfire_enabled:
-            click.echo(
-                "Error: --logfire cannot be used with --local-only", err=True
-            )
-            sys.exit(1)
+            raise click.ClickException("--logfire cannot be used with --local-only")
         # Force logfire off regardless of env
         logfire_enabled = False
 
@@ -296,52 +279,14 @@ def main(
         if effective_reasoning is None:
             effective_reasoning = preset_obj.reasoning
 
-    # Layer 2: validate resolved effective model and Ollama environment
     if settings.local_only_mode:
         resolved = effective_model or settings.default_model
+        assert_local_only_model(resolved, settings, context="CLI --local-only", preset=effective_preset)
 
-        # Reject cloud-backed presets explicitly so the user sees a useful
-        # error rather than a generic "not an ollama model" rejection below.
-        if effective_preset is not None and provider_from_model_id(resolved) != "ollama":
-            click.echo(
-                f"[local-only] Preset {effective_preset!r} selects cloud model "
-                f"'{resolved}'. Use --preset local (or omit --preset).",
-                err=True,
-            )
-            sys.exit(1)
-
-        try:
-            enforce_local_only(
-                resolved,
-                local_only_mode=True,
-                ollama_base_url=settings.ollama_base_url,
-                context="CLI --local-only",
-            )
-        except LocalOnlyViolationError as exc:
-            click.echo(str(exc), err=True)
-            sys.exit(1)
-
-        # Policy-level checks passed. Verify the endpoint is actually up and
-        # the model is pulled.
-        # settings.ollama_base_url is guaranteed non-empty by enforce_local_only.
+        # settings.ollama_base_url is guaranteed non-empty by the helper above.
         assert settings.ollama_base_url is not None
         _preflight_local_only(settings.ollama_base_url, resolved)
-
-        # Print manifest
-        fallback = settings.fallback_model or "(none)"
-        reviewer = settings.reviewer_model if settings.reviewer_enabled else "disabled"
-        click.echo(
-            f"[local-only] Preflight passed. No report text or extraction output will leave this machine.\n"
-            f"  model               = {resolved}\n"
-            f"  ollama endpoint     = {settings.ollama_base_url}\n"
-            f"  fallback_model      = {fallback}\n"
-            f"  reviewer            = {reviewer}\n"
-            f"  coding              = disallowed\n"
-            f"  logfire             = disabled (overridden)\n"
-            f"  model downloads     = allowed (no PHI sent)\n"
-            f"  ⚠ model provenance  = NOT verified — do not use Modelfiles whose FROM points at a :cloud source",
-            err=True,
-        )
+        print_manifest(resolved, settings)
 
     try:
         extraction, validation_result, storage_metadata = _run_pipeline_sync(

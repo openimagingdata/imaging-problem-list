@@ -16,6 +16,11 @@ from pathlib import Path
 
 import click
 
+from finding_extractor.cli._local_only import (
+    apply_cli_override,
+    assert_local_only_model,
+    print_manifest,
+)
 from finding_extractor.cli.batch_engine import (
     build_config_dict,
     collect_input_files,
@@ -37,10 +42,9 @@ from finding_extractor.cli.runtime_budget import (
     DEFAULT_MAX_PREDICTED_RUNTIME_SECONDS,
     build_runtime_preflight,
 )
-from finding_extractor.core.config import ExtractorSettings, get_settings, override_settings
+from finding_extractor.core.config import get_settings
 from finding_extractor.core.logging_setup import setup_logging
 from finding_extractor.core.observability import configure_logfire
-from finding_extractor.llm.policy import LocalOnlyViolationError, enforce_local_only
 
 
 @click.group(name="finding-extractor-batch")
@@ -182,12 +186,7 @@ def run_command(
         raise click.ClickException("Provide at least one file or directory input.")
 
     # Apply --local-only override early so the Layer 1 validator runs.
-    if local_only:
-        base_settings = get_settings()
-        overrides = base_settings.model_dump()
-        overrides["local_only_mode"] = True
-        settings_with_override = ExtractorSettings.model_validate(overrides)
-        override_settings(settings_with_override)
+    apply_cli_override(local_only=local_only)
 
     input_files = collect_input_files(inputs, glob_pattern=glob_pattern, recursive=recursive)
     if not input_files:
@@ -213,27 +212,15 @@ def run_command(
         run_id=run_id,
         input_files=input_files,
     )
-    # Layer 2: enforce local-only on the resolved model before spending any
-    # effort on preflight / state-dir creation.
+    # Enforce local-only on the resolved model before any preflight/state-dir
+    # creation so rejected runs leave no on-disk residue.
     settings = get_settings()
     if settings.local_only_mode:
-        try:
-            enforce_local_only(
-                config.model,
-                local_only_mode=True,
-                ollama_base_url=settings.ollama_base_url,
-                context="batch CLI --local-only",
-            )
-        except LocalOnlyViolationError as exc:
-            raise click.ClickException(str(exc)) from exc
-
-        click.echo(
-            f"[local-only] Preflight passed. No report text or extraction output will leave this machine.\n"
-            f"  model               = {config.model}\n"
-            f"  ollama endpoint     = {settings.ollama_base_url}\n"
-            f"  inputs              = {len(config.inputs)}\n"
-            f"  ⚠ model provenance  = NOT verified — do not use Modelfiles whose FROM points at a :cloud source",
-            err=True,
+        assert_local_only_model(config.model, settings, context="batch CLI --local-only")
+        print_manifest(
+            config.model,
+            settings,
+            extras={"inputs": str(len(config.inputs))},
         )
 
     resolved_max_predicted_runtime = (
