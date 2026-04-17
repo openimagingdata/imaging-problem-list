@@ -61,6 +61,7 @@ class BatchRunConfig:
     status_interval_seconds: float
     manifest_path: str | None
     run_dir: str
+    log_path: str | None = None
 
 
 def _make_run_id() -> str:
@@ -158,6 +159,7 @@ class BatchFileProgress:
         self._chunk_total = 0
         self._next_chunk_idx = 0
         self._chunk_index: dict[str, int] = {}
+        self._drew_pair = False  # first paint is a full two-line print; then in-place
 
     def _set_status(self, status: str) -> None:
         self._status = status
@@ -212,21 +214,38 @@ class BatchFileProgress:
         if self._on_tty:
             self._redraw()
 
-    def finalize(self, *, glyph: str, summary: str) -> None:
-        """Replace the live line with the terminal outcome and break."""
+    def finalize(self, *, glyph: str, summary: str) -> str:
+        """Replace the live pair with the terminal outcome line; clear step line.
+
+        Returns the finalized line text (caller may persist it to a log file).
+        """
         total = fmt_duration(time.monotonic() - self._started)
         final = f"{self._header.replace('  ', f' {glyph} ', 1)} · {summary} · {total}"
-        if self._on_tty:
-            self._echo(f"\r\033[K{final}")
+        if self._on_tty and self._drew_pair:
+            # Move up 2 lines → clear file line → write final + \n →
+            # clear step line → leave cursor on step line (empty) so the
+            # next file starts there with no blank gap.
+            self._echo(f"\033[2A\r\033[2K{final}\n\r\033[2K", nl=False)
         else:
             self._echo(final)
+        return final
 
     def _redraw(self) -> None:
         now = time.monotonic()
         total = fmt_duration(now - self._started)
         status_elapsed = fmt_duration(now - self._status_started)
-        line = f"{self._header} · {self._status} · {total} / {status_elapsed}"
-        self._echo(f"\r\033[K{line}", nl=False)
+        file_line = f"{self._header} · {total}"
+        step_line = f"       {self._status} · {status_elapsed}"
+        if not self._drew_pair:
+            # First paint: two lines + newline each, cursor below both.
+            self._echo(file_line)
+            self._echo(step_line)
+            self._drew_pair = True
+            return
+        # Redraw in place: up 2, clear, line1 + \n, clear, line2 + \n.
+        self._echo(
+            f"\033[2A\r\033[2K{file_line}\n\r\033[2K{step_line}"
+        )
 
 
 async def _tick_loop(progress: BatchFileProgress) -> None:
@@ -365,6 +384,23 @@ async def run_engine(config: BatchRunConfig, *, emit: bool = True) -> int:
     manifest_path = Path(config.manifest_path) if config.manifest_path else None
     inputs = [Path(path) for path in config.inputs]
 
+    log_path = Path(config.log_path) if config.log_path else None
+    log_handle = None
+    if log_path is not None:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        log_handle = log_path.open("a", encoding="utf-8")
+
+    def log_line(text: str) -> None:
+        if log_handle is not None:
+            log_handle.write(text + "\n")
+            log_handle.flush()
+
+    log_line(
+        f"BATCH  run_id={config.run_id}  ·  {len(config.inputs)} inputs  ·  "
+        f"workers={config.workers}  ·  model={config.model}  ·  "
+        f"reasoning={config.reasoning or 'default'}  ·  mode={config.mode}"
+    )
+
     state = initial_state(config)
     write_json_atomic(paths.state_path, state)
 
@@ -466,16 +502,28 @@ async def run_engine(config: BatchRunConfig, *, emit: bool = True) -> int:
                     "duration_seconds": result["duration_seconds"],
                 }
                 await persist_state()
+                glyph = status_glyph.get(status, "•")
+                if status == "ok":
+                    out_name = Path(result["output_path"]).name
+                    summary = f"→ {out_name} · {result['findings_count']} findings"
+                elif status == "skipped":
+                    summary = "skipped (output exists)"
+                else:
+                    summary = f"{result['error'] or 'unknown error'}"
                 if emit and file_progress is not None:
-                    glyph = status_glyph.get(status, "•")
-                    if status == "ok":
-                        out_name = Path(result["output_path"]).name
-                        summary = f"→ {out_name} · {result['findings_count']} findings"
-                    elif status == "skipped":
-                        summary = "skipped (output exists)"
-                    else:
-                        summary = f"{result['error'] or 'unknown error'}"
-                    file_progress.finalize(glyph=glyph, summary=summary)
+                    final_line = file_progress.finalize(glyph=glyph, summary=summary)
+                    log_line(final_line)
+                else:
+                    # No TTY progress (e.g. detached child) — construct the
+                    # same one-line summary and log it (and echo if emit).
+                    duration = fmt_duration(result["duration_seconds"])
+                    line = (
+                        f"[{idx:>{idx_width}}/{total_files}] {glyph} "
+                        f"{source_path.name} · {summary} · {duration}"
+                    )
+                    if emit:
+                        click.echo(line)
+                    log_line(line)
             queue.task_done()
 
     async def reporter() -> None:
@@ -524,22 +572,28 @@ async def run_engine(config: BatchRunConfig, *, emit: bool = True) -> int:
             paths.results_path.read_text(encoding="utf-8"), encoding="utf-8"
         )
 
+    progress = state["progress"]
+    run_started = state.get("started_at_epoch")
+    total_elapsed = (
+        _now_epoch() - run_started if isinstance(run_started, (int, float)) else 0.0
+    )
+    done_line = (
+        "DONE  "
+        f"ok={progress['ok']}  "
+        f"skipped={progress['skipped']}  "
+        f"failed={progress['failed']}  "
+        f"timeout={progress['timeout']}  "
+        f"total={fmt_duration(total_elapsed)}  "
+        f"run_id={config.run_id}"
+    )
+    state_dir_line = f"      see {paths.base_dir}/ for per-file state"
     if emit:
-        progress = state["progress"]
-        run_started = state.get("started_at_epoch")
-        total_elapsed = (
-            _now_epoch() - run_started if isinstance(run_started, (int, float)) else 0.0
-        )
-        click.echo(
-            "DONE  "
-            f"ok={progress['ok']}  "
-            f"skipped={progress['skipped']}  "
-            f"failed={progress['failed']}  "
-            f"timeout={progress['timeout']}  "
-            f"total={fmt_duration(total_elapsed)}  "
-            f"run_id={config.run_id}"
-        )
-        click.echo(f"      see {paths.base_dir}/ for per-file state")
+        click.echo(done_line)
+        click.echo(state_dir_line)
+    log_line(done_line)
+    log_line(state_dir_line)
+    if log_handle is not None:
+        log_handle.close()
     return 1 if state["progress"]["failed"] or state["progress"]["timeout"] else 0
 
 
@@ -566,6 +620,7 @@ def build_config_dict(config: BatchRunConfig) -> dict[str, Any]:
         "status_interval_seconds": config.status_interval_seconds,
         "manifest_path": config.manifest_path,
         "run_dir": config.run_dir,
+        "log_path": config.log_path,
     }
 
 
@@ -589,6 +644,7 @@ def config_from_dict(payload: dict[str, Any]) -> BatchRunConfig:
         status_interval_seconds=float(payload["status_interval_seconds"]),
         manifest_path=payload.get("manifest_path"),
         run_dir=payload["run_dir"],
+        log_path=payload.get("log_path"),
     )
 
 
@@ -612,6 +668,7 @@ def resolve_run_options(
     run_dir: Path | None,
     run_id: str | None,
     input_files: list[Path],
+    log_path: Path | None = None,
 ) -> BatchRunConfig:
     settings = get_settings()
     resolved_model = model or settings.default_model
@@ -648,6 +705,8 @@ def resolve_run_options(
             "Invalid run id. Use 1-128 chars from [A-Za-z0-9._-], starting with alphanumeric."
         )
 
+    resolved_log = log_path.resolve() if log_path else None
+
     return BatchRunConfig(
         run_id=resolved_run_id,
         mode=mode,
@@ -667,4 +726,5 @@ def resolve_run_options(
         status_interval_seconds=resolved_status_interval,
         manifest_path=str(resolved_manifest) if resolved_manifest else None,
         run_dir=str(resolved_run_dir),
+        log_path=str(resolved_log) if resolved_log else None,
     )

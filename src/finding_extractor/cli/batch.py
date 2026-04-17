@@ -161,6 +161,13 @@ def cli() -> None:
     default=False,
     help="Enforce PHI-safe mode: only Ollama models on a local endpoint, no cloud fallback, no logfire.",
 )
+@click.option(
+    "--log",
+    "log_path",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Append a plain-text run log (banner + per-file completion + DONE) to this file.",
+)
 def run_command(
     inputs: tuple[Path, ...],
     glob_pattern: str,
@@ -185,6 +192,7 @@ def run_command(
     manifest: Path | None,
     run_dir: Path | None,
     local_only: bool,
+    log_path: Path | None,
 ) -> None:
     """Run batch extraction over files or directories."""
     if not inputs:
@@ -217,6 +225,7 @@ def run_command(
         run_dir=run_dir,
         run_id=run_id,
         input_files=input_files,
+        log_path=log_path,
     )
     # Enforce local-only on the resolved model before any preflight/state-dir
     # creation so rejected runs leave no on-disk residue.

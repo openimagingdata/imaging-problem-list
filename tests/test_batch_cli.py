@@ -324,6 +324,84 @@ def test_batch_run_local_only_without_ipl_model_env(monkeypatch, cli_runner):
         assert (reports_dir / "head_ct_001.json").exists()
 
 
+def test_batch_run_log_option_captures_summary(monkeypatch, cli_runner):
+    """--log PATH writes banner + per-file completion + DONE to the file."""
+
+    async def fake_run_extraction_runtime(
+        report_text,
+        *,
+        study_description,
+        model,
+        reasoning,
+        validate,
+        store,
+        db_path,
+        source_ref,
+        **kwargs,
+    ):
+        _ = (study_description, model, reasoning, validate, store, db_path, source_ref)
+        return _runtime_result(
+            ExtractedReportFindings(
+                exam_info=ExamInfo(study_description="Chest XR"),
+                findings=[
+                    Finding(
+                        finding_name="pleural effusion",
+                        presence="absent",
+                        report_text=report_text.strip(),
+                    )
+                ],
+                non_finding_text=[],
+            ),
+        )
+
+    monkeypatch.setattr(
+        "finding_extractor.cli.batch_engine.run_extraction_runtime",
+        fake_run_extraction_runtime,
+    )
+
+    with cli_runner.isolated_filesystem():
+        reports_dir = Path("reports")
+        reports_dir.mkdir(parents=True, exist_ok=True)
+        (reports_dir / "a.txt").write_text("No pleural effusion.", encoding="utf-8")
+        (reports_dir / "b.txt").write_text("No pneumothorax.", encoding="utf-8")
+
+        log_file = Path("batch.log")
+        result = cli_runner.invoke(
+            cli,
+            [
+                "run",
+                str(reports_dir),
+                "--glob",
+                "*.txt",
+                "--workers",
+                "1",
+                "--timeout-seconds",
+                "60",
+                "--retries",
+                "0",
+                "--run-id",
+                "batch-log-test",
+                "--run-dir",
+                ".runs",
+                "--model",
+                "openai:gpt-5-mini",
+                "--reasoning",
+                "medium",
+                "--log",
+                str(log_file),
+            ],
+        )
+
+        assert result.exit_code == 0, result.output
+        assert log_file.exists()
+        log_contents = log_file.read_text(encoding="utf-8")
+        assert "BATCH  run_id=batch-log-test" in log_contents
+        assert "[1/2]" in log_contents and "a.txt" in log_contents
+        assert "[2/2]" in log_contents and "b.txt" in log_contents
+        assert "DONE" in log_contents
+        assert "ok=2" in log_contents
+
+
 def test_batch_run_emits_progress_counters(monkeypatch, cli_runner):
     """Per-file output includes [N/M] counter and a unicode status glyph."""
 
