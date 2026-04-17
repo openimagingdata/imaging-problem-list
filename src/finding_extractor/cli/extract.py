@@ -257,7 +257,11 @@ def main(
 
     # Apply CLI overrides so the Layer 1 validator runs with --local-only on.
     extra: dict = {"log_level": "INFO"} if verbose else {}
-    settings = apply_cli_override(local_only=local_only, extra_overrides=extra)
+    settings = apply_cli_override(
+        local_only=local_only,
+        model_override=model,
+        extra_overrides=extra,
+    )
 
     if settings.local_only_mode:
         if logfire_enabled:

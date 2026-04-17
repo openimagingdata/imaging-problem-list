@@ -249,6 +249,157 @@ def test_batch_run_allow_slow_overrides_runtime_guard(monkeypatch, cli_runner):
         assert (reports_dir / "a.extracted.json").exists()
 
 
+def test_batch_run_local_only_without_ipl_model_env(monkeypatch, cli_runner):
+    """--local-only --model ollama:X works without requiring IPL_MODEL in env.
+
+    Regression test for the validator-timing bug where Layer 1 rejected cloud
+    defaults before the CLI --model override could propagate.
+    """
+    monkeypatch.setenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+    # Crucially: do NOT set IPL_MODEL / IPL_FALLBACK_MODEL / IPL_REVIEWER_MODEL.
+    # The CLI --model flag must be enough on its own.
+
+    async def fake_run_extraction_runtime(
+        report_text,
+        *,
+        study_description,
+        model,
+        reasoning,
+        validate,
+        store,
+        db_path,
+        source_ref,
+        **kwargs,
+    ):
+        _ = (study_description, model, reasoning, validate, store, db_path, source_ref)
+        return _runtime_result(
+            ExtractedReportFindings(
+                exam_info=ExamInfo(study_description="XR shoulder"),
+                findings=[
+                    Finding(
+                        finding_name="calcific tendonitis",
+                        presence="present",
+                        report_text=report_text.strip(),
+                    )
+                ],
+                non_finding_text=[],
+            ),
+        )
+
+    monkeypatch.setattr(
+        "finding_extractor.cli.batch_engine.run_extraction_runtime",
+        fake_run_extraction_runtime,
+    )
+
+    with cli_runner.isolated_filesystem():
+        reports_dir = Path("reports")
+        reports_dir.mkdir(parents=True, exist_ok=True)
+        (reports_dir / "head_ct_001.txt").write_text("Calcific tendonitis.", encoding="utf-8")
+
+        result = cli_runner.invoke(
+            cli,
+            [
+                "run",
+                str(reports_dir),
+                "--glob",
+                "head_ct_*.txt",
+                "--suffix",
+                ".json",
+                "--run-id",
+                "batch-local-only-no-env",
+                "--run-dir",
+                ".runs",
+                "--model",
+                "ollama:gemma4-radextract",
+                "--reasoning",
+                "none",
+                "--local-only",
+            ],
+        )
+
+        assert result.exit_code == 0, result.output
+        assert "[local-only] Preflight passed" in result.output
+        # --suffix .json replaces the extension (source_path.with_suffix) so
+        # head_ct_001.txt → head_ct_001.json.
+        assert (reports_dir / "head_ct_001.json").exists()
+
+
+def test_batch_run_emits_progress_counters(monkeypatch, cli_runner):
+    """Per-file output includes [N/M] counter and a unicode status glyph."""
+
+    async def fake_run_extraction_runtime(
+        report_text,
+        *,
+        study_description,
+        model,
+        reasoning,
+        validate,
+        store,
+        db_path,
+        source_ref,
+        **kwargs,
+    ):
+        _ = (study_description, model, reasoning, validate, store, db_path, source_ref)
+        return _runtime_result(
+            ExtractedReportFindings(
+                exam_info=ExamInfo(study_description="Chest XR"),
+                findings=[
+                    Finding(
+                        finding_name="pleural effusion",
+                        presence="absent",
+                        report_text=report_text.strip(),
+                    )
+                ],
+                non_finding_text=[],
+            ),
+        )
+
+    monkeypatch.setattr(
+        "finding_extractor.cli.batch_engine.run_extraction_runtime",
+        fake_run_extraction_runtime,
+    )
+
+    with cli_runner.isolated_filesystem():
+        reports_dir = Path("reports")
+        reports_dir.mkdir(parents=True, exist_ok=True)
+        (reports_dir / "a.txt").write_text("No pleural effusion.", encoding="utf-8")
+        (reports_dir / "b.txt").write_text("No pneumothorax.", encoding="utf-8")
+
+        result = cli_runner.invoke(
+            cli,
+            [
+                "run",
+                str(reports_dir),
+                "--glob",
+                "*.txt",
+                "--workers",
+                "1",
+                "--timeout-seconds",
+                "60",
+                "--retries",
+                "0",
+                "--run-id",
+                "batch-counter-ux",
+                "--run-dir",
+                ".runs",
+                "--model",
+                "openai:gpt-5-mini",
+                "--reasoning",
+                "medium",
+            ],
+        )
+
+        assert result.exit_code == 0, result.output
+        # Counter format: [1/2] and [2/2] should both appear.
+        assert "[1/2]" in result.output
+        assert "[2/2]" in result.output
+        # Success glyph should appear (U+2713 check mark).
+        assert "✓" in result.output
+        # Polished DONE banner uses the key=value format for scripted parsing.
+        assert "DONE" in result.output
+        assert "ok=2" in result.output
+
+
 def test_batch_run_interactive_writes_outputs_and_state(monkeypatch, cli_runner):
     """Interactive run should produce extracted files and terminal state metadata."""
 

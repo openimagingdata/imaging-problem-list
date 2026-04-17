@@ -21,6 +21,7 @@ from finding_extractor.cli.batch_state import (
     _utc_now_iso,
     append_jsonl,
     ensure_run_dir,
+    fmt_duration,
     initial_state,
     render_status,
     run_paths,
@@ -270,6 +271,11 @@ async def run_engine(config: BatchRunConfig, *, emit: bool = True) -> int:
     for _ in range(config.workers):
         queue.put_nowait(None)
 
+    total_files = len(inputs)
+    idx_width = len(str(total_files))
+    started_count = 0
+    status_glyph = {"ok": "✓", "skipped": "○", "failed": "✗", "timeout": "⌛"}
+
     lock = asyncio.Lock()
     stop_event = asyncio.Event()
 
@@ -278,6 +284,7 @@ async def run_engine(config: BatchRunConfig, *, emit: bool = True) -> int:
         write_json_atomic(paths.state_path, state)
 
     async def worker(worker_id: int) -> None:
+        nonlocal started_count
         worker_key = str(worker_id)
         while True:
             source_path = await queue.get()
@@ -292,11 +299,16 @@ async def run_engine(config: BatchRunConfig, *, emit: bool = True) -> int:
                 return
 
             async with lock:
+                started_count += 1
+                idx = started_count
                 state["workers"][worker_key]["status"] = "running"
                 state["workers"][worker_key]["file"] = source_path.name
                 state["workers"][worker_key]["started_at"] = _utc_now_iso()
                 state["workers"][worker_key]["started_at_epoch"] = _now_epoch()
                 await persist_state()
+
+            if emit:
+                click.echo(f"[{idx:>{idx_width}}/{total_files}] ▶  {source_path.name}")
 
             result = await _process_one_file(
                 source_path,
@@ -321,18 +333,26 @@ async def run_engine(config: BatchRunConfig, *, emit: bool = True) -> int:
                 }
                 await persist_state()
                 if emit:
+                    glyph = status_glyph.get(status, "•")
+                    source_name = Path(result["source_path"]).name
+                    duration = fmt_duration(result["duration_seconds"])
                     if status == "ok":
+                        out_name = Path(result["output_path"]).name
                         click.echo(
-                            f"[OK] {Path(result['source_path']).name} -> "
-                            f"{Path(result['output_path']).name} "
-                            f"({result['findings_count']} findings, {result['duration_seconds']:.1f}s)"
+                            f"[{idx:>{idx_width}}/{total_files}] {glyph}  "
+                            f"{source_name} → {out_name}  ·  "
+                            f"{result['findings_count']} findings  ·  {duration}"
                         )
                     elif status == "skipped":
-                        click.echo(f"[SKIP] {Path(result['output_path']).name} exists")
+                        click.echo(
+                            f"[{idx:>{idx_width}}/{total_files}] {glyph}  "
+                            f"{source_name}  ·  skipped (output exists)"
+                        )
                     else:
                         click.echo(
-                            f"[{status.upper()}] {Path(result['source_path']).name}: "
-                            f"{result['error'] or 'unknown error'}"
+                            f"[{idx:>{idx_width}}/{total_files}] {glyph}  "
+                            f"{source_name}  ·  {result['error'] or 'unknown error'}"
+                            f"  ·  {duration}"
                         )
             queue.task_done()
 
@@ -379,13 +399,20 @@ async def run_engine(config: BatchRunConfig, *, emit: bool = True) -> int:
 
     if emit:
         progress = state["progress"]
-        click.echo(
-            "DONE "
-            f"run_id={config.run_id} "
-            f"total={progress['total']} done={progress['done']} "
-            f"ok={progress['ok']} skipped={progress['skipped']} "
-            f"failed={progress['failed']} timeout={progress['timeout']}"
+        run_started = state.get("started_at_epoch")
+        total_elapsed = (
+            _now_epoch() - run_started if isinstance(run_started, (int, float)) else 0.0
         )
+        click.echo(
+            "DONE  "
+            f"ok={progress['ok']}  "
+            f"skipped={progress['skipped']}  "
+            f"failed={progress['failed']}  "
+            f"timeout={progress['timeout']}  "
+            f"total={fmt_duration(total_elapsed)}  "
+            f"run_id={config.run_id}"
+        )
+        click.echo(f"      see {paths.base_dir}/ for per-file state")
     return 1 if state["progress"]["failed"] or state["progress"]["timeout"] else 0
 
 

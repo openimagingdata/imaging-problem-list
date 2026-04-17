@@ -206,6 +206,56 @@ class TestLocalOnlyMode:
                 ollama_base_url=None,
             )
 
+    # --- Auto-applied local defaults (new in the simplify pass) ------------
+
+    def test_applies_local_defaults_when_unset(self):
+        """Fields not explicitly set get local-friendly defaults under local-only."""
+        settings = self._make_settings()
+        assert settings.allow_unknown_model_reasoning is True
+        assert settings.subagent_timeout_seconds == 300.0
+        assert settings.batch_workers == 1
+
+    def test_respects_explicit_overrides_over_local_defaults(self):
+        """User-supplied values beat the auto-defaults."""
+        settings = self._make_settings(
+            batch_workers=4,
+            subagent_timeout_seconds=60.0,
+            allow_unknown_model_reasoning=False,
+        )
+        assert settings.batch_workers == 4
+        assert settings.subagent_timeout_seconds == 60.0
+        assert settings.allow_unknown_model_reasoning is False
+
+    def test_accepts_cli_model_override_via_default_model(self):
+        """apply_cli_override injects default_model before validation runs."""
+        # Simulates the CLI calling ExtractorSettings.model_validate(overrides)
+        # with both local_only_mode and default_model at once.
+        settings = ExtractorSettings.model_validate(
+            {
+                "local_only_mode": True,
+                "default_model": "ollama:qwen3.5:35b-a3b",
+                "fallback_model": None,
+                "reviewer_model": None,
+                "coding_model": "ollama:qwen3.5:35b-a3b",
+                "coding_term_model": None,
+                "coding_fallback_model": None,
+                "ollama_base_url": "http://localhost:11434/v1",
+            }
+        )
+        assert settings.default_model == "ollama:qwen3.5:35b-a3b"
+        assert settings.local_only_mode is True
+
+    def test_does_not_apply_defaults_when_disabled(self):
+        """Local defaults don't leak into non-local-only settings."""
+        settings = ExtractorSettings(
+            local_only_mode=False,
+            default_model="openai:gpt-5.2",
+        )
+        # Defaults from config.py constants — not the local-only ones.
+        assert settings.batch_workers == 4
+        assert settings.subagent_timeout_seconds == 20.0
+        assert settings.allow_unknown_model_reasoning is False
+
     def test_rejects_cloud_suffix_default_model(self):
         with pytest.raises(ValueError, match="cloud-routed"):
             ExtractorSettings(

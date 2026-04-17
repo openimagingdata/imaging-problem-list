@@ -62,6 +62,22 @@ def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def fmt_duration(seconds: float) -> str:
+    """Render ``seconds`` as a compact human-readable duration.
+
+    Examples: ``58s``, ``2m 14s``, ``1h 3m``.
+    """
+    if seconds < 60:
+        return f"{seconds:.0f}s"
+    total_minutes = int(seconds // 60)
+    if total_minutes < 60:
+        remainder_seconds = int(seconds - total_minutes * 60)
+        return f"{total_minutes}m {remainder_seconds:02d}s"
+    hours = total_minutes // 60
+    remainder_minutes = total_minutes - hours * 60
+    return f"{hours}h {remainder_minutes:02d}m"
+
+
 def initial_state(config: Any) -> dict[str, Any]:
     """Create initial state.json structure from a BatchRunConfig."""
     workers = {
@@ -79,6 +95,7 @@ def initial_state(config: Any) -> dict[str, Any]:
         "mode": config.mode,
         "status": "running",
         "started_at": _utc_now_iso(),
+        "started_at_epoch": _now_epoch(),
         "ended_at": None,
         "updated_at": _utc_now_iso(),
         "error": None,
@@ -110,9 +127,40 @@ def initial_state(config: Any) -> dict[str, Any]:
     }
 
 
-def render_status(state: dict[str, Any]) -> str:
+def render_status(state: dict[str, Any], *, verbose: bool = False) -> str:
+    """Format run state for display.
+
+    The default (``verbose=False``) is a single-line progress readout suitable
+    for streaming updates during interactive runs. ``verbose=True`` returns
+    the full multi-line form (used by ``batch status --watch``) that includes
+    per-worker detail.
+    """
     progress = state["progress"]
     now_epoch = _now_epoch()
+    run_started = state.get("started_at_epoch")
+    elapsed = (now_epoch - run_started) if isinstance(run_started, (int, float)) else 0.0
+
+    running = [
+        worker for worker in state["workers"].values() if worker["status"] == "running"
+    ]
+
+    if not verbose:
+        bits = [
+            f"~ {progress['done']}/{progress['total']}",
+            f"ok {progress['ok']}",
+            f"fail {progress['failed']}",
+            f"skip {progress['skipped']}",
+        ]
+        if running:
+            worker = running[0]
+            started = worker.get("started_at_epoch")
+            file_elapsed = (
+                (now_epoch - started) if isinstance(started, (int, float)) else 0.0
+            )
+            bits.append(f"running {worker['file']} ({fmt_duration(file_elapsed)})")
+        bits.append(f"{fmt_duration(elapsed)} elapsed")
+        return "  ·  ".join(bits)
+
     lines = [
         (
             "RUN "
@@ -126,8 +174,10 @@ def render_status(state: dict[str, Any]) -> str:
     for worker_id, worker in sorted(state["workers"].items(), key=lambda item: int(item[0])):
         if worker["status"] == "running":
             started = worker.get("started_at_epoch")
-            elapsed = (now_epoch - started) if isinstance(started, (int, float)) else 0.0
-            lines.append(f"w{worker_id}: running {worker['file']} ({elapsed:.1f}s)")
+            file_elapsed = (
+                (now_epoch - started) if isinstance(started, (int, float)) else 0.0
+            )
+            lines.append(f"w{worker_id}: running {worker['file']} ({file_elapsed:.1f}s)")
         else:
             lines.append(f"w{worker_id}: idle")
     return "\n".join(lines)

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
+from typing import Any
 
 from pydantic import AliasChoices, Field, ValidationInfo, field_validator, model_validator
 from pydantic_settings import (
@@ -530,6 +531,43 @@ class ExtractorSettings(BaseSettings):
             "OLLAMA_BASE_URL",
         ),
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _apply_local_only_defaults(cls, data: Any) -> Any:
+        """Inject local-friendly defaults when ``local_only_mode`` is active.
+
+        Runs before field validation so these values behave like real defaults
+        (honoring explicit user overrides from env/TOML/CLI). Three fields
+        bite users who forget them under local-only; handle them here instead
+        of making every user memorize the incantation:
+
+        - ``allow_unknown_model_reasoning`` → True (custom Modelfiles aren't in
+          the catalog; the default False rejects them)
+        - ``subagent_timeout_seconds`` → 300.0 (local models routinely need
+          30-90s per chunk; default 20 times out mid-chunk)
+        - ``batch_workers`` → 1 (Ollama serializes internally; concurrent
+          requests degrade quality and speed)
+
+        An explicit env var / TOML / CLI value wins over the default because
+        ``"<field>" in data`` is checked — pydantic-settings has already
+        merged all sources into ``data`` by the time this runs.
+        """
+        if not isinstance(data, dict):
+            return data
+        local_only = data.get("local_only_mode") or data.get("IPL_LOCAL_ONLY")
+        if not local_only:
+            return data
+        # Map each field to (value, env-alias). A field counts as "set" if
+        # either its Python name or its env alias appears in the input dict.
+        for field_name, env_alias, value in (
+            ("allow_unknown_model_reasoning", "IPL_ALLOW_UNKNOWN_MODEL_REASONING", True),
+            ("subagent_timeout_seconds", "IPL_SUBAGENT_TIMEOUT_SECONDS", 300.0),
+            ("batch_workers", "IPL_BATCH_WORKERS", 1),
+        ):
+            if field_name not in data and env_alias not in data:
+                data[field_name] = value
+        return data
 
     @model_validator(mode="after")
     def _enforce_local_only(self) -> ExtractorSettings:

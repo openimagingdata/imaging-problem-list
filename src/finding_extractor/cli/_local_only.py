@@ -12,6 +12,7 @@ from __future__ import annotations
 from typing import Any
 
 import click
+from pydantic import ValidationError
 
 from finding_extractor.core.config import ExtractorSettings, get_settings, override_settings
 from finding_extractor.llm.policy import (
@@ -24,22 +25,47 @@ from finding_extractor.llm.policy import (
 def apply_cli_override(
     *,
     local_only: bool,
+    model_override: str | None = None,
     extra_overrides: dict[str, Any] | None = None,
 ) -> ExtractorSettings:
     """Rebuild settings with CLI overrides applied and inject into the global cache.
 
     Round-trips through ``model_dump`` / ``model_validate`` so the Layer 1
     validator runs (``model_copy(update=...)`` skips validators).
+
+    ``model_override`` injects the CLI ``--model`` flag as ``default_model`` so
+    the Layer 1 validator sees the effective model. Without this, a user
+    running ``--local-only --model ollama:X`` would hit the validator at
+    settings load (before the CLI flag had a chance to propagate) and be
+    rejected for whatever ``IPL_MODEL`` happened to be in their env.
     """
     settings = get_settings()
-    if not local_only and not extra_overrides:
+    if not local_only and model_override is None and not extra_overrides:
         return settings
-    overrides = settings.model_dump()
+    # ``exclude_unset=True`` preserves the "user didn't set this" signal
+    # through the round-trip, so the ``mode="before"`` model_validator can
+    # apply local-friendly defaults only to genuinely unset fields.
+    overrides = settings.model_dump(exclude_unset=True)
     if local_only:
         overrides["local_only_mode"] = True
+    if model_override is not None:
+        overrides["default_model"] = model_override
     if extra_overrides:
         overrides.update(extra_overrides)
-    new_settings = ExtractorSettings.model_validate(overrides)
+    try:
+        new_settings = ExtractorSettings.model_validate(overrides)
+    except ValidationError as exc:
+        # CLI validation failures should surface as clean Click errors rather
+        # than pydantic tracebacks. Prefer the underlying ``ctx.error`` message
+        # (the string the field/model validator actually raised), else fall
+        # back to pydantic's ``msg``.
+        errors = exc.errors()
+        if errors:
+            first = errors[0]
+            cause = first.get("ctx", {}).get("error")
+            message = str(cause) if cause is not None else first.get("msg", str(exc))
+            raise click.ClickException(message) from exc
+        raise
     override_settings(new_settings)
     return new_settings
 

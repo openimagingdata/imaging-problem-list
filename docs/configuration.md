@@ -211,6 +211,30 @@ Set `IPL_LOCAL_ONLY=true` (or pass `--local-only` to `finding-extractor` / `find
 
 > ⚠️ **Known limitation — Modelfile aliases are not inspected.** A local Ollama model built from a Modelfile whose `FROM` points at a `:cloud` / `-cloud` source bypasses the tag-suffix check. If you use Modelfile aliases, verify each one's `FROM` line yourself before running on PHI. Tracked in `docs/plans/local-only-future-tightening.md`.
 
+### Quick Start
+
+`.env` needs only:
+
+```
+OLLAMA_BASE_URL=http://localhost:11434/v1
+```
+
+Then a batch run looks like:
+
+```bash
+uv run --env-file .env finding-extractor-batch run /path/to/reports \
+  --glob "head_ct_*.txt" --suffix .json \
+  --model ollama:gemma4-radextract --local-only
+```
+
+Under `--local-only` the system auto-applies:
+- `allow_unknown_model_reasoning=True` (so custom Modelfiles like `gemma4-radextract` work)
+- `subagent_timeout_seconds=300` (local models routinely take 30-90s per chunk)
+- `batch_workers=1` (Ollama serializes internally; concurrent requests degrade)
+- `--allow-slow` on the batch runtime budget (local is always "slow" by cloud standards)
+
+Any explicit `IPL_*` env var or CLI flag beats the auto-default. Set them only when you need something different.
+
 ### What it enforces
 
 Every entry point below validates the resolved model, cloud-suffix tag, and Ollama endpoint before any model call:

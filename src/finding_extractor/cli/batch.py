@@ -185,8 +185,9 @@ def run_command(
     if not inputs:
         raise click.ClickException("Provide at least one file or directory input.")
 
-    # Apply --local-only override early so the Layer 1 validator runs.
-    apply_cli_override(local_only=local_only)
+    # Apply --local-only + CLI --model override early so the Layer 1
+    # validator sees the effective model (not just IPL_MODEL).
+    apply_cli_override(local_only=local_only, model_override=model)
 
     input_files = collect_input_files(inputs, glob_pattern=glob_pattern, recursive=recursive)
     if not input_files:
@@ -217,6 +218,9 @@ def run_command(
     settings = get_settings()
     if settings.local_only_mode:
         assert_local_only_model(config.model, settings, context="batch CLI --local-only")
+        # Local extraction inherently exceeds the cloud-tuned 900s runtime
+        # budget; auto-imply --allow-slow so users don't have to remember it.
+        allow_slow = True
         print_manifest(
             config.model,
             settings,
@@ -251,9 +255,9 @@ def run_command(
     write_json_atomic(paths.config_path, build_config_dict(config))
 
     click.echo(
-        "BATCH "
-        f"run_id={config.run_id} mode={config.mode} inputs={len(config.inputs)} "
-        f"workers={config.workers} model={config.model} reasoning={config.reasoning or 'default'}"
+        f"BATCH  run_id={config.run_id}  ·  {len(config.inputs)} inputs  ·  "
+        f"workers={config.workers}  ·  model={config.model}  ·  "
+        f"reasoning={config.reasoning or 'default'}  ·  mode={config.mode}"
     )
 
     if config.mode == "detached":
@@ -327,7 +331,7 @@ def status_command(
 
     def print_once() -> dict:
         state = load_json(paths.state_path)
-        click.echo(render_status(state))
+        click.echo(render_status(state, verbose=True))
         if state.get("error"):
             click.echo(f"ERROR {state['error']}")
         if state["status"] in _TERMINAL_STATUSES:
