@@ -53,6 +53,11 @@ def cli() -> None:
     settings = get_settings()
     logfire_enabled = configure_logfire(runtime="cli")
     setup_logging(settings, include_logfire_processor=logfire_enabled)
+    # Silence the huggingface_hub unauthenticated-request warnings. We download
+    # the embedding model weights for semantic chunking — no data sent.
+    import logging as _logging
+
+    _logging.getLogger("huggingface_hub.utils._http").setLevel(_logging.ERROR)
 
 
 @cli.command("run")
@@ -242,10 +247,13 @@ def run_command(
         budget_seconds=resolved_max_predicted_runtime,
         allow_slow=allow_slow,
     )
-    click.echo(preflight_line)
+    # Under --local-only we auto-imply --allow-slow; the "running despite
+    # high predicted bound" warning is pure noise for that workflow.
+    if not settings.local_only_mode:
+        click.echo(preflight_line)
     if preflight_error:
         raise click.ClickException(preflight_error)
-    if preflight_warning:
+    if preflight_warning and not settings.local_only_mode:
         click.echo(preflight_warning, err=True)
 
     resolved_output_dir = Path(config.output_dir) if config.output_dir else None

@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 import re
+import sys
 import time
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -23,7 +25,6 @@ from finding_extractor.cli.batch_state import (
     ensure_run_dir,
     fmt_duration,
     initial_state,
-    render_status,
     run_paths,
     write_json_atomic,
 )
@@ -109,6 +110,7 @@ async def _run_batch_extraction_runtime(
     store: ExtractionStore | None,
     db_path: Path | None,
     source_ref: str | None,
+    progress_callback=None,
 ):
     """Run shared extraction runtime and unwrap CLI/batch-oriented tuple."""
     result = await run_extraction_runtime(
@@ -121,8 +123,120 @@ async def _run_batch_extraction_runtime(
         store=store,
         db_path=db_path,
         source_ref=source_ref,
+        progress_callback=progress_callback,
     )
     return result.extraction, result.validation_result, result.storage_metadata
+
+
+class BatchFileProgress:
+    """Live single-line progress display for one batch file.
+
+    Rewrites a single line as the extractor walks through stages, showing
+    ``[N/M] filename · <status> · <total> / <status-elapsed>``. When the file
+    completes the line is finalized with the outcome glyph + finding count +
+    total time, then the next file's line starts below.
+
+    In non-TTY mode (CI, redirected stdout), falls back to one-line-per-file
+    at the end so logs don't accumulate carriage-returns as separate rows.
+    """
+
+    _CHUNK_START_RE = re.compile(r"chunk=([^\s]+) attempt=(\d+) status=started")
+    _CHUNK_DONE_RE = re.compile(
+        r"chunk=([^\s]+) attempt=(\d+) status=completed findings=(\d+)"
+    )
+    _CHUNK_FAIL_RE = re.compile(
+        r"chunk=([^\s]+) attempt=(\d+) status=failed error=([A-Za-z0-9_]+)"
+    )
+
+    def __init__(self, *, header: str, on_tty: bool, echo: Any = click.echo):
+        self._header = header  # e.g. "[1/9] head_ct_1.txt"
+        self._on_tty = on_tty
+        self._echo = echo
+        self._started = time.monotonic()
+        self._status = "starting"
+        self._status_started = self._started
+        self._chunk_total = 0
+        self._next_chunk_idx = 0
+        self._chunk_index: dict[str, int] = {}
+
+    def _set_status(self, status: str) -> None:
+        self._status = status
+        self._status_started = time.monotonic()
+
+    def start(self) -> None:
+        if self._on_tty:
+            self._redraw()
+
+    async def __call__(self, message: str) -> None:
+        detail = message.partition("] ")[2]
+        stage = message.partition("] ")[0].removeprefix("[stage:")
+
+        if stage == "sectionize":
+            m = re.search(r"mode=\S+ sections=\d+ chunks=(\d+)", detail)
+            if m:
+                self._chunk_total = int(m.group(1))
+                self._set_status(f"{self._chunk_total} chunks, reading exam info")
+        elif stage == "extract_exam_info":
+            if detail.startswith("start"):
+                self._set_status("exam_info")
+            elif detail.startswith("completed"):
+                # Brief transition; next chunk-started will update.
+                self._set_status("merging exam info")
+        elif stage == "extract_sections":
+            m = self._CHUNK_START_RE.search(detail)
+            if m:
+                chunk_id = m.group(1)
+                if chunk_id not in self._chunk_index:
+                    self._next_chunk_idx += 1
+                    self._chunk_index[chunk_id] = self._next_chunk_idx
+                idx = self._chunk_index[chunk_id]
+                total = self._chunk_total or idx
+                self._set_status(f"chunk {idx}/{total}")
+            m = self._CHUNK_DONE_RE.search(detail)
+            if m:
+                # Transient state between chunks.
+                self._set_status("merging")
+            m = self._CHUNK_FAIL_RE.search(detail)
+            if m:
+                _cid, attempt, err = m.groups()
+                self._set_status(f"retry (attempt {attempt}, {err})")
+        elif stage == "merge_dedupe":
+            self._set_status("merging")
+        elif stage == "validate_output":
+            self._set_status("validating")
+
+        if self._on_tty:
+            self._redraw()
+
+    async def tick(self) -> None:
+        if self._on_tty:
+            self._redraw()
+
+    def finalize(self, *, glyph: str, summary: str) -> None:
+        """Replace the live line with the terminal outcome and break."""
+        total = fmt_duration(time.monotonic() - self._started)
+        final = f"{self._header.replace('  ', f' {glyph} ', 1)} · {summary} · {total}"
+        if self._on_tty:
+            self._echo(f"\r\033[K{final}")
+        else:
+            self._echo(final)
+
+    def _redraw(self) -> None:
+        now = time.monotonic()
+        total = fmt_duration(now - self._started)
+        status_elapsed = fmt_duration(now - self._status_started)
+        line = f"{self._header} · {self._status} · {total} / {status_elapsed}"
+        self._echo(f"\r\033[K{line}", nl=False)
+
+
+async def _tick_loop(progress: BatchFileProgress) -> None:
+    """Redraw ``progress`` every 0.5s so the timer clock keeps moving."""
+    try:
+        while True:
+            await asyncio.sleep(0.5)
+            await progress.tick()
+    except asyncio.CancelledError:
+        return
 
 
 async def _process_one_file(
@@ -131,6 +245,7 @@ async def _process_one_file(
     config: BatchRunConfig,
     output_dir: Path | None,
     store: ExtractionStore | None,
+    progress_callback=None,
 ) -> dict[str, Any]:
     started_monotonic = time.monotonic()
     output_path = _resolve_output_path(source_path, output_dir, config.suffix)
@@ -164,6 +279,7 @@ async def _process_one_file(
                     store=store,
                     db_path=Path(config.db_path),
                     source_ref=str(source_path),
+                    progress_callback=progress_callback,
                 ),
                 timeout=config.timeout_seconds,
             )
@@ -307,15 +423,33 @@ async def run_engine(config: BatchRunConfig, *, emit: bool = True) -> int:
                 state["workers"][worker_key]["started_at_epoch"] = _now_epoch()
                 await persist_state()
 
+            # Single live-updating progress line per file: header + status
+            # + two timers (total-elapsed / status-elapsed). Ticker keeps the
+            # line fresh between events so the user always sees a moving clock.
+            header = f"[{idx:>{idx_width}}/{total_files}]  {source_path.name}"
+            file_progress: BatchFileProgress | None = None
+            ticker_task: asyncio.Task | None = None
             if emit:
-                click.echo(f"[{idx:>{idx_width}}/{total_files}] ▶  {source_path.name}")
+                file_progress = BatchFileProgress(
+                    header=header,
+                    on_tty=sys.stdout.isatty(),
+                )
+                file_progress.start()
+                ticker_task = asyncio.create_task(_tick_loop(file_progress))
 
-            result = await _process_one_file(
-                source_path,
-                config=config,
-                output_dir=output_dir,
-                store=store,
-            )
+            try:
+                result = await _process_one_file(
+                    source_path,
+                    config=config,
+                    output_dir=output_dir,
+                    store=store,
+                    progress_callback=file_progress,
+                )
+            finally:
+                if ticker_task is not None:
+                    ticker_task.cancel()
+                    with contextlib.suppress(asyncio.CancelledError):
+                        await ticker_task
 
             async with lock:
                 append_jsonl(paths.results_path, result)
@@ -332,38 +466,31 @@ async def run_engine(config: BatchRunConfig, *, emit: bool = True) -> int:
                     "duration_seconds": result["duration_seconds"],
                 }
                 await persist_state()
-                if emit:
+                if emit and file_progress is not None:
                     glyph = status_glyph.get(status, "•")
-                    source_name = Path(result["source_path"]).name
-                    duration = fmt_duration(result["duration_seconds"])
                     if status == "ok":
                         out_name = Path(result["output_path"]).name
-                        click.echo(
-                            f"[{idx:>{idx_width}}/{total_files}] {glyph}  "
-                            f"{source_name} → {out_name}  ·  "
-                            f"{result['findings_count']} findings  ·  {duration}"
-                        )
+                        summary = f"→ {out_name} · {result['findings_count']} findings"
                     elif status == "skipped":
-                        click.echo(
-                            f"[{idx:>{idx_width}}/{total_files}] {glyph}  "
-                            f"{source_name}  ·  skipped (output exists)"
-                        )
+                        summary = "skipped (output exists)"
                     else:
-                        click.echo(
-                            f"[{idx:>{idx_width}}/{total_files}] {glyph}  "
-                            f"{source_name}  ·  {result['error'] or 'unknown error'}"
-                            f"  ·  {duration}"
-                        )
+                        summary = f"{result['error'] or 'unknown error'}"
+                    file_progress.finalize(glyph=glyph, summary=summary)
             queue.task_done()
 
     async def reporter() -> None:
+        # State.json is persisted after every worker transition in ``worker``;
+        # that's what ``finding-extractor-batch status --watch`` consumes for
+        # detached runs. This reporter exists only to keep state.json fresh
+        # during idle periods (e.g. a single long-running chunk); it no longer
+        # emits to stdout because per-file progress events now carry the
+        # "what's happening" signal. See BatchFileProgress.
         while not stop_event.is_set():
             await asyncio.sleep(config.status_interval_seconds)
             async with lock:
                 if state["status"] != "running":
                     continue
-                if emit:
-                    click.echo(render_status(state))
+                await persist_state()
 
     reporter_task = asyncio.create_task(reporter())
     workers = [asyncio.create_task(worker(worker_id)) for worker_id in range(1, config.workers + 1)]

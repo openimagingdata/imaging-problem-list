@@ -221,6 +221,9 @@ evals/runs/
 .eval_runs/
 eval_ollama_run/
 
+# Batch run state + logs (generated, not committed)
+.batch_runs/
+
 extracts/
 
 # Script test data and output (local only)
