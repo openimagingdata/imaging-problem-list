@@ -11,15 +11,18 @@ An audit of the existing `--local-only` feature (commit `23dfc91`) found it only
 Closed those gaps:
 
 - New `enforce_local_only()` / `enforce_endpoint_locality()` / `has_cloud_suffix()` helpers in `llm/policy.py`. Three gates: provider != ollama, cloud-suffix tag, non-local `OLLAMA_BASE_URL` (with DNS resolution check).
-- New `IPL_LOCAL_ONLY_ALLOW_HOSTS` setting for air-gapped deployments where Ollama runs on a named private-network host.
 - Layer 1 settings validator now rejects cloud `default_model` and non-loopback `OLLAMA_BASE_URL` at load time.
 - Wired into `finding-extractor-batch` (with detached-child env propagation), API extraction + coding enqueue paths, and the extraction worker (fails job with `LOCAL_ONLY_VIOLATION`).
 - `core/observability.py::configure_logfire` hard short-circuits under local-only regardless of any `enabled_override`.
 - Cloud-preset rejection in CLI (`--preset fast/balanced/quality` now errors under local-only).
+- Shared `cli/_local_only.py` helpers (`apply_cli_override`, `assert_local_only_model`, `print_manifest`) so single-report and batch CLIs share one implementation of the settings-override + enforcement + manifest flow.
+- CLI manifest now carries an explicit Modelfile-alias warning ("model provenance = NOT verified") because we do not inspect the `FROM` chain of locally-built Modelfiles; users must verify aliases themselves.
 - Tests cover the helper, all three gates, all entry points, and parametrized cloud-suffix detection.
 - Also hardened `scripts/split_reports_csv.py` against path traversal from CSV `ID` column (Codex adversarial review finding).
 
-Plan: `docs/plans/local-only-mode-hardening.md` (completed). Out of scope: eval CLI (not a PHI path by design) and Modelfile-alias detection (documented limitation).
+An `IPL_LOCAL_ONLY_ALLOW_HOSTS` escape hatch was added during implementation and then cut as YAGNI — no real user was asking for air-gapped named-host deployments, and the extra surface area wasn't earning its keep. Trigger-to-reopen is captured in the deferred-work plan.
+
+Plan: `docs/archive/local-only-mode-hardening.md` (completed). Follow-up backlog: `docs/plans/local-only-future-tightening.md` (Modelfile alias detection, end-to-end smoke test, egress verification, `HF_HUB_OFFLINE` enforcement, typed `AnyHttpUrl`, eval CLI enforcement if ever needed for PHI eval, and the cut allow-hosts escape hatch). Out of scope for this pass: eval CLI (not a PHI path by design).
 
 ---
 

@@ -1,7 +1,7 @@
 # Plan: Future Local-Only Tightening
 
 **Status:** Not started. Active backlog.
-**Context:** The hardening pass (`docs/archive/local-only-mode-hardening.md`) closed the urgent PHI-egress gaps — shared `enforce_local_only` helper, Layer 1 settings validation, wiring into batch CLI / API / worker / Logfire, cloud-suffix detection for Ollama Turbo. This document collects what we **deliberately deferred** and what we learned along the way, so we can pick it back up when there's a concrete trigger.
+**Context:** The hardening pass ([`docs/archive/local-only-mode-hardening.md`](../archive/local-only-mode-hardening.md)) closed the urgent PHI-egress gaps — shared `enforce_local_only` helper, Layer 1 settings validation, wiring into batch CLI / API / worker / Logfire, cloud-suffix detection for Ollama Turbo. This document collects what we **deliberately deferred** and what we learned along the way, so we can pick it back up when there's a concrete trigger.
 
 Each item names the trigger that should prompt action — not "someday," but "when X happens, reopen this."
 

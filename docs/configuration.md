@@ -234,7 +234,7 @@ Every entry point below validates the resolved model, cloud-suffix tag, and Olla
 
 - `finding-extractor-eval` does not enforce local-only. Eval datasets are fixture data curated in-repo; they are not PHI. Running eval with a cloud model is a valid workflow.
 - **Modelfile aliases** — see the warning at the top of this section.
-- Air-gapped deployments that run Ollama on a named private-network host rather than loopback. A `IPL_LOCAL_ONLY_ALLOW_HOSTS` escape hatch was considered and deferred as YAGNI; see `docs/plans/local-only-future-tightening.md` for the trigger to reopen.
+- Air-gapped deployments where Ollama runs on a named private-network host rather than loopback. An `IPL_LOCAL_ONLY_ALLOW_HOSTS` escape hatch was prototyped and then cut as YAGNI — the three loopback gates are unconditional today. See `docs/plans/local-only-future-tightening.md` for the trigger to reopen if someone needs this.
 
 ## Common Setup
 
