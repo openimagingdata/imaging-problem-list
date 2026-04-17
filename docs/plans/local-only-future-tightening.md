@@ -49,6 +49,8 @@ Each item names the trigger that should prompt action — not "someday," but "wh
 
 **Why deferred:** Integration tests that require a running Ollama can't go in `task test` (CI-safe unit suite). We have a pattern (`task test:api:e2e`, `task test:web:e2e`) for preconditioned integration tests. Local-only should follow it.
 
+**Status:** The happy path was validated manually once during the hardening pass (2026-04-12, `ollama:gemma4-radextract` against `sample_data/example2/xr_shoulder_20210522.md`, 20 findings, manifest printed verbatim with the Modelfile warning, Logfire correctly suppressed despite `IPL_LOGFIRE_ENABLED=true` in env). Turning that into a repeatable `task` target is still outstanding.
+
 **Trigger:** Before the next PHI pilot, or as soon as CI gains an Ollama-capable runner.
 
 **Sketch:**
