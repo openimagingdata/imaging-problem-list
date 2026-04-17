@@ -293,17 +293,6 @@ class TestEnforceEndpointLocality:
         with pytest.raises(LocalOnlyViolationError, match="non-local"):
             enforce_endpoint_locality("https://ollama.example.com/v1")
 
-    def test_accepts_allowlisted_hostname(self, monkeypatch):
-        # Allowlist hits BEFORE DNS, so the public resolution never runs.
-        monkeypatch.setattr("socket.getaddrinfo", _fake_getaddrinfo_public)
-        assert (
-            enforce_endpoint_locality(
-                "http://ollama.internal/v1",
-                allow_hosts=["ollama.internal"],
-            )
-            == "ollama.internal"
-        )
-
     def test_rejects_unresolvable_hostname(self, monkeypatch):
         def _raise(*_args, **_kwargs):
             import socket as _socket

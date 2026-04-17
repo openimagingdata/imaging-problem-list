@@ -222,7 +222,6 @@ def run_command(
                 config.model,
                 local_only_mode=True,
                 ollama_base_url=settings.ollama_base_url,
-                allow_hosts=settings.local_only_allow_hosts,
                 context="batch CLI --local-only",
             )
         except LocalOnlyViolationError as exc:
@@ -232,8 +231,8 @@ def run_command(
             f"[local-only] Preflight passed. No report text or extraction output will leave this machine.\n"
             f"  model               = {config.model}\n"
             f"  ollama endpoint     = {settings.ollama_base_url}\n"
-            f"  allow hosts         = {settings.local_only_allow_hosts or '(loopback only)'}\n"
-            f"  inputs              = {len(config.inputs)}",
+            f"  inputs              = {len(config.inputs)}\n"
+            f"  ⚠ model provenance  = NOT verified — do not use Modelfiles whose FROM points at a :cloud source",
             err=True,
         )
 

@@ -524,30 +524,12 @@ class ExtractorSettings(BaseSettings):
             "IPL_LOCAL_ONLY",
         ),
     )
-    local_only_allow_hosts: list[str] = Field(
-        default_factory=list,
-        validation_alias=AliasChoices(
-            "IPL_LOCAL_ONLY_ALLOW_HOSTS",
-        ),
-    )
     ollama_base_url: str | None = Field(
         default=None,
         validation_alias=AliasChoices(
             "OLLAMA_BASE_URL",
         ),
     )
-
-    @field_validator("local_only_allow_hosts", mode="before")
-    @classmethod
-    def _parse_local_only_allow_hosts(cls, value: object) -> list[str]:
-        """Accept comma-separated strings from env; normalize to list[str]."""
-        if value is None or value == "":
-            return []
-        if isinstance(value, str):
-            return [part.strip() for part in value.split(",") if part.strip()]
-        if isinstance(value, (list, tuple)):
-            return [str(part).strip() for part in value if str(part).strip()]
-        raise ValueError("local_only_allow_hosts must be a string or list of strings")
 
     @model_validator(mode="after")
     def _enforce_local_only(self) -> ExtractorSettings:
@@ -562,7 +544,6 @@ class ExtractorSettings(BaseSettings):
             return self
 
         from finding_extractor.llm.policy import (
-            enforce_endpoint_locality,
             enforce_local_only,
             provider_from_model_id,
         )
@@ -576,29 +557,17 @@ class ExtractorSettings(BaseSettings):
             self.reviewer_enabled = False
             self.reviewer_model = None
 
-        # 2. Validate the primary model. Previously deferred to CLI Layer 2,
-        #    which left API/worker paths unchecked. Validating here makes
-        #    settings load the source of truth for every entry point.
+        # 2. Validate default_model + OLLAMA_BASE_URL in one call. The helper
+        #    runs the provider, cloud-suffix, and endpoint-locality gates in
+        #    that order, so a single call covers all three.
         enforce_local_only(
             self.default_model,
             local_only_mode=True,
             ollama_base_url=self.ollama_base_url,
-            allow_hosts=self.local_only_allow_hosts,
             context="settings default_model",
         )
 
-        # 3. Endpoint-locality check stands on its own in case callers plan
-        #    to override the model at request time — the URL must still be
-        #    local. ``enforce_local_only`` already covers this, but calling
-        #    it again makes the intent explicit when default_model happens
-        #    to be Ollama.
-        enforce_endpoint_locality(
-            self.ollama_base_url,
-            allow_hosts=self.local_only_allow_hosts,
-            context="settings OLLAMA_BASE_URL",
-        )
-
-        # 4. Force-disable Logfire.
+        # 3. Force-disable Logfire.
         self.logfire_enabled = False
         self.logfire_token = None
 

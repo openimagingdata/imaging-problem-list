@@ -315,7 +315,6 @@ def main(
                 resolved,
                 local_only_mode=True,
                 ollama_base_url=settings.ollama_base_url,
-                allow_hosts=settings.local_only_allow_hosts,
                 context="CLI --local-only",
             )
         except LocalOnlyViolationError as exc:
@@ -335,12 +334,12 @@ def main(
             f"[local-only] Preflight passed. No report text or extraction output will leave this machine.\n"
             f"  model               = {resolved}\n"
             f"  ollama endpoint     = {settings.ollama_base_url}\n"
-            f"  allow hosts         = {settings.local_only_allow_hosts or '(loopback only)'}\n"
             f"  fallback_model      = {fallback}\n"
             f"  reviewer            = {reviewer}\n"
             f"  coding              = disallowed\n"
             f"  logfire             = disabled (overridden)\n"
-            f"  model downloads     = allowed (no PHI sent)",
+            f"  model downloads     = allowed (no PHI sent)\n"
+            f"  ⚠ model provenance  = NOT verified — do not use Modelfiles whose FROM points at a :cloud source",
             err=True,
         )
 

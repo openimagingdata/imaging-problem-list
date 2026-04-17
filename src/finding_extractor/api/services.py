@@ -58,7 +58,6 @@ async def enqueue_extraction_job(
             model_name,
             local_only_mode=settings.local_only_mode,
             ollama_base_url=settings.ollama_base_url,
-            allow_hosts=settings.local_only_allow_hosts,
             context="API extraction request",
         )
     except LocalOnlyViolationError as exc:

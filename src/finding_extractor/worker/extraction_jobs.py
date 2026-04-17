@@ -99,7 +99,6 @@ async def _run_extraction_impl(
                 resolved_model,
                 local_only_mode=settings.local_only_mode,
                 ollama_base_url=settings.ollama_base_url,
-                allow_hosts=settings.local_only_allow_hosts,
                 context="worker extraction job",
             )
         except LocalOnlyViolationError as exc:

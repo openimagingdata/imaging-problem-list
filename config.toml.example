@@ -50,7 +50,6 @@ log_json = false
 # Rejects cloud models, cloud-tagged Ollama models (:cloud / -cloud), and
 # non-loopback OLLAMA_BASE_URL. See docs/configuration.md#local-only-mode.
 # local_only_mode = false
-# local_only_allow_hosts = []  # hostnames that bypass the loopback check (air-gapped only)
 
 logfire_enabled = false
 logfire_send = "auto"

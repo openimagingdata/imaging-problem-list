@@ -14,7 +14,7 @@ from __future__ import annotations
 import ipaddress
 import re
 import socket
-from collections.abc import Callable, Sequence
+from collections.abc import Callable
 from urllib.parse import urlparse
 
 OPENAI_SKIP_TOKENS = (
@@ -311,16 +311,15 @@ def _resolve_host_addresses(host: str) -> list[ipaddress.IPv4Address | ipaddress
 def enforce_endpoint_locality(
     ollama_base_url: str | None,
     *,
-    allow_hosts: Sequence[str] = (),
     context: str = "local-only",
 ) -> str:
-    """Assert that ``OLLAMA_BASE_URL`` points at a loopback/allowlisted host.
+    """Assert that ``OLLAMA_BASE_URL`` points at a loopback host.
 
     Returns the resolved host (for logging/manifest purposes).
 
-    Raises :class:`LocalOnlyViolationError` if the URL is missing, has a non-HTTP
-    scheme, is a hostname that resolves to any public address, or is a public
-    IP literal.
+    Raises :class:`LocalOnlyViolationError` if the URL is missing, has a
+    non-HTTP scheme, is a public IP literal, or is a hostname that resolves
+    to any non-loopback address.
     """
     if not ollama_base_url:
         raise LocalOnlyViolationError(
@@ -342,22 +341,14 @@ def enforce_endpoint_locality(
         )
 
     host_lower = host.lower()
-    allow_set = {h.strip().lower() for h in allow_hosts if h.strip()}
 
-    # Loopback name?
     if host_lower in _LOOPBACK_HOSTNAMES:
         return host_lower
 
-    # Explicit allowlist hit on the name as given.
-    if host_lower in allow_set:
-        return host_lower
-
-    # IP literal?
     if _is_loopback_address(host):
         return host
 
-    # Resolve hostname and require every address to be loopback (or the name
-    # itself to be on the allowlist — already handled above).
+    # Resolve hostname and require every address to be loopback.
     addresses = _resolve_host_addresses(host)
     if not addresses:
         raise LocalOnlyViolationError(
@@ -367,7 +358,7 @@ def enforce_endpoint_locality(
     if non_loopback:
         raise LocalOnlyViolationError(
             f"[{context}] OLLAMA_BASE_URL host {host!r} resolves to non-local addresses "
-            f"{non_loopback!r}; add it to IPL_LOCAL_ONLY_ALLOW_HOSTS if you trust this endpoint"
+            f"{non_loopback!r}; local-only requires a loopback endpoint"
         )
     return host
 
@@ -377,7 +368,6 @@ def enforce_local_only(
     *,
     local_only_mode: bool,
     ollama_base_url: str | None = None,
-    allow_hosts: Sequence[str] = (),
     context: str = "local-only",
 ) -> None:
     """Reject any extraction request that could leave the machine.
@@ -388,8 +378,8 @@ def enforce_local_only(
     1. The model's provider is not ``ollama``.
     2. The model reference carries an Ollama cloud suffix
        (``:cloud`` or ``-cloud`` tag suffix).
-    3. ``ollama_base_url`` is unset, malformed, or resolves to a non-local
-       host that isn't on ``allow_hosts``.
+    3. ``ollama_base_url`` is unset, malformed, or resolves to a non-loopback
+       host.
 
     Callers pass ``context`` (e.g. ``"API request"``, ``"batch CLI"``,
     ``"worker"``) so the error message names the enforcement path. Settings
@@ -412,8 +402,4 @@ def enforce_local_only(
             "ollama.com and are not permitted under local-only."
         )
 
-    enforce_endpoint_locality(
-        ollama_base_url,
-        allow_hosts=allow_hosts,
-        context=context,
-    )
+    enforce_endpoint_locality(ollama_base_url, context=context)
