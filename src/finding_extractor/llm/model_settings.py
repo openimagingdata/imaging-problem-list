@@ -293,6 +293,13 @@ def ollama_needs_native_output(model_name: str) -> bool:
     _, raw_model_id = model_name.split(":", maxsplit=1)
     lowered = raw_model_id.lower()
 
+    # nemotron-cascade-2 appears tool-capable in Ollama's catalog, but under
+    # the extractor's structured chunk schema it exhibits the same
+    # UnexpectedModelBehavior retry loop we saw from other models that need
+    # NativeOutput. Keep other Nemotron families tool-capable for now.
+    if lowered.startswith("nemotron-cascade-2"):
+        return True
+
     # Families known to work with tool calling
     tool_capable_prefixes = (
         "gpt-oss",
@@ -312,6 +319,10 @@ def _ollama_supported_reasoning_for_model(model: str) -> set[str] | None:
     lowered = raw_model_id.lower()
     if lowered.startswith("qwen3.5"):
         # Qwen3.5 thinks by default; reasoning_effort controls it via OpenAI-compat API
+        return {"none", "low", "medium", "high"}
+    if lowered.startswith("nemotron-cascade-2"):
+        # Ollama marks nemotron-cascade-2 as a thinking-capable model on the
+        # OpenAI-compatible API, so it should accept reasoning_effort tiers.
         return {"none", "low", "medium", "high"}
     if lowered.startswith("qwen3:30b") and "thinking" in lowered:
         return set(VALID_REASONING_LEVELS)
@@ -490,8 +501,9 @@ def build_openrouter_settings(reasoning_level: str) -> OpenRouterModelSettings:
 def build_ollama_settings(model: str, reasoning_level: str) -> OpenAIChatModelSettings | None:
     """Build Ollama settings using model-specific thinking support.
 
-    Qwen3.5 thinks by default; uses ``reasoning_effort`` on the OpenAI-compat API
-    to control or disable thinking.  Qwen3 and gpt-oss use ``extra_body.think``.
+    Qwen3.5 and nemotron-cascade-2 use ``reasoning_effort`` on the
+    OpenAI-compatible API to control or disable thinking. Qwen3 and gpt-oss use
+    ``extra_body.think``.
     """
     if ":" not in model:
         return None
@@ -499,9 +511,11 @@ def build_ollama_settings(model: str, reasoning_level: str) -> OpenAIChatModelSe
     _, raw_model_id = model.split(":", maxsplit=1)
     lowered = raw_model_id.lower()
 
-    if lowered.startswith("qwen3.5"):
+    if lowered.startswith(("qwen3.5", "nemotron-cascade-2")):
         # Qwen3.5 thinks by default — must explicitly set reasoning_effort
         # to "none" to disable, or to "low"/"medium"/"high" to control level.
+        # Ollama exposes nemotron-cascade-2 through the same reasoning_effort
+        # surface on /v1/chat/completions.
         effort = "none" if reasoning_level == "none" else reasoning_level
         if effort == "minimal":
             effort = "low"

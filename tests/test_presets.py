@@ -82,6 +82,11 @@ class TestModelReasoningCapabilities:
         assert set(supported) == {"none", "minimal", "low", "medium", "high"}
         assert default == "none"
 
+    def test_ollama_nemotron_cascade_2_supports_all_levels(self):
+        supported, default = model_reasoning_capabilities("ollama:nemotron-cascade-2")
+        assert set(supported) == {"none", "minimal", "low", "medium", "high"}
+        assert default == "none"
+
     def test_unknown_provider_returns_empty(self):
         supported, default = model_reasoning_capabilities("unknown_provider:model")
         assert supported == []
