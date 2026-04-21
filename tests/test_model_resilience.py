@@ -119,7 +119,7 @@ class TestResolveOutputType:
         assert result is _DummyOutput
 
     def test_wraps_for_native_needed_ollama(self):
-        result = resolve_output_type(_DummyOutput, "ollama:gemma4:26b")
+        result = resolve_output_type(_DummyOutput, "ollama:medgemma:27b")
         assert isinstance(result, NativeOutput)
 
     def test_wraps_for_nemotron_cascade_2(self):
@@ -128,7 +128,7 @@ class TestResolveOutputType:
 
     def test_wraps_when_fallback_needs_native(self):
         result = resolve_output_type(
-            _DummyOutput, "ollama:gpt-oss:120b", fallback_model_name="ollama:gemma4:26b"
+            _DummyOutput, "ollama:gpt-oss:120b", fallback_model_name="ollama:medgemma:27b"
         )
         assert isinstance(result, NativeOutput)
 
@@ -163,7 +163,7 @@ def test_coding_agents_use_resolve_output_type_for_native_ollama(monkeypatch):
         lambda model, reasoning=None: None,
     )
     monkeypatch.setenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
-    runtime = build_resilient_model("ollama:gemma4:26b")
+    runtime = build_resilient_model("ollama:medgemma:27b")
 
     # Each factory should produce an agent whose output schema uses NativeOutput
     for factory in [
@@ -175,7 +175,7 @@ def test_coding_agents_use_resolve_output_type_for_native_ollama(monkeypatch):
         agent = factory(runtime)
         # The agent's output schema should be native mode, not tool mode
         assert agent._output_schema.mode == "native", (
-            f"Expected native output mode for {agent.name} with Ollama gemma4"
+            f"Expected native output mode for {agent.name} with Ollama medgemma"
         )
 
 
@@ -205,8 +205,8 @@ def test_coding_agents_wrap_native_when_fallback_needs_it(monkeypatch):
     )
     monkeypatch.setenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
     runtime = build_resilient_model(
-        "ollama:gpt-oss:120b", fallback_model_name="ollama:gemma4:26b"
+        "ollama:gpt-oss:120b", fallback_model_name="ollama:medgemma:27b"
     )
-    assert runtime.fallback_model_name == "ollama:gemma4:26b"
+    assert runtime.fallback_model_name == "ollama:medgemma:27b"
     agent = create_finding_term_agent(runtime)
     assert agent._output_schema.mode == "native"

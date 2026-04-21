@@ -37,7 +37,7 @@ from finding_extractor.core.config import get_settings
 from finding_extractor.llm.defaults import (
     MODEL_ANTHROPIC_CLAUDE_OPUS_4_6,
     MODEL_GOOGLE_GEMINI_3_FLASH_PREVIEW,
-    MODEL_OLLAMA_QWEN35_35B_A3B,
+    MODEL_OLLAMA_QWEN36_35B_A3B_MLX_BF16,
     MODEL_OPENAI_GPT_5_2,
 )
 from finding_extractor.llm.policy import (
@@ -137,9 +137,9 @@ EXTRACTION_PRESETS: dict[str, ExtractionPreset] = {
     ),
     "local": ExtractionPreset(
         name="local",
-        model=MODEL_OLLAMA_QWEN35_35B_A3B,
+        model=MODEL_OLLAMA_QWEN36_35B_A3B_MLX_BF16,
         reasoning="none",
-        description="Local default (Qwen3.5 35b MoE, 23GB), no API keys needed",
+        description="Local default (Qwen3.6 35b MoE MLX-bf16, 70GB), Apple Silicon MLX runtime",
     ),
 }
 
@@ -301,13 +301,16 @@ def ollama_needs_native_output(model_name: str) -> bool:
         return True
 
     # Families known to work with tool calling
+    # gemma4 gained tool-calling in Ollama v0.20.6 (Google post-launch fixes);
+    # manifest reports tools+thinking capability. gemma3/medgemma stay on native.
     tool_capable_prefixes = (
         "gpt-oss",
         "llama3", "llama4",
         "qwen3", "qwen3.5",
         "nemotron",
+        "gemma4",
     )
-    # Everything else (gemma3, gemma4 MoE, deepseek-r1, medgemma, unknown) — use native
+    # Everything else (gemma3, deepseek-r1, medgemma, unknown) — use native
     return all(not lowered.startswith(prefix) for prefix in tool_capable_prefixes)
 
 
@@ -317,12 +320,15 @@ def _ollama_supported_reasoning_for_model(model: str) -> set[str] | None:
         return None
     _, raw_model_id = model.split(":", maxsplit=1)
     lowered = raw_model_id.lower()
-    if lowered.startswith("qwen3.5"):
-        # Qwen3.5 thinks by default; reasoning_effort controls it via OpenAI-compat API
+    if lowered.startswith(("qwen3.5", "qwen3.6")):
+        # Qwen3.5/3.6 think by default; reasoning_effort controls it via OpenAI-compat API
         return {"none", "low", "medium", "high"}
-    if lowered.startswith("nemotron-cascade-2"):
-        # Ollama marks nemotron-cascade-2 as a thinking-capable model on the
-        # OpenAI-compatible API, so it should accept reasoning_effort tiers.
+    if lowered.startswith(("nemotron-cascade-2", "nemotron-3-super")):
+        # Nemotron H-MoE family (cascade-2, 3-super) think by default; the
+        # OpenAI-compatible API accepts reasoning_effort to control or disable it.
+        # Without an explicit level, the model runs extensive CoT even for
+        # trivial replies (observed: 50+ reasoning tokens for a 3-token answer),
+        # which cascades into ~60s subagent calls and 300s timeouts.
         return {"none", "low", "medium", "high"}
     if lowered.startswith("qwen3:30b") and "thinking" in lowered:
         return set(VALID_REASONING_LEVELS)
@@ -511,11 +517,13 @@ def build_ollama_settings(model: str, reasoning_level: str) -> OpenAIChatModelSe
     _, raw_model_id = model.split(":", maxsplit=1)
     lowered = raw_model_id.lower()
 
-    if lowered.startswith(("qwen3.5", "nemotron-cascade-2")):
-        # Qwen3.5 thinks by default — must explicitly set reasoning_effort
-        # to "none" to disable, or to "low"/"medium"/"high" to control level.
-        # Ollama exposes nemotron-cascade-2 through the same reasoning_effort
-        # surface on /v1/chat/completions.
+    if lowered.startswith(("qwen3.5", "qwen3.6", "nemotron-cascade-2", "nemotron-3-super")):
+        # Qwen3.5/3.6 and Nemotron H-MoE (cascade-2, 3-super) think by default
+        # on Ollama's OpenAI-compatible endpoint. Explicitly set reasoning_effort
+        # to "none" to disable, or "low"/"medium"/"high" to control level. Without
+        # this, the model emits chain-of-thought into the `reasoning` field (not
+        # `content`) and per-call latency spikes 3-5x — tool-calling pipelines
+        # hang or hit the 300s subagent timeout.
         effort = "none" if reasoning_level == "none" else reasoning_level
         if effort == "minimal":
             effort = "low"

@@ -4,6 +4,48 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-04-20 — Local reviewer re-evaluation
+
+The prior-round default reviewer (`ollama:gpt-oss:120b` / `reasoning=none`) was carried over from 2026-04-03 without direct reviewer-role benchmarking; the env value `none` directly contradicted the 2026-03-16 cloud-reviewer finding that `reasoning=low` is required for precise review. Ran all 7 local reviewer candidates (gpt-oss:120b, gpt-oss:20b, nemotron-cascade-2, nemotron-3-super:120b, gemma4:26b-mxfp8, gemma4:26b-mlx-bf16, medgemma:27b, qwen3.6:35b-a3b-bf16) paired with qwen3.6:35b-a3b-mlx-bf16 extractor on three reports; manually graded TP/FP against the chunk text and the extraction table each reviewer saw.
+
+Verdict: `qwen3.6:35b-a3b-bf16` / `reasoning=low` is the new reviewer default. It has the best TP/FP ratio of the tested set (0 FPs across 18 graded chunks) and uniquely identifies both evidence-boundary violations and comprehensive-negative decompositions that no other local reviewer catches. `gpt-oss:120b` is fast (175s vs 692s/report) but silently approves real issues that other reviewers correctly flag. `medgemma:27b` rubber-stamps (0 flags in 10 chunks), `gpt-oss:20b` fabricates finding names that aren't in the extraction table, and `nemotron-cascade-2` has a fatal cross-chunk boundary confusion pattern.
+
+Code changes:
+- `src/finding_extractor/llm/model_settings.py`: added `nemotron-3-super` prefix to `_ollama_supported_reasoning_for_model` and `build_ollama_settings` reasoning_effort handlers. Without this routing, the H-MoE family thinks by default on Ollama's OpenAI-compatible endpoint (observed: 50+ reasoning tokens for a 3-token answer), which cascades into 300s subagent timeouts.
+- `src/finding_extractor/llm/defaults.py`: added `MODEL_OLLAMA_QWEN36_35B_A3B_BF16`; `COMMON_MODELS` now distinguishes extractor default (`qwen3.6:35b-a3b-mlx-bf16`) from reviewer default (`qwen3.6:35b-a3b-bf16`).
+- `.env.ollama`: `IPL_REVIEWER_MODEL=ollama:qwen3.6:35b-a3b-bf16`, `IPL_REVIEWER_REASONING=low`.
+
+Tradeoffs: reviewer avg latency rises ~4× (175s → 692s per report). On the M3 Ultra 256GB box both models (70GB extractor + 71GB reviewer) fit comfortably. For imaging-finding extraction the TP/FP gain at 11 min/report is the right call; `gpt-oss:120b` remains a documented speed-first alternative.
+
+Operational observation: Logfire trace retention is short (hours). Extended reviewer-evaluation matrices must query Logfire promptly per-run or the `agent run` span rationale/thinking data is lost.
+
+Report: [eval-ollama-models-report.md](eval-ollama-models-report.md) §"Reviewer evaluation (2026-04-20)".
+
+---
+
+## 2026-04-19 — Qwen3.6 / Gemma 4 / MedGemma evaluation (Ollama 0.21)
+
+Latest-week Ollama churn (v0.20.6–v0.21.0) shipped tool-calling fixes and a dedicated MLX runtime for Gemma 4; Qwen3.6 landed 04-16 with the 35B-A3B MoE tier; official MedGemma (Gemma 3-based, now multimodal at 27B) replaced the obsolete community uploads. Evaluated on three reports from `sample_data/example2/` on M3 Ultra / 256 GB.
+
+Results (avg across CT abdomen / XR chest / MR brain, reviewer off):
+
+- **qwen3.6:35b-a3b-mlx-bf16** (70 GB): **76 s**, 37.7 findings, zero chunk failures — **new recommended default**. The `qwen35moe` architecture has had MLX runtime support since Ollama 0.19; Qwen3.6 benefits directly. **1.68× faster than Q8_0** at full bf16 precision.
+- qwen3.6:35b-a3b-q8_0 (38 GB): 128 s, 35.3 findings, zero failures — Q8 alternative when disk is constrained; ~18% faster than the previous `qwen3.5:35b-a3b` Q4_K_M champion (156 s, one retry required).
+- **gemma4:26b-mxfp8** (26 GB): 178 s, 38 findings, zero failures — quality alternative; MXFP8 is the only reliable Gemma 4 path (Q4_K_M has tool-call syntax failures; Q8_0 is 4.5× slower due to an unoptimized GGUF kernel).
+- gemma4:26b-mlx-bf16 (51 GB): 180 s, 37 findings — MLX runtime path also works for Gemma 4 (Ollama 0.21 addition); retained alongside MXFP8 for ongoing comparison.
+- **medgemma:27b** (17 GB, official library): 184 s, 36.7 findings, zero failures — medical specialist; extracts ~26 % more *present* findings than the generalists across 3 reports and a distinctly different set (Jaccard 0.25–0.38 vs qwen3.6/gemma4). Surfaces systematic neuroradiology checkpoints (e.g., corpus callosum morphology, cerebellar tonsil position) that general models skip. Community `alibayram` and `MedAIBase` uploads purged.
+
+Code changes:
+- `model_settings.py`: `qwen3.6` joins the `qwen3.5` reasoning-effort handlers (same thinking-mode footgun — `reasoning_effort:"none"` required). `gemma4` joins the tool-capable prefix list — `NativeOutput` routing became outdated after v0.20.6.
+- `defaults.py`: new `MODEL_OLLAMA_QWEN36_35B_A3B_MLX_BF16` (default), `MODEL_OLLAMA_QWEN36_35B_A3B_Q8`, `MODEL_OLLAMA_GEMMA4_26B_MXFP8`, `MODEL_OLLAMA_MEDGEMMA_27B`; `local` preset points at the MLX-bf16 default, `COMMON_MODELS` leads with the new local lineup.
+- `ollama/gemma4-radextract{,-dense}.Modelfile`: bases switched to `gemma4:26b-mxfp8` / `gemma4:31b-mxfp8` (Q4_K_M bases were unreliable for tool-calling).
+
+Catalog pruned of obsolete/dominated variants (qwen3.5 MLX-bf16 trio, gemma3:27b, llama3.3, deepseek-r1 32b/70b, community MedGemma uploads, gemma4 Q4_K_M, qwen3.6 q4_K_M/mxfp8/bf16 variants dominated by q8_0 on this hardware).
+
+Report: [eval-ollama-models-report.md](eval-ollama-models-report.md) (supersedes 2026-04-08 round).
+
+---
+
 ## 2026-04-12 — Local-only mode hardening for PHI workloads
 
 An audit of the existing `--local-only` feature (commit `23dfc91`) found it only enforced at the single-report CLI. Batch CLI, API, worker, and Layer 1 settings all had paths where `IPL_LOCAL_ONLY=true` could silently pair with a cloud model. Ollama's cloud-routed models (`:cloud` / `-cloud` tag suffixes, proxied through ollama.com via the local server) were not recognized at all — endpoint-locality alone isn't sufficient since the wire destination stays `localhost`.

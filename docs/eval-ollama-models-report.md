@@ -1,124 +1,101 @@
 # Local Ollama Model Extraction Evaluation
 
-**Date:** 2026-04-03 (updated 2026-04-08)
-**Hardware:** Mac Studio M3 Ultra, 192GB unified memory
-**Ollama version:** 0.20.0 (updated 0.20.3)
+**Date:** 2026-04-20 (supersedes 2026-04-19)
+**Hardware:** Mac Studio M3 Ultra, 256 GB unified memory
+**Ollama version:** 0.21.0
 
 ## Summary
 
-We evaluated local Ollama models for radiology report finding extraction using the IPL extractor pipeline. **Qwen3.5 models (Q4_K_M quantization) are now the recommended local models**, outperforming gpt-oss in both extraction quality and memory efficiency after fixing a critical thinking-mode compatibility issue.
+**`qwen3.6:35b-a3b-mlx-bf16` is the new recommended local default** — the Ollama MLX runtime (shipped in v0.19 for the `qwen35moe` architecture) delivers full bf16 precision at **1.68× the throughput of Q8_0** on M3 Ultra. On 256 GB unified memory, Q4 quantizations are the floor, not the default — higher-precision variants win on both speed (better kernel paths) and reliability (fewer tool-call syntax errors). Ollama 0.20.6 fixed Gemma 4 tool-calling; Ollama 0.21.0 added a dedicated MLX runtime for Gemma 4.
 
-## Models Tested
+**The MLX runtime is the story of this round.** Qwen3.6 uses the `qwen35moe` architecture, which has been MLX-accelerated since Ollama 0.19; we initially overlooked this and defaulted to the GGUF Q8 path. Direct comparison: MLX-bf16 averages **76 s / 37.7 findings** across 3 reports vs Q8_0's **128 s / 35.3 findings**.
 
-| Model | Params | Quant | Tool Support | Extraction Quality | Speed | Verdict |
-|---|---|---|---|---|---|---|
-| **qwen3.5:35b-a3b** | **35B (3B active)** | **Q4_K_M** | **yes** | **Excellent** | **~12s/chunk** | **Recommended** |
-| **qwen3.5:9b** | **9B** | **Q4_K_M** | **yes** | **Excellent** | **~11s/chunk** | **Recommended (lightweight)** |
-| **qwen3.5:27b** | **27B** | **Q4_K_M** | **yes** | **Excellent** | **~28s/chunk** | **Recommended (quality)** |
-| gpt-oss:120b | 120B | MXFP4 | yes | Excellent | ~16s/chunk | Good, but 86GB footprint |
-| gpt-oss:20b | 20B | MXFP4 | yes | Very good | ~14.5s/chunk | Good lightweight option |
-| nemotron-3-super:120b | 120B (12B active) | Q4_K_M | yes | Excellent | ~35 tok/s | Viable but slower |
-| qwen3.5:27b-mlx-bf16 | 27B | MLX bf16 | yes | Good | ~82s/chunk | Too slow for practical use |
-| qwen3.5:35b-a3b-mlx-bf16 | 35B (3B active) | MLX bf16 | yes | Not tested | >240s/chunk | Impractical |
-| qwen3.5:9b-mlx-bf16 | 9B | MLX bf16 | yes | Fair | ~20s/chunk | 40% chunk timeout rate |
-| gemma4:31b | 31B | Q4_K_M | yes | Good | ~23 tok/s | Slow on this hardware |
-| llama3.3 | 70B | Q4_K_M | yes | Good | ~17 tok/s | Slow on this hardware |
-| deepseek-r1:70b/32b | 70B/32B | Q4_K_M | **no** | Not tested | N/A | No tool support in Ollama |
-| gemma3:27b | 27B | Q4_K_M | **no** | Not tested | N/A | No tool support in Ollama |
-| MedGemma variants | 27B | various | **no** | Not tested | N/A | No tool support; NativeOutput works |
+## Models Tested (2026-04-19)
 
-## Speed Comparison
+Results below are from the IPL extractor pipeline run with `IPL_REVIEWER_ENABLED=false` on three reports from `sample_data/example2/`: `ct_abdomen_20251007.md`, `xr_chest_20220315.md`, `mr_brain_20230125.md`. "Avg chunk fails" is across all three runs.
 
-### Qwen3.5 Q4_K_M vs gpt-oss MXFP4 (CT Abdomen, 10 chunks)
+| Model | Params | Quant | Size | Avg time | Avg findings | Chunk fails | Verdict |
+|---|---|---|---:|---:|---:|---:|---|
+| **qwen3.6:35b-a3b-mlx-bf16** | 35B (3B active) | MLX bf16 | 70 GB | **76 s** | 37.7 | 0 | **Recommended (default)** — MLX runtime |
+| qwen3.6:35b-a3b-q8_0 | 35B (3B active) | Q8_0 | 38 GB | 128 s | 35.3 | 0 | Q8 alternative (GGUF path) |
+| **gemma4:26b-mxfp8** | 25.8B (3.8B active) | MXFP8 | 26 GB | 178 s | 38.0 | 0 | **Recommended (quality)** |
+| gemma4:26b-mlx-bf16 | 25.8B (3.8B active) | MLX bf16 | 51 GB | 180 s | 37.0 | 0 | Kept for comparison with MXFP8 |
+| **medgemma:27b** | 27.4B | Q4_K_M | 17 GB | 184 s | 36.7 | 0 | **Recommended (medical specialist)** |
+| qwen3.5:35b-a3b | 35B (3B active) | Q4_K_M | 23 GB | 156 s | 43 | — | Legacy; flaky on 1/3 runs |
+| qwen3.6:35b-a3b-bf16 | 35B (3B active) | BF16 | 71 GB | 158 s | 34 | 0 | Generic bf16 GGUF; dominated by MLX-bf16 |
+| qwen3.6:35b-a3b-mxfp8 | 35B (3B active) | MXFP8 | 37 GB | 197 s | 38 | 0 | MXFP path slower than Q8 on Qwen |
+| qwen3.6:35b-a3b-q4_K_M | 35B (3B active) | Q4_K_M | 23 GB | 148 s | 36 | 0 | Works but dominated by MLX-bf16 |
+| gemma4:26b Q4_K_M | 25.8B (3.8B active) | Q4_K_M | 17 GB | 349 s | (failed) | 2 | Q4 unreliable for Gemma 4 tool-calling |
+| gemma4:26b-a4b-it-q8_0 | 25.8B (3.8B active) | Q8_0 | 28 GB | 820 s | 41 | 0 | Avoid — Ollama Q8 kernel slow on Apple Silicon |
 
-| Model | Quant | Size | Avg chunk | Total | Findings |
-|---|---|---|---|---|---|
-| qwen3.5:35b-a3b | Q4_K_M | 23GB | ~12s | ~2.5 min | 41 |
-| qwen3.5:9b | Q4_K_M | 6GB | ~11s | ~2.5 min | 42 |
-| gpt-oss:120b | MXFP4 | 86GB | ~16s | ~2.6 min | 38 |
-| qwen3.5:27b | Q4_K_M | 17GB | ~28s | ~5.1 min | 45 |
-| gpt-oss:20b | MXFP4 | 86GB | ~14.5s | ~2.2 min | 34 |
+### gpt-oss (unchanged, still useful)
 
-The Qwen3.5 MoE (35b-a3b) and 9b models match or beat gpt-oss:120b on speed while using a fraction of the memory. The 27b dense model is slower but extracts the most findings.
+| Model | Params | Quant | Size | Role |
+|---|---|---|---:|---|
+| gpt-oss:120b | 120B | MXFP4 | 65 GB | Reliable fallback; default reviewer when staying local |
+| gpt-oss:20b | 20B | MXFP4 | 13 GB | Lightweight fallback |
 
-### MLX-bf16 Variants (Not Recommended)
+## Key Findings
 
-MLX-bf16 models run at full 16-bit precision but are bottlenecked by memory bandwidth:
+### Qwen3.6 MLX-bf16 is the new champion
+- Avg 76 s across three reports vs 128 s for Q8_0 (GGUF path) — **1.68× speedup**.
+- Per-report: CT abdomen 86 s (Q8: 121 s), XR chest 58 s (Q8: 133 s, a 2.27× speedup), MR brain 85 s (Q8: 131 s).
+- Slightly more findings at full bf16 precision (37.7 avg vs 35.3 for Q8).
+- The MLX runtime was added to Ollama in v0.19 for the `qwen35moe` architecture. Qwen3.6 uses this same architecture — it benefits automatically.
+- This supersedes the prior-round verdict that MLX-bf16 was "impractical" (based on a Qwen3.5 test on the pre-0.19 path). On Ollama 0.19+, MLX-bf16 is the fastest path for MoE Qwen on Apple Silicon.
 
-| Model | Size | Avg chunk | Reliability |
-|---|---|---|---|
-| qwen3.5:27b-mlx-bf16 | 54GB | ~82s | 100% (very slow) |
-| qwen3.5:9b-mlx-bf16 | 18GB | ~20s | ~60% (frequent hangs) |
-| qwen3.5:35b-a3b-mlx-bf16 | 70GB | >240s | Impractical |
+### Qwen3.6 Q8_0 still beats our prior Qwen3.5 champion
+- Even without MLX, Q8_0 averages 128 s vs 156 s for `qwen3.5:35b-a3b` Q4_K_M (~18% faster).
+- Reliable first-try; Qwen3.5 failed once on `ct_abdomen_20251007` with `UnexpectedModelBehavior` on `impression_1_chunk_2` before succeeding on retry.
+- Finding counts are lower than Qwen3.5 (35.3 avg vs 43) but within the "over-extraction vs GT" tolerance documented previously. Qwen3.6 appears more conservative.
 
-### gpt-oss Per-Report Timing (Full Pipeline, from 2026-04-03)
+### Gemma 4 quantization is counter-intuitive
+- **Q4_K_M is unreliable** for Gemma 4 tool-calling — 2/10 chunks failed on the CT abdomen test (`FallbackExceptionGroup`: both primary and fallback blew up on tool-call parse).
+- **MXFP8 is the reliable reading** — 0 chunk failures across 3 reports, 26 GB, ~178 s avg.
+- **Q8_0 is a trap** — 820 s on CT abdomen (4.5× slower than MXFP8). Ollama's Q8_0 GGUF kernel for Gemma 4 isn't well-optimized on Apple Silicon; MXFP8 goes through a faster path.
+- **MLX-BF16 is roughly tied with MXFP8** over 3 reports (180 s vs 178 s avg; 37 vs 38 findings avg). Both being kept in the catalog — 3 reports is too small a sample to tell them apart; the MLX path is fundamentally different (Ollama 0.21's dedicated MLX runtime) and deserves further characterization on more diverse reports before any retirement call.
 
-Reports tested from `sample_data/example2/`:
+### Qwen3.6 quantization ladder (CT abdomen timings for reference)
+- `mlx-bf16` (70 GB): **86 s** — MLX runtime; fastest path on Apple Silicon for `qwen35moe` architecture.
+- `q8_0` (38 GB): 121 s — GGUF path.
+- `q4_K_M` (23 GB): 148 s — GGUF lower bound; dominated by MLX-bf16.
+- `bf16` (71 GB): 158 s — generic bf16 GGUF path; dominated by MLX-bf16 at ~same footprint.
+- `mxfp8` (37 GB): 197 s — MXFP path adds decode overhead on Qwen's GGUF runtime.
 
-| Report | Modality | gpt-oss:120b | gpt-oss:20b |
-|---|---|---|---|
-| XR Shoulder | XR | 1.5 min | 1.1 min |
-| XR Chest | XR | 2.3 min | 2.2 min |
-| US Abdomen | US | 2.2 min | 2.0 min |
-| CT Abdomen | CT | 2.6 min | 2.2 min |
-| MR Brain | MR | 2.8 min | 2.4 min |
-| **Average** | | **2.3 min** | **2.0 min** |
+### Ollama MLX runtime covers both Qwen MoE and Gemma 4
+- **Qwen `qwen35moe` architecture**: MLX runtime added in Ollama 0.19. `qwen3.6:35b-a3b-mlx-bf16` benefits directly; it's ~1.68× faster than Q8_0 on M3 Ultra at full bf16 precision.
+- **Gemma 4**: dedicated MLX runtime added in Ollama 0.21. `gemma4:26b-mlx-bf16` matches MXFP8 on speed (180 s vs 178 s avg) and quality.
+- The previous "MLX-bf16 is impractical" verdict (2026-04-08) was based on a Qwen3.5 test pre-0.19. It does **not** apply to current Ollama; the MLX-bf16 path is now the **fastest** option for the `qwen35moe` architecture on Apple Silicon.
 
-Average chunk time: gpt-oss:120b ~16s/chunk, gpt-oss:20b ~14.5s/chunk.
+### Gemma 4 tool-calling now works (Ollama 0.20.6+)
+- `ollama show gemma4:26b` lists `tools` and `thinking` in capabilities.
+- The extractor's `ollama_needs_native_output()` previously forced Gemma 4 through `NativeOutput`. That routing is now outdated and has been removed; Gemma 4 uses the tool-calling path like Qwen3/gpt-oss.
+- `gemma3`, `medgemma` still need `NativeOutput` (no `tools` capability in their manifests).
 
-## Extraction Quality
+## Code changes made this round
 
-### Reliability
+1. **`src/finding_extractor/llm/model_settings.py`**
+   - Added `qwen3.6` to `_ollama_supported_reasoning_for_model` and `build_ollama_settings` (same `reasoning_effort` handling as Qwen3.5 — both think by default on the OpenAI-compat endpoint).
+   - Added `gemma4` to the tool-capable prefix list in `ollama_needs_native_output`. `gemma3` and `medgemma` stay on `NativeOutput`.
+   - `local` preset now points to `ollama:qwen3.6:35b-a3b-mlx-bf16` (the MLX runtime path); `defaults.py` exports `MODEL_OLLAMA_QWEN36_35B_A3B_MLX_BF16` as the extractor default and `MODEL_OLLAMA_QWEN36_35B_A3B_BF16` as the reviewer default.
+2. **`src/finding_extractor/llm/defaults.py`**
+   - Added `MODEL_OLLAMA_QWEN36_35B_A3B_{MLX_BF16,BF16,Q8}`, `MODEL_OLLAMA_GEMMA4_26B_MXFP8`, `MODEL_OLLAMA_MEDGEMMA_27B`.
+   - `COMMON_MODELS` now distinguishes extractor default (`qwen3.6:35b-a3b-mlx-bf16`) from reviewer default (`qwen3.6:35b-a3b-bf16`).
+3. **Custom `gemma4-radextract` Modelfiles retired** (2026-04-20 reviewer round). Tested against plain `gemma4:26b-mxfp8`: the Modelfile's baked-in decoding parameters (`temperature=0.1`, `seed=42`, `top_p=0.9`, `num_ctx=32768`) made extraction 2.2–3.4× slower and caused extraction failures in 2/3 reports. The `ollama/` directory and its Modelfiles were removed.
 
-All three Qwen3.5 Q4_K_M models achieved **10/10 successful chunks** on CT abdomen with the `reasoning_effort` fix. The 9b model needed more retries (5 across the run) but completed everything. Both gpt-oss models also achieved 10/10 across 5 reports.
+## Qwen3.5/3.6 thinking-mode handling (unchanged rationale)
 
-Historical issues (resolved):
-- qwen3.5 models initially appeared broken — **all hangs were caused by Qwen3.5's default thinking mode**, not model quality (see "Qwen3.5 Thinking Mode Fix" below)
-- qwen3.5:27b-mlx-bf16: too slow at bf16 precision (~82s/chunk)
-- Earlier runs (before prompt fixes): gpt-oss:120b failed 3/5 reports due to schema confusion from mismatched few-shot examples
+Qwen3.5 and Qwen3.6 both emit reasoning tokens by default on Ollama's OpenAI-compatible API (`/v1/chat/completions`). These land in the `reasoning` field, leaving `content` empty — causing infinite tool-calling retries and timeouts. The fix is `reasoning_effort: "none"` (or `low`/`medium`/`high`). Qwen3's `/nothink` token and `extra_body.think` do **not** work here; only `reasoning_effort` is honored.
 
-### Quality Comparison: gpt-oss:120b vs gpt-oss:20b
+`build_ollama_settings()` sets `openai_reasoning_effort` for `qwen3.5`, `qwen3.6`, and `nemotron-cascade-2` prefixes.
 
-Both models find the same clinically significant findings. Differences are minor:
+## MedGemma (official library now, 2026-04-16 release)
 
-**XR Shoulder** (GT: 9 findings)
-- 120b: 19 findings (11 present, 6 absent, 2 possible) -- all GT present findings covered
-- 20b: 16 findings (8 present, 5 absent, 3 possible) -- all GT present findings covered
-- Both correctly identify: calcific tendonitis, high-riding humeral head, AC joint degenerative changes, absent fractures/dislocations
+`medgemma:27b` in Ollama's official library (pulled from `ollama.com/library/medgemma`) is based on Gemma 3, 27.4B parameters, Q4_K_M, 128K context, text+image. No `tools` capability — uses `NativeOutput` via the extractor's JSON-schema path. The earlier `alibayram/medgemma:27b` and `MedAIBase/MedGemma1.0:27b` community uploads are obsolete and have been purged.
 
-**XR Chest** (GT: 20 findings, 12 present)
-- 120b: 32 findings (22 present) -- finds all GT present findings including pneumonia, DISH, fractures, calcifications, osteopenia
-- 20b: 27 findings (18 present) -- same key findings, slightly less granular
-- Both correctly identify the acute T9 compression fracture, healed rib fractures, healed clavicle fracture
+Observed extraction behavior on CT abdomen: 177 s, 38 findings, 0 chunk failures — competitive with Gemma 4 MXFP8 at a smaller footprint (17 GB vs 26 GB). A promising specialist for medical-domain runs.
 
-**US Abdomen** (GT: 21 findings, 6 present)
-- 120b: 30 findings (11 present) -- hepatic steatosis, gallstones, bilateral renal calculi, parapelvic cyst, aortic calcification
-- 20b: 28 findings (12 present) -- same findings; 20b extracts slightly more detail (echogenicity, IVC patency)
-
-**CT Abdomen** (GT: 31 findings, 7 present + 1 indeterminate)
-- 120b: 38 findings (13 present, 1 possible) -- all GT present findings plus DISH as possible
-- 20b: 34 findings (11 present, 1 possible) -- same key findings, slightly fewer sub-findings
-- Both correctly extract bilateral renal calculi with sizes, hepatic steatosis, calcifications, spine degeneration
-
-**MR Brain** (GT: 22 findings, 5 present)
-- 120b: 46 findings (12 present) -- cerebral atrophy, white matter disease, sinus disease
-- 20b: 41 findings (10 present) -- same key findings
-- Both extract the specific 5mm right frontal subcortical white matter lesion
-
-### Quality Assessment
-
-Both models produce clinically reasonable extractions. Key observations:
-
-1. **All clinically significant findings are captured** by both models across all reports
-2. **Both over-extract vs ground truth** — this is expected because the GT uses standardized OIFM codes while models produce more granular findings. The merge/coding pipeline handles consolidation.
-3. **120b extracts slightly more** (10-15% more findings) — mostly additional granularity, not additional clinical information
-4. **Presence/absence classification is accurate** — both correctly identify absent findings from normal statements
-5. **DISH correctly marked as "possible"** — both models handle hedged language appropriately
-6. **Attribute extraction is good** — sizes, laterality, severity, change_from_prior all captured
-
-## Configuration
-
-### .env.ollama
+## Configuration (.env.ollama — unchanged)
 
 ```
 OLLAMA_BASE_URL=http://localhost:11434/v1
@@ -126,47 +103,115 @@ IPL_ALLOW_UNKNOWN_MODEL_REASONING=true
 IPL_SUBAGENT_TIMEOUT_SECONDS=300
 IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY=1
 IPL_REVIEWER_ENABLED=false
+IPL_REVIEWER_MODEL=ollama:gpt-oss:120b
+IPL_REVIEWER_REASONING=none
+IPL_FALLBACK_MODEL=ollama:gpt-oss:20b
 ```
 
-### Key findings about pipeline configuration
-
-- **Multi-model runs** require `OLLAMA_MAX_LOADED_MODELS=4` to keep extraction + reviewer models loaded simultaneously
-- **Concurrency must be 1** — multiple concurrent Ollama requests degrade performance
-- **Timeout needs to be generous** (300s) for non-MXFP4 models; gpt-oss models rarely need more than 45s per chunk
-- **Fallback model** should be another Ollama model to avoid accidental cloud API calls
-- See `config.toml.example` for recommended local settings
-
-## NativeOutput for Models Without Tool Support
-
-Several Ollama model families (gemma4 MoE, gemma3, deepseek-r1, MedGemma) can't use PydanticAI's tool-calling protocol. The extractor now **automatically detects** these and uses `NativeOutput` (JSON schema mode) instead. This is handled by `ollama_needs_native_output()` in `model_settings.py` and `resolve_output_type()` in `resilience.py`, applied across both extraction and coding agents.
-
-When primary and fallback models have different output mode requirements, the system biases to native output (which works for all models).
-
-## Qwen3.5 Thinking Mode Fix (2026-04-08)
-
-Qwen3.5 models think by default — unlike Qwen3 (which had separate `-instruct` and `-thinking` tags), Qwen3.5 always emits reasoning tokens before responding. On Ollama's OpenAI-compatible API (`/v1/chat/completions`), these tokens go into the `reasoning` field, leaving `content` empty. This causes:
-
-- Tool-calling responses with empty content → infinite retries → timeouts
-- The model appears "stuck" but is actually generating reasoning tokens that PydanticAI can't see
-
-**Fix:** Send `reasoning_effort: "none"` via the OpenAI-compatible API. This is implemented in `build_ollama_settings()` in `model_settings.py`, which sets `openai_reasoning_effort` for all Qwen3.5 models. Higher reasoning levels (`low`, `medium`, `high`) are also supported.
-
-Key details:
-- The native Ollama API (`/api/chat`) uses `"think": false` — but PydanticAI uses the OpenAI-compatible endpoint
-- The OpenAI-compatible endpoint ignores `"think"` and `extra_body.think` — only `reasoning_effort` works
-- Qwen3's `/nothink` token does not work with Qwen3.5
-- `_ollama_supported_reasoning_for_model()` now recognizes `qwen3.5` as supporting `none/low/medium/high`
+- **Concurrency 1** still matters: multiple concurrent Ollama requests degrade performance.
+- **300 s timeout** is generous enough for all recommended variants; any chunk above 100 s typically indicates a tool-call parse problem, not a speed one.
+- **Multi-model runs** (`OLLAMA_MAX_LOADED_MODELS=4`) still required if you enable reviewer + separate extractor model.
 
 ## Recommendations
 
-1. **Use qwen3.5:35b-a3b (Q4_K_M) as the default local extraction model** — fastest, excellent quality, only 23GB memory
-2. **Use qwen3.5:9b (Q4_K_M) as the ultralight option** — 6GB footprint, competitive speed/quality, more retries needed
-3. **Use qwen3.5:27b (Q4_K_M) for maximum extraction thoroughness** — extracts the most findings, 2x slower
-4. **gpt-oss:120b remains a solid option** if already downloaded — reliable, well-tested
-5. **Avoid MLX-bf16 variants** — memory bandwidth bottleneck makes them 3-15x slower than Q4_K_M
-6. **NativeOutput auto-detection is implemented** — models without tool support (gemma4 MoE, gemma3, deepseek-r1, MedGemma) are automatically detected and use JSON schema mode
-7. **Custom Modelfiles** in `ollama/` provide extraction-optimized defaults for gemma4 variants
+1. **Default:** `ollama:qwen3.6:35b-a3b-mlx-bf16` — fastest (76 s avg), full bf16 precision via Ollama MLX runtime, reliable, 70 GB.
+2. **Q8 alternative:** `ollama:qwen3.6:35b-a3b-q8_0` — if disk is constrained (38 GB), still fast via GGUF path (128 s avg).
+3. **Quality / deeper extraction:** `ollama:gemma4:26b-mxfp8` — ~8% more findings per report, 26 GB, clean tool-calling via Ollama 0.20.6+ fixes.
+4. **Alternate Gemma 4 path (kept for ongoing comparison):** `ollama:gemma4:26b-mlx-bf16` (51 GB) — the Ollama 0.21 MLX runtime path. Roughly tied with MXFP8 on our 3-report sample; retaining both until we have more data to differentiate them.
+5. **Medical-domain specialist:** `ollama:medgemma:27b` (17 GB, official library) — same speed tier as Gemma 4, ~26 % more *present* findings across 3 reports, distinctly different extraction style (see "MedGemma: detailed comparison" below). Multimodal (text+image).
+6. **Ultralight:** no local small-model recommended this round — `qwen3.5:9b` was retired. Pull `qwen3.6:35b-a3b-mlx-bf16` (70 GB) or the Q8 variant (38 GB); on M3 Ultra the memory headroom makes Q4/tiny options obsolete. For low-memory hardware, pull a sub-10 GB model on demand.
+7. **Reviewer / fallback:** `ollama:gpt-oss:120b` / `ollama:gpt-oss:20b` — no reason to change.
+
+**Avoid:**
+- Gemma 4 Q4_K_M for tool-calling (chunk failures).
+- Gemma 4 Q8_0 (slow GGUF kernel; use MXFP8 or MLX-bf16).
+- Qwen3.6 MXFP8 / BF16 / Q4_K_M on this hardware — all dominated by MLX-bf16 or Q8_0.
+- NVFP4 variants (Nvidia format; no Apple Silicon benefit).
+
+## MedGemma: detailed comparison
+
+MedGemma was evaluated on the same three reports as the other recommendations. It is a *specialist complement* to the general-purpose extractors, not a drop-in replacement.
+
+### Per-report finding counts (present / absent / total)
+
+| Report | qwen3.6 Q8 | gemma4 MXFP8 | medgemma |
+|---|---|---|---|
+| CT abdomen | 12 / 22 / 36 | 12 / 24 / 39 | **16** / 22 / 38 |
+| XR chest | 20 / 10 / 30 | 21 / 11 / 32 | 20 / 11 / 31 |
+| MR brain | 10 / 30 / 40 | 9 / 34 / 43 | **17** / 23 / 41 |
+| **Total present** | 42 | 42 | **53** |
+
+MedGemma extracts ~26 % more *present* findings across the 3 reports. On the MR brain case, it finds nearly 2× as many.
+
+### Finding-name overlap (Jaccard, normalized names)
+
+| Report | qwen3.6 ∩ gemma4 | qwen3.6 ∩ medgemma | gemma4 ∩ medgemma |
+|---|---:|---:|---:|
+| CT abdomen | 0.48 | 0.38 | 0.37 |
+| XR chest | 0.54 | 0.50 | 0.41 |
+| MR brain | 0.36 | 0.29 | 0.25 |
+
+qwen3.6 and gemma4 agree with each other substantially more than either agrees with medgemma. **MedGemma extracts *different* findings, not just more or fewer** — it follows a medical-domain systematic checklist.
+
+### What MedGemma uniquely catches on MR brain
+
+Findings only MedGemma extracted (examples):
+- `white matter hyperintensities` (specific anatomy: *right frontal subcortical white matter*)
+- `gray-white matter differentiation`, `corpus callosum morphology`, `brainstem appearance`, `cerebellum appearance`, `cerebellar tonsil position`
+- `basal cistern`, `pituitary gland size`, `intracranial artery abnormality`, `ventricular size`
+
+These are standard neuroradiology checkpoints — the systematic mental checklist a radiologist applies to every brain MRI. The general-purpose models miss them because the report describes them as normal, not as abnormal findings; MedGemma's medical training surfaces the implicit observations.
+
+### Tradeoffs
+
+- MedGemma populates `location.specific_anatomy` in only ~45 % of findings (vs ~97 %+ for the generalists). Many medgemma finding names already encode the anatomy (e.g., "corpus callosum morphology"), so structured duplication is lower. Downstream code-mapping pipelines may need different heuristics.
+- MedGemma captures slightly more structured `attributes` (severity/size/laterality): 31 vs 23–26 across reports.
+- No `tools` capability in the model manifest → uses `NativeOutput` (JSON schema mode). Cleanly reliable in this pipeline.
+
+### Strong combination
+
+Running both qwen3.6 (or gemma4) and medgemma on the same report and merging is worth exploring: medgemma fills the implicit-findings gap; the generalists anchor the structured fields medgemma leaves sparse.
+
+## Reviewer evaluation (2026-04-20)
+
+Seven local reviewers were paired with the `qwen3.6:35b-a3b-mlx-bf16` extractor on three reports from `sample_data/example2/` with `IPL_REVIEWER_REASONING=low`. For each reviewer's flag, we manually graded TP/FP against the chunk text and the extraction table the reviewer saw. We also identified "dogs that didn't bark" — real issues multiple reviewers missed.
+
+### Ranking
+
+| Reviewer | MR flags | TPs | FPs | Unique catches | Avg time/report | Verdict |
+|---|---:|---:|---:|---|---:|---|
+| **qwen3.6:35b-a3b-bf16** | 2 | 2 | 0 | evidence-boundary + comprehensive-negative decomposition | 692 s | **Recommended reviewer** — best TP/FP ratio |
+| gpt-oss:120b | 3 | 3 | 0 | none | 175 s | Fast but missed ≥4 real issues on MR |
+| gemma4:26b-mlx-bf16 | 2 | 1–2 | 1 | evidence boundary | 479 s | Sophisticated, faster alternative |
+| nemotron-3-super:120b | 6 | 2 | 1 | disease-name-for-blanket-normal pattern | 707 s | Aggressive, pedantic; needed reasoning-handler fix |
+| nemotron-cascade-2 | ~5–6 | 2 | ~4 | paranasal sinusitis hallucination | 570 s | Cross-chunk boundary confusion — unreliable |
+| gemma4:26b-mxfp8 | 1 | 0–1 | 0–1 | none | 308 s | Too conservative |
+| medgemma:27b | 0 | 0 | 0 | none | 222 s | Rubber-stamps every chunk — do not use as reviewer |
+| gpt-oss:20b | earlier | 0 | many | none | 170 s | **Fabricates finding names that aren't in the extraction table** — dangerous |
+
+### Key findings
+
+1. **gpt-oss:120b (our previous default reviewer) under-flags.** On MR brain it silently approved ≥4 real issues that other reviewers correctly caught: the "paranasal sinuses well aerated" blanket negative (chunks 6), the evidence-boundary violation on orbital mass extracted from FOLLOWING_CHUNK_CONTEXT (chunk 7), the over-specific "orbital mass absent" for blanket "orbits normal" (chunk 7), and the "paranasal sinusitis" hallucination in impression_2.
+
+2. **qwen3.6:35b-a3b-bf16 catches sophisticated issues others miss.** On MR brain it uniquely identified that "No acute intracranial abnormality, mass, or hemorrhage" is a comprehensive negative that decomposes into three distinct absent findings — the extractor only captured two. It also caught the evidence-boundary violation (one of two reviewers to do so). Zero FPs across 18 graded chunks.
+
+3. **Cross-family pairing works**: gemma4:26b-mxfp8 extractor + qwen3.6:35b-a3b-bf16 reviewer on MR brain produced 48 findings and 0 reviewer flags (vs qwen3.6 MLX-bf16 extractor which triggered 2 flags on the same report). Different-family pairing doesn't hide issues; it avoids same-family blind spots.
+
+4. **`reasoning_effort=low` is required** for nemotron-3-super:120b. Without it, the model thinks by default (50+ reasoning tokens for a 3-token answer), per-call latency spikes 3–5×, and subagent calls hit the 300 s timeout. Fix: extend `build_ollama_settings()` to route `nemotron-3-super` through the same reasoning_effort path as `qwen3.5/3.6` and `nemotron-cascade-2`.
+
+5. **`medgemma:27b` is a bad reviewer**. It flagged 0/10 MR chunks, including chunks where multiple other reviewers correctly identified real issues. It produces plausible-sounding "the extraction accurately represents..." rationales but does not engage critically. Good as a specialist extractor; useless as a reviewer.
+
+6. **`gpt-oss:20b` must not be used as a reviewer**. Three of its four MR flags cited finding names that literally did not appear in the extraction table it was shown — it fabricates its own input.
+
+7. **`.env.ollama` updated**: `IPL_REVIEWER_MODEL=ollama:qwen3.6:35b-a3b-bf16`, `IPL_REVIEWER_REASONING=low`. Previous default (`gpt-oss:120b` / `none`) was both the wrong model and the wrong reasoning level.
+
+### Code change (reviewer round)
+
+- `src/finding_extractor/llm/model_settings.py`: added `nemotron-3-super` to `_ollama_supported_reasoning_for_model` and `build_ollama_settings` reasoning_effort handlers. Without this, the reviewer role for `nemotron-3-super:120b` silently thinks and times out.
+- `src/finding_extractor/llm/defaults.py`: added `MODEL_OLLAMA_QWEN36_35B_A3B_BF16`; `COMMON_MODELS` now explicitly distinguishes the extractor default (MLX-bf16) from the reviewer default (bf16 GGUF).
 
 ## Logfire
 
 All runs are traced at: https://logfire-us.pydantic.dev/talkasab/imaging-problem-list
+
+Caveat from this round: Logfire retention of trace data is short (hours). For extended evaluations, query Logfire promptly as each run completes; otherwise `agent run` span attributes (rationales, problems, thinking traces) age out before analysis.

@@ -2,6 +2,7 @@
 
 import ipaddress
 from collections import namedtuple
+from typing import Any
 
 import pytest
 
@@ -92,9 +93,13 @@ class TestOllamaNeedsNativeOutput:
     def test_nemotron_cascade_2_needs_native(self):
         assert ollama_needs_native_output("ollama:nemotron-cascade-2") is True
 
-    def test_gemma4_needs_native(self):
-        assert ollama_needs_native_output("ollama:gemma4:26b") is True
-        assert ollama_needs_native_output("ollama:gemma4:31b") is True
+    def test_gemma4_uses_tools(self):
+        # gemma4 supports tool-calling reliably as of Ollama v0.20.6
+        # (Google post-launch fixes). Previously routed through NativeOutput.
+        assert ollama_needs_native_output("ollama:gemma4:26b") is False
+        assert ollama_needs_native_output("ollama:gemma4:31b") is False
+        assert ollama_needs_native_output("ollama:gemma4:26b-mxfp8") is False
+        assert ollama_needs_native_output("ollama:gemma4:26b-mlx-bf16") is False
 
     def test_gemma3_needs_native(self):
         assert ollama_needs_native_output("ollama:gemma3:27b") is True
@@ -104,11 +109,18 @@ class TestOllamaNeedsNativeOutput:
         assert ollama_needs_native_output("ollama:deepseek-r1:32b") is True
 
     def test_medgemma_needs_native(self):
+        assert ollama_needs_native_output("ollama:medgemma:27b") is True
+        assert ollama_needs_native_output("ollama:medgemma:4b") is True
+        # community uploads (retired) — kept for backward-compat in policy
         assert ollama_needs_native_output("ollama:MedAIBase/MedGemma1.0:27b") is True
         assert ollama_needs_native_output("ollama:alibayram/medgemma:27b") is True
 
     def test_custom_modelfile_names_need_native(self):
-        assert ollama_needs_native_output("ollama:gemma4-radextract") is True
+        # Unknown Ollama-model strings route to NativeOutput conservatively
+        # (the prior example, `gemma4-radextract`, matched the `gemma4`
+        # tool-capable prefix after the 2026-04-19 routing change, so it
+        # is no longer a good illustrative case).
+        assert ollama_needs_native_output("ollama:my-custom-modelfile:7b") is True
 
     def test_unknown_ollama_family_conservative_default(self):
         assert ollama_needs_native_output("ollama:some-unknown-model:7b") is True
@@ -128,14 +140,14 @@ class TestLocalOnlyMode:
         yield
         clear_settings_cache()
 
-    def _make_settings(self, **overrides) -> ExtractorSettings:
+    def _make_settings(self, **overrides: Any) -> ExtractorSettings:
         """Build settings with local-only defaults, applying overrides."""
-        defaults = {
+        defaults: dict[str, Any] = {
             "local_only_mode": True,
-            "default_model": "ollama:qwen3.5:35b-a3b",
+            "default_model": "ollama:qwen3.6:35b-a3b-mlx-bf16",
             "fallback_model": None,
             "reviewer_model": None,
-            "coding_model": "ollama:qwen3.5:35b-a3b",
+            "coding_model": "ollama:qwen3.6:35b-a3b-mlx-bf16",
             "coding_term_model": None,
             "coding_fallback_model": None,
             "ollama_base_url": "http://localhost:11434/v1",
@@ -290,9 +302,9 @@ class TestHasCloudSuffix:
     @pytest.mark.parametrize(
         "model_id",
         [
-            "ollama:qwen3.5:35b-a3b",
+            "ollama:qwen3.6:35b-a3b-mlx-bf16",
             "ollama:gpt-oss:120b",
-            "ollama:gemma4-radextract",
+            "ollama:gemma4:26b-mxfp8",
             "ollama:llama3.3:latest",
             "ollama:cloudy:7b",  # "cloudy" != "cloud"
             "qwen3.5:35b-a3b",

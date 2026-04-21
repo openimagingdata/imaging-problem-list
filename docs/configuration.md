@@ -213,23 +213,35 @@ Set `IPL_LOCAL_ONLY=true` (or pass `--local-only` to `finding-extractor` / `find
 
 ### Quick Start
 
-`.env` needs only:
-
-```
-OLLAMA_BASE_URL=http://localhost:11434/v1
-```
-
-Then a batch run looks like:
+Use the committed `.env.ollama` file — it pins every `IPL_*` needed for the recommended local pipeline (extractor, reviewer, fallback, timeouts, Ollama base URL). Load it with `uv run --env-file`:
 
 ```bash
-uv run --env-file .env finding-extractor-batch run /path/to/reports \
+uv run --env-file .env.ollama finding-extractor-batch run /path/to/reports \
   --glob "head_ct_*.txt" --suffix .json \
-  --model ollama:gemma4-radextract --local-only
+  --output-dir /path/to/results \
+  --local-only \
+  --timeout-seconds 1800
 ```
 
+The committed `.env.ollama` sets:
+```
+OLLAMA_BASE_URL=http://localhost:11434/v1
+IPL_MODEL=ollama:qwen3.6:35b-a3b-mlx-bf16
+IPL_REASONING=none
+IPL_REVIEWER_ENABLED=true
+IPL_REVIEWER_MODEL=ollama:qwen3.6:35b-a3b-bf16
+IPL_REVIEWER_REASONING=low
+IPL_FALLBACK_MODEL=ollama:gpt-oss:20b
+IPL_ALLOW_UNKNOWN_MODEL_REASONING=true
+IPL_SUBAGENT_TIMEOUT_SECONDS=300
+IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY=1
+```
+
+`--timeout-seconds 1800` bumps the per-file budget to 30 minutes — the BF16 reviewer averages ~11 min/report (see `docs/eval-ollama-models-report.md`), comfortably below that ceiling. The default (420 s) is too low for this reviewer.
+
 Under `--local-only` the system auto-applies:
-- `allow_unknown_model_reasoning=True` (so custom Modelfiles like `gemma4-radextract` work)
-- `subagent_timeout_seconds=300` (local models routinely take 30-90s per chunk)
+- `allow_unknown_model_reasoning=True` (so custom Modelfile names whose reasoning surface we can't introspect still work)
+- `subagent_timeout_seconds=300` (local models routinely take 30–90 s per chunk; reviewer calls can be longer)
 - `batch_workers=1` (Ollama serializes internally; concurrent requests degrade)
 - `--allow-slow` on the batch runtime budget (local is always "slow" by cloud standards)
 

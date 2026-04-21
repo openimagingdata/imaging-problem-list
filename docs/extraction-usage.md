@@ -46,7 +46,7 @@ Pass any [pydantic-ai model string](https://ai.pydantic.dev/models/) via `--mode
 | Anthropic | `anthropic:claude-opus-4-6` | `ANTHROPIC_API_KEY` |
 | Google | `google-gla:gemini-3-flash-preview` (default) | `GOOGLE_API_KEY` |
 | OpenRouter | `openrouter:meta-llama/llama-3.1-70b` | `OPENROUTER_API_KEY` |
-| Ollama | `ollama:qwen3:30b-instruct` | *(none, local)* |
+| Ollama | `ollama:qwen3.6:35b-a3b-mlx-bf16` (local default) | *(none, local)* |
 
 ```bash
 # Anthropic
@@ -60,41 +60,59 @@ uv run finding-extractor report.txt -m google-gla:gemini-3.1-pro-preview
 uv run finding-extractor report.txt -m openrouter:meta-llama/llama-3.1-70b
 
 # Local Ollama (see Ollama setup below)
-uv run finding-extractor report.txt -m ollama:gpt-oss:20b
-uv run finding-extractor report.txt -m ollama:gpt-oss:120b --reasoning medium
-uv run finding-extractor report.txt -m ollama:gemma4-radextract
+uv run finding-extractor report.txt -m ollama:qwen3.6:35b-a3b-mlx-bf16
+uv run finding-extractor report.txt -m ollama:gemma4:26b-mxfp8                 # quality alt
+uv run finding-extractor report.txt -m ollama:gpt-oss:120b --reasoning medium  # legacy
 ```
 
 ### Ollama Setup
 
-Ollama runs models locally without API keys. You must:
+Ollama runs models locally without API keys — the right choice for **PHI-sensitive workloads**. For those runs, always pass `--local-only` (see "Local-only (PHI-safe)" below) to enforce that no report text or output can reach a cloud endpoint.
 
-1. **Install and start Ollama:** Follow [ollama.com](https://ollama.com)
-2. **Pull model(s):**
-   - `ollama pull gpt-oss:120b` — fast (MXFP4), recommended
-   - `ollama pull gpt-oss:20b` — fast, lightweight
-   - `ollama pull gemma4:26b` — for custom Modelfile builds (see `ollama/README.md`)
-   - `ollama pull nemotron-3-super:120b` — MoE, good quality
-   - `ollama pull qwen3.5:27b` — general-purpose
-3. **Set base URL:** Add `OLLAMA_BASE_URL=http://localhost:11434/v1` to your `.env`
-4. **For multi-model runs** (extraction + reviewer): `export OLLAMA_MAX_LOADED_MODELS=4`
+Steps:
 
-See `config.toml.example` for recommended local Ollama settings (timeout, concurrency, model selection).
+1. **Install and start Ollama:** Follow [ollama.com](https://ollama.com). Minimum version 0.21.0 (MLX runtime, Gemma 4 tool-calling).
+2. **Pull the recommended local models** (on Apple Silicon / M-series; see `docs/eval-ollama-models-report.md` for benchmark rationale):
+   - `ollama pull qwen3.6:35b-a3b-mlx-bf16` — **extraction default**, 70 GB, MLX runtime
+   - `ollama pull qwen3.6:35b-a3b-bf16` — **reviewer default**, 71 GB (GGUF)
+   - `ollama pull gpt-oss:20b` — fallback, 13 GB
+   - `ollama pull gemma4:26b-mxfp8` — quality-first extraction alternative, 26 GB
+   - `ollama pull medgemma:27b` — medical-domain specialist extractor, 17 GB
+3. **Use the committed `.env.ollama` file** (rather than hand-setting env vars) — it already pins all the right models, reasoning levels, and timeouts:
+   ```bash
+   uv run --env-file .env.ollama finding-extractor report.txt
+   ```
+4. **Multi-model runs** (extractor + reviewer both loaded): `export OLLAMA_MAX_LOADED_MODELS=4` in your shell.
+
+The committed `.env.ollama` sets:
+- `IPL_MODEL=ollama:qwen3.6:35b-a3b-mlx-bf16`, `IPL_REASONING=none`
+- `IPL_REVIEWER_ENABLED=true`, `IPL_REVIEWER_MODEL=ollama:qwen3.6:35b-a3b-bf16`, `IPL_REVIEWER_REASONING=low`
+- `IPL_FALLBACK_MODEL=ollama:gpt-oss:20b`
+- `OLLAMA_BASE_URL=http://localhost:11434/v1`
+- `IPL_SUBAGENT_TIMEOUT_SECONDS=300`, `IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY=1`
+
+#### Local-only (PHI-safe)
+
+For PHI workloads, always add `--local-only`. This enforces a three-gate guard at load time: provider must be Ollama, no cloud-suffix tags (`:cloud`, `-cloud`), and `OLLAMA_BASE_URL` must resolve to loopback. Also disables Logfire and blocks any non-Ollama fallback.
 
 ```bash
-# Add to .env:
-OLLAMA_BASE_URL=http://localhost:11434/v1
+# Single report
+uv run --env-file .env.ollama finding-extractor /path/to/report.txt --local-only
 
-uv run finding-extractor report.txt -m ollama:gpt-oss:20b
+# Batch (a directory of reports)
+uv run --env-file .env.ollama finding-extractor-batch run \
+  /path/to/reports/ \
+  --glob '*.txt' \
+  --output-dir /path/to/results/ \
+  --local-only \
+  --timeout-seconds 1800   # BF16 reviewer runs are ~11 min/report; 30 min headroom
 ```
+
+See `docs/configuration.md` §"Local-only Mode (PHI Safety)" for the full enforcement matrix, limitations (Modelfile alias inspection not yet implemented), and reference command.
 
 #### NativeOutput for models without tool support
 
-Some Ollama model families (gemma4 MoE, gemma3, deepseek-r1, MedGemma) don't support PydanticAI's tool-calling protocol. The extractor automatically detects these and uses PydanticAI's `NativeOutput` (JSON schema mode) instead. No manual configuration needed.
-
-#### Custom Modelfiles
-
-For models that benefit from conservative decoding (low temperature, fixed seed), custom Modelfiles are available in `ollama/`. See `ollama/README.md` for build instructions.
+Some Ollama families (gemma3, deepseek-r1, MedGemma) don't support PydanticAI's tool-calling protocol. The extractor auto-detects these and uses `NativeOutput` (JSON schema mode) instead. Gemma 4 *does* support tool-calling as of Ollama 0.20.6; it is not on the NativeOutput list. See `ollama_needs_native_output()` in `src/finding_extractor/llm/model_settings.py`.
 
 ## Reasoning / Thinking Level
 
@@ -110,11 +128,12 @@ Levels: `none`, `minimal`, `low`, `medium`, `high`
 Reasoning defaults are provider-specific (`openai=medium`, `anthropic=medium`, `google=low`, `openrouter=medium`, `ollama=none`). You can override with `--reasoning` or `IPL_REASONING`.
 
 For Ollama, reasoning is model-specific:
-- `ollama:gpt-oss:120b`: `none|low|medium|high` (`minimal` normalizes to `low`)
-- `ollama:qwen3.5:27b`: `none` (default)
-- `ollama:nemotron-3-super:120b`: `none` (default)
+- `ollama:qwen3.5:*` / `ollama:qwen3.6:*`: `none|low|medium|high` — thinks by default on the OpenAI-compatible endpoint; `reasoning_effort:none` is required to disable (the extractor sends this automatically)
+- `ollama:nemotron-cascade-2:*` / `ollama:nemotron-3-super:*`: same `none|low|medium|high` handling as Qwen3.5/3.6
+- `ollama:gpt-oss:120b` / `ollama:gpt-oss:20b`: `none|low|medium|high` (`minimal` normalizes to `low`)
 - `ollama:qwen3:30b-thinking`: `none|minimal|low|medium|high` (mapped to `think=false|true`)
 - `ollama:qwen3:30b-instruct`: `none` only
+- `ollama:medgemma:*`: `none` only (Gemma 3-based, no reasoning surface)
 
 Configuration details (env vars, `config.toml`, precedence, and secrets policy):
 - `docs/configuration.md`
@@ -221,7 +240,7 @@ Use `--store` to persist reports/extractions to SQLite. See `docs/persistence-us
 
 For many reports at once, use `finding-extractor-batch` (local in-process runner).
 
-Interactive mode:
+Interactive mode (cloud models):
 
 ```bash
 uv run --env-file .env finding-extractor-batch run sample_data/example3 \
@@ -234,6 +253,18 @@ uv run --env-file .env finding-extractor-batch run sample_data/example3 \
   --mode interactive \
   --allow-slow
 ```
+
+Interactive mode (local / PHI-safe):
+
+```bash
+uv run --env-file .env.ollama finding-extractor-batch run /path/to/reports/ \
+  --glob '*.txt' \
+  --output-dir /path/to/results/ \
+  --local-only \
+  --timeout-seconds 1800
+```
+
+Note: for local runs keep `--workers 1` (the default) — Ollama serializes per GPU.
 
 Detached mode:
 

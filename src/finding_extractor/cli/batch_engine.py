@@ -196,12 +196,26 @@ class BatchFileProgress:
                 self._set_status(f"chunk {idx}/{total}")
             m = self._CHUNK_DONE_RE.search(detail)
             if m:
-                # Transient state between chunks.
-                self._set_status("merging")
+                # Transient between chunks; a `review` or next `chunk N/M`
+                # event will overwrite this shortly. We intentionally do NOT
+                # say "merging" here — real merge happens only after the
+                # final chunk and is marked by the merge_dedupe stage below.
+                pass
             m = self._CHUNK_FAIL_RE.search(detail)
             if m:
                 _cid, attempt, err = m.groups()
                 self._set_status(f"retry (attempt {attempt}, {err})")
+        elif stage == "review":
+            chunk_id = None
+            m = re.search(r"report_chunk_id=(\S+)", detail)
+            if m:
+                chunk_id = m.group(1)
+            idx = self._chunk_index.get(chunk_id) if chunk_id else None
+            total = self._chunk_total or idx or 0
+            label = f"reviewing {idx}/{total}" if idx else "reviewing"
+            if detail.startswith("chunk_reextract_start") and idx:
+                label = f"re-extracting {idx}/{total}"
+            self._set_status(label)
         elif stage == "merge_dedupe":
             self._set_status("merging")
         elif stage == "validate_output":
