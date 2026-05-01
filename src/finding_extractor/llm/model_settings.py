@@ -6,6 +6,7 @@ This module manages reasoning/thinking configuration for supported LLM providers
 - Google (thinking levels: NONE, MINIMAL, LOW, MEDIUM, HIGH)
 - OpenRouter (effort-based reasoning: low, medium, high)
 - Ollama (model-specific thinking support via ``extra_body.think``)
+- vLLM (on-prem OpenAI-compatible deployments)
 
 Each provider has:
 - Default reasoning level when unspecified
@@ -60,6 +61,7 @@ PROVIDER_DEFAULT_REASONING: dict[str, str] = {
     "google": "low",
     "openrouter": "medium",
     "ollama": "none",
+    "vllm": "none",
 }
 
 PROVIDER_SUPPORTED_REASONING: dict[str, set[str]] = {
@@ -68,6 +70,7 @@ PROVIDER_SUPPORTED_REASONING: dict[str, set[str]] = {
     "google": set(VALID_REASONING_LEVELS),
     "openrouter": set(VALID_REASONING_LEVELS),
     "ollama": {"none"},
+    "vllm": set(VALID_REASONING_LEVELS),
 }
 
 # Anthropic thinking budget mapping: level -> (budget_tokens, max_tokens)
@@ -276,6 +279,48 @@ def _openai_supported_reasoning_for_model(model: str) -> set[str] | None:
     return None
 
 
+def _vllm_supported_reasoning_for_model(model: str) -> set[str] | None:
+    """Return supported reasoning levels for known on-prem vLLM deployments."""
+    if ":" not in model:
+        return None
+    _, raw_model_id = model.split(":", maxsplit=1)
+    lowered = raw_model_id.lower()
+    if lowered == "openai/gpt-oss-120b":
+        return {"none", "low", "medium", "high"}
+    if lowered == "google/gemma-4-31b-it":
+        return {"none"}
+    return None
+
+
+def _resolve_vllm_reasoning_for_model(
+    model: str,
+    reasoning_level: str,
+    *,
+    allow_unknown_model_reasoning: bool = False,
+) -> str:
+    """Resolve vLLM reasoning with deployment-specific compatibility checks."""
+    supported = _vllm_supported_reasoning_for_model(model)
+    if supported is None:
+        if allow_unknown_model_reasoning:
+            return reasoning_level
+        msg = (
+            f"Cannot verify reasoning compatibility for model {model!r}. "
+            "Set IPL_ALLOW_UNKNOWN_MODEL_REASONING=true to bypass."
+        )
+        raise ValueError(msg)
+
+    if reasoning_level in supported:
+        return reasoning_level
+    if reasoning_level == "minimal" and "low" in supported:
+        return "low"
+
+    allowed = ", ".join(sorted(supported))
+    raise ValueError(
+        f"Reasoning level {reasoning_level!r} is not supported by {model}; "
+        f"supported levels: {allowed}"
+    )
+
+
 def ollama_needs_native_output(model_name: str) -> bool:
     """Return True if this Ollama model needs PydanticAI's NativeOutput mode.
 
@@ -312,6 +357,23 @@ def ollama_needs_native_output(model_name: str) -> bool:
     )
     # Everything else (gemma3, deepseek-r1, medgemma, unknown) — use native
     return all(not lowered.startswith(prefix) for prefix in tool_capable_prefixes)
+
+
+def vllm_needs_native_output(model_name: str) -> bool:
+    """Return True for vLLM deployments that should avoid tool-calling mode.
+
+    The configured vLLM endpoints are OpenAI-compatible but may be served
+    without a `--tool-call-parser`. PydanticAI tool mode sends
+    ``tool_choice="required"``, which those servers reject. NativeOutput uses
+    JSON-schema structured output instead and avoids the tool-calling path.
+    """
+    provider = provider_from_model_id(model_name)
+    return provider == "vllm"
+
+
+def model_needs_native_output(model_name: str) -> bool:
+    """Return True when a configured model should use PydanticAI NativeOutput."""
+    return ollama_needs_native_output(model_name) or vllm_needs_native_output(model_name)
 
 
 def _ollama_supported_reasoning_for_model(model: str) -> set[str] | None:
@@ -434,6 +496,13 @@ def resolve_runtime_reasoning(
             allow_unknown_model_reasoning=allow_unknown_model_reasoning,
         )
 
+    if provider == "vllm":
+        return _resolve_vllm_reasoning_for_model(
+            model,
+            validated_level,
+            allow_unknown_model_reasoning=allow_unknown_model_reasoning,
+        )
+
     return validate_reasoning_for_model(model, validated_level)
 
 
@@ -541,6 +610,20 @@ def build_ollama_settings(model: str, reasoning_level: str) -> OpenAIChatModelSe
     return None
 
 
+def build_vllm_settings(model: str, reasoning_level: str) -> OpenAIChatModelSettings | None:
+    """Build vLLM settings for known OpenAI-compatible on-prem deployments."""
+    if ":" not in model:
+        return None
+    _, raw_model_id = model.split(":", maxsplit=1)
+    lowered = raw_model_id.lower()
+    if lowered == "openai/gpt-oss-120b":
+        if reasoning_level == "none":
+            return None
+        effort = "low" if reasoning_level == "minimal" else reasoning_level
+        return OpenAIChatModelSettings(openai_reasoning_effort=effort)  # type: ignore[typeddict-item]
+    return None
+
+
 
 def get_model_settings(model: str, reasoning: str | None = None) -> ModelSettings | None:
     """Build provider-appropriate ModelSettings for the agent.
@@ -576,6 +659,12 @@ def get_model_settings(model: str, reasoning: str | None = None) -> ModelSetting
             level,
             allow_unknown_model_reasoning=True,
         )
+    elif provider == "vllm":
+        level = _resolve_vllm_reasoning_for_model(
+            model,
+            level,
+            allow_unknown_model_reasoning=True,
+        )
 
     builders = {
         "openai": build_openai_settings,
@@ -583,6 +672,7 @@ def get_model_settings(model: str, reasoning: str | None = None) -> ModelSetting
         "google": build_google_settings,
         "openrouter": build_openrouter_settings,
         "ollama": lambda v: build_ollama_settings(model, v),
+        "vllm": lambda v: build_vllm_settings(model, v),
     }
 
     builder = builders.get(provider)
@@ -618,6 +708,15 @@ def model_reasoning_capabilities(model: str) -> tuple[list[str], str]:
 
     if provider == "openai":
         supported = _openai_supported_reasoning_for_model(model)
+        if supported is None:
+            return sorted(PROVIDER_SUPPORTED_REASONING.get(provider, set())), default
+        effective = set(supported)
+        if "low" in effective:
+            effective.add("minimal")
+        return sorted(effective), default
+
+    if provider == "vllm":
+        supported = _vllm_supported_reasoning_for_model(model)
         if supported is None:
             return sorted(PROVIDER_SUPPORTED_REASONING.get(provider, set())), default
         effective = set(supported)

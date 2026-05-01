@@ -844,6 +844,24 @@ class TestResolveRuntimeReasoning:
         )
         assert level == "low"
 
+    def test_vllm_gemma_accepts_none_reasoning(self):
+        level = resolve_runtime_reasoning("vllm:google/gemma-4-31B-it", "none")
+        assert level == "none"
+
+    def test_vllm_gemma_rejects_explicit_reasoning(self):
+        with pytest.raises(ValueError, match="Reasoning level 'medium' is not supported"):
+            resolve_runtime_reasoning("vllm:google/gemma-4-31B-it", "medium")
+
+    def test_vllm_gpt_oss_minimal_normalizes_to_low(self):
+        level = resolve_runtime_reasoning("vllm:openai/gpt-oss-120b", "minimal")
+        assert level == "low"
+
+    def test_vllm_gpt_oss_builds_reasoning_effort_settings(self):
+        settings = get_model_settings("vllm:openai/gpt-oss-120b", reasoning="high")
+        assert settings is not None
+        provider_settings = cast(dict[str, Any], settings)
+        assert provider_settings["openai_reasoning_effort"] == "high"
+
 
 class TestEmitStatus:
     """Test cases for the _emit_progress helper."""

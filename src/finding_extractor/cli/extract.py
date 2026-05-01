@@ -232,7 +232,7 @@ _run_pipeline_sync = runnify(_run_pipeline)
     "--local-only",
     is_flag=True,
     default=False,
-    help="PHI-safe mode: require ollama models only, disable Logfire, block HuggingFace.",
+    help="PHI-safe mode: require Ollama loopback or approved vLLM, disable Logfire.",
 )
 def main(
     report_file,
@@ -287,9 +287,10 @@ def main(
         resolved = effective_model or settings.default_model
         assert_local_only_model(resolved, settings, context="CLI --local-only", preset=effective_preset)
 
-        # settings.ollama_base_url is guaranteed non-empty by the helper above.
-        assert settings.ollama_base_url is not None
-        _preflight_local_only(settings.ollama_base_url, resolved)
+        if resolved.startswith("ollama:"):
+            # settings.ollama_base_url is guaranteed non-empty by the helper above.
+            assert settings.ollama_base_url is not None
+            _preflight_local_only(settings.ollama_base_url, resolved)
         print_manifest(resolved, settings)
 
     try:

@@ -4,6 +4,19 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-04-24 — vLLM provider
+
+- Added `vllm:` model IDs for configured OpenAI-compatible deployments: `vllm:google/gemma-4-31B-it` and `vllm:openai/gpt-oss-120b`.
+- Added configurable vLLM base URLs with defaults for the current Gemma 4 31B and GPT OSS 120B endpoints; optional auth uses env-only `VLLM_API_KEY`.
+- Added model-specific reasoning validation: Gemma 4 accepts `none`; GPT OSS accepts `none|low|medium|high` with `minimal` normalized to `low`.
+- Routed vLLM models through `NativeOutput` because the current servers reject tool-calling requests unless started with a tool-call parser.
+- Hardened vLLM provider construction so it never falls back to `OPENAI_API_KEY`; unauthenticated deployments use a non-secret placeholder key, while authenticated deployments must set `VLLM_API_KEY`.
+- Canonicalized vLLM served model names before sending requests so accepted case variants still call exact deployment names such as `google/gemma-4-31B-it`.
+- Extended `--local-only` / `IPL_LOCAL_ONLY=true` to allow configured vLLM endpoints whose hosts are explicitly allowlisted while still rejecting cloud providers, Ollama cloud tags, and unapproved vLLM hosts.
+- Updated usage/config docs and examples so the on-prem models work through the same CLI/API/batch/eval model fields as existing providers.
+
+---
+
 ## 2026-04-20 — Local reviewer re-evaluation
 
 The prior-round default reviewer (`ollama:gpt-oss:120b` / `reasoning=none`) was carried over from 2026-04-03 without direct reviewer-role benchmarking; the env value `none` directly contradicted the 2026-03-16 cloud-reviewer finding that `reasoning=low` is required for precise review. Ran all 7 local reviewer candidates (gpt-oss:120b, gpt-oss:20b, nemotron-cascade-2, nemotron-3-super:120b, gemma4:26b-mxfp8, gemma4:26b-mlx-bf16, medgemma:27b, qwen3.6:35b-a3b-bf16) paired with qwen3.6:35b-a3b-mlx-bf16 extractor on three reports; manually graded TP/FP against the chunk text and the extraction table each reviewer saw.

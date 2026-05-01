@@ -79,11 +79,12 @@ def assert_local_only_model(
 ) -> None:
     """Run the local-only policy check, converting violations to click errors.
 
-    When ``preset`` is provided and the resolved model is non-Ollama, raise a
+    When ``preset`` is provided and the resolved model is not approved, raise a
     preset-specific error message that names the offending preset — easier to
-    act on than the generic "not an Ollama model" violation.
+    act on than the generic provider violation.
     """
-    if preset is not None and provider_from_model_id(resolved_model) != "ollama":
+    provider = provider_from_model_id(resolved_model)
+    if preset is not None and provider not in {"ollama", "vllm"}:
         raise click.ClickException(
             f"[{context}] Preset {preset!r} selects cloud model "
             f"{resolved_model!r}. Use --preset local (or omit --preset)."
@@ -93,6 +94,10 @@ def assert_local_only_model(
             resolved_model,
             local_only_mode=True,
             ollama_base_url=settings.ollama_base_url,
+            vllm_base_url=settings.vllm_base_url_for_model_optional(resolved_model)
+            if provider == "vllm"
+            else None,
+            vllm_allowed_hosts=settings.vllm_local_only_allowed_hosts,
             context=context,
         )
     except LocalOnlyViolationError as exc:
@@ -112,10 +117,16 @@ def print_manifest(
     """
     fallback = settings.fallback_model or "(none)"
     reviewer = settings.reviewer_model if settings.reviewer_enabled else "disabled"
+    provider = provider_from_model_id(resolved_model)
+    endpoint_label = "ollama endpoint"
+    endpoint_value = settings.ollama_base_url or "(none)"
+    if provider == "vllm":
+        endpoint_label = "vllm endpoint"
+        endpoint_value = settings.vllm_base_url_for_model(resolved_model)
     lines = [
-        "[local-only] Preflight passed. No report text or extraction output will leave this machine.",
+        "[local-only] Preflight passed. Inference is restricted to approved local/on-prem endpoints.",
         f"  model               = {resolved_model}",
-        f"  ollama endpoint     = {settings.ollama_base_url}",
+        f"  {endpoint_label:<20}= {endpoint_value}",
         f"  fallback_model      = {fallback}",
         f"  reviewer            = {reviewer}",
         "  coding              = disallowed",
@@ -125,7 +136,8 @@ def print_manifest(
     if extras:
         for key, value in extras.items():
             lines.append(f"  {key:<20}= {value}")
-    lines.append(
-        "  \u26a0 model provenance  = NOT verified \u2014 do not use Modelfiles whose FROM points at a :cloud source"
-    )
+    if provider == "ollama":
+        lines.append(
+            "  \u26a0 model provenance  = NOT verified \u2014 do not use Modelfiles whose FROM points at a :cloud source"
+        )
     click.echo("\n".join(lines), err=True)

@@ -597,7 +597,7 @@ async def test_extract_dispatch_rejects_cloud_model_under_local_only(
         json={"model": "openai:gpt-5.2"},
     )
     assert response.status_code == 422
-    assert "not an Ollama model" in response.json()["detail"]
+    assert "not an Ollama or approved vLLM model" in response.json()["detail"]
 
 
 @pytest.mark.asyncio
@@ -634,6 +634,46 @@ async def test_extract_dispatch_accepts_ollama_model_under_local_only(
         f"/api/reports/{report_id}/extract",
         json={"model": "ollama:qwen3.5:35b-a3b"},
     )
+    assert response.status_code == 202
+
+
+@pytest.mark.asyncio
+async def test_extract_dispatch_accepts_vllm_model_under_local_only(
+    app,
+    client: AsyncClient,
+    monkeypatch,
+):
+    """Approved vLLM model should work when IPL_LOCAL_ONLY=true."""
+    from finding_extractor.core.config import ExtractorSettings, override_settings
+
+    settings = ExtractorSettings(
+        local_only_mode=True,
+        default_model="vllm:google/gemma-4-31B-it",
+        fallback_model=None,
+        reviewer_model=None,
+        coding_model="ollama:qwen3.5:35b-a3b",
+        coding_term_model=None,
+        coding_fallback_model=None,
+        ollama_base_url=None,
+        vllm_gemma4_31b_base_url="https://vllm.internal.example/gemma/v1",
+        vllm_local_only_allow_hosts="vllm.internal.example",
+    )
+    override_settings(settings)
+
+    async def _ok_kiq(*args, **kwargs):
+        _ = (args, kwargs)
+        return None
+
+    monkeypatch.setattr(app.state.run_extraction_task, "kiq", _ok_kiq)
+
+    report = await client.post("/api/reports", json={"report_text": "No focal consolidation."})
+    report_id = report.json()["id"]
+
+    response = await client.post(
+        f"/api/reports/{report_id}/extract",
+        json={"model": "vllm:google/gemma-4-31B-it"},
+    )
+
     assert response.status_code == 202
 
 

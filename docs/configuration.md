@@ -13,7 +13,7 @@ Configuration sources are applied in this order:
 
 ## Environment Variables
 
-### App Settings (`IPL_*`)
+### App Settings (`IPL_*` plus provider endpoints)
 
 | Env var | Type | Default | TOML key (`[ipl]`) |
 |---|---|---|---|
@@ -69,6 +69,9 @@ Configuration sources are applied in this order:
 | `IPL_LOGFIRE_HEADERS` | bool | `false` | `logfire_capture_headers` |
 | `IPL_LOGFIRE_METRICS` | bool | `false` | `logfire_system_metrics` |
 | `IPL_LOGFIRE_SDKS` | bool | `false` | `logfire_instrument_provider_sdks` |
+| `VLLM_GEMMA4_31B_BASE_URL` | string \| null | `null` | `vllm_gemma4_31b_base_url` |
+| `VLLM_GPT_OSS_120B_BASE_URL` | string \| null | `null` | `vllm_gpt_oss_120b_base_url` |
+| `IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS` | comma-separated hosts | `""` | `vllm_local_only_allow_hosts` |
 
 Notes:
 - `IPL_LOG_LEVEL` accepts `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG`, `NOTSET` (`WARN` alias is normalized to `WARNING`).
@@ -87,6 +90,9 @@ Notes:
     - `ollama:qwen3:30b-thinking` supports all reasoning levels
     - `ollama:qwen3:30b-instruct` supports `none` only
     - `ollama:gpt-oss:120b` supports `none|low|medium|high` (`minimal` normalized to `low`)
+  - model-specific vLLM behavior is enforced for known on-prem deployments:
+    - `vllm:google/gemma-4-31B-it` supports `none` only
+    - `vllm:openai/gpt-oss-120b` supports `none|low|medium|high` (`minimal` normalized to `low`)
 - `IPL_SUBAGENT_TIMEOUT_SECONDS` applies to all sub-agent calls (chunk extraction, exam-info, validator review). Set to `null` to disable timeouts.
 - `IPL_PRESET` selects a named (model, reasoning) configuration: `fast`, `balanced`, `quality`, `local`. When set, overrides `IPL_MODEL` and `IPL_REASONING`.
 - CORS origins are currently fixed in code to localhost defaults (not a runtime setting).
@@ -102,6 +108,42 @@ These are intentionally not `IPL_`-prefixed and are env-only:
 - `ANTHROPIC_API_KEY`
 - `GOOGLE_API_KEY`
 - `OPENROUTER_API_KEY`
+- `VLLM_API_KEY` (optional; only needed if the on-prem vLLM service requires auth)
+
+### On-Prem vLLM Configuration
+
+Use these model IDs with the existing `--model`, `IPL_MODEL`, `reviewer_model`,
+fallback, coding, and eval configuration surfaces:
+
+- `vllm:google/gemma-4-31B-it`
+- `vllm:openai/gpt-oss-120b`
+
+The configured base URLs must point at the OpenAI-compatible `/v1` API root, not
+the full `/v1/chat/completions` path. If a full chat-completions URL is supplied,
+settings normalization strips the suffix automatically.
+
+`VLLM_API_KEY` never falls back to `OPENAI_API_KEY`. If `VLLM_API_KEY` is unset,
+the client sends a non-secret placeholder key for compatibility with the OpenAI
+client while avoiding credential leakage to on-prem endpoints.
+
+vLLM model IDs are matched case-insensitively for convenience, then normalized
+to exact served model names before requests are sent.
+
+The configured vLLM servers are routed through PydanticAI
+`NativeOutput` / JSON-schema structured output. Gemma 4 supports tool calling,
+but vLLM only accepts OpenAI tool calls when the server is launched with the
+appropriate tool-call parser configuration.
+
+Use `.env.vllm` for the local convenience profile:
+
+```bash
+cp .env.vllm.example .env.vllm
+uv run --env-file .env.vllm finding-extractor report.txt
+```
+
+The tracked `.env.vllm.example` pins the tested Gemma 4 extractor / GPT OSS
+reviewer setup without secrets; add `VLLM_API_KEY` separately if auth is
+required.
 
 ### Ollama Configuration (Local Models)
 
@@ -116,7 +158,16 @@ Some Ollama model families (gemma4 MoE, gemma3, deepseek-r1, MedGemma) can't use
 
 #### Recommended local config
 
-See `config.toml.example` for Ollama-specific settings (timeout, concurrency, model selection). Custom Modelfiles with extraction-optimized defaults are in `ollama/`.
+Use `.env.ollama` for the local convenience profile:
+
+```bash
+cp .env.ollama.example .env.ollama
+uv run --env-file .env.ollama finding-extractor report.txt --local-only
+```
+
+The tracked `.env.ollama.example` pins the recommended local extractor,
+reviewer, fallback, timeout, and serial-worker settings. See
+`config.toml.example` for the same settings in TOML form.
 
 See `docs/extraction-usage.md` for Ollama setup instructions.
 
@@ -203,19 +254,23 @@ Rejected TOML keys include:
 - `ANTHROPIC_API_KEY`
 - `GOOGLE_API_KEY`
 - `OPENROUTER_API_KEY`
+- `VLLM_API_KEY`
 - `LOGFIRE_TOKEN`
 
 ## Local-Only Mode (PHI-Safe)
 
-Set `IPL_LOCAL_ONLY=true` (or pass `--local-only` to `finding-extractor` / `finding-extractor-batch`) to guarantee no report text or extraction output leaves the machine.
+Set `IPL_LOCAL_ONLY=true` (or pass `--local-only` to `finding-extractor` / `finding-extractor-batch`) to keep report text and extraction output on approved inference paths only: loopback Ollama or configured vLLM endpoints whose hosts are explicitly allowlisted by `IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS`. Cloud providers, Ollama cloud-routed tags, unapproved vLLM hosts, Logfire, and coding are blocked.
 
 > ⚠️ **Known limitation — Modelfile aliases are not inspected.** A local Ollama model built from a Modelfile whose `FROM` points at a `:cloud` / `-cloud` source bypasses the tag-suffix check. If you use Modelfile aliases, verify each one's `FROM` line yourself before running on PHI. Tracked in `docs/plans/local-only-future-tightening.md`.
 
 ### Quick Start
 
-Use the committed `.env.ollama` file — it pins every `IPL_*` needed for the recommended local pipeline (extractor, reviewer, fallback, timeouts, Ollama base URL). Load it with `uv run --env-file`:
+Use `.env.ollama` for a workstation-local Ollama pipeline. Create it from the
+tracked non-secret example if needed, then load it with `uv run --env-file`:
 
 ```bash
+cp .env.ollama.example .env.ollama
+
 uv run --env-file .env.ollama finding-extractor-batch run /path/to/reports \
   --glob "head_ct_*.txt" --suffix .json \
   --output-dir /path/to/results \
@@ -223,7 +278,7 @@ uv run --env-file .env.ollama finding-extractor-batch run /path/to/reports \
   --timeout-seconds 1800
 ```
 
-The committed `.env.ollama` sets:
+The tracked `.env.ollama.example` sets:
 ```
 OLLAMA_BASE_URL=http://localhost:11434/v1
 IPL_MODEL=ollama:qwen3.6:35b-a3b-mlx-bf16
@@ -239,6 +294,16 @@ IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY=1
 
 `--timeout-seconds 1800` bumps the per-file budget to 30 minutes — the BF16 reviewer averages ~11 min/report (see `docs/eval-ollama-models-report.md`), comfortably below that ceiling. The default (420 s) is too low for this reviewer.
 
+Use `.env.vllm` for the configured vLLM pipeline:
+
+```bash
+cp .env.vllm.example .env.vllm
+
+uv run --env-file .env.vllm finding-extractor /path/to/report.txt --local-only
+```
+
+The tracked `.env.vllm.example` shows placeholder `/v1` endpoint roots and `IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS`; replace them in your private `.env.vllm` with the vLLM host you actually use. `VLLM_API_KEY` is optional and remains separate from `OPENAI_API_KEY`.
+
 Under `--local-only` the system auto-applies:
 - `allow_unknown_model_reasoning=True` (so custom Modelfile names whose reasoning surface we can't introspect still work)
 - `subagent_timeout_seconds=300` (local models routinely take 30–90 s per chunk; reviewer calls can be longer)
@@ -249,14 +314,14 @@ Any explicit `IPL_*` env var or CLI flag beats the auto-default. Set them only w
 
 ### What it enforces
 
-Every entry point below validates the resolved model, cloud-suffix tag, and Ollama endpoint before any model call:
+Every entry point below validates the resolved model, cloud-suffix tag, and endpoint before any model call:
 
 | Entry point | Enforcement |
 |---|---|
-| Settings load | Rejects cloud `IPL_MODEL` / `IPL_FALLBACK_MODEL` / `IPL_REVIEWER_MODEL`; rejects missing or non-loopback `OLLAMA_BASE_URL` |
+| Settings load | Rejects cloud `IPL_MODEL` / `IPL_FALLBACK_MODEL` / `IPL_REVIEWER_MODEL`; rejects missing or non-loopback `OLLAMA_BASE_URL` for Ollama models; rejects vLLM hosts not listed in `IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS` |
 | `finding-extractor` CLI | Rejects cloud `--model`, cloud `--preset`, and `--logfire`; prints manifest with resolved endpoint |
 | `finding-extractor-batch` CLI | Same as above; detached child inherits `IPL_LOCAL_ONLY=true` via subprocess env |
-| API `POST /reports/{id}/extract` | 422 if `body.model` is non-Ollama, cloud-routed, or endpoint is remote |
+| API `POST /reports/{id}/extract` | 422 if `body.model` is cloud, cloud-routed, or points at an unapproved endpoint |
 | API `POST /extractions/{id}/code` | 422 — coding is disallowed entirely in local-only mode |
 | Extraction worker | Fails the job with `LOCAL_ONLY_VIOLATION` if it reaches here with a cloud model |
 | Logfire | Short-circuited; no traces sent regardless of other flags |
@@ -265,12 +330,13 @@ Every entry point below validates the resolved model, cloud-suffix tag, and Olla
 
 - `OLLAMA_BASE_URL` host must be a loopback literal (`127.0.0.1`, `::1`) or a loopback name (`localhost`). Hostnames resolve via `socket.getaddrinfo`; every returned address must be loopback.
 - Models with an Ollama cloud-routed tag (`:cloud` or `-cloud` suffix, e.g. `qwen3.5:cloud`, `gpt-oss:120b-cloud`) are rejected — these get proxied to `ollama.com` through the local `ollama serve` process and would leak PHI despite the local wire endpoint.
+- vLLM models are allowed only when they are supported `vllm:` model IDs and their base URL host appears in `IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS` / `vllm_local_only_allow_hosts`.
 
 ### What is NOT covered
 
 - `finding-extractor-eval` does not enforce local-only. Eval datasets are fixture data curated in-repo; they are not PHI. Running eval with a cloud model is a valid workflow.
 - **Modelfile aliases** — see the warning at the top of this section.
-- Air-gapped deployments where Ollama runs on a named private-network host rather than loopback. An `IPL_LOCAL_ONLY_ALLOW_HOSTS` escape hatch was prototyped and then cut as YAGNI — the three loopback gates are unconditional today. See `docs/plans/local-only-future-tightening.md` for the trigger to reopen if someone needs this.
+- Air-gapped deployments where Ollama runs on a named private-network host rather than loopback. An `IPL_LOCAL_ONLY_ALLOW_HOSTS` escape hatch was prototyped and then cut as YAGNI — the Ollama loopback gate is unconditional today. See `docs/plans/local-only-future-tightening.md` for the trigger to reopen if someone needs this.
 
 ## Common Setup
 

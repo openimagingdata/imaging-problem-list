@@ -11,6 +11,8 @@ fallback_model = "openai:gpt-5.2"
 # - ollama:qwen3:30b-instruct
 # - ollama:qwen3:30b-thinking
 # - ollama:gpt-oss:120b
+# - vllm:google/gemma-4-31B-it
+# - vllm:openai/gpt-oss-120b
 reviewer_enabled = true
 # reviewer_model = "openai-responses:gpt-5.4-mini"  # default
 reviewer_reasoning = "low"
@@ -45,10 +47,24 @@ log_json = false
 # Note: also set OLLAMA_BASE_URL=http://localhost:11434/v1 in .env
 # Note: set OLLAMA_MAX_LOADED_MODELS=4 in your environment for multi-model runs
 
+# --- On-prem vLLM configuration ---
+# The project includes defaults for two configured OpenAI-compatible vLLM
+# deployments below. Override these for your served model endpoints.
+# default_model = "vllm:google/gemma-4-31B-it"
+# fallback_model = "vllm:openai/gpt-oss-120b"
+# default_reasoning = "none"   # Gemma 4 does not expose a reasoning control
+# reviewer_model = "vllm:openai/gpt-oss-120b"
+# reviewer_reasoning = "medium"
+# vllm_gemma4_31b_base_url = "https://vllm.example.org/gemma-4-31B-it/v1"
+# vllm_gpt_oss_120b_base_url = "https://vllm.example.org/gpt-oss-120b/v1"
+# vllm_local_only_allow_hosts = "vllm.example.org"
+# If the service requires auth, set VLLM_API_KEY in .env, not config.toml.
+
 # --- Local-only (PHI-safe) mode ---
-# Set IPL_LOCAL_ONLY=true to force every path to keep data on this machine.
-# Rejects cloud models, cloud-tagged Ollama models (:cloud / -cloud), and
-# non-loopback OLLAMA_BASE_URL. See docs/configuration.md#local-only-mode.
+# Set IPL_LOCAL_ONLY=true to force every path to approved local/on-prem
+# inference only. Rejects cloud models, cloud-tagged Ollama models
+# (:cloud / -cloud), non-loopback OLLAMA_BASE_URL, and unapproved vLLM hosts.
+# See docs/configuration.md#local-only-mode.
 # local_only_mode = false
 
 logfire_enabled = false
