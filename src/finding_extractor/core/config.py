@@ -547,7 +547,10 @@ class ExtractorSettings(BaseSettings):
         - ``subagent_timeout_seconds`` → 300.0 (local models routinely need
           30-90s per chunk; default 20 times out mid-chunk)
         - ``batch_workers`` → 1 (Ollama serializes internally; concurrent
-          requests degrade quality and speed)
+          report-level workers degrade quality and speed)
+        - ``extractor_max_subagent_concurrency`` → 2 (Ollama 0.23.1 MLX
+          threading fixes make c=2 safe for per-report chunk concurrency;
+          c=1 is too conservative, c=4 starts breaking on 2026-05-14 sweep)
 
         An explicit env var / TOML / CLI value wins over the default because
         ``"<field>" in data`` is checked — pydantic-settings has already
@@ -564,6 +567,7 @@ class ExtractorSettings(BaseSettings):
             ("allow_unknown_model_reasoning", "IPL_ALLOW_UNKNOWN_MODEL_REASONING", True),
             ("subagent_timeout_seconds", "IPL_SUBAGENT_TIMEOUT_SECONDS", 300.0),
             ("batch_workers", "IPL_BATCH_WORKERS", 1),
+            ("extractor_max_subagent_concurrency", "IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY", 2),
         ):
             if field_name not in data and env_alias not in data:
                 data[field_name] = value

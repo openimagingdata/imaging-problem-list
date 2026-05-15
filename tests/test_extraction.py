@@ -328,26 +328,6 @@ class TestMultiProviderSettings:
         provider_settings = cast(dict[str, Any], settings)
         assert provider_settings["extra_body"]["think"] == "low"
 
-    def test_ollama_nemotron_cascade_2_settings_none(self):
-        """nemotron-cascade-2 uses reasoning_effort on Ollama's OpenAI API."""
-        settings = get_model_settings("ollama:nemotron-cascade-2", reasoning="none")
-        assert settings is not None
-        provider_settings = cast(dict[str, Any], settings)
-        assert provider_settings["openai_reasoning_effort"] == "none"
-
-    def test_ollama_nemotron_cascade_2_settings_high(self):
-        """nemotron-cascade-2 accepts tiered reasoning levels."""
-        settings = get_model_settings("ollama:nemotron-cascade-2", reasoning="high")
-        assert settings is not None
-        provider_settings = cast(dict[str, Any], settings)
-        assert provider_settings["openai_reasoning_effort"] == "high"
-
-    def test_ollama_nemotron_cascade_2_settings_minimal_maps_low(self):
-        """nemotron-cascade-2 normalizes minimal to low."""
-        settings = get_model_settings("ollama:nemotron-cascade-2", reasoning="minimal")
-        assert settings is not None
-        provider_settings = cast(dict[str, Any], settings)
-        assert provider_settings["openai_reasoning_effort"] == "low"
 
 
 class TestAnthropicAdaptiveDetection:
@@ -651,9 +631,6 @@ class TestReasoningValidation:
         with pytest.raises(ValueError, match="not supported by ollama:qwen3:30b-instruct"):
             validate_reasoning_for_model("ollama:qwen3:30b-instruct", "high")
 
-    def test_validate_reasoning_for_model_ollama_nemotron_cascade_2_accepts_high(self):
-        """nemotron-cascade-2 accepts tiered reasoning."""
-        validate_reasoning_for_model("ollama:nemotron-cascade-2", "high")
 
     def test_validate_reasoning_for_model_openai_accepts_all(self):
         """OpenAI models accept all reasoning levels."""
@@ -781,10 +758,6 @@ class TestResolveEffectiveReasoning:
         level = resolve_runtime_reasoning("ollama:qwen3:30b-thinking", "high")
         assert level == "high"
 
-    def test_ollama_nemotron_cascade_2_accepts_explicit_medium(self):
-        """nemotron-cascade-2 should accept explicit reasoning tiers at preflight."""
-        level = resolve_runtime_reasoning("ollama:nemotron-cascade-2", "medium")
-        assert level == "medium"
 
     def test_unknown_provider_returns_none_without_defaults(self):
         """Unknown provider with no reasoning returns None."""
@@ -828,9 +801,6 @@ class TestResolveRuntimeReasoning:
         level = resolve_runtime_reasoning("ollama:gpt-oss:120b", "minimal")
         assert level == "low"
 
-    def test_ollama_nemotron_cascade_2_minimal_normalizes_to_low(self):
-        level = resolve_runtime_reasoning("ollama:nemotron-cascade-2", "minimal")
-        assert level == "low"
 
     def test_ollama_unknown_family_fails_fast_by_default(self):
         with pytest.raises(ValueError, match="Cannot verify reasoning compatibility"):

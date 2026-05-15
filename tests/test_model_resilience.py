@@ -122,10 +122,6 @@ class TestResolveOutputType:
         result = resolve_output_type(_DummyOutput, "ollama:medgemma:27b")
         assert isinstance(result, NativeOutput)
 
-    def test_wraps_for_nemotron_cascade_2(self):
-        result = resolve_output_type(_DummyOutput, "ollama:nemotron-cascade-2")
-        assert isinstance(result, NativeOutput)
-
     def test_wraps_when_fallback_needs_native(self):
         result = resolve_output_type(
             _DummyOutput, "ollama:gpt-oss:120b", fallback_model_name="ollama:medgemma:27b"

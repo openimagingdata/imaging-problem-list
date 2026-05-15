@@ -1,6 +1,6 @@
 # Pending Refactoring Backlog
 
-Last updated: 2026-03-18
+Last updated: 2026-05-14
 Status: Active
 
 This is the canonical near-term refactoring/cleanup queue. Longer-horizon improvements live in `docs/future-improvements.md`.
@@ -14,6 +14,39 @@ This is the canonical near-term refactoring/cleanup queue. Longer-horizon improv
 | PR-015 | low | Reconcile archived CLI persistence residuals: keep/retire `--store-include-validation` and confirm explicit `--store` failure/validation exit-code tests. | `docs/archive/persistence-cli-plan.md` |
 | PR-019 | medium | Enforce migration discipline on direct API startup: avoid `create_all()`-bootstrapped unstamped schemas when running `finding-extractor-api` outside the Taskfile/Docker migration path. | PR review on `refactor/package-restructuring` |
 | PR-020 | medium | Finish active-doc sweep after package restructuring; update remaining references to removed modules, renamed callbacks, and deleted `ValidationResult.is_valid` semantics. Detailed scope below. | PR review on `refactor/package-restructuring` |
+| PR-025 | low | Collapse manual Ollama `reasoning_effort` prefix-matching in `src/finding_extractor/llm/model_settings.py` once Ollama 0.21.3+ native `reasoning_effort`→thinking mapping is parity-verified. Detailed scope below. | 2026-05-14 eval round (Track D) |
+| PR-026 | low | Investigate `num_ctx` tuning for Ollama models on the OpenAI-compat endpoint. Currently silently dropped (Ollama issue #6544); the only workaround is a custom Modelfile, which 2026-04-20 eval retired for reliability. Defer until we have evidence num_ctx is a bottleneck. | 2026-05-14 eval round |
+| PR-027 | low | Explore combined-extractor pipeline: run `gemma4:26b-nvfp4` + `qwen3.6:35b-a3b-mlx-bf16` in parallel and merge findings. 2026-05-14 quality analysis showed finding-name Jaccard overlap is 0.22–0.50 between the two — they extract complementary vocabularies (Gemma 4 = anatomical-systematic checklist; qwen3.6 = pathology-named). | 2026-05-14 quality comparison |
+
+## Detailed Scope for PR-025
+
+**Context.** Ollama 0.21.3+ ships native `reasoning_effort`→thinking mapping on the OpenAI-compatible endpoint. Our `build_ollama_settings` and `_ollama_supported_reasoning_for_model` currently special-case qwen3.5/3.6, nemotron-3-super, gemma4, qwen3:30b-thinking, and gpt-oss:120b with per-prefix branches (~50 lines total). If the native mapping covers all these families equivalently, the manual plumbing is redundant.
+
+**Pre-condition (do not skip).** Empirically verify on a current Ollama release that bypassing `build_ollama_settings` (i.e., returning `None` for the qwen3.6 prefix) yields the same per-call latency and same empty-`reasoning`/populated-`content` behavior as the manual plumbing. Test specifically with `reasoning_effort=none` on `qwen3.6:35b-a3b-mlx-bf16` and `reasoning_effort=low` on a Nemotron H-MoE model. Capture Logfire trace URLs in the commit message.
+
+**Risks.** The manual plumbing exists because of real bugs (3–5× latency spikes on qwen3.6 at default thinking, FallbackExceptionGroup on chunks with malformed CoT). The collapse must not regress these.
+
+**Scope on collapse.** `_ollama_supported_reasoning_for_model` simplifies to a single tool-capable set plus an explicit "no-reasoning" set for llama-family and qwen3:30b-instruct. `build_ollama_settings` returns `OpenAIChatModelSettings(openai_reasoning_effort=level)` uniformly for tool-capable Ollama families. The `extra_body={"think": ...}` branches for `qwen3:30b-thinking` and `gpt-oss:120b` are evaluated separately — they predate the `reasoning_effort` mapping and may still be needed.
+
+**Test updates.** `tests/test_presets.py`, `tests/test_model_resilience.py`, `tests/test_model_policy.py` simplify in lockstep. If any family fails parity, keep its manual branch with a code comment citing the Logfire trace URL and date.
+
+## Detailed Scope for PR-026
+
+**Context.** Research agent finding 2026-05-14: Ollama's OpenAI-compatible endpoint silently drops `extra_body.options`, so `num_ctx` cannot be set per-request (Ollama issue #6544). The only documented workaround is `ollama create` with a `PARAMETER num_ctx 32768` Modelfile, but the 2026-04-20 eval retired the `gemma4-radextract` custom Modelfile because baked-in decoding parameters caused 2/3 reports to fail.
+
+**Trigger to revisit.** Any of: (a) Ollama merges a fix for #6544 and `extra_body.options` is honored; (b) we have evidence that 256K-context KV cache pressure is a bottleneck for our chunk sizes (currently all chunks <4K tokens, so unlikely); (c) we adopt a context-heavy model where the default context window matters.
+
+**Decision tree if Ollama fixes it.** Add `num_ctx=32768` to `build_ollama_settings` for the local-only path. No Modelfile needed.
+
+## Detailed Scope for PR-027
+
+**Context.** 2026-05-14 quality analysis on the 3 baseline reports showed `gemma4:26b-nvfp4` and `qwen3.6:35b-a3b-mlx-bf16` extract **complementary** finding vocabularies. Jaccard finding-name overlap is 0.22 (MR brain) to 0.50 (XR chest). Gemma 4 surfaces anatomical-systematic checkpoints ("cerebellar tonsil position", "ventricular prominence"); qwen3.6 surfaces pathology-named findings ("ischemic change", "leukoaraiosis"). The 2026-04-20 eval found the same pattern between qwen3.6 and MedGemma; the "strong combination" idea was noted but not implemented.
+
+**Sketch.** Run both extractors on the same report (in parallel if memory headroom allows; sequentially otherwise), merge findings by (finding_name, body_region, presence) tuple — keep both names when descriptions overlap. Output is a union with per-finding provenance ("extracted_by": ["gemma4", "qwen3.6"]).
+
+**Open questions.** (a) Cost/latency budget — both extractors at concurrency=2 against the same 6 reports is ~17 min vs 7 min for one. (b) Merge heuristics — Jaccard <0.50 means many names won't normalize cleanly; need a deduplication strategy that doesn't lose unique catches from either side. (c) Reviewer interaction — does the reviewer still triggers re-extraction sensibly against a merged extraction table?
+
+**Trigger to revisit.** Any user-driven need for higher recall (e.g. completeness audits, IPL temporal-tracking workflows that depend on catching anatomical-systematic negatives).
 
 ## Detailed Scope for PR-020
 

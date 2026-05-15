@@ -215,3 +215,134 @@ Seven local reviewers were paired with the `qwen3.6:35b-a3b-mlx-bf16` extractor 
 All runs are traced at: https://logfire-us.pydantic.dev/talkasab/imaging-problem-list
 
 Caveat from this round: Logfire retention of trace data is short (hours). For extended evaluations, query Logfire promptly as each run completes; otherwise `agent run` span attributes (rationales, problems, thinking traces) age out before analysis.
+
+---
+
+# 2026-05-14 round — Ollama 0.23.1→0.24.0 catch-up and new local default
+
+**Date:** 2026-05-14
+**Hardware:** Mac Studio M3 Ultra, 256 GB unified memory
+**Ollama version at bench time:** 0.23.1–0.23.3 (matrix); 0.24.0 confirmation smoke
+**Plan reference:** `~/.claude/plans/please-come-up-with-fuzzy-nygaard.md`
+
+## Summary
+
+**`gemma4:26b-nvfp4` is the new recommended local default extractor**, displacing `qwen3.6:35b-a3b-mlx-bf16`. It wins every report on speed (67s avg vs qwen3.6's 109s on 6 reports), produces ~30% more *present* findings (130 vs 100 total), and uses one-quarter the disk (17 GB vs 70 GB).
+
+The win required two changes that overturn the 2026-04-20 routing decisions:
+1. **Gemma 4 is now routed through `NativeOutput`**, not tool-calling. Ollama 0.22.1's "Gemma 4 renderer refined for thinking + tool-calling" release note hid a regression: with `reasoning_effort=none` and tool-calling, Gemma 4 26B produces malformed tool calls ~50% of the time. JSON-schema output sidesteps the tool-call parser entirely.
+2. **`gpt-oss:20b` retired as fallback model.** It was triggering `FallbackExceptionGroup` because both primary and fallback chunks failed; the 2026-04-20 reviewer eval already flagged it as fabricating finding names. Replaced with `ollama:qwen3.6:35b-a3b-mlx-bf16` as a known-good local fallback.
+
+Disk net change this round: started 461 GB across 10 models; ended at ~278 GB across 7 models (about 183 GB recovered).
+
+## Models retired this round (disk + code)
+
+| Model | Size | Reason |
+|---|---|---|
+| `nemotron-cascade-2:latest` | 24 GB | 2026-04-20 verdict: cross-chunk boundary confusion |
+| `nemotron-3-super:120b` | 86 GB | 2026-04-20 verdict: aggressive, pedantic, 707s avg |
+| `qwen3.6:35b-a3b-q8_0` | 38 GB | Dominated by MLX-bf16 on Apple Silicon |
+| `gemma4:31b-mlx-bf16` | 62 GB | Dense 31B on Apple Silicon: hardware-bound 4.2× slower than 26B MoE at batch=1; not salvageable per Incept5 MLX benchmark and Google's MTP guidance (gains require batch≥4) |
+| `gemma4:26b-mlx-bf16` | 51 GB | Identical findings to mxfp8/nvfp4 on 2026-04-20 + this round, no speed advantage |
+| `granite4.1:30b` | 17 GB | 2/6 chunk failures on 2026-05-14 matrix; 3–5× slower than gemma4-nvfp4 when it works |
+| `nemotron-3-nano:30b-a3b-q8_0` | 33 GB | Slowest of 4 candidates (382s avg); needed NativeOutput + reasoning=low; no quality advantage |
+
+## Models added and kept (disk)
+
+| Tag | Size | Role |
+|---|---|---|
+| `gemma4:26b-nvfp4` | 17 GB | **New default extractor** (NativeOutput, reasoning=none) |
+
+## Routing fixes this round (`src/finding_extractor/llm/model_settings.py`)
+
+1. **Gemma 4 → `NativeOutput`.** Tool-calling worked on Ollama 0.21 (2026-04-20: 178s avg, 0 failures). On Ollama 0.22.1+ with `reasoning_effort=none`, the 26B variants flake intermittently (~50% chunk-failure rate with malformed tool calls). With thinking left on, latency jumps to ~500s/report. JSON-schema output bypasses the broken tool-call parsing and lets us suppress thinking cleanly. Result: 67s avg / 6-of-6 clean on this round's bench.
+2. **`reasoning_effort=none` honored for Gemma 4** via `build_ollama_settings`, alongside qwen3.5/3.6 and nemotron-3-super.
+3. **`nemotron-cascade-2`, `nemotron-3-nano`, `granite4.1` routing branches removed** (models retired this round; their routing logic deleted along with them).
+4. **`extractor_max_subagent_concurrency` local-only auto-default raised from 1 → 2** in `core/config.py` (see Track C).
+
+## Extractor matrix — 6 reports × 4 candidates, `reviewer_enabled=false`, concurrency=2
+
+Reports: `ct_abdomen_20251007`, `xr_chest_20220315`, `mr_brain_20230125`, `ct_chest_20220922`, `us_abdomen_20220208`, `xr_shoulder_20210522` (all in `sample_data/example2/`).
+
+| Model | Routing | Reasoning | 6-report avg | Reports clean | Findings avg | Present avg |
+|---|---|---|---|---|---|---|
+| **`gemma4:26b-nvfp4`** | **NativeOutput** | **none** | **67s** | **6/6** | **35.5** | **21.7** |
+| `qwen3.6:35b-a3b-mlx-bf16` (prior default) | tools | none | 109s | 6/6 | 33.2 | 16.7 |
+| `granite4.1:30b` | NativeOutput | none | 289s | 4/6 | 39 (when works) | 19.3 |
+| `nemotron-3-nano:30b-a3b-q8_0` | NativeOutput | low | 382s | 6/6 | 31.2 | 17.0 |
+
+Per-report wall time:
+
+| Report | qwen3.6 | gemma4 nvfp4 | granite4.1 | nemotron-nano |
+|---|---:|---:|---:|---:|
+| ct_abdomen | 209s | **76s** | 329s | 438s |
+| xr_chest | 75s | **59s** | 173s | 357s |
+| mr_brain | 99s | **72s** | 291s ✗ | 378s |
+| ct_chest | 117s | **104s** | 419s | 565s |
+| us_abdomen | 80s | **60s** | 260s ✗ | 332s |
+| xr_shoulder | 72s | **34s** | 262s | 223s |
+
+Note: qwen3.6's `ct_abdomen` 209s is partly cold-load on the first model swap of the matrix; warm-load runs averaged ~89s. The conclusion (gemma4-nvfp4 wins on speed) holds either way.
+
+## Quality comparison: gemma4 vs qwen3.6 — complementary, not redundant
+
+Same 3 baseline reports (ct_abdomen, xr_chest, mr_brain). Finding-name Jaccard overlap is **0.22–0.50** between gemma4-nvfp4 and qwen3.6 — they extract genuinely different findings.
+
+Pattern (MR brain, illustrative): gemma4-nvfp4 found 22 *present* findings vs qwen3.6's 11. The 28 names unique to gemma4 are anatomical-systematic ("gray-white matter differentiation", "cerebellar tonsil position", "ventricular prominence", "skull fracture") — the radiologist's mental checklist applied to every brain MRI. The 25 names unique to qwen3.6 are pathology-vocabulary ("ischemic change", "leukoaraiosis", "intracranial arterial stenosis/occlusion") — findings as named in the report text.
+
+This is the same pattern the 2026-04-20 eval found between qwen3.6 and MedGemma. **Gemma 4 26B is essentially playing MedGemma's role at qwen3.6 speed.**
+
+Implication: a combined-extractor pipeline (gemma4 + qwen3.6 → merge) may capture both vocabularies. Out of scope for this round, but worth noting.
+
+## NVFP4 vs MXFP8
+
+Both `gemma4:26b-nvfp4` (16 GB, 6.3B active params per manifest) and `gemma4:26b-mxfp8` (26 GB, 8.7B active) ran clean on the same 3 baseline reports with NativeOutput + reasoning=none:
+
+| Variant | ct_abdomen | xr_chest | mr_brain | Avg | Findings (3-report total) |
+|---|---:|---:|---:|---:|---:|
+| `gemma4:26b-nvfp4` | 71s | 81s | 84s | 79s | 115 |
+| `gemma4:26b-mxfp8` | 89s | 54s | 87s | 77s | 112 |
+
+Effectively tied. NVFP4 wins on disk (9 GB smaller). Recommended as primary; mxfp8 kept as alternative for comparison.
+
+## Track C — concurrency sweep on `qwen3.6:35b-a3b-mlx-bf16`
+
+Tested `IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY` at 1, 2, 4 across the 6-report corpus.
+
+| Concurrency | 6-report total | Clean | Notes |
+|---|---:|---:|---|
+| 1 | 2161s (includes 1794s cold-load outlier on ct_abdomen) | 5/6 | First-model-load cascade timed out one report |
+| **2** | **608s** | **6/6** | Safe ceiling; modest 10–25% per-report speedup |
+| 4 | 642s | 5/6 | Chunk failure on mr_brain; ct_abdomen 3.6× slower than c=2 |
+
+**Verdict:** c=2 is the safe lift. The expected 2× win from concurrency didn't materialize — Ollama still serializes most of the work internally on Apple Silicon at batch=1 — but c=2 is a clean modest improvement. Bumped local-only auto-default from 1 → 2 in `core/config.py`; `.env.ollama` updated to match.
+
+## Configuration changes (`.env.ollama`)
+
+```
+IPL_MODEL=ollama:gemma4:26b-nvfp4         # was: ollama:qwen3.6:35b-a3b-mlx-bf16
+IPL_REASONING=none                        # unchanged
+IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY=2  # was: 1
+IPL_FALLBACK_MODEL=ollama:qwen3.6:35b-a3b-mlx-bf16  # was: ollama:gpt-oss:20b
+IPL_REVIEWER_MODEL=ollama:qwen3.6:35b-a3b-bf16      # unchanged
+IPL_REVIEWER_REASONING=low                # unchanged
+IPL_REVIEWER_ENABLED=true                 # unchanged
+```
+
+## Updated recommendations (supersede 2026-04-20)
+
+1. **Default extractor:** `ollama:gemma4:26b-nvfp4` — fastest, smallest, most present findings, NativeOutput path, reasoning=none.
+2. **Alternative extractor:** `ollama:gemma4:26b-mxfp8` — equivalent quality at ~equivalent speed, larger disk footprint. Useful for A/B compares.
+3. **Tool-calling alternative extractor:** `ollama:qwen3.6:35b-a3b-mlx-bf16` — slower (109s avg) but exercises a different code path; useful for cross-family validation. Captures different vocabulary (pathology-named vs anatomical-systematic).
+4. **Reviewer:** `ollama:qwen3.6:35b-a3b-bf16`, reasoning=low — unchanged.
+5. **Local fallback:** `ollama:qwen3.6:35b-a3b-mlx-bf16` (was `gpt-oss:20b`). Pointing the fallback at the same family as our extractor alternative avoids the gpt-oss:20b fabrication risk.
+6. **Medical specialist:** `ollama:medgemma:27b` — unchanged. Note: gemma4-nvfp4 now overlaps with MedGemma's systematic-anatomy style at much higher speed; MedGemma stays available for explicitly medical-domain runs.
+7. **Heavy reasoning:** `ollama:gpt-oss:120b` — unchanged.
+
+## Ollama 0.24.0 note
+
+Ollama 0.24.0 (released 2026-05-14) reworked the MLX sampler "for improved generation quality on Apple Silicon." This directly affects our new default's runtime path. The matrix bench above was on 0.23.1–0.23.3. Confirmation smoke on 0.24.0 with `gemma4:26b-nvfp4` + xr_chest: **65s, 30 findings, 19 present** (vs 59s / 29 / 18 on 0.23.x — within run-to-run variance; one more finding total and one more present). Recommendation (gemma4-nvfp4 as default) holds on 0.24.0; no code or config change needed.
+
+## Logfire
+
+All runs are traced at: https://logfire-us.pydantic.dev/talkasab/imaging-problem-list — capture span attributes promptly; retention is short.

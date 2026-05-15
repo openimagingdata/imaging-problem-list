@@ -1,6 +1,6 @@
 # Model Selection Notes
 
-Last updated: 2026-03-16
+Last updated: 2026-05-09
 Status: Active reference
 
 ## Current Defaults
@@ -35,14 +35,26 @@ Canonical source in code:
 2. `openai:gpt-5.2` (default fallback)
 3. `anthropic:claude-opus-4-6` (high-quality validator/extraction option)
 4. `google-gla:gemini-3.1-pro-preview` (strong Google quality option)
-5. `ollama:qwen3:30b-instruct` (local baseline, reasoning=`none`)
-6. `ollama:qwen3:30b-thinking` (local thinking-capable model)
-7. `ollama:gpt-oss:120b` (local heavy reasoning-capable model)
+5. `ollama:qwen3.6:35b-a3b-mlx-bf16` (local default extractor, MLX runtime, reasoning=`none`)
+6. `ollama:qwen3.6:35b-a3b-bf16` (local default reviewer, reasoning=`low`)
+7. `ollama:gemma4:26b-mxfp8` (local quality option)
+8. `ollama:gemma4:31b-mlx-bf16` (local dense Gemma 4 candidate — under eval 2026-05-09)
+9. `ollama:granite4.1:30b` (local structured-output candidate — under eval 2026-05-09)
+10. `ollama:medgemma:27b` (local medical specialist)
+11. `ollama:nemotron-3-nano:30b-a3b-q8_0` (local reasoning candidate — under eval 2026-05-09)
+12. `ollama:gpt-oss:120b` (local heavy reasoning-capable model)
 
 Reasoning notes for curated local models:
+- `ollama:qwen3.5:*` / `ollama:qwen3.6:*`: `none|low|medium|high`; thinks by default — `reasoning_effort:none` is required to disable
+- `ollama:nemotron-3-super:*` / `ollama:nemotron-3-nano:*`: same `none|low|medium|high` handling (H-MoE family)
+- `ollama:gpt-oss:120b`: `none|low|medium|high` accepted; `minimal` normalizes to `low`
 - `ollama:qwen3:30b-thinking`: all reasoning inputs accepted; runtime maps `none` to `think=false` and non-`none` to `think=true`
 - `ollama:qwen3:30b-instruct`: `none` only
-- `ollama:gpt-oss:120b`: `none|low|medium|high` accepted; `minimal` normalizes to `low`
+- `ollama:gemma4:*`: `none` (tool-capable via Ollama 0.20.6+)
+- `ollama:granite4.1:*`: `none` (no thinking surface)
+- `ollama:medgemma:*`: `none` only (Gemma 3-based)
+
+Retired (2026-05-09): `ollama:nemotron-cascade-2` (cross-chunk boundary confusion verdict, see 2026-04-20 reviewer eval); `ollama:qwen3.5:*` family (superseded by qwen3.6 on Apple Silicon MLX runtime).
 
 ## Reviewer Model Evaluation (2026-03-16)
 

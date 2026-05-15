@@ -129,7 +129,8 @@ Reasoning defaults are provider-specific (`openai=medium`, `anthropic=medium`, `
 
 For Ollama, reasoning is model-specific:
 - `ollama:qwen3.5:*` / `ollama:qwen3.6:*`: `none|low|medium|high` — thinks by default on the OpenAI-compatible endpoint; `reasoning_effort:none` is required to disable (the extractor sends this automatically)
-- `ollama:nemotron-cascade-2:*` / `ollama:nemotron-3-super:*`: same `none|low|medium|high` handling as Qwen3.5/3.6
+- `ollama:gemma4:*`: `none|low|medium|high` — same `reasoning_effort` handling as Qwen3.6; routed through `NativeOutput` (JSON-schema) rather than tool-calling because Ollama 0.22.1's renderer change broke gemma4 tool-calls under suppressed thinking
+- `ollama:nemotron-3-super:*`: same `none|low|medium|high` handling as Qwen3.5/3.6 (cascade-2 and nano retired 2026-05-14)
 - `ollama:gpt-oss:120b` / `ollama:gpt-oss:20b`: `none|low|medium|high` (`minimal` normalizes to `low`)
 - `ollama:qwen3:30b-thinking`: `none|minimal|low|medium|high` (mapped to `think=false|true`)
 - `ollama:qwen3:30b-instruct`: `none` only

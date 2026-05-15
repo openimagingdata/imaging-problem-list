@@ -11,13 +11,11 @@ MODEL_ANTHROPIC_CLAUDE_OPUS_4_6 = "anthropic:claude-opus-4-6"
 MODEL_OLLAMA_QWEN3_30B_INSTRUCT = "ollama:qwen3:30b-instruct"
 MODEL_OLLAMA_QWEN3_30B_THINKING = "ollama:qwen3:30b-thinking"
 MODEL_OLLAMA_GPT_OSS_120B = "ollama:gpt-oss:120b"
-MODEL_OLLAMA_QWEN35_35B_A3B = "ollama:qwen3.5:35b-a3b"
-MODEL_OLLAMA_QWEN35_27B = "ollama:qwen3.5:27b"
-MODEL_OLLAMA_QWEN35_9B = "ollama:qwen3.5:9b"
 MODEL_OLLAMA_QWEN36_35B_A3B_Q8 = "ollama:qwen3.6:35b-a3b-q8_0"
 MODEL_OLLAMA_QWEN36_35B_A3B_MLX_BF16 = "ollama:qwen3.6:35b-a3b-mlx-bf16"
 MODEL_OLLAMA_QWEN36_35B_A3B_BF16 = "ollama:qwen3.6:35b-a3b-bf16"
 MODEL_OLLAMA_GEMMA4_26B_MXFP8 = "ollama:gemma4:26b-mxfp8"
+MODEL_OLLAMA_GEMMA4_26B_NVFP4 = "ollama:gemma4:26b-nvfp4"
 MODEL_OLLAMA_MEDGEMMA_27B = "ollama:medgemma:27b"
 
 
@@ -57,9 +55,19 @@ COMMON_MODELS: tuple[CommonModel, ...] = (
         role="Google fast low-cost option",
     ),
     CommonModel(
+        model=MODEL_OLLAMA_GEMMA4_26B_NVFP4,
+        recommended_reasoning="none",
+        role="local default extractor (Gemma 4 MoE NVFP4, 17GB; NativeOutput; 6/6 clean, 67s avg per 2026-05-14 eval)",
+    ),
+    CommonModel(
+        model=MODEL_OLLAMA_GEMMA4_26B_MXFP8,
+        recommended_reasoning="none",
+        role="local extractor alternative (Gemma 4 MoE MXFP8, 26GB; equivalent quality, larger)",
+    ),
+    CommonModel(
         model=MODEL_OLLAMA_QWEN36_35B_A3B_MLX_BF16,
         recommended_reasoning="none",
-        role="local default extractor (Qwen3.6 MoE MLX-bf16, 70GB; 1.68x faster than Q8)",
+        role="local extractor alternative (Qwen3.6 MoE MLX-bf16, 70GB; tool-calling path)",
     ),
     CommonModel(
         model=MODEL_OLLAMA_QWEN36_35B_A3B_BF16,
@@ -72,19 +80,9 @@ COMMON_MODELS: tuple[CommonModel, ...] = (
         role="local Q8 alternative (38GB; slower than MLX-bf16 on Apple Silicon)",
     ),
     CommonModel(
-        model=MODEL_OLLAMA_GEMMA4_26B_MXFP8,
-        recommended_reasoning="none",
-        role="local quality (Gemma 4 MoE MXFP8, 26GB)",
-    ),
-    CommonModel(
         model=MODEL_OLLAMA_MEDGEMMA_27B,
         recommended_reasoning="none",
         role="local medical specialist (MedGemma 27B, 17GB)",
-    ),
-    CommonModel(
-        model=MODEL_OLLAMA_QWEN35_9B,
-        recommended_reasoning="none",
-        role="local ultralight (6GB)",
     ),
     CommonModel(
         model=MODEL_OLLAMA_QWEN3_30B_INSTRUCT,

@@ -37,7 +37,7 @@ from finding_extractor.core.config import get_settings
 from finding_extractor.llm.defaults import (
     MODEL_ANTHROPIC_CLAUDE_OPUS_4_6,
     MODEL_GOOGLE_GEMINI_3_FLASH_PREVIEW,
-    MODEL_OLLAMA_QWEN36_35B_A3B_MLX_BF16,
+    MODEL_OLLAMA_GEMMA4_26B_NVFP4,
     MODEL_OPENAI_GPT_5_2,
 )
 from finding_extractor.llm.policy import (
@@ -137,9 +137,9 @@ EXTRACTION_PRESETS: dict[str, ExtractionPreset] = {
     ),
     "local": ExtractionPreset(
         name="local",
-        model=MODEL_OLLAMA_QWEN36_35B_A3B_MLX_BF16,
+        model=MODEL_OLLAMA_GEMMA4_26B_NVFP4,
         reasoning="none",
-        description="Local default (Qwen3.6 35b MoE MLX-bf16, 70GB), Apple Silicon MLX runtime",
+        description="Local default (Gemma 4 26b MoE NVFP4, 17GB), NativeOutput, 67s/report on M3 Ultra",
     ),
 }
 
@@ -293,22 +293,22 @@ def ollama_needs_native_output(model_name: str) -> bool:
     _, raw_model_id = model_name.split(":", maxsplit=1)
     lowered = raw_model_id.lower()
 
-    # nemotron-cascade-2 appears tool-capable in Ollama's catalog, but under
-    # the extractor's structured chunk schema it exhibits the same
-    # UnexpectedModelBehavior retry loop we saw from other models that need
-    # NativeOutput. Keep other Nemotron families tool-capable for now.
-    if lowered.startswith("nemotron-cascade-2"):
+    # gemma4 26B: tool-calling worked on Ollama 0.21 (2026-04-20 eval: 178s avg,
+    # 0 failures). On Ollama 0.22.1+ (renderer refined for thinking+tools), the
+    # 26B variants flake intermittently when reasoning_effort=none is sent
+    # (~50% chunk-failure rate with malformed tool calls on 2026-05-13). With
+    # thinking left on, reliability returns but latency jumps to ~500s/report.
+    # NativeOutput sidesteps tool-call parsing and lets us suppress thinking
+    # cleanly — 6-report bench 2026-05-14: 67s avg, 6/6 clean.
+    if lowered.startswith("gemma4"):
         return True
 
-    # Families known to work with tool calling
-    # gemma4 gained tool-calling in Ollama v0.20.6 (Google post-launch fixes);
-    # manifest reports tools+thinking capability. gemma3/medgemma stay on native.
+    # Families known to work with tool calling. gemma3/medgemma stay on native.
     tool_capable_prefixes = (
         "gpt-oss",
         "llama3", "llama4",
-        "qwen3", "qwen3.5",
+        "qwen3", "qwen3.5", "qwen3.6",
         "nemotron",
-        "gemma4",
     )
     # Everything else (gemma3, deepseek-r1, medgemma, unknown) — use native
     return all(not lowered.startswith(prefix) for prefix in tool_capable_prefixes)
@@ -323,12 +323,18 @@ def _ollama_supported_reasoning_for_model(model: str) -> set[str] | None:
     if lowered.startswith(("qwen3.5", "qwen3.6")):
         # Qwen3.5/3.6 think by default; reasoning_effort controls it via OpenAI-compat API
         return {"none", "low", "medium", "high"}
-    if lowered.startswith(("nemotron-cascade-2", "nemotron-3-super")):
-        # Nemotron H-MoE family (cascade-2, 3-super) think by default; the
-        # OpenAI-compatible API accepts reasoning_effort to control or disable it.
-        # Without an explicit level, the model runs extensive CoT even for
-        # trivial replies (observed: 50+ reasoning tokens for a 3-token answer),
-        # which cascades into ~60s subagent calls and 300s timeouts.
+    if lowered.startswith("nemotron-3-super"):
+        # Nemotron H-MoE 3-super thinks by default; the OpenAI-compatible API
+        # accepts reasoning_effort to control or disable it. Without an explicit
+        # level, the model runs extensive CoT even for trivial replies (observed:
+        # 50+ reasoning tokens for a 3-token answer), which cascades into ~60s
+        # subagent calls and 300s timeouts. (Branch retained defensively even
+        # though 3-super is currently off-disk; cheap if someone pulls it back.)
+        return {"none", "low", "medium", "high"}
+    if lowered.startswith("gemma4"):
+        # gemma4 manifests all report `thinking` capability. Routed through
+        # NativeOutput (see ollama_needs_native_output) so reasoning_effort
+        # can be honored cleanly without breaking tool-call parsing.
         return {"none", "low", "medium", "high"}
     if lowered.startswith("qwen3:30b") and "thinking" in lowered:
         return set(VALID_REASONING_LEVELS)
@@ -507,7 +513,7 @@ def build_openrouter_settings(reasoning_level: str) -> OpenRouterModelSettings:
 def build_ollama_settings(model: str, reasoning_level: str) -> OpenAIChatModelSettings | None:
     """Build Ollama settings using model-specific thinking support.
 
-    Qwen3.5 and nemotron-cascade-2 use ``reasoning_effort`` on the
+    Qwen3.5/3.6 and Nemotron-3 (super, nano) use ``reasoning_effort`` on the
     OpenAI-compatible API to control or disable thinking. Qwen3 and gpt-oss use
     ``extra_body.think``.
     """
@@ -517,13 +523,24 @@ def build_ollama_settings(model: str, reasoning_level: str) -> OpenAIChatModelSe
     _, raw_model_id = model.split(":", maxsplit=1)
     lowered = raw_model_id.lower()
 
-    if lowered.startswith(("qwen3.5", "qwen3.6", "nemotron-cascade-2", "nemotron-3-super")):
-        # Qwen3.5/3.6 and Nemotron H-MoE (cascade-2, 3-super) think by default
-        # on Ollama's OpenAI-compatible endpoint. Explicitly set reasoning_effort
-        # to "none" to disable, or "low"/"medium"/"high" to control level. Without
-        # this, the model emits chain-of-thought into the `reasoning` field (not
-        # `content`) and per-call latency spikes 3-5x — tool-calling pipelines
-        # hang or hit the 300s subagent timeout.
+    if lowered.startswith(("qwen3.5", "qwen3.6", "nemotron-3-super")):
+        # Qwen3.5/3.6 and Nemotron-3-super advertise `thinking` in their Ollama
+        # manifests and emit chain-of-thought by default on the OpenAI-compatible
+        # endpoint. Explicitly set reasoning_effort to "none" to disable, or
+        # "low"/"medium"/"high" to control the level. Without this, the model
+        # emits CoT into the `reasoning` field (not `content`) and per-call
+        # latency spikes 3-5x.
+        effort = "none" if reasoning_level == "none" else reasoning_level
+        if effort == "minimal":
+            effort = "low"
+        return OpenAIChatModelSettings(openai_reasoning_effort=effort)  # type: ignore[typeddict-item]
+
+    if lowered.startswith("gemma4"):
+        # Gemma 4 is routed through NativeOutput (see ollama_needs_native_output)
+        # so we can safely suppress thinking with reasoning_effort=none. Under
+        # tool-calling on Ollama 0.22.1+, suppressing thinking produced
+        # malformed tool calls; under JSON-schema output, the failure mode
+        # doesn't apply.
         effort = "none" if reasoning_level == "none" else reasoning_level
         if effort == "minimal":
             effort = "low"

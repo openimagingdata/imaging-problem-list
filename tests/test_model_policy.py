@@ -90,16 +90,16 @@ class TestOllamaNeedsNativeOutput:
     def test_nemotron_uses_tools(self):
         assert ollama_needs_native_output("ollama:nemotron-3-super:120b") is False
 
-    def test_nemotron_cascade_2_needs_native(self):
-        assert ollama_needs_native_output("ollama:nemotron-cascade-2") is True
-
-    def test_gemma4_uses_tools(self):
-        # gemma4 supports tool-calling reliably as of Ollama v0.20.6
-        # (Google post-launch fixes). Previously routed through NativeOutput.
-        assert ollama_needs_native_output("ollama:gemma4:26b") is False
-        assert ollama_needs_native_output("ollama:gemma4:31b") is False
-        assert ollama_needs_native_output("ollama:gemma4:26b-mxfp8") is False
-        assert ollama_needs_native_output("ollama:gemma4:26b-mlx-bf16") is False
+    def test_gemma4_needs_native(self):
+        # Ollama 0.22.1's renderer refinement broke gemma4 tool-calling when
+        # reasoning_effort=none (50% chunk-fail rate on 2026-05-13 sweep);
+        # routed through NativeOutput as of 2026-05-14. Tool-calling worked
+        # on Ollama 0.21.x (2026-04-20 eval).
+        assert ollama_needs_native_output("ollama:gemma4:26b") is True
+        assert ollama_needs_native_output("ollama:gemma4:31b") is True
+        assert ollama_needs_native_output("ollama:gemma4:26b-mxfp8") is True
+        assert ollama_needs_native_output("ollama:gemma4:26b-nvfp4") is True
+        assert ollama_needs_native_output("ollama:gemma4:26b-mlx-bf16") is True
 
     def test_gemma3_needs_native(self):
         assert ollama_needs_native_output("ollama:gemma3:27b") is True
@@ -226,6 +226,7 @@ class TestLocalOnlyMode:
         assert settings.allow_unknown_model_reasoning is True
         assert settings.subagent_timeout_seconds == 300.0
         assert settings.batch_workers == 1
+        assert settings.extractor_max_subagent_concurrency == 2
 
     def test_respects_explicit_overrides_over_local_defaults(self):
         """User-supplied values beat the auto-defaults."""

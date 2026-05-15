@@ -4,6 +4,34 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-05-14 — Ollama 0.23.1→0.24.0 catch-up; new local default extractor
+
+`gemma4:26b-nvfp4` (17 GB) is the new recommended local default extractor, displacing `qwen3.6:35b-a3b-mlx-bf16` (70 GB). On a 6-report bench at concurrency=2: 67s avg vs qwen3.6's 109s, with 30% more *present* findings (130 vs 100 total). Gemma 4 26B and qwen3.6 are now understood as **complementary**, not redundant — Gemma 4 follows the radiologist's anatomical-checklist style; qwen3.6 captures pathology-named findings. Finding-name Jaccard overlap is 0.22–0.50.
+
+Two routing decisions overturned from the 2026-04-20 round:
+1. **Gemma 4 routed through `NativeOutput`**, not tool-calling. Ollama 0.22.1's renderer refinement broke gemma4 tool-calls when `reasoning_effort=none` is sent (~50% chunk-failure rate). JSON-schema output bypasses the broken parser and lets us suppress thinking cleanly. Same fix pattern as granite4.1 and nemotron-3-nano received during smokes.
+2. **`gpt-oss:20b` retired as fallback model** — triggered `FallbackExceptionGroup` when paired with gemma4 (both primary and fallback failed). 2026-04-20 reviewer eval already flagged it as fabricating finding names. Replaced with `ollama:qwen3.6:35b-a3b-mlx-bf16` as the local fallback.
+
+Models retired this round (-294 GB across 7 retirements): `nemotron-cascade-2:latest`, `nemotron-3-super:120b`, `qwen3.6:35b-a3b-q8_0`, `gemma4:31b-mlx-bf16` (dense 31B hardware-bound 4× slower than 26B MoE per Incept5 MLX benchmark; MTP speculative decoding gains require batch≥4 per Google), `gemma4:26b-mlx-bf16` (no advantage over mxfp8/nvfp4), `granite4.1:30b` (2/6 chunk failures on the matrix; 3–5× slower), `nemotron-3-nano:30b-a3b-q8_0` (slowest of 4 candidates; no quality advantage).
+
+Concurrency: bumped `extractor_max_subagent_concurrency` local-only auto-default from 1 → 2 (Track C sweep showed c=2 was the safe ceiling on Ollama 0.23.1's MLX threading fixes; c=4 starts breaking). Per-report gain is 10–25%, not the 2× hoped for — Ollama still serializes most work internally on Apple Silicon at batch=1.
+
+Ollama 0.24.0 confirmation smoke on the new default: same speed and quality as 0.23.x within run-to-run variance. New MLX sampler is described as a generation-quality improvement; no breaking changes.
+
+Code changes:
+- `src/finding_extractor/llm/model_settings.py`: gemma4 routed to NativeOutput; `gemma4` added to `_ollama_supported_reasoning_for_model` and `build_ollama_settings` reasoning_effort branches; `nemotron-cascade-2`, `nemotron-3-nano`, `granite4.1` branches removed (models retired); local preset now points at `MODEL_OLLAMA_GEMMA4_26B_NVFP4`.
+- `src/finding_extractor/llm/defaults.py`: removed `MODEL_OLLAMA_QWEN35_*` constants (qwen3.5 line fully superseded), removed retired-model constants, added `MODEL_OLLAMA_GEMMA4_26B_NVFP4`; `COMMON_MODELS` reordered with new default extractor at top.
+- `src/finding_extractor/core/config.py`: local-only auto-defaults tuple now includes `extractor_max_subagent_concurrency=2`.
+- `.env.ollama`: `IPL_MODEL=ollama:gemma4:26b-nvfp4`, `IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY=2`, `IPL_FALLBACK_MODEL=ollama:qwen3.6:35b-a3b-mlx-bf16`.
+- Tests: ~10 tests removed (granite4.1, nemotron-3-nano, nemotron-cascade-2), 1 test updated (test_applies_local_defaults includes new concurrency default), `test_gemma4_uses_tools` renamed to `test_gemma4_needs_native`. 201 tests pass.
+- Docs: `model-selection-notes.md` updated with new curated list; `extraction-usage.md` reasoning-table refreshed; `docs/plans/nemotron-cascade-2-evaluation.md` archived.
+
+Report: [eval-ollama-models-report.md](eval-ollama-models-report.md) §"2026-05-14 round — Ollama 0.23.1→0.24.0 catch-up and new local default".
+
+Plan reference (archived after completion): `~/.claude/plans/please-come-up-with-fuzzy-nygaard.md`.
+
+---
+
 ## 2026-04-20 — Local reviewer re-evaluation
 
 The prior-round default reviewer (`ollama:gpt-oss:120b` / `reasoning=none`) was carried over from 2026-04-03 without direct reviewer-role benchmarking; the env value `none` directly contradicted the 2026-03-16 cloud-reviewer finding that `reasoning=low` is required for precise review. Ran all 7 local reviewer candidates (gpt-oss:120b, gpt-oss:20b, nemotron-cascade-2, nemotron-3-super:120b, gemma4:26b-mxfp8, gemma4:26b-mlx-bf16, medgemma:27b, qwen3.6:35b-a3b-bf16) paired with qwen3.6:35b-a3b-mlx-bf16 extractor on three reports; manually graded TP/FP against the chunk text and the extraction table each reviewer saw.
