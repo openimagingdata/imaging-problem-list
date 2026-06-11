@@ -23,6 +23,7 @@ Per-exam list of findings (present/absent) extracted from a single radiology rep
 
 - Each finding has an OIFM code, description, and attributes (presence/absence, change from prior)
 - The same finding type may appear multiple times (e.g., multiple kidney stones) -- each gets its own entry with a unique `observationId`
+- An optional `anatomicLocation` (`{locationId, locationDisplay}`) encodes the standardized anatomic location using the `anatomic-locations` RID system; omitted when the finding is not anatomically localizable
 - FHIR mapping: **DiagnosticReport** containing **Observation** objects with component attributes
 - Examples: `sample_data/` and `viewer/data/patients/.../exams/*/efl.json`
 
@@ -30,7 +31,7 @@ Per-exam list of findings (present/absent) extracted from a single radiology rep
 
 Per-patient aggregation of findings across all imaging exams, with temporal tracking.
 
-- Groups observations of the same finding type across exams, preserving references to each source report
+- Groups observations by finding type **and** anatomic location (`locationId`) across exams, preserving references to each source report -- so one finding code at distinct sites (e.g. ascending vs. abdominal aortic aneurysm) yields separate entries; consumers key on the IPL finding `id`, not `finding_type_code`
 - Tracks temporal status: currently present, resolved, never-present/ruled-out
 - FHIR mapping: **Report** containing **Condition** objects (one per finding type), each referencing **Observation** objects from source **DiagnosticReports**
 

@@ -24,6 +24,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID905",
+        "locationDisplay": "abdominal aorta"
+      },
       "reportText": "The abdominal aorta is normal in caliber with atherosclerotic calcifications."
     },
     {
@@ -38,6 +42,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID56",
+        "locationDisplay": "abdomen"
+      },
       "reportText": "No drainable fluid collection or abscess."
     },
     {
@@ -52,6 +60,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID88",
+        "locationDisplay": "adrenal gland"
+      },
       "reportText": "Normal bilaterally."
     },
     {
@@ -66,6 +78,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID580",
+        "locationDisplay": "ascending aorta"
+      },
       "reportText": "The ascending aorta measures 4.3 cm in maximal diameter, stable to slightly increased."
     },
     {
@@ -80,6 +96,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID905",
+        "locationDisplay": "abdominal aorta"
+      },
       "reportText": "The abdominal aorta is normal in caliber with atherosclerotic calcifications."
     },
     {
@@ -94,6 +114,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID397",
+        "locationDisplay": "peritoneal cavity"
+      },
       "reportText": "No ascites."
     },
     {
@@ -108,6 +132,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID237",
+        "locationDisplay": "bladder"
+      },
       "reportText": "No ureteral or bladder stones."
     },
     {
@@ -122,6 +150,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID237",
+        "locationDisplay": "bladder"
+      },
       "reportText": "The urinary bladder is partially distended and unremarkable."
     },
     {
@@ -136,6 +168,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID29204",
+        "locationDisplay": "seventh thoracic vertebra"
+      },
       "reportText": "Stable sclerotic focus in T7 vertebral body."
     },
     {
@@ -150,6 +186,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1385",
+        "locationDisplay": "heart"
+      },
       "reportText": "The heart is normal in size."
     },
     {
@@ -164,6 +204,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID187",
+        "locationDisplay": "gallbladder"
+      },
       "reportText": "Multiple gallstones are present within the gallbladder."
     },
     {
@@ -178,6 +222,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID199",
+        "locationDisplay": "common bile duct"
+      },
       "reportText": "The common bile duct measures 5 mm, within normal limits."
     },
     {
@@ -192,6 +240,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1301",
+        "locationDisplay": "lung"
+      },
       "reportText": "The visualized lung bases are clear."
     },
     {
@@ -206,6 +258,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28727",
+        "locationDisplay": "set of coronary arteries"
+      },
       "reportText": "Mitral annular and coronary artery calcifications are present."
     },
     {
@@ -220,6 +276,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID34573",
+        "locationDisplay": "lumbar vertebral column"
+      },
       "reportText": "Degenerative changes of the thoracic and lumbar spine with flowing anterior osteophytes consistent with diffuse idiopathic skeletal hyperostosis."
     },
     {
@@ -234,6 +294,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID34572",
+        "locationDisplay": "thoracic vertebral column"
+      },
       "reportText": "Degenerative changes of the thoracic and lumbar spine with flowing anterior osteophytes consistent with diffuse idiopathic skeletal hyperostosis."
     },
     {
@@ -248,6 +312,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID162",
+        "locationDisplay": "sigmoid colon"
+      },
       "reportText": "There is wall thickening of the sigmoid colon with pericolonic fat stranding consistent with acute diverticulitis."
     },
     {
@@ -262,6 +330,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID162",
+        "locationDisplay": "sigmoid colon"
+      },
       "reportText": "Moderate sigmoid diverticulosis is present."
     },
     {
@@ -276,6 +348,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID187",
+        "locationDisplay": "gallbladder"
+      },
       "reportText": "No gallbladder wall thickening or pericholecystic fluid."
     },
     {
@@ -290,6 +366,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID58",
+        "locationDisplay": "liver"
+      },
       "reportText": "Hepatic steatosis with stable 6 mm liver lesion, likely simple cyst."
     },
     {
@@ -304,6 +384,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID58",
+        "locationDisplay": "liver"
+      },
       "reportText": "The previously noted 6 mm hypodense lesion in segment 6 is again seen and unchanged."
     },
     {
@@ -318,6 +402,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID58",
+        "locationDisplay": "liver"
+      },
       "reportText": "The liver demonstrates diffuse decreased attenuation consistent with hepatic steatosis."
     },
     {
@@ -332,6 +420,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID205",
+        "locationDisplay": "kidney"
+      },
       "reportText": "No hydronephrosis."
     },
     {
@@ -346,6 +438,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID33652",
+        "locationDisplay": "biliary tree"
+      },
       "reportText": "No intrahepatic biliary ductal dilatation."
     },
     {
@@ -360,6 +456,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28854",
+        "locationDisplay": "abdominal lymph node group"
+      },
       "reportText": "A few mildly prominent pericolic lymph nodes are present, likely reactive."
     },
     {
@@ -374,6 +474,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28854",
+        "locationDisplay": "abdominal lymph node group"
+      },
       "reportText": "No pathologically enlarged retroperitoneal or pelvic lymph nodes."
     },
     {
@@ -388,6 +492,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28854",
+        "locationDisplay": "abdominal lymph node group"
+      },
       "reportText": "No pathologically enlarged retroperitoneal or pelvic lymph nodes."
     },
     {
@@ -402,6 +510,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1395",
+        "locationDisplay": "mitral valve"
+      },
       "reportText": "Mitral annular and coronary artery calcifications are present."
     },
     {
@@ -416,6 +528,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID56",
+        "locationDisplay": "abdomen"
+      },
       "reportText": "Diffuse osteopenia."
     },
     {
@@ -430,6 +546,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID176",
+        "locationDisplay": "pancreatic duct"
+      },
       "reportText": "No pancreatic ductal dilatation or peripancreatic fluid."
     },
     {
@@ -444,6 +564,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID170",
+        "locationDisplay": "pancreas"
+      },
       "reportText": "Normal in size and demonstrates homogeneous enhancement."
     },
     {
@@ -458,6 +582,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1407",
+        "locationDisplay": "pericardium"
+      },
       "reportText": "No pericardial effusion."
     },
     {
@@ -472,6 +600,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID187",
+        "locationDisplay": "gallbladder"
+      },
       "reportText": "No gallbladder wall thickening or pericholecystic fluid."
     },
     {
@@ -486,6 +618,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID162",
+        "locationDisplay": "sigmoid colon"
+      },
       "reportText": "There is wall thickening of the sigmoid colon with pericolonic fat stranding consistent with acute diverticulitis."
     },
     {
@@ -500,6 +636,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID170",
+        "locationDisplay": "pancreas"
+      },
       "reportText": "No pancreatic ductal dilatation or peripancreatic fluid."
     },
     {
@@ -514,6 +654,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1363",
+        "locationDisplay": "pleural space"
+      },
       "reportText": "No pleural effusion."
     },
     {
@@ -528,6 +672,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID397",
+        "locationDisplay": "peritoneal cavity"
+      },
       "reportText": "No pneumoperitoneum."
     },
     {
@@ -542,6 +690,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID343",
+        "locationDisplay": "prostate"
+      },
       "reportText": "The prostate gland and seminal vesicles are within normal limits."
     },
     {
@@ -556,6 +708,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID29662",
+        "locationDisplay": "right kidney"
+      },
       "reportText": "Non-obstructing calculi are present bilaterally, stable. Right lower pole stone measures 3 mm."
     },
     {
@@ -570,6 +726,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID29663",
+        "locationDisplay": "left kidney"
+      },
       "reportText": "Non-obstructing calculi are present bilaterally, stable. Left interpolar stone measures approximately 4 mm."
     },
     {
@@ -584,6 +744,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID29663",
+        "locationDisplay": "left kidney"
+      },
       "reportText": "Small parapelvic cysts in the left kidney measure up to 1.8 cm, stable."
     },
     {
@@ -598,6 +762,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28591_RID6157_RID5824",
+        "locationDisplay": "left seventh rib"
+      },
       "reportText": "Healed left 7th and 8th rib fractures."
     },
     {
@@ -612,6 +780,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28591_RID6157_RID5824",
+        "locationDisplay": "left seventh rib"
+      },
       "reportText": "Healed left 7th and 8th rib fractures."
     },
     {
@@ -626,6 +798,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID162",
+        "locationDisplay": "sigmoid colon"
+      },
       "reportText": "There is wall thickening of the sigmoid colon with pericolonic fat stranding consistent with acute diverticulitis."
     },
     {
@@ -640,6 +816,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID86",
+        "locationDisplay": "spleen"
+      },
       "reportText": "No focal lesions."
     },
     {
@@ -654,6 +834,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID86",
+        "locationDisplay": "spleen"
+      },
       "reportText": "Normal in size measuring 11 cm."
     },
     {
@@ -668,6 +852,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID229",
+        "locationDisplay": "ureter"
+      },
       "reportText": "No ureteral or bladder stones."
     },
     {
@@ -682,6 +870,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID29206",
+        "locationDisplay": "ninth thoracic vertebra"
+      },
       "reportText": "Old superior endplate compression fracture at T9, unchanged."
     }
   ]

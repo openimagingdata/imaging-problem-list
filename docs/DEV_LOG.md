@@ -4,6 +4,32 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-06-11 — Anatomic-location correction pass on example2
+
+Hand-reviewed and corrected every anatomic location in `sample_data/example2` against an agreed rule set (documented in [anatomic-location-assignment-rules.md](anatomic-location-assignment-rules.md)). The automated enrichment had systematically fabricated a laterality (usually "left") for bilateral/non-lateralized findings and had several wrong-organ, over-specific, and missing assignments.
+
+- **Fabricated laterality removed:** absent/unsided findings on non-sided exams now use the generic organ (adrenal gland, kidney, seminal vesicle, lung, pleural space, pulmonary hilum, cerebral hemisphere, orbit, maxillary sinus) instead of an invented side.
+- **Wrong organ / specificity fixed:** "lumbar spine degenerative change" → lumbar (was thoracic); "humerus fracture" → humerus (was head of humerus); over-specific lung/soft-tissue targets coarsened to the finding's own anatomic noun or the exam region.
+- **Retrieval misses filled:** prostate findings (the index had returned salivary glands) now resolve to prostate via direct lookup; unlocalized "soft tissue mass" / "generalized osteoporosis" fall back to the exam region (thorax/abdomen).
+- **One bilateral split:** bilateral maxillary mucosal thickening became two observations (`_left`/`_right`).
+- Coverage 274/276 (the 2 unmapped — basal cistern, dural venous sinus — are absent from the ontology). Corrected-state audit at `extracts/anatomy_locations_corrected.csv`.
+- Regenerated `MRN0000001_ipl.json` (125 anatomy groups). Residual same-code/multi-location entries are now either clinically distinct or parent/child pairs for the Step 3b reconciliation, not errors.
+
+---
+
+## 2026-06-10 — Anatomic location on EFLs + anatomy-aware IPL
+
+Added standardized anatomic location to the `sample_data/example2` data, as the foundation for a forthcoming anatomy-aware viewer.
+
+- EFL observations now carry an optional `anatomicLocation` (`{locationId, locationDisplay}`) using the `anatomic-locations` RID system. Populated by `scripts/enrich_efl_anatomy.py`, which adapts each EFL observation into a `Finding` (location unset) and runs the production `run_coding` pipeline, harvesting `location_codes`. The location-coding prompts infer anatomy from report text + exam context, so absent findings are still localized and no new prompt was needed.
+  - Same-named observations are coded in separate `run_coding` calls ("slots") so each keeps its own laterality (the pipeline groups location coding by finding name when location is unset, which would otherwise collapse e.g. left vs. right renal calculi onto one site).
+  - 260/275 example2 observations localized; a review CSV of every decision is written to `extracts/anatomy_enrichment_review.csv`.
+- `scripts/generate_ipl_from_efls.py` now groups by `(findingCode, locationId)` and overwrites `sample_data/example2/MRN0000001_ipl.json` in place. One finding code can appear at multiple locations, so each IPL finding gains an `anatomicLocation` and consumers must key on the finding `id`.
+- `viewer/data/` is intentionally untouched (the current viewer reads its own processed copy; a fresh viewer is planned).
+- Known follow-on: anatomic-compatibility reconciliation (whether observations sharing a finding code are the same problem or distinct) — the first cut over-splits compatible parent/child locations. See `docs/plans/anatomic-location-efl-ipl.md` (Step 3b).
+
+---
+
 ## 2026-06-10 — Active documentation refresh
 
 - Corrected active docs for current validation output, `progress_callback`, eval CLI module names, local model defaults, Ollama `NativeOutput` routing, and vLLM profile behavior.

@@ -24,6 +24,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID88",
+        "locationDisplay": "adrenal gland"
+      },
       "reportText": "The adrenal glands are unremarkable."
     },
     {
@@ -38,6 +42,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID88",
+        "locationDisplay": "adrenal gland"
+      },
       "reportText": "The adrenal glands are unremarkable."
     },
     {
@@ -52,6 +60,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID905",
+        "locationDisplay": "abdominal aorta"
+      },
       "reportText": "The abdominal aorta is of normal caliber."
     },
     {
@@ -66,6 +78,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID397",
+        "locationDisplay": "peritoneal cavity"
+      },
       "reportText": "There is no ascites."
     },
     {
@@ -80,6 +96,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1301",
+        "locationDisplay": "lung"
+      },
       "reportText": "The visualized portions of the lower lungs are clear."
     },
     {
@@ -94,6 +114,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID33652",
+        "locationDisplay": "biliary tree"
+      },
       "reportText": "The biliary ducts are not dilated."
     },
     {
@@ -108,6 +132,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID237",
+        "locationDisplay": "bladder"
+      },
       "reportText": "The urinary bladder is normal in contour."
     },
     {
@@ -122,6 +150,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID94",
+        "locationDisplay": "gastrointestinal tract"
+      },
       "reportText": "The bowel is nondilated, and no areas of wall thickening or surrounding inflammatory change are noted."
     },
     {
@@ -136,6 +168,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID94",
+        "locationDisplay": "gastrointestinal tract"
+      },
       "reportText": "The bowel is nondilated, and no areas of wall thickening or surrounding inflammatory change are noted."
     },
     {
@@ -150,6 +186,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID94",
+        "locationDisplay": "gastrointestinal tract"
+      },
       "reportText": "The bowel is nondilated, and no areas of wall thickening or surrounding inflammatory change are noted."
     },
     {
@@ -164,6 +204,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1385",
+        "locationDisplay": "heart"
+      },
       "reportText": "The heart is not enlarged, and no pericardial fluid is identified."
     },
     {
@@ -178,6 +222,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID187",
+        "locationDisplay": "gallbladder"
+      },
       "reportText": "The gallbladder is normally distended and shows no wall thickening or calcified stones."
     },
     {
@@ -192,6 +240,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1301",
+        "locationDisplay": "lung"
+      },
       "reportText": "The visualized portions of the lower lungs are clear."
     },
     {
@@ -206,6 +258,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28727",
+        "locationDisplay": "set of coronary arteries"
+      },
       "reportText": "Vascular calcifications are present, including at the mitral annulus and within the coronary arteries."
     },
     {
@@ -220,6 +276,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID34573",
+        "locationDisplay": "lumbar vertebral column"
+      },
       "reportText": "The bones show advanced degenerative changes throughout the thoracic and lumbar spine."
     },
     {
@@ -234,6 +294,10 @@
           "attributeValueDescription": "indeterminate"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID34573",
+        "locationDisplay": "lumbar vertebral column"
+      },
       "reportText": "Flowing osteophytes are present, raising the possibility of diffuse idiopathic skeletal hyperostosis."
     },
     {
@@ -248,6 +312,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID187",
+        "locationDisplay": "gallbladder"
+      },
       "reportText": "The gallbladder is normally distended and shows no wall thickening or calcified stones."
     },
     {
@@ -262,6 +330,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID58",
+        "locationDisplay": "liver"
+      },
       "reportText": "The liver appears diffusely decreased in attenuation, which is suggestive of fatty infiltration."
     },
     {
@@ -276,6 +348,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID205",
+        "locationDisplay": "kidney"
+      },
       "reportText": "There is no hydronephrosis."
     },
     {
@@ -290,6 +366,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28854",
+        "locationDisplay": "abdominal lymph node group"
+      },
       "reportText": "No enlarged abdominal or pelvic lymph nodes are identified."
     },
     {
@@ -304,6 +384,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1395",
+        "locationDisplay": "mitral valve"
+      },
       "reportText": "Vascular calcifications are present, including at the mitral annulus and within the coronary arteries."
     },
     {
@@ -318,6 +402,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID170",
+        "locationDisplay": "pancreas"
+      },
       "reportText": "The pancreas is normal in contour and demonstrates no focal abnormality."
     },
     {
@@ -332,6 +420,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID170",
+        "locationDisplay": "pancreas"
+      },
       "reportText": "The pancreas is normal in contour and demonstrates no focal abnormality."
     },
     {
@@ -346,6 +438,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID29663",
+        "locationDisplay": "left kidney"
+      },
       "reportText": "Small parapelvic cysts are present in the left kidney."
     },
     {
@@ -360,6 +456,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1407",
+        "locationDisplay": "pericardium"
+      },
       "reportText": "The heart is not enlarged, and no pericardial fluid is identified."
     },
     {
@@ -374,6 +474,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1301",
+        "locationDisplay": "lung"
+      },
       "reportText": "The visualized portions of the lower lungs are clear."
     },
     {
@@ -388,6 +492,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID343",
+        "locationDisplay": "prostate"
+      },
       "reportText": "The prostate and seminal vesicles appear within normal limits."
     },
     {
@@ -402,6 +510,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID29662",
+        "locationDisplay": "right kidney"
+      },
       "reportText": "Stable bilateral renal stones including right lower pole stone measuring approximately 3 mm and left interpolar region, measuring about 4\u20135 mm."
     },
     {
@@ -416,6 +528,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID29663",
+        "locationDisplay": "left kidney"
+      },
       "reportText": "Stable bilateral renal stones including right lower pole stone measuring approximately 3 mm and left interpolar region, measuring about 4\u20135 mm."
     },
     {
@@ -430,6 +546,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID86",
+        "locationDisplay": "spleen"
+      },
       "reportText": "The spleen is normal in size."
     },
     {
@@ -444,6 +564,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID229",
+        "locationDisplay": "ureter"
+      },
       "reportText": "No ureteral stones are seen."
     }
   ]

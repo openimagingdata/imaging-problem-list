@@ -78,7 +78,7 @@ tasks:
   test:unit:
     desc: Run backend unit/component tests (no Docker/services)
     cmds:
-      - uv run pytest tests/test_store.py tests/test_api.py tests/test_tasks.py tests/test_extraction_orchestrator.py tests/test_semantic_chunking.py tests/test_migrations.py tests/test_config.py tests/test_model_catalog.py tests/test_model_policy.py tests/test_model_resilience.py tests/test_extraction.py tests/test_extraction_runtime.py tests/test_prompt.py tests/test_chunk_prompt.py tests/test_cli.py tests/test_batch_cli.py tests/test_models.py tests/test_logging_setup.py tests/test_eval_matching.py tests/test_eval_evaluators.py tests/test_eval_cli.py tests/test_eval_datasets.py tests/test_report_sections.py tests/test_exam_info_agent.py tests/test_extraction_review.py tests/test_presets.py tests/test_impression_list_chunker.py
+      - uv run pytest tests/test_store.py tests/test_api.py tests/test_tasks.py tests/test_extraction_orchestrator.py tests/test_semantic_chunking.py tests/test_migrations.py tests/test_config.py tests/test_model_catalog.py tests/test_model_policy.py tests/test_model_resilience.py tests/test_extraction.py tests/test_extraction_runtime.py tests/test_prompt.py tests/test_chunk_prompt.py tests/test_cli.py tests/test_batch_cli.py tests/test_models.py tests/test_logging_setup.py tests/test_eval_matching.py tests/test_eval_evaluators.py tests/test_eval_cli.py tests/test_eval_datasets.py tests/test_report_sections.py tests/test_exam_info_agent.py tests/test_extraction_review.py tests/test_presets.py tests/test_impression_list_chunker.py tests/test_generate_ipl.py
 
   test:ui:
     desc: Run Playwright UI tests (excluded from default test run)
