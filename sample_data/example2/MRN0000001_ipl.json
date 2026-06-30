@@ -2802,30 +2802,6 @@
       "finding_type_code": "OIFM_GMTS_031526",
       "finding_type_display": "calcification in a tendon",
       "anatomicLocation": {
-        "locationId": "RID39518",
-        "locationDisplay": "shoulder"
-      },
-      "observations": [
-        {
-          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
-          "observation_id": "calcific_tendinopathy_1",
-          "exam_date": "2022-09-22",
-          "exam_type_code": "29252-4",
-          "exam_type_display": "CT Chest WO contrast",
-          "presence": "present",
-          "anatomicLocation": {
-            "locationId": "RID39518",
-            "locationDisplay": "shoulder"
-          },
-          "reportText": "Calcifications are noted in the region of the rotator cuff insertion at the greater tuberosity, compatible with known calcific tendonitis (May 2006 radiograph)."
-        }
-      ]
-    },
-    {
-      "id": "ipl-finding-072",
-      "finding_type_code": "OIFM_GMTS_031526",
-      "finding_type_display": "calcification in a tendon",
-      "anatomicLocation": {
         "locationId": "RID41117",
         "locationDisplay": "left supraspinatus tendon"
       },
@@ -2842,11 +2818,24 @@
             "locationDisplay": "left supraspinatus tendon"
           },
           "reportText": "Amorphous calcifications are present in the region of the supraspinatus tendon insertion on the greater tuberosity, consistent with calcific tendonitis."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "calcific_tendinopathy_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "anatomicLocation": {
+            "locationId": "RID41117",
+            "locationDisplay": "left supraspinatus tendon"
+          },
+          "reportText": "Calcifications are noted in the region of the rotator cuff insertion at the greater tuberosity, compatible with known calcific tendonitis (May 2006 radiograph)."
         }
       ]
     },
     {
-      "id": "ipl-finding-073",
+      "id": "ipl-finding-072",
       "finding_type_code": "OIFM_GMTS_032553",
       "finding_type_display": "lobar atelectasis",
       "anatomicLocation": {
@@ -2883,7 +2872,7 @@
       ]
     },
     {
-      "id": "ipl-finding-074",
+      "id": "ipl-finding-073",
       "finding_type_code": "OIFM_GMTS_033498",
       "finding_type_display": "pulmonary segmental consolidation",
       "anatomicLocation": {
@@ -2972,7 +2961,7 @@
       ]
     },
     {
-      "id": "ipl-finding-075",
+      "id": "ipl-finding-074",
       "finding_type_code": "OIFM_GMTS_033498",
       "finding_type_display": "pulmonary segmental consolidation",
       "anatomicLocation": {
@@ -2996,7 +2985,7 @@
       ]
     },
     {
-      "id": "ipl-finding-076",
+      "id": "ipl-finding-075",
       "finding_type_code": "OIFM_GMTS_035534",
       "finding_type_display": "portal vein thrombosis",
       "anatomicLocation": {
@@ -3033,31 +3022,7 @@
       ]
     },
     {
-      "id": "ipl-finding-077",
-      "finding_type_code": "OIFM_MGB_311515",
-      "finding_type_display": "glenohumeral joint abnormality",
-      "anatomicLocation": {
-        "locationId": "RID1905",
-        "locationDisplay": "glenohumeral joint"
-      },
-      "observations": [
-        {
-          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
-          "observation_id": "humeral_head_malposition_1",
-          "exam_date": "2022-09-22",
-          "exam_type_code": "29252-4",
-          "exam_type_display": "CT Chest WO contrast",
-          "presence": "present",
-          "anatomicLocation": {
-            "locationId": "RID1905",
-            "locationDisplay": "glenohumeral joint"
-          },
-          "reportText": "The humeral head is in a high-riding position with reduced acromiohumeral distance."
-        }
-      ]
-    },
-    {
-      "id": "ipl-finding-078",
+      "id": "ipl-finding-076",
       "finding_type_code": "OIFM_MGB_311515",
       "finding_type_display": "glenohumeral joint abnormality",
       "anatomicLocation": {
@@ -3077,11 +3042,24 @@
             "locationDisplay": "left glenohumeral joint"
           },
           "reportText": "The humeral head is positioned in a high-riding configuration with reduced acromiohumeral distance measuring approximately 6 mm, suggesting chronic rotator cuff pathology."
+        },
+        {
+          "report_id": "aabb5f5e-2a58-492e-a13b-f7840a9d4eb7",
+          "observation_id": "humeral_head_malposition_1",
+          "exam_date": "2022-09-22",
+          "exam_type_code": "29252-4",
+          "exam_type_display": "CT Chest WO contrast",
+          "presence": "present",
+          "anatomicLocation": {
+            "locationId": "RID42241",
+            "locationDisplay": "left glenohumeral joint"
+          },
+          "reportText": "The humeral head is in a high-riding position with reduced acromiohumeral distance."
         }
       ]
     },
     {
-      "id": "ipl-finding-079",
+      "id": "ipl-finding-077",
       "finding_type_code": "OIFM_MGB_944849",
       "finding_type_display": "rib fracture",
       "anatomicLocation": {
@@ -3209,7 +3187,7 @@
       ]
     },
     {
-      "id": "ipl-finding-080",
+      "id": "ipl-finding-078",
       "finding_type_code": "OIFM_MGB_949427",
       "finding_type_display": "bronchial wall thickening",
       "anatomicLocation": {
@@ -3233,7 +3211,7 @@
       ]
     },
     {
-      "id": "ipl-finding-081",
+      "id": "ipl-finding-079",
       "finding_type_code": "OIFM_MSFT_134126",
       "finding_type_display": "abdominal aortic aneurysm",
       "anatomicLocation": {
@@ -3270,7 +3248,7 @@
       ]
     },
     {
-      "id": "ipl-finding-082",
+      "id": "ipl-finding-080",
       "finding_type_code": "OIFM_MSFT_213340",
       "finding_type_display": "pleural abnormality",
       "anatomicLocation": {
@@ -3294,7 +3272,7 @@
       ]
     },
     {
-      "id": "ipl-finding-083",
+      "id": "ipl-finding-081",
       "finding_type_code": "OIFM_MSFT_218756",
       "finding_type_display": "Intracerebral Hemorrhage",
       "anatomicLocation": {
@@ -3318,7 +3296,7 @@
       ]
     },
     {
-      "id": "ipl-finding-084",
+      "id": "ipl-finding-082",
       "finding_type_code": "OIFM_MSFT_430810",
       "finding_type_display": "coronary artery calcifications",
       "anatomicLocation": {
@@ -3420,7 +3398,7 @@
       ]
     },
     {
-      "id": "ipl-finding-085",
+      "id": "ipl-finding-083",
       "finding_type_code": "OIFM_MSFT_440456",
       "finding_type_display": "cerebral aneurysm",
       "anatomicLocation": {
@@ -3444,7 +3422,7 @@
       ]
     },
     {
-      "id": "ipl-finding-086",
+      "id": "ipl-finding-084",
       "finding_type_code": "OIFM_OIDM_023679",
       "finding_type_display": "abnormal intracranial enhancement",
       "anatomicLocation": {
@@ -3468,9 +3446,9 @@
       ]
     },
     {
-      "id": "ipl-finding-087",
+      "id": "ipl-finding-085",
       "finding_type_code": "OIFM_OIDM_029466",
-      "finding_type_display": "enotosis",
+      "finding_type_display": "enostosis",
       "anatomicLocation": {
         "locationId": "RID29204",
         "locationDisplay": "seventh thoracic vertebra"
@@ -3518,7 +3496,7 @@
       ]
     },
     {
-      "id": "ipl-finding-088",
+      "id": "ipl-finding-086",
       "finding_type_code": "OIFM_OIDM_093125",
       "finding_type_display": "cerebral small vessel disease",
       "anatomicLocation": {
@@ -3542,7 +3520,7 @@
       ]
     },
     {
-      "id": "ipl-finding-089",
+      "id": "ipl-finding-087",
       "finding_type_code": "OIFM_OIDM_119725",
       "finding_type_display": "intracranial mass",
       "anatomicLocation": {
@@ -3566,7 +3544,7 @@
       ]
     },
     {
-      "id": "ipl-finding-090",
+      "id": "ipl-finding-088",
       "finding_type_code": "OIFM_OIDM_159498",
       "finding_type_display": "mitral annular calcification",
       "anatomicLocation": {
@@ -3668,7 +3646,7 @@
       ]
     },
     {
-      "id": "ipl-finding-091",
+      "id": "ipl-finding-089",
       "finding_type_code": "OIFM_OIDM_160831",
       "finding_type_display": "hepatic lesion",
       "anatomicLocation": {
@@ -3692,7 +3670,7 @@
       ]
     },
     {
-      "id": "ipl-finding-092",
+      "id": "ipl-finding-090",
       "finding_type_code": "OIFM_OIDM_160831",
       "finding_type_display": "hepatic lesion",
       "anatomicLocation": {
@@ -3755,7 +3733,7 @@
       ]
     },
     {
-      "id": "ipl-finding-093",
+      "id": "ipl-finding-091",
       "finding_type_code": "OIFM_OIDM_201175",
       "finding_type_display": "bowel inflammation",
       "anatomicLocation": {
@@ -3792,7 +3770,7 @@
       ]
     },
     {
-      "id": "ipl-finding-094",
+      "id": "ipl-finding-092",
       "finding_type_code": "OIFM_OIDM_201175",
       "finding_type_display": "bowel inflammation",
       "anatomicLocation": {
@@ -3881,7 +3859,7 @@
       ]
     },
     {
-      "id": "ipl-finding-095",
+      "id": "ipl-finding-093",
       "finding_type_code": "OIFM_OIDM_208758",
       "finding_type_display": "orbital mass",
       "anatomicLocation": {
@@ -3905,7 +3883,7 @@
       ]
     },
     {
-      "id": "ipl-finding-096",
+      "id": "ipl-finding-094",
       "finding_type_code": "OIFM_OIDM_228653",
       "finding_type_display": "mastoid air cell effusion",
       "anatomicLocation": {
@@ -3929,7 +3907,7 @@
       ]
     },
     {
-      "id": "ipl-finding-097",
+      "id": "ipl-finding-095",
       "finding_type_code": "OIFM_OIDM_267712",
       "finding_type_display": "basal cistern effacement",
       "anatomicLocation": null,
@@ -3946,7 +3924,7 @@
       ]
     },
     {
-      "id": "ipl-finding-098",
+      "id": "ipl-finding-096",
       "finding_type_code": "OIFM_OIDM_299401",
       "finding_type_display": "soft tissue mass",
       "anatomicLocation": {
@@ -3983,7 +3961,7 @@
       ]
     },
     {
-      "id": "ipl-finding-099",
+      "id": "ipl-finding-097",
       "finding_type_code": "OIFM_OIDM_299401",
       "finding_type_display": "soft tissue mass",
       "anatomicLocation": {
@@ -4007,7 +3985,7 @@
       ]
     },
     {
-      "id": "ipl-finding-100",
+      "id": "ipl-finding-098",
       "finding_type_code": "OIFM_OIDM_299401",
       "finding_type_display": "soft tissue mass",
       "anatomicLocation": {
@@ -4031,7 +4009,7 @@
       ]
     },
     {
-      "id": "ipl-finding-101",
+      "id": "ipl-finding-099",
       "finding_type_code": "OIFM_OIDM_299401",
       "finding_type_display": "soft tissue mass",
       "anatomicLocation": {
@@ -4068,7 +4046,7 @@
       ]
     },
     {
-      "id": "ipl-finding-102",
+      "id": "ipl-finding-100",
       "finding_type_code": "OIFM_OIDM_309677",
       "finding_type_display": "skull abnormality",
       "anatomicLocation": {
@@ -4105,7 +4083,7 @@
       ]
     },
     {
-      "id": "ipl-finding-103",
+      "id": "ipl-finding-101",
       "finding_type_code": "OIFM_OIDM_332518",
       "finding_type_display": "prostatic abnormality",
       "anatomicLocation": {
@@ -4129,7 +4107,7 @@
       ]
     },
     {
-      "id": "ipl-finding-104",
+      "id": "ipl-finding-102",
       "finding_type_code": "OIFM_OIDM_371547",
       "finding_type_display": "pancreatic lesion",
       "anatomicLocation": {
@@ -4218,7 +4196,7 @@
       ]
     },
     {
-      "id": "ipl-finding-105",
+      "id": "ipl-finding-103",
       "finding_type_code": "OIFM_OIDM_388787",
       "finding_type_display": "colonic diverticulosis",
       "anatomicLocation": {
@@ -4255,7 +4233,7 @@
       ]
     },
     {
-      "id": "ipl-finding-106",
+      "id": "ipl-finding-104",
       "finding_type_code": "OIFM_OIDM_437042",
       "finding_type_display": "bladder abnormality",
       "anatomicLocation": {
@@ -4279,7 +4257,7 @@
       ]
     },
     {
-      "id": "ipl-finding-107",
+      "id": "ipl-finding-105",
       "finding_type_code": "OIFM_OIDM_452510",
       "finding_type_display": "seminal vesicle abnormality",
       "anatomicLocation": {
@@ -4303,7 +4281,7 @@
       ]
     },
     {
-      "id": "ipl-finding-108",
+      "id": "ipl-finding-106",
       "finding_type_code": "OIFM_OIDM_456265",
       "finding_type_display": "Chiari malformation",
       "anatomicLocation": {
@@ -4327,7 +4305,7 @@
       ]
     },
     {
-      "id": "ipl-finding-109",
+      "id": "ipl-finding-107",
       "finding_type_code": "OIFM_OIDM_467681",
       "finding_type_display": "parapelvic renal cyst",
       "anatomicLocation": {
@@ -4351,7 +4329,7 @@
       ]
     },
     {
-      "id": "ipl-finding-110",
+      "id": "ipl-finding-108",
       "finding_type_code": "OIFM_OIDM_478641",
       "finding_type_display": "pulmonary opacity",
       "anatomicLocation": {
@@ -4375,7 +4353,7 @@
       ]
     },
     {
-      "id": "ipl-finding-111",
+      "id": "ipl-finding-109",
       "finding_type_code": "OIFM_OIDM_481402",
       "finding_type_display": "lumbar spine degenerative change",
       "anatomicLocation": {
@@ -4438,7 +4416,7 @@
       ]
     },
     {
-      "id": "ipl-finding-112",
+      "id": "ipl-finding-110",
       "finding_type_code": "OIFM_OIDM_500879",
       "finding_type_display": "colonic diverticulitis",
       "anatomicLocation": {
@@ -4475,7 +4453,7 @@
       ]
     },
     {
-      "id": "ipl-finding-113",
+      "id": "ipl-finding-111",
       "finding_type_code": "OIFM_OIDM_668318",
       "finding_type_display": "inferior vena cava thrombosis",
       "anatomicLocation": {
@@ -4499,7 +4477,7 @@
       ]
     },
     {
-      "id": "ipl-finding-114",
+      "id": "ipl-finding-112",
       "finding_type_code": "OIFM_OIDM_675673",
       "finding_type_display": "thoracic spine degenerative change",
       "anatomicLocation": {
@@ -4549,7 +4527,7 @@
       ]
     },
     {
-      "id": "ipl-finding-115",
+      "id": "ipl-finding-113",
       "finding_type_code": "OIFM_OIDM_745898",
       "finding_type_display": "pulmonary scar",
       "anatomicLocation": {
@@ -4573,7 +4551,7 @@
       ]
     },
     {
-      "id": "ipl-finding-116",
+      "id": "ipl-finding-114",
       "finding_type_code": "OIFM_OIDM_786384",
       "finding_type_display": "cerebral atrophy",
       "anatomicLocation": {
@@ -4597,7 +4575,7 @@
       ]
     },
     {
-      "id": "ipl-finding-117",
+      "id": "ipl-finding-115",
       "finding_type_code": "OIFM_OIDM_786838",
       "finding_type_display": "loss of gray-white differentiation",
       "anatomicLocation": {
@@ -4621,7 +4599,7 @@
       ]
     },
     {
-      "id": "ipl-finding-118",
+      "id": "ipl-finding-116",
       "finding_type_code": "OIFM_OIDM_842151",
       "finding_type_display": "clavicle fracture",
       "anatomicLocation": {
@@ -4684,7 +4662,7 @@
       ]
     },
     {
-      "id": "ipl-finding-119",
+      "id": "ipl-finding-117",
       "finding_type_code": "OIFM_OIDM_874812",
       "finding_type_display": "hydronephrosis",
       "anatomicLocation": {
@@ -4760,7 +4738,7 @@
       ]
     },
     {
-      "id": "ipl-finding-120",
+      "id": "ipl-finding-118",
       "finding_type_code": "OIFM_OIDM_874812",
       "finding_type_display": "hydronephrosis",
       "anatomicLocation": {
@@ -4784,7 +4762,7 @@
       ]
     },
     {
-      "id": "ipl-finding-121",
+      "id": "ipl-finding-119",
       "finding_type_code": "OIFM_OIDM_920919",
       "finding_type_display": "peripancreatic fluid",
       "anatomicLocation": {
@@ -4808,7 +4786,7 @@
       ]
     },
     {
-      "id": "ipl-finding-122",
+      "id": "ipl-finding-120",
       "finding_type_code": "OIFM_OIDM_971596",
       "finding_type_display": "upper extremity fracture",
       "anatomicLocation": {
@@ -4832,7 +4810,7 @@
       ]
     },
     {
-      "id": "ipl-finding-123",
+      "id": "ipl-finding-121",
       "finding_type_code": "OIFM_OIDM_972279",
       "finding_type_display": "intracranial vascular abnormality",
       "anatomicLocation": {
@@ -4856,7 +4834,7 @@
       ]
     },
     {
-      "id": "ipl-finding-124",
+      "id": "ipl-finding-122",
       "finding_type_code": "OIFM_OIDM_990401",
       "finding_type_display": "diffuse idiopathic skeletal hyperostosis",
       "anatomicLocation": {
@@ -4932,7 +4910,7 @@
       ]
     },
     {
-      "id": "ipl-finding-125",
+      "id": "ipl-finding-123",
       "finding_type_code": "OIFM_OIDM_990401",
       "finding_type_display": "diffuse idiopathic skeletal hyperostosis",
       "anatomicLocation": {

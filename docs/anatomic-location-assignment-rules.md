@@ -26,6 +26,21 @@ Source priority: **explicit text side > sided-exam side > generic (unsided)**.
 - A **non-sided exam never introduces a side.** CT Abdomen "adrenal glands unremarkable" → *adrenal
   gland* (generic), not "left adrenal gland". "No hydronephrosis" (no side) → *kidney* (generic).
 - A **sided exam** sides the finding: "XR Shoulder - left" + "humerus fracture" → *left humerus*.
+- **Resolve laterality against the full report section, not the finding's isolated quote.** A finding's
+  `reportText` is one verbatim snippet, and the side is often stated only in the section header or an
+  earlier sentence of the same section, not in that snippet. When the section establishes a side, it
+  applies to every finding in the section unless a later sentence contradicts it. This is "text/section
+  context wins" (precedence rule 1) applied to laterality.
+  - **Worked example (a real miss, now fixed):** a CT Chest `Shoulders:` section reads *"The **left**
+    glenohumeral joint demonstrates a moderate joint effusion. The humeral head is in a high-riding
+    position… Calcifications are noted in the region of the rotator cuff insertion…"* The high-riding-head
+    and calcific-tendinopathy findings carry snippets with no side, but the section establishes **left**,
+    so they are `left glenohumeral joint` / `left supraspinatus tendon` — not the generic structures.
+  - **Pitfall:** reviewing or coding from the isolated `reportText` silently drops section laterality and
+    under-calls findings to the generic structure. Always read the snippet against its section.
+  - **Still do not infer a side across exams or from clinical priors.** If *this* report's section gives
+    no side, stay generic even when another exam localized the same problem (e.g. a US "parapelvic cysts"
+    snippet with no side stays *kidney* even though a prior CT said "left kidney").
 
 ## Bilateral findings
 

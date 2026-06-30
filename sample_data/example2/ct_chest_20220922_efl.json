@@ -69,7 +69,7 @@
     {
       "observationId": "benign_bone_island_1",
       "findingCode": "OIFM_OIDM_029466",
-      "findingDescription": "enotosis",
+      "findingDescription": "enostosis",
       "attributes": [
         {
           "attributeCode": "OIFMA_OIDM_071504",
@@ -97,8 +97,8 @@
         }
       ],
       "anatomicLocation": {
-        "locationId": "RID39518",
-        "locationDisplay": "shoulder"
+        "locationId": "RID41117",
+        "locationDisplay": "left supraspinatus tendon"
       },
       "reportText": "Calcifications are noted in the region of the rotator cuff insertion at the greater tuberosity, compatible with known calcific tendonitis (May 2006 radiograph)."
     },
@@ -295,8 +295,8 @@
         }
       ],
       "anatomicLocation": {
-        "locationId": "RID1905",
-        "locationDisplay": "glenohumeral joint"
+        "locationId": "RID42241",
+        "locationDisplay": "left glenohumeral joint"
       },
       "reportText": "The humeral head is in a high-riding position with reduced acromiohumeral distance."
     },
