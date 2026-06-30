@@ -4,6 +4,44 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-06-11 — Laterality + typo follow-up corrections (example2)
+
+Follow-up to the anatomic-location correction pass (commit `9e6c6de`).
+
+- Two CT Chest shoulder findings carried no side in their own verbatim quote but the report's
+  `Shoulders:` section establishes "left"; corrected to *left glenohumeral joint* / *left supraspinatus
+  tendon* so they group longitudinally with the XR Shoulder findings.
+- Hardened `anatomic-location-assignment-rules.md`: resolve laterality against the full report section,
+  not the finding's isolated snippet (with the shoulder case as a worked example).
+- Fixed the finding name typo `enotosis` → `enostosis` across three EFLs; regenerated
+  `MRN0000001_ipl.json` (123 anatomy groups).
+
+---
+
+## 2026-06-11 — Anatomy-aware viewer_v2 first slice
+
+Built the first `viewer_v2` static anatomy-aware IPL viewer for `sample_data/example2/MRN0000001`.
+
+- Added a separate React/Vite/TypeScript/Tailwind app under `viewer_v2/`, with generated committed data under `viewer_v2/public/data/`.
+- Added `scripts/build_viewer_v2_data.py` to generate patient, IPL, EFL/report, anatomy, cluster, and finding-definition bundles from the trusted IPL/sample inputs.
+- Added an anatomy-first dashboard with region/cluster/location progression, spatially lateralized extremity tiles, strict side filtering, status toggles, finding timelines, definition/anatomy metadata separation, and exact evidence drilldown.
+- Reworked the diagram from stacked region cards into a body-map schematic, with heatmap burden and named active-finding chips inside each anatomical zone instead of count-only active badges.
+- Converted `viewer_v2` to a dark radiology-workstation theme; light mode is not treated as an acceptable default for this tool.
+- Tightened the mobile anatomy view after adversarial screenshot review: anatomy remains before detail, laterality remains spatial, active finding names stay visible, and overflow uses compact `N more` controls.
+- Adjusted the body-map layout so the pelvis sits directly below the abdomen, lower extremities sit laterally below the pelvis, active overflow expands in place as `N more`, and the unlocalized tray is hidden when empty under the current filters.
+- Removed global side filters from the v2 viewer; lateral anatomy clicks now drive only local selection context, so selecting a non-lateral region clears the prior side context. Region detail now labels lateral selections directly and presents cluster groups as sub-regions with findings underneath.
+- Generalized anatomy-chip density so any high-burden zone shows more current findings before overflow. Current/always state now uses color accents; always-present findings are collapsed behind an `N always` control, and summary burden rows use the same side-aware anatomy labels as the diagram.
+- Added generated compact finding-name metadata from `viewer_v2/finding_compact_names.json`; dense anatomy chips and finding lists use short labels while detail views preserve the full IPL finding display name.
+- Replaced remaining visible "Cluster" labels with "Sub-region" in the finding detail workflow and removed sticky top-bar behavior that could obscure content while scrolling.
+- Removed the fake "Upper Extremity, Unspecified Side" anatomy tile; generic/unspecified laterality remains metadata/detail context rather than a standalone body-map region.
+- Added Taskfile targets for `viewer:v2:data`, `viewer:v2:dev`, `viewer:v2:build`, and `viewer:v2:deploy` to Cloudflare Pages project `ipl-anatomy`.
+- Incorporated known data quirks: `Body` ontology rows are presentation-bucketed for thorax/abdomen/extremity fallbacks, evidence matching folds Unicode dash/quote variants before exact matching, and missing-anatomy findings emit explicit warnings.
+- Verified data generation, JSON parsing, Vite build, anatomy fallback coverage, and Playwright screenshot states for desktop/mobile review.
+
+Plan: [plans/viewer-v2-anatomy-dashboard.md](plans/viewer-v2-anatomy-dashboard.md).
+
+---
+
 ## 2026-06-11 — Anatomic-location correction pass on example2
 
 Hand-reviewed and corrected every anatomic location in `sample_data/example2` against an agreed rule set (documented in [anatomic-location-assignment-rules.md](anatomic-location-assignment-rules.md)). The automated enrichment had systematically fabricated a laterality (usually "left") for bilateral/non-lateralized findings and had several wrong-organ, over-specific, and missing assignments.

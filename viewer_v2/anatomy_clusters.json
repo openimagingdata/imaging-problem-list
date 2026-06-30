@@ -1,0 +1,215 @@
+{
+  "schemaVersion": "viewer-v2-cluster-config.1",
+  "regions": [
+    {
+      "id": "head",
+      "label": "Head",
+      "displayOrder": 10,
+      "diagramBand": "head"
+    },
+    {
+      "id": "neck",
+      "label": "Neck",
+      "displayOrder": 20,
+      "diagramBand": "neck"
+    },
+    {
+      "id": "thorax",
+      "label": "Thorax",
+      "displayOrder": 30,
+      "diagramBand": "thorax"
+    },
+    {
+      "id": "abdomen",
+      "label": "Abdomen",
+      "displayOrder": 40,
+      "diagramBand": "abdomen"
+    },
+    {
+      "id": "pelvis",
+      "label": "Pelvis",
+      "displayOrder": 50,
+      "diagramBand": "pelvis"
+    },
+    {
+      "id": "upper_extremity",
+      "label": "Upper Extremity",
+      "displayOrder": 60,
+      "diagramBand": "upper_extremity"
+    },
+    {
+      "id": "lower_extremity",
+      "label": "Lower Extremity",
+      "displayOrder": 70,
+      "diagramBand": "lower_extremity"
+    },
+    {
+      "id": "breast",
+      "label": "Breast",
+      "displayOrder": 80,
+      "diagramBand": "breast"
+    },
+    {
+      "id": "unlocalized",
+      "label": "Unlocalized",
+      "displayOrder": 999,
+      "diagramBand": "unlocalized"
+    }
+  ],
+  "clusters": [
+    {
+      "id": "head_brain",
+      "regionId": "head",
+      "label": "Brain / Parenchyma",
+      "displayOrder": 10,
+      "keywords": ["brain", "cerebral", "cerebell", "telencephalon", "hemisphere", "frontal lobe"]
+    },
+    {
+      "id": "head_ventricles_csf",
+      "regionId": "head",
+      "label": "Ventricles / CSF Spaces",
+      "displayOrder": 20,
+      "keywords": ["ventricle", "cistern", "csf", "hydrocephalus"]
+    },
+    {
+      "id": "head_sinuses_orbits",
+      "regionId": "head",
+      "label": "Sinuses / Orbits / Mastoid",
+      "displayOrder": 30,
+      "keywords": ["sinus", "orbit", "mastoid"]
+    },
+    {
+      "id": "head_skull_base",
+      "regionId": "head",
+      "label": "Skull / Skull Base",
+      "displayOrder": 40,
+      "keywords": ["skull", "cranium", "cranial", "base of cranium"]
+    },
+    {
+      "id": "head_sellar",
+      "regionId": "head",
+      "label": "Sellar / Pituitary",
+      "displayOrder": 50,
+      "keywords": ["sella", "sellar", "pituitary"]
+    },
+    {
+      "id": "thorax_lungs_pleura",
+      "regionId": "thorax",
+      "label": "Lungs / Pleura",
+      "displayOrder": 10,
+      "keywords": ["lung", "lobe", "pulmonary", "pleura", "pleural", "hilum"]
+    },
+    {
+      "id": "thorax_heart_pericardium",
+      "regionId": "thorax",
+      "label": "Heart / Pericardium",
+      "displayOrder": 20,
+      "keywords": ["heart", "cardiac", "pericard", "mitral", "coronary"]
+    },
+    {
+      "id": "thorax_mediastinum_vessels",
+      "regionId": "thorax",
+      "label": "Mediastinum / Vessels",
+      "displayOrder": 30,
+      "keywords": ["mediast", "aorta", "aortic", "pulmonary artery", "vena cava", "vascular"]
+    },
+    {
+      "id": "thorax_chest_wall_ribs",
+      "regionId": "thorax",
+      "label": "Chest Wall / Ribs",
+      "displayOrder": 40,
+      "keywords": ["rib", "clavicle", "chest wall", "musculature of thorax", "thorax"]
+    },
+    {
+      "id": "thorax_spine",
+      "regionId": "thorax",
+      "label": "Thoracic Spine",
+      "displayOrder": 50,
+      "keywords": ["thoracic vertebra", "thoracic vertebral", "thoracic spine"]
+    },
+    {
+      "id": "abdomen_liver_biliary",
+      "regionId": "abdomen",
+      "label": "Liver / Biliary / Gallbladder",
+      "displayOrder": 10,
+      "keywords": ["liver", "hepatic", "biliary", "bile duct", "gallbladder", "common bile duct"]
+    },
+    {
+      "id": "abdomen_kidney_adrenal_urinary",
+      "regionId": "abdomen",
+      "label": "Kidneys / Adrenals / Urinary Tract",
+      "displayOrder": 20,
+      "keywords": ["kidney", "renal", "adrenal", "ureter", "urinary"]
+    },
+    {
+      "id": "abdomen_bowel_peritoneum",
+      "regionId": "abdomen",
+      "label": "Bowel / Peritoneum",
+      "displayOrder": 30,
+      "keywords": ["bowel", "colon", "intestine", "peritone", "mesenter", "retroperitone"]
+    },
+    {
+      "id": "abdomen_pancreas_spleen",
+      "regionId": "abdomen",
+      "label": "Pancreas / Spleen",
+      "displayOrder": 40,
+      "keywords": ["pancreas", "pancreatic", "spleen", "splenic"]
+    },
+    {
+      "id": "abdomen_aorta_vessels",
+      "regionId": "abdomen",
+      "label": "Aorta / Abdominal Vessels",
+      "displayOrder": 50,
+      "keywords": ["abdominal aorta", "portal vein", "inferior vena cava", "vessel", "vascular"]
+    },
+    {
+      "id": "abdomen_spine",
+      "regionId": "abdomen",
+      "label": "Lumbar Spine",
+      "displayOrder": 60,
+      "keywords": ["lumbar", "vertebral column"]
+    },
+    {
+      "id": "pelvis_bladder_urinary",
+      "regionId": "pelvis",
+      "label": "Bladder / Pelvic Urinary",
+      "displayOrder": 10,
+      "keywords": ["bladder", "ureter", "urinary"]
+    },
+    {
+      "id": "pelvis_reproductive",
+      "regionId": "pelvis",
+      "label": "Reproductive Organs",
+      "displayOrder": 20,
+      "keywords": ["prostate", "seminal", "uterus", "ovary", "adnexa"]
+    },
+    {
+      "id": "pelvis_bowel",
+      "regionId": "pelvis",
+      "label": "Pelvic Bowel",
+      "displayOrder": 30,
+      "keywords": ["sigmoid", "rectum", "colon", "bowel"]
+    },
+    {
+      "id": "upper_extremity_shoulder",
+      "regionId": "upper_extremity",
+      "label": "Shoulder / Glenohumeral",
+      "displayOrder": 10,
+      "keywords": ["shoulder", "glenohumeral", "acromioclavicular"]
+    },
+    {
+      "id": "upper_extremity_bones",
+      "regionId": "upper_extremity",
+      "label": "Humerus / Clavicle / Scapula",
+      "displayOrder": 20,
+      "keywords": ["humerus", "humeral", "clavicle", "scapula"]
+    },
+    {
+      "id": "upper_extremity_tendons_soft_tissues",
+      "regionId": "upper_extremity",
+      "label": "Tendons / Soft Tissues",
+      "displayOrder": 30,
+      "keywords": ["tendon", "muscle", "soft tissue", "supraspinatus"]
+    }
+  ]
+}

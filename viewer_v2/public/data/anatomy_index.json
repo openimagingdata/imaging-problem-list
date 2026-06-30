@@ -1,0 +1,4507 @@
+{
+  "schemaVersion": "viewer-v2-data.1",
+  "generatedAt": "2026-06-11T20:46:58.399446+00:00",
+  "locations": {
+    "RID10143": {
+      "id": "RID10143",
+      "display": "mastoid antrum",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID9361",
+          "display": "temporal bone"
+        },
+        {
+          "id": "RID9196",
+          "display": "skull"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID9361",
+          "display": "temporal bone"
+        },
+        {
+          "id": "RID9196",
+          "display": "skull"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID10143_RID5824",
+        "display": "left mastoid antrum"
+      },
+      "rightVariant": {
+        "id": "RID10143_RID5825",
+        "display": "right mastoid antrum"
+      }
+    },
+    "RID10143_RID5824": {
+      "id": "RID10143_RID5824",
+      "display": "left mastoid antrum",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID9361_RID5824",
+          "display": "left temporal bone"
+        },
+        {
+          "id": "RID9196",
+          "display": "skull"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID9361_RID5824",
+          "display": "left temporal bone"
+        },
+        {
+          "id": "RID9196",
+          "display": "skull"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID10143",
+        "display": "mastoid antrum"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID10143_RID5825",
+        "display": "right mastoid antrum"
+      }
+    },
+    "RID10143_RID5825": {
+      "id": "RID10143_RID5825",
+      "display": "right mastoid antrum",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID9361_RID5825",
+          "display": "right temporal bone"
+        },
+        {
+          "id": "RID9196",
+          "display": "skull"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID9361_RID5825",
+          "display": "right temporal bone"
+        },
+        {
+          "id": "RID9196",
+          "display": "skull"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID10143",
+        "display": "mastoid antrum"
+      },
+      "leftVariant": {
+        "id": "RID10143_RID5824",
+        "display": "left mastoid antrum"
+      },
+      "rightVariant": null
+    },
+    "RID1178": {
+      "id": "RID1178",
+      "display": "inferior vena cava",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID1208": {
+      "id": "RID1208",
+      "display": "portal vein",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID50378",
+          "display": "set of visceral vessels"
+        },
+        {
+          "id": "RID13183",
+          "display": "arterial system"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID1243": {
+      "id": "RID1243",
+      "display": "thorax",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID1246": {
+      "id": "RID1246",
+      "display": "tracheobronchial tree",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1384",
+          "display": "mediastinum"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID1301": {
+      "id": "RID1301",
+      "display": "lung",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1363",
+          "display": "pleural space"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID1326",
+        "display": "left lung"
+      },
+      "rightVariant": {
+        "id": "RID1302",
+        "display": "right lung"
+      }
+    },
+    "RID1302": {
+      "id": "RID1302",
+      "display": "right lung",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1363_RID5825",
+          "display": "right pleural space"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1301",
+        "display": "lung"
+      },
+      "leftVariant": {
+        "id": "RID1326",
+        "display": "left lung"
+      },
+      "rightVariant": null
+    },
+    "RID1315": {
+      "id": "RID1315",
+      "display": "lower lobe of right lung",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1302",
+          "display": "right lung"
+        },
+        {
+          "id": "RID1363_RID5825",
+          "display": "right pleural space"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID1302",
+          "display": "right lung"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID13183": {
+      "id": "RID13183",
+      "display": "arterial system",
+      "regionId": "unlocalized",
+      "regionLabel": "Unlocalized",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID1326": {
+      "id": "RID1326",
+      "display": "left lung",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1363_RID5824",
+          "display": "left pleural space"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1301",
+        "display": "lung"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID1302",
+        "display": "right lung"
+      }
+    },
+    "RID13284": {
+      "id": "RID13284",
+      "display": "face",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID1362": {
+      "id": "RID1362",
+      "display": "pleura",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID1363": {
+      "id": "RID1363",
+      "display": "pleural space",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID1363_RID5824",
+        "display": "left pleural space"
+      },
+      "rightVariant": {
+        "id": "RID1363_RID5825",
+        "display": "right pleural space"
+      }
+    },
+    "RID1363_RID5824": {
+      "id": "RID1363_RID5824",
+      "display": "left pleural space",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1363",
+        "display": "pleural space"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID1363_RID5825",
+        "display": "right pleural space"
+      }
+    },
+    "RID1363_RID5825": {
+      "id": "RID1363_RID5825",
+      "display": "right pleural space",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1363",
+        "display": "pleural space"
+      },
+      "leftVariant": {
+        "id": "RID1363_RID5824",
+        "display": "left pleural space"
+      },
+      "rightVariant": null
+    },
+    "RID13788": {
+      "id": "RID13788",
+      "display": "right lateral ventricle",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6391_RID5825",
+          "display": "right frontal brain region"
+        },
+        {
+          "id": "RID6437",
+          "display": "telencephalon"
+        },
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID7124",
+        "display": "lateral ventricle"
+      },
+      "leftVariant": {
+        "id": "RID13789",
+        "display": "left lateral ventricle"
+      },
+      "rightVariant": null
+    },
+    "RID13789": {
+      "id": "RID13789",
+      "display": "left lateral ventricle",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6391_RID5824",
+          "display": "left frontal brain region"
+        },
+        {
+          "id": "RID6437",
+          "display": "telencephalon"
+        },
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID7124",
+        "display": "lateral ventricle"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID13788",
+        "display": "right lateral ventricle"
+      }
+    },
+    "RID1384": {
+      "id": "RID1384",
+      "display": "mediastinum",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID1385": {
+      "id": "RID1385",
+      "display": "heart",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1384",
+          "display": "mediastinum"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID13857": {
+      "id": "RID13857",
+      "display": "cerebral hemisphere",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID13859",
+        "display": "left cerebral hemisphere"
+      },
+      "rightVariant": {
+        "id": "RID13858",
+        "display": "right cerebral hemisphere"
+      }
+    },
+    "RID13858": {
+      "id": "RID13858",
+      "display": "right cerebral hemisphere",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID13857",
+        "display": "cerebral hemisphere"
+      },
+      "leftVariant": {
+        "id": "RID13859",
+        "display": "left cerebral hemisphere"
+      },
+      "rightVariant": null
+    },
+    "RID13859": {
+      "id": "RID13859",
+      "display": "left cerebral hemisphere",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID13857",
+        "display": "cerebral hemisphere"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID13858",
+        "display": "right cerebral hemisphere"
+      }
+    },
+    "RID13862": {
+      "id": "RID13862",
+      "display": "right frontal lobe",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6391_RID5825",
+          "display": "right frontal brain region"
+        },
+        {
+          "id": "RID6437",
+          "display": "telencephalon"
+        },
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID6434",
+          "display": "brain"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID6440",
+        "display": "frontal lobe"
+      },
+      "leftVariant": {
+        "id": "RID13863",
+        "display": "left frontal lobe"
+      },
+      "rightVariant": null
+    },
+    "RID13863": {
+      "id": "RID13863",
+      "display": "left frontal lobe",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6391_RID5824",
+          "display": "left frontal brain region"
+        },
+        {
+          "id": "RID6437",
+          "display": "telencephalon"
+        },
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID6434",
+          "display": "brain"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID6440",
+        "display": "frontal lobe"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID13862",
+        "display": "right frontal lobe"
+      }
+    },
+    "RID1395": {
+      "id": "RID1395",
+      "display": "mitral valve",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1385",
+          "display": "heart"
+        },
+        {
+          "id": "RID1384",
+          "display": "mediastinum"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID1385",
+          "display": "heart"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID1407": {
+      "id": "RID1407",
+      "display": "pericardium",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1384",
+          "display": "mediastinum"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID152": {
+      "id": "RID152",
+      "display": "large intestine",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID94",
+          "display": "gastrointestinal tract"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID162": {
+      "id": "RID162",
+      "display": "sigmoid colon",
+      "regionId": "pelvis",
+      "regionLabel": "Pelvis",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID2507",
+          "display": "pelvis"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID152",
+          "display": "large intestine"
+        },
+        {
+          "id": "RID94",
+          "display": "gastrointestinal tract"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID170": {
+      "id": "RID170",
+      "display": "pancreas",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID176": {
+      "id": "RID176",
+      "display": "pancreatic duct",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID170",
+          "display": "pancreas"
+        },
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID1850": {
+      "id": "RID1850",
+      "display": "upper extremity",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID1850_RID5824",
+        "display": "left upper extremity"
+      },
+      "rightVariant": {
+        "id": "RID1850_RID5825",
+        "display": "right upper extremity"
+      }
+    },
+    "RID1850_RID5824": {
+      "id": "RID1850_RID5824",
+      "display": "left upper extremity",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1850",
+        "display": "upper extremity"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID1850_RID5825",
+        "display": "right upper extremity"
+      }
+    },
+    "RID1850_RID5825": {
+      "id": "RID1850_RID5825",
+      "display": "right upper extremity",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1850",
+        "display": "upper extremity"
+      },
+      "leftVariant": {
+        "id": "RID1850_RID5824",
+        "display": "left upper extremity"
+      },
+      "rightVariant": null
+    },
+    "RID1854": {
+      "id": "RID1854",
+      "display": "clavicle",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39518",
+          "display": "shoulder"
+        },
+        {
+          "id": "RID1850",
+          "display": "upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID41741",
+        "display": "left clavicle"
+      },
+      "rightVariant": {
+        "id": "RID41740",
+        "display": "right clavicle"
+      }
+    },
+    "RID187": {
+      "id": "RID187",
+      "display": "gallbladder",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID397",
+          "display": "peritoneal cavity"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID33652",
+          "display": "biliary tree"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID1895": {
+      "id": "RID1895",
+      "display": "acromioclavicular joint",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39518",
+          "display": "shoulder"
+        },
+        {
+          "id": "RID1850",
+          "display": "upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID42239",
+        "display": "left acromioclavicular joint"
+      },
+      "rightVariant": {
+        "id": "RID42238",
+        "display": "right acromioclavicular joint"
+      }
+    },
+    "RID1905": {
+      "id": "RID1905",
+      "display": "glenohumeral joint",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39518",
+          "display": "shoulder"
+        },
+        {
+          "id": "RID1850",
+          "display": "upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID42241",
+        "display": "left glenohumeral joint"
+      },
+      "rightVariant": {
+        "id": "RID42240",
+        "display": "right glenohumeral joint"
+      }
+    },
+    "RID1953": {
+      "id": "RID1953",
+      "display": "supraspinatus tendon",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1905",
+          "display": "glenohumeral joint"
+        },
+        {
+          "id": "RID39518",
+          "display": "shoulder"
+        },
+        {
+          "id": "RID1850",
+          "display": "upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID1941",
+          "display": "supraspinatus muscle"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID41117",
+        "display": "left supraspinatus tendon"
+      },
+      "rightVariant": {
+        "id": "RID41116",
+        "display": "right supraspinatus tendon"
+      }
+    },
+    "RID1968_RID5824": {
+      "id": "RID1968_RID5824",
+      "display": "left arm",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1850_RID5824",
+          "display": "left upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1968",
+        "display": "arm"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID1968_RID5825",
+        "display": "right arm"
+      }
+    },
+    "RID1971": {
+      "id": "RID1971",
+      "display": "humerus",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1968",
+          "display": "arm"
+        },
+        {
+          "id": "RID1850",
+          "display": "upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID41946",
+        "display": "left humerus"
+      },
+      "rightVariant": {
+        "id": "RID41945",
+        "display": "right humerus"
+      }
+    },
+    "RID199": {
+      "id": "RID199",
+      "display": "common bile duct",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID33652",
+          "display": "biliary tree"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID204": {
+      "id": "RID204",
+      "display": "urinary tract",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID205": {
+      "id": "RID205",
+      "display": "kidney",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID204",
+          "display": "urinary tract"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID29663",
+        "display": "left kidney"
+      },
+      "rightVariant": {
+        "id": "RID29662",
+        "display": "right kidney"
+      }
+    },
+    "RID229": {
+      "id": "RID229",
+      "display": "ureter",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID204",
+          "display": "urinary tract"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID30845",
+        "display": "left ureter"
+      },
+      "rightVariant": {
+        "id": "RID30844",
+        "display": "right ureter"
+      }
+    },
+    "RID237": {
+      "id": "RID237",
+      "display": "bladder",
+      "regionId": "pelvis",
+      "regionLabel": "Pelvis",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID2507",
+          "display": "pelvis"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID204",
+          "display": "urinary tract"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID2468": {
+      "id": "RID2468",
+      "display": "chest wall",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID2507": {
+      "id": "RID2507",
+      "display": "pelvis",
+      "regionId": "unlocalized",
+      "regionLabel": "Unlocalized",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID28591": {
+      "id": "RID28591",
+      "display": "set of ribs",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID2468",
+          "display": "chest wall"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID28591_RID6157": {
+      "id": "RID28591_RID6157",
+      "display": "seventh rib",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID2468",
+          "display": "chest wall"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID28591",
+          "display": "set of ribs"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID28591_RID6157_RID5824",
+        "display": "left seventh rib"
+      },
+      "rightVariant": {
+        "id": "RID28591_RID6157_RID5825",
+        "display": "right seventh rib"
+      }
+    },
+    "RID28591_RID6157_RID5824": {
+      "id": "RID28591_RID6157_RID5824",
+      "display": "left seventh rib",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID2468",
+          "display": "chest wall"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID28591",
+          "display": "set of ribs"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID28591_RID6157",
+        "display": "seventh rib"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID28591_RID6157_RID5825",
+        "display": "right seventh rib"
+      }
+    },
+    "RID28591_RID6157_RID5825": {
+      "id": "RID28591_RID6157_RID5825",
+      "display": "right seventh rib",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID2468",
+          "display": "chest wall"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID28591",
+          "display": "set of ribs"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID28591_RID6157",
+        "display": "seventh rib"
+      },
+      "leftVariant": {
+        "id": "RID28591_RID6157_RID5824",
+        "display": "left seventh rib"
+      },
+      "rightVariant": null
+    },
+    "RID28727": {
+      "id": "RID28727",
+      "display": "set of coronary arteries",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1384",
+          "display": "mediastinum"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID28731": {
+      "id": "RID28731",
+      "display": "base of cranium",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID9196",
+          "display": "skull"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID28847": {
+      "id": "RID28847",
+      "display": "lymph node group",
+      "regionId": "unlocalized",
+      "regionLabel": "Unlocalized",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID28854": {
+      "id": "RID28854",
+      "display": "abdominal lymph node group",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID28847",
+          "display": "lymph node group"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID29204": {
+      "id": "RID29204",
+      "display": "seventh thoracic vertebra",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID34572",
+          "display": "thoracic vertebral column"
+        },
+        {
+          "id": "RID7741",
+          "display": "spine"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID29206": {
+      "id": "RID29206",
+      "display": "ninth thoracic vertebra",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID34572",
+          "display": "thoracic vertebral column"
+        },
+        {
+          "id": "RID7741",
+          "display": "spine"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID29662": {
+      "id": "RID29662",
+      "display": "right kidney",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID204",
+          "display": "urinary tract"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID205",
+        "display": "kidney"
+      },
+      "leftVariant": {
+        "id": "RID29663",
+        "display": "left kidney"
+      },
+      "rightVariant": null
+    },
+    "RID29663": {
+      "id": "RID29663",
+      "display": "left kidney",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID204",
+          "display": "urinary tract"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID205",
+        "display": "kidney"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID29662",
+        "display": "right kidney"
+      }
+    },
+    "RID30324": {
+      "id": "RID30324",
+      "display": "right adrenal gland",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID88",
+        "display": "adrenal gland"
+      },
+      "leftVariant": {
+        "id": "RID30325",
+        "display": "left adrenal gland"
+      },
+      "rightVariant": null
+    },
+    "RID30325": {
+      "id": "RID30325",
+      "display": "left adrenal gland",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID88",
+        "display": "adrenal gland"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID30324",
+        "display": "right adrenal gland"
+      }
+    },
+    "RID30844": {
+      "id": "RID30844",
+      "display": "right ureter",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID204",
+          "display": "urinary tract"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID229",
+        "display": "ureter"
+      },
+      "leftVariant": {
+        "id": "RID30845",
+        "display": "left ureter"
+      },
+      "rightVariant": null
+    },
+    "RID30845": {
+      "id": "RID30845",
+      "display": "left ureter",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID204",
+          "display": "urinary tract"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID229",
+        "display": "ureter"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID30844",
+        "display": "right ureter"
+      }
+    },
+    "RID33242": {
+      "id": "RID33242",
+      "display": "posterior inferior area of posterior segment of right lobe of liver",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID58",
+          "display": "liver"
+        },
+        {
+          "id": "RID397",
+          "display": "peritoneal cavity"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID74",
+          "display": "right lobe of liver"
+        },
+        {
+          "id": "RID58",
+          "display": "liver"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID33652": {
+      "id": "RID33652",
+      "display": "biliary tree",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID342": {
+      "id": "RID342",
+      "display": "genital system of the male human body",
+      "regionId": "pelvis",
+      "regionLabel": "Pelvis",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID2507",
+          "display": "pelvis"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID343": {
+      "id": "RID343",
+      "display": "prostate",
+      "regionId": "pelvis",
+      "regionLabel": "Pelvis",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID2507",
+          "display": "pelvis"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID34566": {
+      "id": "RID34566",
+      "display": "pulmonary hilum",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1301",
+          "display": "lung"
+        },
+        {
+          "id": "RID1363",
+          "display": "pleural space"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID34566_RID5824",
+        "display": "left pulmonary hilum"
+      },
+      "rightVariant": {
+        "id": "RID34566_RID5825",
+        "display": "right pulmonary hilum"
+      }
+    },
+    "RID34566_RID5824": {
+      "id": "RID34566_RID5824",
+      "display": "left pulmonary hilum",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1326",
+          "display": "left lung"
+        },
+        {
+          "id": "RID1363_RID5824",
+          "display": "left pleural space"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID34566",
+        "display": "pulmonary hilum"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID34566_RID5825",
+        "display": "right pulmonary hilum"
+      }
+    },
+    "RID34566_RID5825": {
+      "id": "RID34566_RID5825",
+      "display": "right pulmonary hilum",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1302",
+          "display": "right lung"
+        },
+        {
+          "id": "RID1363_RID5825",
+          "display": "right pleural space"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID34566",
+        "display": "pulmonary hilum"
+      },
+      "leftVariant": {
+        "id": "RID34566_RID5824",
+        "display": "left pulmonary hilum"
+      },
+      "rightVariant": null
+    },
+    "RID34572": {
+      "id": "RID34572",
+      "display": "thoracic vertebral column",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID7741",
+          "display": "spine"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID34573": {
+      "id": "RID34573",
+      "display": "lumbar vertebral column",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID7741",
+          "display": "spine"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID357": {
+      "id": "RID357",
+      "display": "seminal vesicle",
+      "regionId": "pelvis",
+      "regionLabel": "Pelvis",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID2507",
+          "display": "pelvis"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID342",
+          "display": "genital system of the male human body"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID50233",
+        "display": "left seminal vesicle"
+      },
+      "rightVariant": {
+        "id": "RID50232",
+        "display": "right seminal vesicle"
+      }
+    },
+    "RID35844": {
+      "id": "RID35844",
+      "display": "descending thoracic aorta",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1384",
+          "display": "mediastinum"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID879",
+          "display": "thoracic aorta"
+        },
+        {
+          "id": "RID480",
+          "display": "aorta"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID38674": {
+      "id": "RID38674",
+      "display": "pituitary gland",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6537",
+          "display": "set of basal ganglia"
+        },
+        {
+          "id": "RID6437",
+          "display": "telencephalon"
+        },
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID39518": {
+      "id": "RID39518",
+      "display": "shoulder",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1850",
+          "display": "upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID39518_RID5824",
+        "display": "left shoulder"
+      },
+      "rightVariant": {
+        "id": "RID39518_RID5825",
+        "display": "right shoulder"
+      }
+    },
+    "RID39518_RID5824": {
+      "id": "RID39518_RID5824",
+      "display": "left shoulder",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1850_RID5824",
+          "display": "left upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID39518",
+        "display": "shoulder"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID39518_RID5825",
+        "display": "right shoulder"
+      }
+    },
+    "RID39518_RID5825": {
+      "id": "RID39518_RID5825",
+      "display": "right shoulder",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1850_RID5825",
+          "display": "right upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID39518",
+        "display": "shoulder"
+      },
+      "leftVariant": {
+        "id": "RID39518_RID5824",
+        "display": "left shoulder"
+      },
+      "rightVariant": null
+    },
+    "RID39569": {
+      "id": "RID39569",
+      "display": "whole body",
+      "regionId": "unlocalized",
+      "regionLabel": "Unlocalized",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID397": {
+      "id": "RID397",
+      "display": "peritoneal cavity",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID41116": {
+      "id": "RID41116",
+      "display": "right supraspinatus tendon",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID42240",
+          "display": "right glenohumeral joint"
+        },
+        {
+          "id": "RID39518_RID5825",
+          "display": "right shoulder"
+        },
+        {
+          "id": "RID1850_RID5825",
+          "display": "right upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID43061",
+          "display": "right supraspinatus muscle"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID1953",
+        "display": "supraspinatus tendon"
+      },
+      "leftVariant": {
+        "id": "RID41117",
+        "display": "left supraspinatus tendon"
+      },
+      "rightVariant": null
+    },
+    "RID41117": {
+      "id": "RID41117",
+      "display": "left supraspinatus tendon",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID42241",
+          "display": "left glenohumeral joint"
+        },
+        {
+          "id": "RID39518_RID5824",
+          "display": "left shoulder"
+        },
+        {
+          "id": "RID1850_RID5824",
+          "display": "left upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID43062",
+          "display": "left supraspinatus muscle"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID1953",
+        "display": "supraspinatus tendon"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID41116",
+        "display": "right supraspinatus tendon"
+      }
+    },
+    "RID41740": {
+      "id": "RID41740",
+      "display": "right clavicle",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39518_RID5825",
+          "display": "right shoulder"
+        },
+        {
+          "id": "RID1850_RID5825",
+          "display": "right upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1854",
+        "display": "clavicle"
+      },
+      "leftVariant": {
+        "id": "RID41741",
+        "display": "left clavicle"
+      },
+      "rightVariant": null
+    },
+    "RID41741": {
+      "id": "RID41741",
+      "display": "left clavicle",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39518_RID5824",
+          "display": "left shoulder"
+        },
+        {
+          "id": "RID1850_RID5824",
+          "display": "left upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1854",
+        "display": "clavicle"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID41740",
+        "display": "right clavicle"
+      }
+    },
+    "RID41945": {
+      "id": "RID41945",
+      "display": "right humerus",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1968_RID5825",
+          "display": "right arm"
+        },
+        {
+          "id": "RID1850_RID5825",
+          "display": "right upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1971",
+        "display": "humerus"
+      },
+      "leftVariant": {
+        "id": "RID41946",
+        "display": "left humerus"
+      },
+      "rightVariant": null
+    },
+    "RID41946": {
+      "id": "RID41946",
+      "display": "left humerus",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1968_RID5824",
+          "display": "left arm"
+        },
+        {
+          "id": "RID1850_RID5824",
+          "display": "left upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1971",
+        "display": "humerus"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID41945",
+        "display": "right humerus"
+      }
+    },
+    "RID42238": {
+      "id": "RID42238",
+      "display": "right acromioclavicular joint",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39518_RID5825",
+          "display": "right shoulder"
+        },
+        {
+          "id": "RID1850_RID5825",
+          "display": "right upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1895",
+        "display": "acromioclavicular joint"
+      },
+      "leftVariant": {
+        "id": "RID42239",
+        "display": "left acromioclavicular joint"
+      },
+      "rightVariant": null
+    },
+    "RID42239": {
+      "id": "RID42239",
+      "display": "left acromioclavicular joint",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39518_RID5824",
+          "display": "left shoulder"
+        },
+        {
+          "id": "RID1850_RID5824",
+          "display": "left upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1895",
+        "display": "acromioclavicular joint"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID42238",
+        "display": "right acromioclavicular joint"
+      }
+    },
+    "RID42240": {
+      "id": "RID42240",
+      "display": "right glenohumeral joint",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39518_RID5825",
+          "display": "right shoulder"
+        },
+        {
+          "id": "RID1850_RID5825",
+          "display": "right upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1905",
+        "display": "glenohumeral joint"
+      },
+      "leftVariant": {
+        "id": "RID42241",
+        "display": "left glenohumeral joint"
+      },
+      "rightVariant": null
+    },
+    "RID42241": {
+      "id": "RID42241",
+      "display": "left glenohumeral joint",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39518_RID5824",
+          "display": "left shoulder"
+        },
+        {
+          "id": "RID1850_RID5824",
+          "display": "left upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1905",
+        "display": "glenohumeral joint"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID42240",
+        "display": "right glenohumeral joint"
+      }
+    },
+    "RID43062": {
+      "id": "RID43062",
+      "display": "left supraspinatus muscle",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39518_RID5824",
+          "display": "left shoulder"
+        },
+        {
+          "id": "RID1850_RID5824",
+          "display": "left upper extremity"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID1941",
+        "display": "supraspinatus muscle"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID43061",
+        "display": "right supraspinatus muscle"
+      }
+    },
+    "RID431": {
+      "id": "RID431",
+      "display": "retroperitoneum",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID480": {
+      "id": "RID480",
+      "display": "aorta",
+      "regionId": "unlocalized",
+      "regionLabel": "Unlocalized",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID50232": {
+      "id": "RID50232",
+      "display": "right seminal vesicle",
+      "regionId": "pelvis",
+      "regionLabel": "Pelvis",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID2507",
+          "display": "pelvis"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID342",
+          "display": "genital system of the male human body"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID357",
+        "display": "seminal vesicle"
+      },
+      "leftVariant": {
+        "id": "RID50233",
+        "display": "left seminal vesicle"
+      },
+      "rightVariant": null
+    },
+    "RID50233": {
+      "id": "RID50233",
+      "display": "left seminal vesicle",
+      "regionId": "pelvis",
+      "regionLabel": "Pelvis",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID2507",
+          "display": "pelvis"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID342",
+          "display": "genital system of the male human body"
+        }
+      ],
+      "genericVariant": {
+        "id": "RID357",
+        "display": "seminal vesicle"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID50232",
+        "display": "right seminal vesicle"
+      }
+    },
+    "RID50378": {
+      "id": "RID50378",
+      "display": "set of visceral vessels",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID13183",
+          "display": "arterial system"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID56": {
+      "id": "RID56",
+      "display": "abdomen",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID58": {
+      "id": "RID58",
+      "display": "liver",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID397",
+          "display": "peritoneal cavity"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID580": {
+      "id": "RID580",
+      "display": "ascending aorta",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1384",
+          "display": "mediastinum"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID879",
+          "display": "thoracic aorta"
+        },
+        {
+          "id": "RID480",
+          "display": "aorta"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID581": {
+      "id": "RID581",
+      "display": "aortic arch",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1384",
+          "display": "mediastinum"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID879",
+          "display": "thoracic aorta"
+        },
+        {
+          "id": "RID480",
+          "display": "aorta"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID6381_RID6434": {
+      "id": "RID6381_RID6434",
+      "display": "infratentorial brain",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID6434",
+          "display": "brain"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID6383_RID9080": {
+      "id": "RID6383_RID9080",
+      "display": "intracranial head",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID6389_RID6434": {
+      "id": "RID6389_RID6434",
+      "display": "supratentorial brain",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID6434",
+          "display": "brain"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID6391": {
+      "id": "RID6391",
+      "display": "frontal brain region",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6437",
+          "display": "telencephalon"
+        },
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID6391_RID5824",
+        "display": "left frontal brain region"
+      },
+      "rightVariant": {
+        "id": "RID6391_RID5825",
+        "display": "right frontal brain region"
+      }
+    },
+    "RID6391_RID5825": {
+      "id": "RID6391_RID5825",
+      "display": "right frontal brain region",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6437",
+          "display": "telencephalon"
+        },
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID6391",
+        "display": "frontal brain region"
+      },
+      "leftVariant": {
+        "id": "RID6391_RID5824",
+        "display": "left frontal brain region"
+      },
+      "rightVariant": null
+    },
+    "RID6434": {
+      "id": "RID6434",
+      "display": "brain",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID6437": {
+      "id": "RID6437",
+      "display": "telencephalon",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID6434",
+          "display": "brain"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID6440": {
+      "id": "RID6440",
+      "display": "frontal lobe",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6391",
+          "display": "frontal brain region"
+        },
+        {
+          "id": "RID6437",
+          "display": "telencephalon"
+        },
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID6434",
+          "display": "brain"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID13863",
+        "display": "left frontal lobe"
+      },
+      "rightVariant": {
+        "id": "RID13862",
+        "display": "right frontal lobe"
+      }
+    },
+    "RID6537": {
+      "id": "RID6537",
+      "display": "set of basal ganglia",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6437",
+          "display": "telencephalon"
+        },
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID6434",
+          "display": "brain"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID6815": {
+      "id": "RID6815",
+      "display": "cerebellum",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6381_RID6434",
+          "display": "infratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID7124": {
+      "id": "RID7124",
+      "display": "lateral ventricle",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID6391",
+          "display": "frontal brain region"
+        },
+        {
+          "id": "RID6437",
+          "display": "telencephalon"
+        },
+        {
+          "id": "RID6389_RID6434",
+          "display": "supratentorial brain"
+        },
+        {
+          "id": "RID6383_RID9080",
+          "display": "intracranial head"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID13789",
+        "display": "left lateral ventricle"
+      },
+      "rightVariant": {
+        "id": "RID13788",
+        "display": "right lateral ventricle"
+      }
+    },
+    "RID74": {
+      "id": "RID74",
+      "display": "right lobe of liver",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID58",
+          "display": "liver"
+        },
+        {
+          "id": "RID397",
+          "display": "peritoneal cavity"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID58",
+          "display": "liver"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID7741": {
+      "id": "RID7741",
+      "display": "spine",
+      "regionId": "unlocalized",
+      "regionLabel": "Unlocalized",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID86": {
+      "id": "RID86",
+      "display": "spleen",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID397",
+          "display": "peritoneal cavity"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID879": {
+      "id": "RID879",
+      "display": "thoracic aorta",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1384",
+          "display": "mediastinum"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID480",
+          "display": "aorta"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID88": {
+      "id": "RID88",
+      "display": "adrenal gland",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID30325",
+        "display": "left adrenal gland"
+      },
+      "rightVariant": {
+        "id": "RID30324",
+        "display": "right adrenal gland"
+      }
+    },
+    "RID905": {
+      "id": "RID905",
+      "display": "abdominal aorta",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID431",
+          "display": "retroperitoneum"
+        },
+        {
+          "id": "RID56",
+          "display": "abdomen"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID480",
+          "display": "aorta"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID9080": {
+      "id": "RID9080",
+      "display": "head",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID9196": {
+      "id": "RID9196",
+      "display": "skull",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID9361": {
+      "id": "RID9361",
+      "display": "temporal bone",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID9196",
+          "display": "skull"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [
+        {
+          "id": "RID9196",
+          "display": "skull"
+        }
+      ],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID9361_RID5824",
+        "display": "left temporal bone"
+      },
+      "rightVariant": {
+        "id": "RID9361_RID5825",
+        "display": "right temporal bone"
+      }
+    },
+    "RID94": {
+      "id": "RID94",
+      "display": "gastrointestinal tract",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    },
+    "RID9557": {
+      "id": "RID9557",
+      "display": "maxillary sinus",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID13284",
+          "display": "face"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID9557_RID5824",
+        "display": "left maxillary sinus"
+      },
+      "rightVariant": {
+        "id": "RID9557_RID5825",
+        "display": "right maxillary sinus"
+      }
+    },
+    "RID9557_RID5824": {
+      "id": "RID9557_RID5824",
+      "display": "left maxillary sinus",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID13284",
+          "display": "face"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID9557",
+        "display": "maxillary sinus"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID9557_RID5825",
+        "display": "right maxillary sinus"
+      }
+    },
+    "RID9557_RID5825": {
+      "id": "RID9557_RID5825",
+      "display": "right maxillary sinus",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID13284",
+          "display": "face"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID9557",
+        "display": "maxillary sinus"
+      },
+      "leftVariant": {
+        "id": "RID9557_RID5824",
+        "display": "left maxillary sinus"
+      },
+      "rightVariant": null
+    },
+    "RID9573": {
+      "id": "RID9573",
+      "display": "orbit",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "generic_unspecified",
+      "sourceLaterality": "generic",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID13284",
+          "display": "face"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": {
+        "id": "RID9573_RID5824",
+        "display": "left orbit"
+      },
+      "rightVariant": {
+        "id": "RID9573_RID5825",
+        "display": "right orbit"
+      }
+    },
+    "RID9573_RID5824": {
+      "id": "RID9573_RID5824",
+      "display": "left orbit",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "left",
+      "sourceLaterality": "left",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID13284",
+          "display": "face"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID9573",
+        "display": "orbit"
+      },
+      "leftVariant": null,
+      "rightVariant": {
+        "id": "RID9573_RID5825",
+        "display": "right orbit"
+      }
+    },
+    "RID9573_RID5825": {
+      "id": "RID9573_RID5825",
+      "display": "right orbit",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "laterality": "right",
+      "sourceLaterality": "right",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID13284",
+          "display": "face"
+        },
+        {
+          "id": "RID9080",
+          "display": "head"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": {
+        "id": "RID9573",
+        "display": "orbit"
+      },
+      "leftVariant": {
+        "id": "RID9573_RID5824",
+        "display": "left orbit"
+      },
+      "rightVariant": null
+    },
+    "RID975": {
+      "id": "RID975",
+      "display": "main pulmonary artery",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "laterality": "midline_nonlateral",
+      "sourceLaterality": "nonlateral",
+      "bodySystem": null,
+      "structureType": null,
+      "locationType": "structure",
+      "containmentAncestors": [
+        {
+          "id": "RID1384",
+          "display": "mediastinum"
+        },
+        {
+          "id": "RID1243",
+          "display": "thorax"
+        },
+        {
+          "id": "RID39569",
+          "display": "whole body"
+        }
+      ],
+      "partOfAncestors": [],
+      "genericVariant": null,
+      "leftVariant": null,
+      "rightVariant": null
+    }
+  },
+  "usedLocationIds": [
+    "RID10143",
+    "RID1178",
+    "RID1208",
+    "RID1243",
+    "RID1246",
+    "RID1301",
+    "RID1315",
+    "RID1326",
+    "RID1362",
+    "RID1363",
+    "RID1384",
+    "RID1385",
+    "RID13857",
+    "RID13862",
+    "RID1395",
+    "RID1407",
+    "RID162",
+    "RID170",
+    "RID176",
+    "RID1850_RID5824",
+    "RID187",
+    "RID199",
+    "RID205",
+    "RID229",
+    "RID237",
+    "RID2468",
+    "RID28591_RID6157_RID5824",
+    "RID28727",
+    "RID28731",
+    "RID28854",
+    "RID29204",
+    "RID29206",
+    "RID29662",
+    "RID29663",
+    "RID33242",
+    "RID33652",
+    "RID343",
+    "RID34566",
+    "RID34566_RID5825",
+    "RID34572",
+    "RID34573",
+    "RID357",
+    "RID35844",
+    "RID38674",
+    "RID39518_RID5824",
+    "RID397",
+    "RID41117",
+    "RID41741",
+    "RID41946",
+    "RID42239",
+    "RID42241",
+    "RID56",
+    "RID58",
+    "RID580",
+    "RID581",
+    "RID6383_RID9080",
+    "RID6389_RID6434",
+    "RID6434",
+    "RID6437",
+    "RID6815",
+    "RID7124",
+    "RID86",
+    "RID88",
+    "RID905",
+    "RID9196",
+    "RID94",
+    "RID9557_RID5824",
+    "RID9557_RID5825",
+    "RID9573",
+    "RID975"
+  ]
+}

@@ -1,0 +1,1106 @@
+{
+  "schemaVersion": "viewer-v2-data.1",
+  "generatedAt": "2026-06-11T20:46:58.399446+00:00",
+  "regions": [
+    {
+      "id": "head",
+      "label": "Head",
+      "displayOrder": 10,
+      "diagramBand": "head"
+    },
+    {
+      "id": "neck",
+      "label": "Neck",
+      "displayOrder": 20,
+      "diagramBand": "neck"
+    },
+    {
+      "id": "thorax",
+      "label": "Thorax",
+      "displayOrder": 30,
+      "diagramBand": "thorax"
+    },
+    {
+      "id": "abdomen",
+      "label": "Abdomen",
+      "displayOrder": 40,
+      "diagramBand": "abdomen"
+    },
+    {
+      "id": "pelvis",
+      "label": "Pelvis",
+      "displayOrder": 50,
+      "diagramBand": "pelvis"
+    },
+    {
+      "id": "upper_extremity",
+      "label": "Upper Extremity",
+      "displayOrder": 60,
+      "diagramBand": "upper_extremity"
+    },
+    {
+      "id": "lower_extremity",
+      "label": "Lower Extremity",
+      "displayOrder": 70,
+      "diagramBand": "lower_extremity"
+    },
+    {
+      "id": "breast",
+      "label": "Breast",
+      "displayOrder": 80,
+      "diagramBand": "breast"
+    },
+    {
+      "id": "unlocalized",
+      "label": "Unlocalized",
+      "displayOrder": 999,
+      "diagramBand": "unlocalized"
+    }
+  ],
+  "clusters": [
+    {
+      "id": "head_brain",
+      "regionId": "head",
+      "label": "Brain / Parenchyma",
+      "displayOrder": 10,
+      "keywords": [
+        "brain",
+        "cerebral",
+        "cerebell",
+        "telencephalon",
+        "hemisphere",
+        "frontal lobe"
+      ]
+    },
+    {
+      "id": "head_ventricles_csf",
+      "regionId": "head",
+      "label": "Ventricles / CSF Spaces",
+      "displayOrder": 20,
+      "keywords": [
+        "ventricle",
+        "cistern",
+        "csf",
+        "hydrocephalus"
+      ]
+    },
+    {
+      "id": "head_sinuses_orbits",
+      "regionId": "head",
+      "label": "Sinuses / Orbits / Mastoid",
+      "displayOrder": 30,
+      "keywords": [
+        "sinus",
+        "orbit",
+        "mastoid"
+      ]
+    },
+    {
+      "id": "head_skull_base",
+      "regionId": "head",
+      "label": "Skull / Skull Base",
+      "displayOrder": 40,
+      "keywords": [
+        "skull",
+        "cranium",
+        "cranial",
+        "base of cranium"
+      ]
+    },
+    {
+      "id": "head_sellar",
+      "regionId": "head",
+      "label": "Sellar / Pituitary",
+      "displayOrder": 50,
+      "keywords": [
+        "sella",
+        "sellar",
+        "pituitary"
+      ]
+    },
+    {
+      "id": "thorax_lungs_pleura",
+      "regionId": "thorax",
+      "label": "Lungs / Pleura",
+      "displayOrder": 10,
+      "keywords": [
+        "lung",
+        "lobe",
+        "pulmonary",
+        "pleura",
+        "pleural",
+        "hilum"
+      ]
+    },
+    {
+      "id": "thorax_heart_pericardium",
+      "regionId": "thorax",
+      "label": "Heart / Pericardium",
+      "displayOrder": 20,
+      "keywords": [
+        "heart",
+        "cardiac",
+        "pericard",
+        "mitral",
+        "coronary"
+      ]
+    },
+    {
+      "id": "thorax_mediastinum_vessels",
+      "regionId": "thorax",
+      "label": "Mediastinum / Vessels",
+      "displayOrder": 30,
+      "keywords": [
+        "mediast",
+        "aorta",
+        "aortic",
+        "pulmonary artery",
+        "vena cava",
+        "vascular"
+      ]
+    },
+    {
+      "id": "thorax_chest_wall_ribs",
+      "regionId": "thorax",
+      "label": "Chest Wall / Ribs",
+      "displayOrder": 40,
+      "keywords": [
+        "rib",
+        "clavicle",
+        "chest wall",
+        "musculature of thorax",
+        "thorax"
+      ]
+    },
+    {
+      "id": "thorax_spine",
+      "regionId": "thorax",
+      "label": "Thoracic Spine",
+      "displayOrder": 50,
+      "keywords": [
+        "thoracic vertebra",
+        "thoracic vertebral",
+        "thoracic spine"
+      ]
+    },
+    {
+      "id": "abdomen_liver_biliary",
+      "regionId": "abdomen",
+      "label": "Liver / Biliary / Gallbladder",
+      "displayOrder": 10,
+      "keywords": [
+        "liver",
+        "hepatic",
+        "biliary",
+        "bile duct",
+        "gallbladder",
+        "common bile duct"
+      ]
+    },
+    {
+      "id": "abdomen_kidney_adrenal_urinary",
+      "regionId": "abdomen",
+      "label": "Kidneys / Adrenals / Urinary Tract",
+      "displayOrder": 20,
+      "keywords": [
+        "kidney",
+        "renal",
+        "adrenal",
+        "ureter",
+        "urinary"
+      ]
+    },
+    {
+      "id": "abdomen_bowel_peritoneum",
+      "regionId": "abdomen",
+      "label": "Bowel / Peritoneum",
+      "displayOrder": 30,
+      "keywords": [
+        "bowel",
+        "colon",
+        "intestine",
+        "peritone",
+        "mesenter",
+        "retroperitone"
+      ]
+    },
+    {
+      "id": "abdomen_pancreas_spleen",
+      "regionId": "abdomen",
+      "label": "Pancreas / Spleen",
+      "displayOrder": 40,
+      "keywords": [
+        "pancreas",
+        "pancreatic",
+        "spleen",
+        "splenic"
+      ]
+    },
+    {
+      "id": "abdomen_aorta_vessels",
+      "regionId": "abdomen",
+      "label": "Aorta / Abdominal Vessels",
+      "displayOrder": 50,
+      "keywords": [
+        "abdominal aorta",
+        "portal vein",
+        "inferior vena cava",
+        "vessel",
+        "vascular"
+      ]
+    },
+    {
+      "id": "abdomen_spine",
+      "regionId": "abdomen",
+      "label": "Lumbar Spine",
+      "displayOrder": 60,
+      "keywords": [
+        "lumbar",
+        "vertebral column"
+      ]
+    },
+    {
+      "id": "pelvis_bladder_urinary",
+      "regionId": "pelvis",
+      "label": "Bladder / Pelvic Urinary",
+      "displayOrder": 10,
+      "keywords": [
+        "bladder",
+        "ureter",
+        "urinary"
+      ]
+    },
+    {
+      "id": "pelvis_reproductive",
+      "regionId": "pelvis",
+      "label": "Reproductive Organs",
+      "displayOrder": 20,
+      "keywords": [
+        "prostate",
+        "seminal",
+        "uterus",
+        "ovary",
+        "adnexa"
+      ]
+    },
+    {
+      "id": "pelvis_bowel",
+      "regionId": "pelvis",
+      "label": "Pelvic Bowel",
+      "displayOrder": 30,
+      "keywords": [
+        "sigmoid",
+        "rectum",
+        "colon",
+        "bowel"
+      ]
+    },
+    {
+      "id": "upper_extremity_shoulder",
+      "regionId": "upper_extremity",
+      "label": "Shoulder / Glenohumeral",
+      "displayOrder": 10,
+      "keywords": [
+        "shoulder",
+        "glenohumeral",
+        "acromioclavicular"
+      ]
+    },
+    {
+      "id": "upper_extremity_bones",
+      "regionId": "upper_extremity",
+      "label": "Humerus / Clavicle / Scapula",
+      "displayOrder": 20,
+      "keywords": [
+        "humerus",
+        "humeral",
+        "clavicle",
+        "scapula"
+      ]
+    },
+    {
+      "id": "upper_extremity_tendons_soft_tissues",
+      "regionId": "upper_extremity",
+      "label": "Tendons / Soft Tissues",
+      "displayOrder": 30,
+      "keywords": [
+        "tendon",
+        "muscle",
+        "soft tissue",
+        "supraspinatus"
+      ]
+    }
+  ],
+  "locationClusters": {
+    "RID10143": {
+      "locationId": "RID10143",
+      "locationDisplay": "mastoid antrum",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_sinuses_orbits",
+      "clusterLabel": "Sinuses / Orbits / Mastoid",
+      "laterality": "generic_unspecified",
+      "displayOrder": 30,
+      "matchedBy": "keyword:mastoid"
+    },
+    "RID1178": {
+      "locationId": "RID1178",
+      "locationDisplay": "inferior vena cava",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_aorta_vessels",
+      "clusterLabel": "Aorta / Abdominal Vessels",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 50,
+      "matchedBy": "keyword:inferior vena cava"
+    },
+    "RID1208": {
+      "locationId": "RID1208",
+      "locationDisplay": "portal vein",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_bowel_peritoneum",
+      "clusterLabel": "Bowel / Peritoneum",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 30,
+      "matchedBy": "keyword:mesenter"
+    },
+    "RID1243": {
+      "locationId": "RID1243",
+      "locationDisplay": "thorax",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_chest_wall_ribs",
+      "clusterLabel": "Chest Wall / Ribs",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 40,
+      "matchedBy": "keyword:rib"
+    },
+    "RID1246": {
+      "locationId": "RID1246",
+      "locationDisplay": "tracheobronchial tree",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_mediastinum_vessels",
+      "clusterLabel": "Mediastinum / Vessels",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 30,
+      "matchedBy": "ancestor-keyword:mediast"
+    },
+    "RID1301": {
+      "locationId": "RID1301",
+      "locationDisplay": "lung",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_lungs_pleura",
+      "clusterLabel": "Lungs / Pleura",
+      "laterality": "generic_unspecified",
+      "displayOrder": 10,
+      "matchedBy": "keyword:lung"
+    },
+    "RID1315": {
+      "locationId": "RID1315",
+      "locationDisplay": "lower lobe of right lung",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_lungs_pleura",
+      "clusterLabel": "Lungs / Pleura",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:lung"
+    },
+    "RID1326": {
+      "locationId": "RID1326",
+      "locationDisplay": "left lung",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_lungs_pleura",
+      "clusterLabel": "Lungs / Pleura",
+      "laterality": "left",
+      "displayOrder": 10,
+      "matchedBy": "keyword:lung"
+    },
+    "RID1362": {
+      "locationId": "RID1362",
+      "locationDisplay": "pleura",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_lungs_pleura",
+      "clusterLabel": "Lungs / Pleura",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:lung"
+    },
+    "RID1363": {
+      "locationId": "RID1363",
+      "locationDisplay": "pleural space",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_lungs_pleura",
+      "clusterLabel": "Lungs / Pleura",
+      "laterality": "generic_unspecified",
+      "displayOrder": 10,
+      "matchedBy": "keyword:pleura"
+    },
+    "RID1384": {
+      "locationId": "RID1384",
+      "locationDisplay": "mediastinum",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_mediastinum_vessels",
+      "clusterLabel": "Mediastinum / Vessels",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 30,
+      "matchedBy": "keyword:mediast"
+    },
+    "RID1385": {
+      "locationId": "RID1385",
+      "locationDisplay": "heart",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_heart_pericardium",
+      "clusterLabel": "Heart / Pericardium",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 20,
+      "matchedBy": "keyword:heart"
+    },
+    "RID13857": {
+      "locationId": "RID13857",
+      "locationDisplay": "cerebral hemisphere",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_brain",
+      "clusterLabel": "Brain / Parenchyma",
+      "laterality": "generic_unspecified",
+      "displayOrder": 10,
+      "matchedBy": "keyword:cerebral"
+    },
+    "RID13862": {
+      "locationId": "RID13862",
+      "locationDisplay": "right frontal lobe",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_brain",
+      "clusterLabel": "Brain / Parenchyma",
+      "laterality": "right",
+      "displayOrder": 10,
+      "matchedBy": "keyword:frontal lobe"
+    },
+    "RID1395": {
+      "locationId": "RID1395",
+      "locationDisplay": "mitral valve",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_heart_pericardium",
+      "clusterLabel": "Heart / Pericardium",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 20,
+      "matchedBy": "keyword:heart"
+    },
+    "RID1407": {
+      "locationId": "RID1407",
+      "locationDisplay": "pericardium",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_lungs_pleura",
+      "clusterLabel": "Lungs / Pleura",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:pulmonary"
+    },
+    "RID162": {
+      "locationId": "RID162",
+      "locationDisplay": "sigmoid colon",
+      "regionId": "pelvis",
+      "regionLabel": "Pelvis",
+      "clusterId": "pelvis_bowel",
+      "clusterLabel": "Pelvic Bowel",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 30,
+      "matchedBy": "keyword:sigmoid"
+    },
+    "RID170": {
+      "locationId": "RID170",
+      "locationDisplay": "pancreas",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_pancreas_spleen",
+      "clusterLabel": "Pancreas / Spleen",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 40,
+      "matchedBy": "keyword:pancreas"
+    },
+    "RID176": {
+      "locationId": "RID176",
+      "locationDisplay": "pancreatic duct",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_pancreas_spleen",
+      "clusterLabel": "Pancreas / Spleen",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 40,
+      "matchedBy": "keyword:pancreas"
+    },
+    "RID1850_RID5824": {
+      "locationId": "RID1850_RID5824",
+      "locationDisplay": "left upper extremity",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "clusterId": "upper_extremity_other",
+      "clusterLabel": "Other Upper Extremity",
+      "laterality": "left",
+      "displayOrder": 900,
+      "matchedBy": "region-fallback"
+    },
+    "RID187": {
+      "locationId": "RID187",
+      "locationDisplay": "gallbladder",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_liver_biliary",
+      "clusterLabel": "Liver / Biliary / Gallbladder",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:gallbladder"
+    },
+    "RID199": {
+      "locationId": "RID199",
+      "locationDisplay": "common bile duct",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_liver_biliary",
+      "clusterLabel": "Liver / Biliary / Gallbladder",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:hepatic"
+    },
+    "RID205": {
+      "locationId": "RID205",
+      "locationDisplay": "kidney",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_kidney_adrenal_urinary",
+      "clusterLabel": "Kidneys / Adrenals / Urinary Tract",
+      "laterality": "generic_unspecified",
+      "displayOrder": 20,
+      "matchedBy": "keyword:kidney"
+    },
+    "RID229": {
+      "locationId": "RID229",
+      "locationDisplay": "ureter",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_kidney_adrenal_urinary",
+      "clusterLabel": "Kidneys / Adrenals / Urinary Tract",
+      "laterality": "generic_unspecified",
+      "displayOrder": 20,
+      "matchedBy": "keyword:renal"
+    },
+    "RID237": {
+      "locationId": "RID237",
+      "locationDisplay": "bladder",
+      "regionId": "pelvis",
+      "regionLabel": "Pelvis",
+      "clusterId": "pelvis_bladder_urinary",
+      "clusterLabel": "Bladder / Pelvic Urinary",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:bladder"
+    },
+    "RID2468": {
+      "locationId": "RID2468",
+      "locationDisplay": "chest wall",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_lungs_pleura",
+      "clusterLabel": "Lungs / Pleura",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:pleura"
+    },
+    "RID28591_RID6157_RID5824": {
+      "locationId": "RID28591_RID6157_RID5824",
+      "locationDisplay": "left seventh rib",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_chest_wall_ribs",
+      "clusterLabel": "Chest Wall / Ribs",
+      "laterality": "left",
+      "displayOrder": 40,
+      "matchedBy": "keyword:rib"
+    },
+    "RID28727": {
+      "locationId": "RID28727",
+      "locationDisplay": "set of coronary arteries",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_heart_pericardium",
+      "clusterLabel": "Heart / Pericardium",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 20,
+      "matchedBy": "keyword:coronary"
+    },
+    "RID28731": {
+      "locationId": "RID28731",
+      "locationDisplay": "base of cranium",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_skull_base",
+      "clusterLabel": "Skull / Skull Base",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 40,
+      "matchedBy": "keyword:skull"
+    },
+    "RID28854": {
+      "locationId": "RID28854",
+      "locationDisplay": "abdominal lymph node group",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_other",
+      "clusterLabel": "Other Abdomen",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 900,
+      "matchedBy": "region-fallback"
+    },
+    "RID29204": {
+      "locationId": "RID29204",
+      "locationDisplay": "seventh thoracic vertebra",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_spine",
+      "clusterLabel": "Thoracic Spine",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 50,
+      "matchedBy": "keyword:thoracic vertebra"
+    },
+    "RID29206": {
+      "locationId": "RID29206",
+      "locationDisplay": "ninth thoracic vertebra",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_spine",
+      "clusterLabel": "Thoracic Spine",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 50,
+      "matchedBy": "keyword:thoracic vertebra"
+    },
+    "RID29662": {
+      "locationId": "RID29662",
+      "locationDisplay": "right kidney",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_kidney_adrenal_urinary",
+      "clusterLabel": "Kidneys / Adrenals / Urinary Tract",
+      "laterality": "right",
+      "displayOrder": 20,
+      "matchedBy": "keyword:kidney"
+    },
+    "RID29663": {
+      "locationId": "RID29663",
+      "locationDisplay": "left kidney",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_kidney_adrenal_urinary",
+      "clusterLabel": "Kidneys / Adrenals / Urinary Tract",
+      "laterality": "left",
+      "displayOrder": 20,
+      "matchedBy": "keyword:kidney"
+    },
+    "RID33242": {
+      "locationId": "RID33242",
+      "locationDisplay": "posterior inferior area of posterior segment of right lobe of liver",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_liver_biliary",
+      "clusterLabel": "Liver / Biliary / Gallbladder",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:liver"
+    },
+    "RID33652": {
+      "locationId": "RID33652",
+      "locationDisplay": "biliary tree",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_liver_biliary",
+      "clusterLabel": "Liver / Biliary / Gallbladder",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:biliary"
+    },
+    "RID343": {
+      "locationId": "RID343",
+      "locationDisplay": "prostate",
+      "regionId": "pelvis",
+      "regionLabel": "Pelvis",
+      "clusterId": "pelvis_bladder_urinary",
+      "clusterLabel": "Bladder / Pelvic Urinary",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:bladder"
+    },
+    "RID34566": {
+      "locationId": "RID34566",
+      "locationDisplay": "pulmonary hilum",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_lungs_pleura",
+      "clusterLabel": "Lungs / Pleura",
+      "laterality": "generic_unspecified",
+      "displayOrder": 10,
+      "matchedBy": "keyword:lung"
+    },
+    "RID34566_RID5825": {
+      "locationId": "RID34566_RID5825",
+      "locationDisplay": "right pulmonary hilum",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_lungs_pleura",
+      "clusterLabel": "Lungs / Pleura",
+      "laterality": "right",
+      "displayOrder": 10,
+      "matchedBy": "keyword:lung"
+    },
+    "RID34572": {
+      "locationId": "RID34572",
+      "locationDisplay": "thoracic vertebral column",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_spine",
+      "clusterLabel": "Thoracic Spine",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 50,
+      "matchedBy": "keyword:thoracic vertebra"
+    },
+    "RID34573": {
+      "locationId": "RID34573",
+      "locationDisplay": "lumbar vertebral column",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_spine",
+      "clusterLabel": "Lumbar Spine",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 60,
+      "matchedBy": "keyword:lumbar"
+    },
+    "RID357": {
+      "locationId": "RID357",
+      "locationDisplay": "seminal vesicle",
+      "regionId": "pelvis",
+      "regionLabel": "Pelvis",
+      "clusterId": "pelvis_bladder_urinary",
+      "clusterLabel": "Bladder / Pelvic Urinary",
+      "laterality": "generic_unspecified",
+      "displayOrder": 10,
+      "matchedBy": "keyword:bladder"
+    },
+    "RID35844": {
+      "locationId": "RID35844",
+      "locationDisplay": "descending thoracic aorta",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_mediastinum_vessels",
+      "clusterLabel": "Mediastinum / Vessels",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 30,
+      "matchedBy": "keyword:aorta"
+    },
+    "RID38674": {
+      "locationId": "RID38674",
+      "locationDisplay": "pituitary gland",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_sellar",
+      "clusterLabel": "Sellar / Pituitary",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 50,
+      "matchedBy": "keyword:pituitary"
+    },
+    "RID39518_RID5824": {
+      "locationId": "RID39518_RID5824",
+      "locationDisplay": "left shoulder",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "clusterId": "upper_extremity_shoulder",
+      "clusterLabel": "Shoulder / Glenohumeral",
+      "laterality": "left",
+      "displayOrder": 10,
+      "matchedBy": "keyword:shoulder"
+    },
+    "RID397": {
+      "locationId": "RID397",
+      "locationDisplay": "peritoneal cavity",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_bowel_peritoneum",
+      "clusterLabel": "Bowel / Peritoneum",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 30,
+      "matchedBy": "keyword:peritone"
+    },
+    "RID41117": {
+      "locationId": "RID41117",
+      "locationDisplay": "left supraspinatus tendon",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "clusterId": "upper_extremity_tendons_soft_tissues",
+      "clusterLabel": "Tendons / Soft Tissues",
+      "laterality": "left",
+      "displayOrder": 30,
+      "matchedBy": "keyword:tendon"
+    },
+    "RID41741": {
+      "locationId": "RID41741",
+      "locationDisplay": "left clavicle",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "clusterId": "upper_extremity_bones",
+      "clusterLabel": "Humerus / Clavicle / Scapula",
+      "laterality": "left",
+      "displayOrder": 20,
+      "matchedBy": "keyword:clavicle"
+    },
+    "RID41946": {
+      "locationId": "RID41946",
+      "locationDisplay": "left humerus",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "clusterId": "upper_extremity_bones",
+      "clusterLabel": "Humerus / Clavicle / Scapula",
+      "laterality": "left",
+      "displayOrder": 20,
+      "matchedBy": "keyword:humerus"
+    },
+    "RID42239": {
+      "locationId": "RID42239",
+      "locationDisplay": "left acromioclavicular joint",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "clusterId": "upper_extremity_shoulder",
+      "clusterLabel": "Shoulder / Glenohumeral",
+      "laterality": "left",
+      "displayOrder": 10,
+      "matchedBy": "keyword:acromioclavicular"
+    },
+    "RID42241": {
+      "locationId": "RID42241",
+      "locationDisplay": "left glenohumeral joint",
+      "regionId": "upper_extremity",
+      "regionLabel": "Upper Extremity",
+      "clusterId": "upper_extremity_shoulder",
+      "clusterLabel": "Shoulder / Glenohumeral",
+      "laterality": "left",
+      "displayOrder": 10,
+      "matchedBy": "keyword:glenohumeral"
+    },
+    "RID56": {
+      "locationId": "RID56",
+      "locationDisplay": "abdomen",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_other",
+      "clusterLabel": "Other Abdomen",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 900,
+      "matchedBy": "region-fallback"
+    },
+    "RID58": {
+      "locationId": "RID58",
+      "locationDisplay": "liver",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_liver_biliary",
+      "clusterLabel": "Liver / Biliary / Gallbladder",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:liver"
+    },
+    "RID580": {
+      "locationId": "RID580",
+      "locationDisplay": "ascending aorta",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_mediastinum_vessels",
+      "clusterLabel": "Mediastinum / Vessels",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 30,
+      "matchedBy": "keyword:aorta"
+    },
+    "RID581": {
+      "locationId": "RID581",
+      "locationDisplay": "aortic arch",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_mediastinum_vessels",
+      "clusterLabel": "Mediastinum / Vessels",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 30,
+      "matchedBy": "keyword:aorta"
+    },
+    "RID6383_RID9080": {
+      "locationId": "RID6383_RID9080",
+      "locationDisplay": "intracranial head",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_skull_base",
+      "clusterLabel": "Skull / Skull Base",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 40,
+      "matchedBy": "keyword:cranial"
+    },
+    "RID6389_RID6434": {
+      "locationId": "RID6389_RID6434",
+      "locationDisplay": "supratentorial brain",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_brain",
+      "clusterLabel": "Brain / Parenchyma",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:brain"
+    },
+    "RID6434": {
+      "locationId": "RID6434",
+      "locationDisplay": "brain",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_brain",
+      "clusterLabel": "Brain / Parenchyma",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:brain"
+    },
+    "RID6437": {
+      "locationId": "RID6437",
+      "locationDisplay": "telencephalon",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_brain",
+      "clusterLabel": "Brain / Parenchyma",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:cerebral"
+    },
+    "RID6815": {
+      "locationId": "RID6815",
+      "locationDisplay": "cerebellum",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_brain",
+      "clusterLabel": "Brain / Parenchyma",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:cerebell"
+    },
+    "RID7124": {
+      "locationId": "RID7124",
+      "locationDisplay": "lateral ventricle",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_brain",
+      "clusterLabel": "Brain / Parenchyma",
+      "laterality": "generic_unspecified",
+      "displayOrder": 10,
+      "matchedBy": "keyword:cerebral"
+    },
+    "RID86": {
+      "locationId": "RID86",
+      "locationDisplay": "spleen",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_pancreas_spleen",
+      "clusterLabel": "Pancreas / Spleen",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 40,
+      "matchedBy": "keyword:spleen"
+    },
+    "RID88": {
+      "locationId": "RID88",
+      "locationDisplay": "adrenal gland",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_kidney_adrenal_urinary",
+      "clusterLabel": "Kidneys / Adrenals / Urinary Tract",
+      "laterality": "generic_unspecified",
+      "displayOrder": 20,
+      "matchedBy": "keyword:kidney"
+    },
+    "RID905": {
+      "locationId": "RID905",
+      "locationDisplay": "abdominal aorta",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_aorta_vessels",
+      "clusterLabel": "Aorta / Abdominal Vessels",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 50,
+      "matchedBy": "keyword:abdominal aorta"
+    },
+    "RID9196": {
+      "locationId": "RID9196",
+      "locationDisplay": "skull",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_brain",
+      "clusterLabel": "Brain / Parenchyma",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:brain"
+    },
+    "RID94": {
+      "locationId": "RID94",
+      "locationDisplay": "gastrointestinal tract",
+      "regionId": "abdomen",
+      "regionLabel": "Abdomen",
+      "clusterId": "abdomen_liver_biliary",
+      "clusterLabel": "Liver / Biliary / Gallbladder",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:liver"
+    },
+    "RID9557_RID5824": {
+      "locationId": "RID9557_RID5824",
+      "locationDisplay": "left maxillary sinus",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_sinuses_orbits",
+      "clusterLabel": "Sinuses / Orbits / Mastoid",
+      "laterality": "left",
+      "displayOrder": 30,
+      "matchedBy": "keyword:sinus"
+    },
+    "RID9557_RID5825": {
+      "locationId": "RID9557_RID5825",
+      "locationDisplay": "right maxillary sinus",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_sinuses_orbits",
+      "clusterLabel": "Sinuses / Orbits / Mastoid",
+      "laterality": "right",
+      "displayOrder": 30,
+      "matchedBy": "keyword:sinus"
+    },
+    "RID9573": {
+      "locationId": "RID9573",
+      "locationDisplay": "orbit",
+      "regionId": "head",
+      "regionLabel": "Head",
+      "clusterId": "head_sinuses_orbits",
+      "clusterLabel": "Sinuses / Orbits / Mastoid",
+      "laterality": "generic_unspecified",
+      "displayOrder": 30,
+      "matchedBy": "keyword:orbit"
+    },
+    "RID975": {
+      "locationId": "RID975",
+      "locationDisplay": "main pulmonary artery",
+      "regionId": "thorax",
+      "regionLabel": "Thorax",
+      "clusterId": "thorax_lungs_pleura",
+      "clusterLabel": "Lungs / Pleura",
+      "laterality": "midline_nonlateral",
+      "displayOrder": 10,
+      "matchedBy": "keyword:pulmonary"
+    }
+  }
+}

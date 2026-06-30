@@ -29,6 +29,14 @@ tasks:
     cmds:
       - /bin/sh -ec 'mkdir -p .cache/npm && npm ci --cache .cache/npm --include=dev --no-audit --no-fund --loglevel=error'
 
+  setup:viewer:v2:
+    desc: Install viewer_v2 Node dependencies
+    preconditions:
+      - sh: command -v npm >/dev/null 2>&1
+        msg: npm is required (install Node.js)
+    cmds:
+      - /bin/sh -ec 'mkdir -p .cache/npm && npm --prefix viewer_v2 ci --cache .cache/npm --include=dev --no-audit --no-fund --loglevel=error'
+
   lint:
     desc: Run lint checks (python + web + web format + json + toml + migration drift)
     cmds:
@@ -112,6 +120,35 @@ tasks:
     desc: Alias for test:web:e2e
     cmds:
       - task: test:web:e2e
+
+  viewer:v2:data:
+    desc: Generate committed static data for viewer_v2
+    cmds:
+      - uv run python scripts/build_viewer_v2_data.py
+
+  viewer:v2:dev:
+    desc: Start viewer_v2 Vite dev server
+    cmds:
+      - task: viewer:v2:data
+      - npm --prefix viewer_v2 run dev -- --host 127.0.0.1
+
+  viewer:v2:build:
+    desc: Generate viewer_v2 data and build the static app
+    cmds:
+      - task: viewer:v2:data
+      - npm --prefix viewer_v2 run build
+
+  viewer:v2:check:
+    desc: Regenerate viewer_v2 data and fail if committed generated data changed
+    cmds:
+      - task: viewer:v2:data
+      - git diff --exit-code -- viewer_v2/public/data
+
+  viewer:v2:deploy:
+    desc: Build and deploy viewer_v2 to Cloudflare Pages project ipl-anatomy
+    cmds:
+      - task: viewer:v2:build
+      - npm --prefix viewer_v2 run deploy
 
   eval:smoke:
     desc: Run smoke eval dataset (fast, CI-safe)
