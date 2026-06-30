@@ -24,6 +24,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID42239",
+        "locationDisplay": "left acromioclavicular joint"
+      },
       "reportText": "Mild degenerative changes of the acromioclavicular joint with joint space narrowing and small osteophytes."
     },
     {
@@ -38,6 +42,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID41741",
+        "locationDisplay": "left clavicle"
+      },
       "reportText": "The humeral head, glenoid, clavicle, and scapula demonstrate normal bone density without fracture or lytic lesion."
     },
     {
@@ -52,6 +60,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID41946",
+        "locationDisplay": "left humerus"
+      },
       "reportText": "The humeral head, glenoid, clavicle, and scapula demonstrate normal bone density without fracture or lytic lesion."
     },
     {
@@ -66,6 +78,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1850_RID5824",
+        "locationDisplay": "left upper extremity"
+      },
       "reportText": "The humeral head, glenoid, clavicle, and scapula demonstrate normal bone density without fracture or lytic lesion."
     },
     {
@@ -80,6 +96,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID41117",
+        "locationDisplay": "left supraspinatus tendon"
+      },
       "reportText": "Amorphous calcifications are present in the region of the supraspinatus tendon insertion on the greater tuberosity, consistent with calcific tendonitis."
     },
     {
@@ -94,6 +114,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID42241",
+        "locationDisplay": "left glenohumeral joint"
+      },
       "reportText": "No dislocation or subluxation."
     },
     {
@@ -108,6 +132,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID42241",
+        "locationDisplay": "left glenohumeral joint"
+      },
       "reportText": "The glenohumeral joint space is preserved."
     },
     {
@@ -122,6 +150,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID42241",
+        "locationDisplay": "left glenohumeral joint"
+      },
       "reportText": "The humeral head is positioned in a high-riding configuration with reduced acromiohumeral distance measuring approximately 6 mm, suggesting chronic rotator cuff pathology."
     },
     {
@@ -136,6 +168,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID39518_RID5824",
+        "locationDisplay": "left shoulder"
+      },
       "reportText": "The visualized soft tissues are unremarkable on radiograph."
     }
   ]

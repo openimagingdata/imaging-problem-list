@@ -54,6 +54,8 @@ DEFAULT_ALLOW_UNKNOWN_MODEL_REASONING = False
 DEFAULT_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY = 5
 DEFAULT_REVIEWER_ENABLED = True
 DEFAULT_REVIEWER_REEXTRACT_ENABLED = True
+DEFAULT_VLLM_GEMMA4_31B_BASE_URL: str | None = None
+DEFAULT_VLLM_GPT_OSS_120B_BASE_URL: str | None = None
 DEFAULT_CHUNKING_SEMANTIC_TRIGGER_SENTENCE_COUNT = 4
 DEFAULT_CHUNKING_SEMANTIC_EMBEDDING_MODEL = "minishlab/potion-base-32M"
 DEFAULT_CHUNKING_SEMANTIC_THRESHOLD = 0.8
@@ -69,11 +71,13 @@ _TOML_SECRET_KEYS = {
     "anthropic_api_key",
     "google_api_key",
     "openrouter_api_key",
+    "vllm_api_key",
     "logfire_token",
     "OPENAI_API_KEY",
     "ANTHROPIC_API_KEY",
     "GOOGLE_API_KEY",
     "OPENROUTER_API_KEY",
+    "VLLM_API_KEY",
     "LOGFIRE_TOKEN",
 }
 _TOML_SECRET_KEYS_NORMALIZED = {key.lower() for key in _TOML_SECRET_KEYS}
@@ -531,6 +535,65 @@ class ExtractorSettings(BaseSettings):
             "OLLAMA_BASE_URL",
         ),
     )
+    vllm_gemma4_31b_base_url: str | None = Field(
+        default=DEFAULT_VLLM_GEMMA4_31B_BASE_URL,
+        validation_alias=AliasChoices(
+            "VLLM_GEMMA4_31B_BASE_URL",
+        ),
+    )
+    vllm_gpt_oss_120b_base_url: str | None = Field(
+        default=DEFAULT_VLLM_GPT_OSS_120B_BASE_URL,
+        validation_alias=AliasChoices(
+            "VLLM_GPT_OSS_120B_BASE_URL",
+        ),
+    )
+    vllm_api_key: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices(
+            "VLLM_API_KEY",
+        ),
+    )
+    vllm_local_only_allow_hosts: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS",
+            "VLLM_LOCAL_ONLY_ALLOW_HOSTS",
+        ),
+    )
+
+    @property
+    def vllm_local_only_allowed_hosts(self) -> frozenset[str]:
+        """Return normalized vLLM hosts approved for local-only mode."""
+        return frozenset(
+            host.strip().lower()
+            for host in self.vllm_local_only_allow_hosts.split(",")
+            if host.strip()
+        )
+
+    def vllm_base_url_for_model_optional(self, model_id: str) -> str | None:
+        """Return the configured vLLM base URL, or None when it is unset."""
+        from finding_extractor.llm.policy import canonical_vllm_model_id
+
+        canonical = canonical_vllm_model_id(model_id)
+        if canonical == "google/gemma-4-31B-it":
+            return self.vllm_gemma4_31b_base_url
+        if canonical == "openai/gpt-oss-120b":
+            return self.vllm_gpt_oss_120b_base_url
+        raise ValueError(f"unsupported vLLM model {model_id!r}")
+
+    def vllm_base_url_for_model(self, model_id: str) -> str:
+        """Return the OpenAI-compatible API base URL for a supported vLLM model."""
+        url = self.vllm_base_url_for_model_optional(model_id)
+        if url is None:
+            from finding_extractor.llm.policy import canonical_vllm_model_id
+
+            canonical = canonical_vllm_model_id(model_id)
+            if canonical == "google/gemma-4-31B-it":
+                raise ValueError("VLLM_GEMMA4_31B_BASE_URL is required for this model")
+            if canonical == "openai/gpt-oss-120b":
+                raise ValueError("VLLM_GPT_OSS_120B_BASE_URL is required for this model")
+        assert url is not None
+        return url
 
     @model_validator(mode="before")
     @classmethod
@@ -593,21 +656,39 @@ class ExtractorSettings(BaseSettings):
         # 1. Neutralize implicit model fields that would send data to cloud
         #    providers. Coding models are skipped — coding is blocked entirely
         #    in local-only mode by coding/runtime.py and the CLI.
-        if self.fallback_model is not None and provider_from_model_id(self.fallback_model) != "ollama":
+        allowed_providers = {"ollama", "vllm"}
+        if (
+            self.fallback_model is not None
+            and provider_from_model_id(self.fallback_model) not in allowed_providers
+        ):
             self.fallback_model = None
-        if self.reviewer_model is not None and provider_from_model_id(self.reviewer_model) != "ollama":
+        if (
+            self.reviewer_model is not None
+            and provider_from_model_id(self.reviewer_model) not in allowed_providers
+        ):
             self.reviewer_enabled = False
             self.reviewer_model = None
 
-        # 2. Validate default_model + OLLAMA_BASE_URL in one call. The helper
-        #    runs the provider, cloud-suffix, and endpoint-locality gates in
-        #    that order, so a single call covers all three.
-        enforce_local_only(
-            self.default_model,
-            local_only_mode=True,
-            ollama_base_url=self.ollama_base_url,
-            context="settings default_model",
-        )
+        # 2. Validate every inference-capable model + endpoint in one call per
+        #    model. The helper runs the provider, cloud-suffix / approved-model,
+        #    and endpoint-locality gates in that order.
+        def _enforce_model(model_name: str, *, context: str) -> None:
+            enforce_local_only(
+                model_name,
+                local_only_mode=True,
+                ollama_base_url=self.ollama_base_url,
+                vllm_base_url=self.vllm_base_url_for_model_optional(model_name)
+                if provider_from_model_id(model_name) == "vllm"
+                else None,
+                vllm_allowed_hosts=self.vllm_local_only_allowed_hosts,
+                context=context,
+            )
+
+        _enforce_model(self.default_model, context="settings default_model")
+        if self.fallback_model is not None:
+            _enforce_model(self.fallback_model, context="settings fallback_model")
+        if self.reviewer_enabled and self.reviewer_model is not None:
+            _enforce_model(self.reviewer_model, context="settings reviewer_model")
 
         # 3. Force-disable Logfire.
         self.logfire_enabled = False
@@ -639,6 +720,21 @@ class ExtractorSettings(BaseSettings):
             "(or WARN alias)"
         )
         raise ValueError(msg)
+
+    @field_validator("vllm_gemma4_31b_base_url", "vllm_gpt_oss_120b_base_url")
+    @classmethod
+    def _normalize_vllm_base_url(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = value.strip().rstrip("/")
+        if not normalized:
+            raise ValueError("vLLM base URL must not be empty")
+        suffix = "/chat/completions"
+        if normalized.endswith(suffix):
+            normalized = normalized[: -len(suffix)]
+        if not normalized.endswith("/v1"):
+            raise ValueError("vLLM base URL must point at the OpenAI-compatible /v1 API root")
+        return normalized
 
     @property
     def cors_origins(self) -> list[str]:

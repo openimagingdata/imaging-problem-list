@@ -1,12 +1,19 @@
 # Plan: `--local-only` mode for PHI-safe extraction
 
-**Status:** In progress
+**Status:** Completed; retained as historical design notes.
+
+Current behavior is broader than this original Ollama-only plan. `--local-only`
+/ `IPL_LOCAL_ONLY=true` now permits approved inference paths: Ollama on a
+loopback endpoint and configured vLLM endpoints whose hosts are explicitly
+listed in `IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS`. Cloud providers, Ollama
+cloud-routed model tags, unapproved vLLM hosts, Logfire, and coding remain
+blocked. The current reference is `docs/configuration.md#local-only-mode`.
 
 ## Goal
 
-Provide a single CLI flag that **guarantees** the finding-extractor pipeline does not send any **data-bearing content** (report text, extraction output, PHI) to a network destination outside `localhost:11434` (Ollama). Target use case: running against PHI-containing reports with hard assurance no PHI leaves the machine.
+Provide a single CLI flag that **guarantees** the finding-extractor pipeline does not send any **data-bearing content** (report text, extraction output, PHI) outside approved inference endpoints. The original target was `localhost:11434` (Ollama); the implemented policy now also allows configured, explicitly allowlisted vLLM hosts.
 
-**What "local-only" means:** No report text, extraction results, or PHI-bearing payloads are sent to any remote service. Model weight downloads (HuggingFace, etc.) and metadata-only API calls (model catalog discovery) are allowed — these don't carry input data.
+**What "local-only" means:** No report text, extraction results, or PHI-bearing payloads are sent to cloud providers or unapproved hosts. Model weight downloads (HuggingFace, etc.) and metadata-only API calls (model catalog discovery) are allowed — these don't carry input data.
 
 We do **not** rely on OS-level network isolation (sandboxing, pf rules, etc.). The guarantee must be enforceable purely within the application.
 

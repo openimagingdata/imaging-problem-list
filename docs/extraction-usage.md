@@ -47,6 +47,7 @@ Pass any [pydantic-ai model string](https://ai.pydantic.dev/models/) via `--mode
 | Google | `google-gla:gemini-3-flash-preview` (default) | `GOOGLE_API_KEY` |
 | OpenRouter | `openrouter:meta-llama/llama-3.1-70b` | `OPENROUTER_API_KEY` |
 | Ollama | `ollama:qwen3.6:35b-a3b-mlx-bf16` (local default) | *(none, local)* |
+| On-prem vLLM | `vllm:google/gemma-4-31B-it` | `VLLM_API_KEY` optional |
 
 ```bash
 # Anthropic
@@ -61,11 +62,70 @@ uv run finding-extractor report.txt -m openrouter:meta-llama/llama-3.1-70b
 
 # Local Ollama (see Ollama setup below)
 uv run finding-extractor report.txt -m ollama:qwen3.6:35b-a3b-mlx-bf16
-uv run finding-extractor report.txt -m ollama:gemma4:26b-mxfp8                 # quality alt
+uv run --env-file .env.ollama finding-extractor report.txt -m ollama:gemma4:26b-mxfp8  # quality alt
 uv run finding-extractor report.txt -m ollama:gpt-oss:120b --reasoning medium  # legacy
+
+# On-prem vLLM
+uv run finding-extractor report.txt -m vllm:google/gemma-4-31B-it --reasoning none
+uv run finding-extractor report.txt -m vllm:openai/gpt-oss-120b --reasoning medium
 ```
 
-### Ollama Setup
+### On-Prem vLLM Profile
+
+The `vllm:` provider supports configured OpenAI-compatible vLLM endpoints:
+
+- `vllm:google/gemma-4-31B-it`
+- `vllm:openai/gpt-oss-120b`
+
+Default base URLs are already configured. If deployment paths change, set
+`VLLM_GEMMA4_31B_BASE_URL` or `VLLM_GPT_OSS_120B_BASE_URL` to the `/v1` API root
+or the full `/v1/chat/completions` URL. If the service requires auth, set
+`VLLM_API_KEY` in `.env`.
+
+`VLLM_API_KEY` is isolated from OpenAI credentials. If it is unset, the vLLM
+client uses a non-secret placeholder key instead of falling back to
+`OPENAI_API_KEY`. The accepted `vllm:` model IDs are also canonicalized before
+requests are sent, so the exact served model name reaches the endpoint.
+
+The extractor uses JSON-schema structured output for `vllm:` models rather than
+OpenAI tool calling against the current endpoints. Gemma 4 supports tool
+calling, but vLLM only accepts those requests when the server is launched with
+the matching `--tool-call-parser` configuration.
+
+Use `.env.vllm` for the tested Gemma-extractor / GPT-OSS-reviewer profile:
+
+```bash
+# Create a local profile if needed. .env.vllm is ignored by git.
+cp .env.vllm.example .env.vllm
+
+# Single report
+uv run --env-file .env.vllm finding-extractor sample_data/example2/xr_chest_20210614.md
+
+# Batch
+uv run --env-file .env.vllm finding-extractor-batch run sample_data/example2 \
+  --glob '*.md' \
+  --validate \
+  --workers 1 \
+  --timeout-seconds 1800
+```
+
+The tracked `.env.vllm.example` contains non-secret defaults:
+- `IPL_MODEL=vllm:google/gemma-4-31B-it`, `IPL_REASONING=none`
+- `IPL_REVIEWER_MODEL=vllm:openai/gpt-oss-120b`, `IPL_REVIEWER_REASONING=medium`
+- `IPL_FALLBACK_MODEL=vllm:openai/gpt-oss-120b`
+- vLLM `/v1` base URLs for both deployments
+- longer subagent timeout and serial extraction settings used in the smoke/performance checks
+
+To test a different vLLM role without editing the profile, override only the CLI
+model/reasoning:
+
+```bash
+uv run --env-file .env.vllm finding-extractor report.txt \
+  -m vllm:openai/gpt-oss-120b \
+  --reasoning low
+```
+
+### Ollama Profile
 
 Ollama runs models locally without API keys — the right choice for **PHI-sensitive workloads**. For those runs, always pass `--local-only` (see "Local-only (PHI-safe)" below) to enforce that no report text or output can reach a cloud endpoint.
 
@@ -78,26 +138,41 @@ Steps:
    - `ollama pull gpt-oss:20b` — fallback, 13 GB
    - `ollama pull gemma4:26b-mxfp8` — quality-first extraction alternative, 26 GB
    - `ollama pull medgemma:27b` — medical-domain specialist extractor, 17 GB
-3. **Use the committed `.env.ollama` file** (rather than hand-setting env vars) — it already pins all the right models, reasoning levels, and timeouts:
+3. **Use `.env.ollama`** rather than hand-setting every variable:
    ```bash
+   # Create a local profile if needed. .env.ollama is ignored by git.
+   cp .env.ollama.example .env.ollama
+
+   # Single report
    uv run --env-file .env.ollama finding-extractor report.txt
+
+   # Batch
+   uv run --env-file .env.ollama finding-extractor-batch run /path/to/reports/ \
+     --glob '*.txt' \
+     --validate \
+     --local-only \
+     --workers 1 \
+     --timeout-seconds 1800
    ```
 4. **Multi-model runs** (extractor + reviewer both loaded): `export OLLAMA_MAX_LOADED_MODELS=4` in your shell.
 
-The committed `.env.ollama` sets:
+The tracked `.env.ollama.example` contains non-secret defaults:
 - `IPL_MODEL=ollama:qwen3.6:35b-a3b-mlx-bf16`, `IPL_REASONING=none`
 - `IPL_REVIEWER_ENABLED=true`, `IPL_REVIEWER_MODEL=ollama:qwen3.6:35b-a3b-bf16`, `IPL_REVIEWER_REASONING=low`
 - `IPL_FALLBACK_MODEL=ollama:gpt-oss:20b`
 - `OLLAMA_BASE_URL=http://localhost:11434/v1`
-- `IPL_SUBAGENT_TIMEOUT_SECONDS=300`, `IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY=1`
+- `IPL_SUBAGENT_TIMEOUT_SECONDS=300`, `IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY=1`, `IPL_BATCH_WORKERS=1`
 
 #### Local-only (PHI-safe)
 
-For PHI workloads, always add `--local-only`. This enforces a three-gate guard at load time: provider must be Ollama, no cloud-suffix tags (`:cloud`, `-cloud`), and `OLLAMA_BASE_URL` must resolve to loopback. Also disables Logfire and blocks any non-Ollama fallback.
+For PHI workloads, always add `--local-only`. This enforces an approved-inference guard at load time: models must be either Ollama on a loopback endpoint or a configured vLLM deployment whose host is allowlisted by `IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS`; Ollama cloud-suffix tags (`:cloud`, `-cloud`) are rejected; and unapproved vLLM hosts are blocked. It also disables Logfire and blocks cloud fallbacks/reviewers.
 
 ```bash
 # Single report
 uv run --env-file .env.ollama finding-extractor /path/to/report.txt --local-only
+
+# Single report using configured vLLM
+uv run --env-file .env.vllm finding-extractor /path/to/report.txt --local-only
 
 # Batch (a directory of reports)
 uv run --env-file .env.ollama finding-extractor-batch run \
@@ -125,16 +200,20 @@ uv run finding-extractor report.txt --reasoning none
 
 Levels: `none`, `minimal`, `low`, `medium`, `high`
 
-Reasoning defaults are provider-specific (`openai=medium`, `anthropic=medium`, `google=low`, `openrouter=medium`, `ollama=none`). You can override with `--reasoning` or `IPL_REASONING`.
+Reasoning defaults are provider-specific (`openai=medium`, `anthropic=medium`, `google=low`, `openrouter=medium`, `ollama=none`, `vllm=none`). You can override with `--reasoning` or `IPL_REASONING`.
 
 For Ollama, reasoning is model-specific:
 - `ollama:qwen3.5:*` / `ollama:qwen3.6:*`: `none|low|medium|high` — thinks by default on the OpenAI-compatible endpoint; `reasoning_effort:none` is required to disable (the extractor sends this automatically)
 - `ollama:gemma4:*`: `none|low|medium|high` — same `reasoning_effort` handling as Qwen3.6; routed through `NativeOutput` (JSON-schema) rather than tool-calling because Ollama 0.22.1's renderer change broke gemma4 tool-calls under suppressed thinking
 - `ollama:nemotron-3-super:*`: same `none|low|medium|high` handling as Qwen3.5/3.6 (cascade-2 and nano retired 2026-05-14)
-- `ollama:gpt-oss:120b` / `ollama:gpt-oss:20b`: `none|low|medium|high` (`minimal` normalizes to `low`)
+- `ollama:gpt-oss:120b`: `none|low|medium|high` (`minimal` normalizes to `low`)
 - `ollama:qwen3:30b-thinking`: `none|minimal|low|medium|high` (mapped to `think=false|true`)
 - `ollama:qwen3:30b-instruct`: `none` only
-- `ollama:medgemma:*`: `none` only (Gemma 3-based, no reasoning surface)
+- Recommended local profile models outside the verified reasoning matrix, including `ollama:gemma4:*`, `ollama:medgemma:*`, and `ollama:gpt-oss:20b`, should be run with reasoning `none` via `.env.ollama` or with `IPL_ALLOW_UNKNOWN_MODEL_REASONING=true`.
+
+For on-prem vLLM:
+- `vllm:google/gemma-4-31B-it`: `none` only
+- `vllm:openai/gpt-oss-120b`: `none|low|medium|high` (`minimal` normalizes to `low`)
 
 Configuration details (env vars, `config.toml`, precedence, and secrets policy):
 - `docs/configuration.md`
@@ -161,7 +240,9 @@ Options:
 
 Validation is enabled by default. Use `--no-validate` to disable it.
 
-`--validate` runs a **coverage analysis** that checks whether all report text lines are accounted for by extracted findings or non-finding text segments. It does **not** perform verbatim quote checking — that is handled automatically by the agent's output validator, which retries the model when quotes don't match. As a result, `--validate` always returns `is_valid=True` with no `verbatim_errors`; it only produces `coverage_warnings`.
+`--validate` runs the post-extraction validation pass. Validation output is reported as lists of `verbatim_errors` and `coverage_warnings`; there is no aggregate boolean validity field on the validation result.
+
+Verbatim quote checking is enforced during extraction by the agent output validator, which retries the model when quotes do not match the report text. The post-run validation pass can still surface `verbatim_errors` if invalid quotes survive all retries or are introduced by downstream merging. Coverage warnings are advisory unless strict reliability mode is enabled. In strict mode, unrecovered section failures or validation errors fail the run instead of returning a best-effort extraction.
 
 ## Logfire Observability
 
@@ -214,7 +295,7 @@ result = await run_extraction_runtime(
     source_ref=None,
     report_id=None,
     # Optional: receive stage status messages during extraction
-    # status_callback=async_fn_that_takes_a_string,
+    # progress_callback=async_fn_that_takes_a_string,
 )
 
 for finding in result.extraction.findings:

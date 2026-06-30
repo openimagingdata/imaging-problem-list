@@ -32,7 +32,7 @@ Results below are from the IPL extractor pipeline run with `IPL_REVIEWER_ENABLED
 
 | Model | Params | Quant | Size | Role |
 |---|---|---|---:|---|
-| gpt-oss:120b | 120B | MXFP4 | 65 GB | Reliable fallback; default reviewer when staying local |
+| gpt-oss:120b | 120B | MXFP4 | 65 GB | Fast heavy reasoning option; no longer the recommended reviewer |
 | gpt-oss:20b | 20B | MXFP4 | 13 GB | Lightweight fallback |
 
 ## Key Findings
@@ -87,7 +87,7 @@ Results below are from the IPL extractor pipeline run with `IPL_REVIEWER_ENABLED
 
 Qwen3.5 and Qwen3.6 both emit reasoning tokens by default on Ollama's OpenAI-compatible API (`/v1/chat/completions`). These land in the `reasoning` field, leaving `content` empty — causing infinite tool-calling retries and timeouts. The fix is `reasoning_effort: "none"` (or `low`/`medium`/`high`). Qwen3's `/nothink` token and `extra_body.think` do **not** work here; only `reasoning_effort` is honored.
 
-`build_ollama_settings()` sets `openai_reasoning_effort` for `qwen3.5`, `qwen3.6`, and `nemotron-cascade-2` prefixes.
+`build_ollama_settings()` sets `openai_reasoning_effort` for `qwen3.5`, `qwen3.6`, `nemotron-cascade-2`, and `nemotron-3-super` prefixes.
 
 ## MedGemma (official library now, 2026-04-16 release)
 
@@ -102,14 +102,14 @@ OLLAMA_BASE_URL=http://localhost:11434/v1
 IPL_ALLOW_UNKNOWN_MODEL_REASONING=true
 IPL_SUBAGENT_TIMEOUT_SECONDS=300
 IPL_EXTRACTOR_MAX_SUBAGENT_CONCURRENCY=1
-IPL_REVIEWER_ENABLED=false
-IPL_REVIEWER_MODEL=ollama:gpt-oss:120b
-IPL_REVIEWER_REASONING=none
+IPL_REVIEWER_ENABLED=true
+IPL_REVIEWER_MODEL=ollama:qwen3.6:35b-a3b-bf16
+IPL_REVIEWER_REASONING=low
 IPL_FALLBACK_MODEL=ollama:gpt-oss:20b
 ```
 
 - **Concurrency 1** still matters: multiple concurrent Ollama requests degrade performance.
-- **300 s timeout** is generous enough for all recommended variants; any chunk above 100 s typically indicates a tool-call parse problem, not a speed one.
+- **300 s subagent timeout** is generous enough for recommended extractor/fallback chunk calls; reviewer-enabled batch runs still need a higher per-file timeout such as `--timeout-seconds 1800`.
 - **Multi-model runs** (`OLLAMA_MAX_LOADED_MODELS=4`) still required if you enable reviewer + separate extractor model.
 
 ## Recommendations
@@ -120,7 +120,8 @@ IPL_FALLBACK_MODEL=ollama:gpt-oss:20b
 4. **Alternate Gemma 4 path (kept for ongoing comparison):** `ollama:gemma4:26b-mlx-bf16` (51 GB) — the Ollama 0.21 MLX runtime path. Roughly tied with MXFP8 on our 3-report sample; retaining both until we have more data to differentiate them.
 5. **Medical-domain specialist:** `ollama:medgemma:27b` (17 GB, official library) — same speed tier as Gemma 4, ~26 % more *present* findings across 3 reports, distinctly different extraction style (see "MedGemma: detailed comparison" below). Multimodal (text+image).
 6. **Ultralight:** no local small-model recommended this round — `qwen3.5:9b` was retired. Pull `qwen3.6:35b-a3b-mlx-bf16` (70 GB) or the Q8 variant (38 GB); on M3 Ultra the memory headroom makes Q4/tiny options obsolete. For low-memory hardware, pull a sub-10 GB model on demand.
-7. **Reviewer / fallback:** `ollama:gpt-oss:120b` / `ollama:gpt-oss:20b` — no reason to change.
+7. **Reviewer:** `ollama:qwen3.6:35b-a3b-bf16` with `reasoning=low` — best TP/FP ratio in the reviewer round; slower than gpt-oss but catches issues gpt-oss silently approves.
+8. **Fallback:** `ollama:gpt-oss:20b` — lightweight local fallback. Keep `ollama:gpt-oss:120b` as a speed-first heavy reasoning option, not the default reviewer.
 
 **Avoid:**
 - Gemma 4 Q4_K_M for tool-calling (chunk failures).

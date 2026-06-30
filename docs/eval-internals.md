@@ -214,7 +214,7 @@ Key points:
 
 ## Runner Architecture (`runner.py`)
 
-The run engine follows the pattern from `batch_cli.py`:
+The run engine follows the current batch split: `cli/batch.py` owns the Click entry point, while `cli/batch_engine.py` owns the reusable run engine.
 
 1. **Load dataset** via `load_dataset()`.
 2. **Attach evaluators** (all 6) to the dataset.
@@ -255,7 +255,7 @@ Concurrency is handled by pydantic-evals' built-in `max_concurrency` parameter (
 |-----------|----------|
 | `tests/test_eval_matching.py` | Tokenization, Jaccard similarity, match_findings edge cases, location/attribute bonus disambiguation, self-match diagnostics against comprehensive dataset, integration with examples |
 | `tests/test_eval_evaluators.py` | All 6 evaluators with mock context, integration with CT abdomen example |
-| `tests/test_eval_cli.py` | CLI help, run/import-baseline/report with mocked runner, threshold logic, dataset loading |
+| Eval CLI tests | CLI help, run/import-baseline/report with mocked runner, threshold logic, dataset loading |
 | `tests/test_eval_datasets.py` | `import_baseline_cases()` edge cases, `save_dataset()`, round-trip load |
 
 Tests use a `FakeEvaluatorContext` dataclass that stands in for pydantic-evals' `EvaluatorContext`, allowing unit testing of evaluator logic without running the full framework.
@@ -266,7 +266,7 @@ Tests use a `FakeEvaluatorContext` dataclass that stands in for pydantic-evals' 
 2. Implement `evaluate(ctx) -> dict[str, float]` returning named metrics.
 3. Add the evaluator to the list in `runner.py:run_eval()`.
 4. Add tests in `test_eval_evaluators.py`.
-5. If threshold support is needed, add a CLI flag in `eval_cli.py` and wire it into the thresholds dict.
+5. If threshold support is needed, add a CLI flag in `cli/eval_cmd.py` and wire it into the thresholds dict.
 
 ## Adding a New Dataset
 

@@ -24,6 +24,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1246",
+        "locationDisplay": "tracheobronchial tree"
+      },
       "reportText": "The airways are patent without bronchial wall thickening."
     },
     {
@@ -38,6 +42,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID581",
+        "locationDisplay": "aortic arch"
+      },
       "reportText": "The aortic arch and descending thoracic aorta are normal in caliber with atherosclerotic calcifications."
     },
     {
@@ -52,12 +60,16 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID580",
+        "locationDisplay": "ascending aorta"
+      },
       "reportText": "The ascending aorta measures 4.0 cm in maximal diameter with fusiform configuration, representing mild aneurysmal dilation."
     },
     {
       "observationId": "benign_bone_island_1",
       "findingCode": "OIFM_OIDM_029466",
-      "findingDescription": "enotosis",
+      "findingDescription": "enostosis",
       "attributes": [
         {
           "attributeCode": "OIFMA_OIDM_071504",
@@ -66,6 +78,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID29204",
+        "locationDisplay": "seventh thoracic vertebra"
+      },
       "reportText": "A small sclerotic focus in the T7 vertebral body measuring 8 mm is stable compared to August 2005, consistent with benign bone island."
     },
     {
@@ -80,6 +96,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID41117",
+        "locationDisplay": "left supraspinatus tendon"
+      },
       "reportText": "Calcifications are noted in the region of the rotator cuff insertion at the greater tuberosity, compatible with known calcific tendonitis (May 2006 radiograph)."
     },
     {
@@ -94,6 +114,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1385",
+        "locationDisplay": "heart"
+      },
       "reportText": "The heart is normal in size."
     },
     {
@@ -108,6 +132,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID187",
+        "locationDisplay": "gallbladder"
+      },
       "reportText": "Cholelithiasis is present."
     },
     {
@@ -122,6 +150,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID41741",
+        "locationDisplay": "left clavicle"
+      },
       "reportText": "An old healed fracture of the left clavicle at the mid-shaft is identified with smooth corticated margins."
     },
     {
@@ -136,6 +168,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1301",
+        "locationDisplay": "lung"
+      },
       "reportText": "The lungs are well expanded and clear. No consolidation, interstitial thickening, or ground-glass opacity."
     },
     {
@@ -150,6 +186,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28727",
+        "locationDisplay": "set of coronary arteries"
+      },
       "reportText": "Coronary artery calcifications are present."
     },
     {
@@ -164,6 +204,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID34572",
+        "locationDisplay": "thoracic vertebral column"
+      },
       "reportText": "Extensive degenerative changes of the thoracic spine with anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis (DISH)."
     },
     {
@@ -178,6 +222,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID34572",
+        "locationDisplay": "thoracic vertebral column"
+      },
       "reportText": "Extensive degenerative changes of the thoracic spine with anterior bridging osteophytes consistent with diffuse idiopathic skeletal hyperostosis (DISH)."
     },
     {
@@ -192,6 +240,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID42241",
+        "locationDisplay": "left glenohumeral joint"
+      },
       "reportText": "The left glenohumeral joint demonstrates a moderate joint effusion."
     },
     {
@@ -206,6 +258,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1301",
+        "locationDisplay": "lung"
+      },
       "reportText": "The lungs are well expanded and clear. No consolidation, interstitial thickening, or ground-glass opacity."
     },
     {
@@ -220,6 +276,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID58",
+        "locationDisplay": "liver"
+      },
       "reportText": "Limited views of the upper abdomen demonstrate hepatic steatosis."
     },
     {
@@ -234,6 +294,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID42241",
+        "locationDisplay": "left glenohumeral joint"
+      },
       "reportText": "The humeral head is in a high-riding position with reduced acromiohumeral distance."
     },
     {
@@ -248,6 +312,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1301",
+        "locationDisplay": "lung"
+      },
       "reportText": "The lungs are well expanded and clear. No consolidation, interstitial thickening, or ground-glass opacity."
     },
     {
@@ -262,6 +330,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID34566_RID5825",
+        "locationDisplay": "right pulmonary hilum"
+      },
       "reportText": "A few borderline enlarged lymph nodes are present in the right hilum, largest measuring 11 mm in short axis, likely reactive."
     },
     {
@@ -276,6 +348,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID975",
+        "locationDisplay": "main pulmonary artery"
+      },
       "reportText": "The main pulmonary artery measures 2.8 cm."
     },
     {
@@ -290,6 +366,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1384",
+        "locationDisplay": "mediastinum"
+      },
       "reportText": "The mediastinal and hilar contours are normal."
     },
     {
@@ -304,6 +384,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1395",
+        "locationDisplay": "mitral valve"
+      },
       "reportText": "Mitral annular calcification is prominent."
     },
     {
@@ -318,6 +402,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID34572",
+        "locationDisplay": "thoracic vertebral column"
+      },
       "reportText": "Diffuse osteopenia is present, particularly severe in the thoracic spine."
     },
     {
@@ -332,6 +420,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1407",
+        "locationDisplay": "pericardium"
+      },
       "reportText": "No pericardial effusion or thickening."
     },
     {
@@ -346,6 +438,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1363",
+        "locationDisplay": "pleural space"
+      },
       "reportText": "No pleural effusion or pneumothorax."
     },
     {
@@ -360,6 +456,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1363",
+        "locationDisplay": "pleural space"
+      },
       "reportText": "No pleural effusion or pneumothorax."
     },
     {
@@ -374,6 +474,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1315",
+        "locationDisplay": "lower lobe of right lung"
+      },
       "reportText": "A 4 mm solid pulmonary nodule is present in the right lower lobe lateral basal segment (image 42, series 2)."
     },
     {
@@ -388,6 +492,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1315",
+        "locationDisplay": "lower lobe of right lung"
+      },
       "reportText": "Mild linear scarring is noted in the right lower lobe medial basilar segment, likely sequela of prior pneumonia (June 2006)."
     },
     {
@@ -402,6 +510,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28591_RID6157_RID5824",
+        "locationDisplay": "left seventh rib"
+      },
       "reportText": "Healed fractures of the left 7th and 8th ribs are present along the posterior axillary line with callus formation."
     },
     {
@@ -416,6 +528,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28591_RID6157_RID5824",
+        "locationDisplay": "left seventh rib"
+      },
       "reportText": "Healed fractures of the left 7th and 8th ribs are present along the posterior axillary line with callus formation."
     },
     {
@@ -430,6 +546,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID2468",
+        "locationDisplay": "chest wall"
+      },
       "reportText": "No chest wall mass or abnormal soft tissue collection."
     },
     {
@@ -444,6 +564,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID29206",
+        "locationDisplay": "ninth thoracic vertebra"
+      },
       "reportText": "Old superior endplate compression fracture at T9, chronic appearing."
     }
   ]

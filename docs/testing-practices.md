@@ -43,8 +43,8 @@ uv run pytest tests/test_api.py -q
   - `tests/test_tasks.py`
 - CLI and batch/eval command behavior:
   - `tests/test_cli.py`
-  - `tests/test_batch_cli.py`
-  - `tests/test_eval_cli.py`
+  - `tests.test_batch_cli`
+  - `tests.test_eval_cli`
 - Config/policy/catalog contracts:
   - `tests/test_config.py`
   - `tests/test_model_policy.py`

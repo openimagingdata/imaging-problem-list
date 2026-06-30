@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "viewer-v2-data.1",
+  "generatedAt": "2026-06-11T20:46:58.399446+00:00",
+  "id": "patient-mrn0000001",
+  "displayName": "John Doe",
+  "mrn": "MRN0000001",
+  "dob": "1961-01-01",
+  "examCount": 10,
+  "findingCount": 123
+}

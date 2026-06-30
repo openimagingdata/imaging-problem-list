@@ -5,17 +5,19 @@ The key data structures are the Exam Finding List (for inidividual reports) and 
 
 ## Finding Extraction
 
-Extract structured findings from radiology reports using LLM agents across 5 providers:
-- **OpenAI** (GPT-5, GPT-4.1, reasoning support)
+Extract structured findings from radiology reports using LLM agents across cloud, local, and on-prem providers:
+- **OpenAI** (current reasoning-capable models)
 - **Anthropic** (Claude 4.x, extended thinking)
 - **Google** (Gemini 3.x, thinking levels)
 - **OpenRouter** (aggregates many providers with unified API)
 - **Ollama** (local models, no API key needed)
+- **vLLM** (OpenAI-compatible deployments)
 
 Quick start:
 ```bash
 uv run finding-extractor report.txt
 uv run finding-extractor report.txt -m anthropic:claude-sonnet-4-5 --reasoning high
+uv run finding-extractor report.txt -m vllm:google/gemma-4-31B-it --reasoning none
 ```
 
 See `docs/extraction-usage.md` for provider setup and reasoning configuration.

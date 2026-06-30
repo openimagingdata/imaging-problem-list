@@ -83,7 +83,7 @@ Each item names the trigger that should prompt action — not "someday," but "wh
 
 **What:** A comma-separated list of hostnames that bypass the loopback check, intended for air-gapped deployments where Ollama runs on a named private-network host.
 
-**Why deferred:** Added speculatively in the hardening pass, no real user requesting it. Cut (see commit history) to keep the surface minimal. The three-gate check (provider / cloud-suffix / loopback endpoint) is enforced without exception today.
+**Why deferred:** Added speculatively in the hardening pass, no real user requesting it. Cut (see commit history) to keep the surface minimal. Today Ollama still requires loopback, while vLLM endpoints use the explicit `IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS` allowlist.
 
 **Trigger to reopen:** A real deployment asks for it. At that point the design should include:
 - Explicit opt-in setting, not default

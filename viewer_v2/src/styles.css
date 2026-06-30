@@ -1,0 +1,308 @@
+@import "tailwindcss";
+
+:root {
+  color: #d7e2ee;
+  background: #070b10;
+  color-scheme: dark;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #070b10;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+input,
+select,
+button {
+  color-scheme: dark;
+}
+
+input::placeholder {
+  color: #728095;
+}
+
+.report-text mark {
+  border-radius: 3px;
+  color: #0f172a;
+  background: #facc15;
+  box-shadow: inset 0 -1px 0 #a16207;
+}
+
+/* Radiology workstation theme. The JSX still uses Tailwind utility names,
+   so this layer converts the existing light tokens into a dark interface. */
+.bg-\[\#f4f6f8\],
+.bg-slate-100 {
+  background-color: #070b10 !important;
+}
+
+.bg-white,
+.bg-white\/95 {
+  background-color: #0e141b !important;
+}
+
+.bg-white\/90 {
+  background-color: rgba(17, 24, 39, 0.94) !important;
+}
+
+.bg-white\/80,
+.bg-white\/70 {
+  background-color: rgba(15, 23, 42, 0.82) !important;
+}
+
+.bg-slate-50 {
+  background-color: #101820 !important;
+}
+
+.bg-slate-800 {
+  background-color: #1f2937 !important;
+}
+
+.bg-cyan-50 {
+  background-color: #083344 !important;
+}
+
+.bg-emerald-50 {
+  background-color: #052e2b !important;
+}
+
+.bg-amber-50 {
+  background-color: #33210a !important;
+}
+
+.bg-red-50 {
+  background-color: #3b0d0d !important;
+}
+
+.bg-zinc-100 {
+  background-color: #18181b !important;
+}
+
+.bg-slate-900 {
+  background-color: #38bdf8 !important;
+}
+
+.text-white {
+  color: #06111a !important;
+}
+
+.text-slate-950,
+.text-slate-900,
+.text-slate-800 {
+  color: #e5edf6 !important;
+}
+
+.text-slate-700,
+.text-slate-600 {
+  color: #b7c4d6 !important;
+}
+
+.text-slate-500 {
+  color: #8795aa !important;
+}
+
+.text-cyan-900 {
+  color: #a5f3fc !important;
+}
+
+.text-emerald-900 {
+  color: #a7f3d0 !important;
+}
+
+.text-amber-900,
+.text-amber-800 {
+  color: #fde68a !important;
+}
+
+.text-red-800,
+.text-red-700 {
+  color: #fecaca !important;
+}
+
+.text-zinc-600 {
+  color: #d4d4d8 !important;
+}
+
+.border-slate-200,
+.border-slate-300 {
+  border-color: #263241 !important;
+}
+
+.border-cyan-700,
+.hover\:border-cyan-500:hover {
+  border-color: #22d3ee !important;
+}
+
+.border-emerald-700 {
+  border-color: #34d399 !important;
+}
+
+.border-amber-200 {
+  border-color: #92400e !important;
+}
+
+.border-red-200 {
+  border-color: #7f1d1d !important;
+}
+
+.ring-slate-200,
+.ring-slate-600,
+.ring-zinc-700 {
+  --tw-ring-color: #334155 !important;
+}
+
+.ring-cyan-200,
+.ring-cyan-300,
+.ring-cyan-500 {
+  --tw-ring-color: #22d3ee !important;
+}
+
+.ring-red-200,
+.ring-red-700 {
+  --tw-ring-color: #ef4444 !important;
+}
+
+.ring-amber-200,
+.ring-amber-700 {
+  --tw-ring-color: #d97706 !important;
+}
+
+.divide-slate-200 > :not(:last-child) {
+  border-color: #263241 !important;
+}
+
+.shadow-sm {
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.45) !important;
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color) !important;
+}
+
+.hover\:bg-slate-50:hover {
+  background-color: #17212b !important;
+}
+
+.hover\:bg-cyan-50:hover {
+  background-color: #0e3a4a !important;
+}
+
+input,
+select {
+  background-color: #0b1118 !important;
+  border-color: #334155 !important;
+  color: #e5edf6 !important;
+}
+
+pre.report-text {
+  background-color: #071018 !important;
+  border-color: #263241 !important;
+  color: #d7e2ee !important;
+}
+
+.active-finding-chip-current {
+  border-left: 3px solid #ef4444;
+}
+
+.active-finding-chip-always {
+  border-left: 3px solid #d97706;
+}
+
+.overflow-findings-button-always {
+  border-color: rgba(217, 119, 6, 0.55) !important;
+  color: #fde68a !important;
+}
+
+.body-map-grid {
+  grid-template-columns: minmax(118px, 0.72fr) minmax(190px, 1fr) minmax(118px, 0.72fr);
+  grid-template-areas:
+    ". head ."
+    ". neck ."
+    "rightUpper thorax leftUpper"
+    "rightUpper breast leftUpper"
+    ". abdomen ."
+    ". pelvis ."
+    "rightLower . leftLower";
+}
+
+@media (max-width: 639px) {
+  .body-map-grid {
+    grid-template-columns: minmax(82px, 0.58fr) minmax(162px, 1fr) minmax(82px, 0.58fr);
+    grid-template-areas:
+      ". head ."
+      ". neck ."
+      "rightUpper thorax leftUpper"
+      "rightUpper breast leftUpper"
+      ". abdomen ."
+      ". pelvis ."
+      "rightLower . leftLower";
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .body-map-grid [role="button"] {
+    min-height: 58px !important;
+    border-radius: 16px !important;
+    padding: 8px !important;
+  }
+
+  .body-map-grid [role="button"] > div:first-child {
+    gap: 6px;
+  }
+
+  .body-map-grid [role="button"] > div:first-child > div:first-child {
+    font-size: 12px !important;
+    line-height: 1.1 !important;
+  }
+
+  .body-map-grid [aria-label^="Head"] {
+    min-height: 96px !important;
+    border-radius: 999px !important;
+  }
+
+  .body-map-grid [aria-label^="Neck"] {
+    min-height: 42px !important;
+  }
+
+  .body-map-grid [aria-label^="Thorax"],
+  .body-map-grid [aria-label^="Abdomen"] {
+    min-height: 128px !important;
+    border-radius: 28px !important;
+  }
+
+  .body-map-grid [aria-label^="Pelvis"] {
+    min-height: 96px !important;
+  }
+
+  .body-map-grid [aria-label*="Upper Extremity"],
+  .body-map-grid [aria-label*="Lower Extremity"] {
+    min-height: 128px !important;
+    margin-inline: 0;
+  }
+
+  .body-map-grid .active-finding-chip,
+  .body-map-grid .overflow-findings-button {
+    padding: 4px 6px !important;
+    font-size: 11px !important;
+    line-height: 1.15 !important;
+  }
+
+  .body-map-grid .resolved-count-button {
+    padding: 2px 6px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+  }
+
+  .body-map-grid .overflow-findings-button {
+    border-style: solid;
+    background-color: transparent !important;
+    color: #cbd5e1 !important;
+  }
+}

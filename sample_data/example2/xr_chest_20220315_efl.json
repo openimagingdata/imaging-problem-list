@@ -24,6 +24,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID581",
+        "locationDisplay": "aortic arch"
+      },
       "reportText": "The aortic knob is prominent with a tortuous descending thoracic aorta, compatible with atherosclerotic disease."
     },
     {
@@ -38,6 +42,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1301",
+        "locationDisplay": "lung"
+      },
       "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
     },
     {
@@ -52,6 +60,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1385",
+        "locationDisplay": "heart"
+      },
       "reportText": "The cardiac silhouette is normal in size."
     },
     {
@@ -66,6 +78,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID41741",
+        "locationDisplay": "left clavicle"
+      },
       "reportText": "An old healed fracture of the left mid-clavicle is identified."
     },
     {
@@ -80,6 +96,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1301",
+        "locationDisplay": "lung"
+      },
       "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
     },
     {
@@ -94,6 +114,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28727",
+        "locationDisplay": "set of coronary arteries"
+      },
       "reportText": "Calcification of the coronary arteries is noted."
     },
     {
@@ -108,6 +132,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID34572",
+        "locationDisplay": "thoracic vertebral column"
+      },
       "reportText": "Extensive degenerative changes of the thoracic spine with flowing anterior osteophytes bridging multiple levels, consistent with diffuse idiopathic skeletal hyperostosis."
     },
     {
@@ -122,6 +150,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID34572",
+        "locationDisplay": "thoracic vertebral column"
+      },
       "reportText": "Extensive degenerative changes of the thoracic spine with flowing anterior osteophytes bridging multiple levels, consistent with diffuse idiopathic skeletal hyperostosis."
     },
     {
@@ -136,6 +168,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID34566",
+        "locationDisplay": "pulmonary hilum"
+      },
       "reportText": "The hila are normal in size and contour."
     },
     {
@@ -150,6 +186,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1395",
+        "locationDisplay": "mitral valve"
+      },
       "reportText": "Prominent mitral annular calcification is visible."
     },
     {
@@ -164,6 +204,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1243",
+        "locationDisplay": "thorax"
+      },
       "reportText": "Diffuse osteopenia is present."
     },
     {
@@ -178,6 +222,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1363",
+        "locationDisplay": "pleural space"
+      },
       "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
     },
     {
@@ -192,6 +240,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1362",
+        "locationDisplay": "pleura"
+      },
       "reportText": "No pleural thickening or effusion."
     },
     {
@@ -206,6 +258,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1301",
+        "locationDisplay": "lung"
+      },
       "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
     },
     {
@@ -220,6 +276,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1363",
+        "locationDisplay": "pleural space"
+      },
       "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
     },
     {
@@ -234,6 +294,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1301",
+        "locationDisplay": "lung"
+      },
       "reportText": "The lungs are well expanded and clear. No focal consolidation, pleural effusion, or pneumothorax. No definite pulmonary nodule identified on radiograph."
     },
     {
@@ -248,6 +312,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28591_RID6157_RID5824",
+        "locationDisplay": "left seventh rib"
+      },
       "reportText": "Healed fractures of the left 7th and 8th ribs are present posterolaterally with smooth callus formation."
     },
     {
@@ -262,6 +330,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID28591_RID6157_RID5824",
+        "locationDisplay": "left seventh rib"
+      },
       "reportText": "Healed fractures of the left 7th and 8th ribs are present posterolaterally with smooth callus formation."
     },
     {
@@ -276,6 +348,10 @@
           "attributeValueDescription": "absent"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID1243",
+        "locationDisplay": "thorax"
+      },
       "reportText": "No soft tissue abnormality."
     },
     {
@@ -290,6 +366,10 @@
           "attributeValueDescription": "present"
         }
       ],
+      "anatomicLocation": {
+        "locationId": "RID29206",
+        "locationDisplay": "ninth thoracic vertebra"
+      },
       "reportText": "An old superior endplate compression fracture at T9 is noted, now appearing chronic/healed compared to April 2006."
     }
   ]

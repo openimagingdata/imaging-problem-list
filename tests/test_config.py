@@ -36,6 +36,8 @@ from finding_extractor.core.config import (
     DEFAULT_MODEL,
     DEFAULT_REDIS_URL,
     DEFAULT_UPDATE_MODEL_LIST_INTERVAL_SECONDS,
+    DEFAULT_VLLM_GEMMA4_31B_BASE_URL,
+    DEFAULT_VLLM_GPT_OSS_120B_BASE_URL,
     clear_settings_cache,
     get_settings,
 )
@@ -73,6 +75,10 @@ def test_settings_defaults_without_env(tmp_path, monkeypatch):
     assert settings.openai_api_key is None
     assert settings.anthropic_api_key is None
     assert settings.google_api_key is None
+    assert settings.vllm_api_key is None
+    assert settings.vllm_gemma4_31b_base_url == DEFAULT_VLLM_GEMMA4_31B_BASE_URL
+    assert settings.vllm_gpt_oss_120b_base_url == DEFAULT_VLLM_GPT_OSS_120B_BASE_URL
+    assert settings.vllm_local_only_allowed_hosts == frozenset()
     assert settings.update_model_list_interval_seconds == DEFAULT_UPDATE_MODEL_LIST_INTERVAL_SECONDS
     assert settings.cors_origins == DEFAULT_CORS_ORIGINS
     assert settings.log_level == DEFAULT_LOG_LEVEL
@@ -132,6 +138,10 @@ def test_settings_support_ipl_env_names(tmp_path, monkeypatch):
     monkeypatch.setenv("OPENAI_API_KEY", "openai-test")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "anthropic-test")
     monkeypatch.setenv("GOOGLE_API_KEY", "google-test")
+    monkeypatch.setenv("VLLM_API_KEY", "vllm-test")
+    monkeypatch.setenv("VLLM_GEMMA4_31B_BASE_URL", "https://example.org/gemma/v1/chat/completions")
+    monkeypatch.setenv("VLLM_GPT_OSS_120B_BASE_URL", "https://example.org/gpt-oss/v1")
+    monkeypatch.setenv("IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS", "example.org, vllm.internal")
     monkeypatch.setenv("IPL_MODEL_LIST_UPDATE_INTERVAL", "86400")
     monkeypatch.setenv("IPL_LOG_LEVEL", "debug")
     monkeypatch.setenv("IPL_LOG_JSON", "true")
@@ -172,6 +182,10 @@ def test_settings_support_ipl_env_names(tmp_path, monkeypatch):
     assert settings.openai_api_key == "openai-test"
     assert settings.anthropic_api_key == "anthropic-test"
     assert settings.google_api_key == "google-test"
+    assert settings.vllm_api_key == "vllm-test"
+    assert settings.vllm_gemma4_31b_base_url == "https://example.org/gemma/v1"
+    assert settings.vllm_gpt_oss_120b_base_url == "https://example.org/gpt-oss/v1"
+    assert settings.vllm_local_only_allowed_hosts == frozenset({"example.org", "vllm.internal"})
     assert settings.update_model_list_interval_seconds == 86400
     assert settings.cors_origins == DEFAULT_CORS_ORIGINS
     assert settings.log_level == "DEBUG"

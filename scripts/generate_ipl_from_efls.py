@@ -14,6 +14,7 @@ import json
 import sys
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 
 def generate_ipl(efl_dir: str, output_file: str, patient_name: str = "John Doe"):
@@ -36,11 +37,16 @@ def generate_ipl(efl_dir: str, output_file: str, patient_name: str = "John Doe")
 
     print(f"Found {len(efl_files)} EFL files")
 
-    # Group findings by finding type (OIFM code)
-    # Structure: {finding_code: {finding_code, finding_description, observations: []}}
-    findings_by_type = defaultdict(lambda: {
+    # Group findings by finding type (OIFM code) AND anatomic location.
+    # A finding code at two distinct anatomic locations (e.g. abdominal vs.
+    # hilar lymphadenopathy) becomes two separate IPL entries. Observations
+    # without an anatomic location group under locationId = None.
+    # Key: (finding_code, location_id)
+    # Structure: {key: {finding_code, finding_description, anatomic_location, observations: []}}
+    findings_by_type: dict[tuple[str, str | None], dict[str, Any]] = defaultdict(lambda: {
         'finding_code': None,
         'finding_description': None,
+        'anatomic_location': None,
         'observations': []
     })
 
@@ -72,6 +78,8 @@ def generate_ipl(efl_dir: str, output_file: str, patient_name: str = "John Doe")
             finding_description = finding['findingDescription']
             observation_id = finding['observationId']
             text = finding.get('reportText', '')
+            anatomic_location = finding.get('anatomicLocation')
+            location_id = anatomic_location['locationId'] if anatomic_location else None
 
             # Get presence value from attributes
             presence = None
@@ -84,11 +92,14 @@ def generate_ipl(efl_dir: str, output_file: str, patient_name: str = "John Doe")
                 print(f"    Warning: No presence attribute for {observation_id}")
                 continue
 
-            # Add to findings grouped by type (OIFM code)
-            # Multiple instances from same exam are added as separate observations
-            if findings_by_type[finding_code]['finding_code'] is None:
-                findings_by_type[finding_code]['finding_code'] = finding_code
-                findings_by_type[finding_code]['finding_description'] = finding_description
+            # Group by finding type (OIFM code) AND anatomic location.
+            # Multiple instances from same exam are added as separate observations.
+            group_key = (finding_code, location_id)
+            group = findings_by_type[group_key]
+            if group['finding_code'] is None:
+                group['finding_code'] = finding_code
+                group['finding_description'] = finding_description
+                group['anatomic_location'] = anatomic_location
 
             # Add observation (includes both present and absent)
             observation = {
@@ -100,11 +111,15 @@ def generate_ipl(efl_dir: str, output_file: str, patient_name: str = "John Doe")
                 'presence': presence
             }
 
+            # Carry the observation's own anatomic location, if any
+            if anatomic_location:
+                observation['anatomicLocation'] = anatomic_location
+
             # Only add reportText if it exists and is non-empty
             if text:
                 observation['reportText'] = text
 
-            findings_by_type[finding_code]['observations'].append(observation)
+            group['observations'].append(observation)
 
     # Build IPL structure
     ipl = {
@@ -117,8 +132,16 @@ def generate_ipl(efl_dir: str, output_file: str, patient_name: str = "John Doe")
         "findings": []
     }
 
-    # Add findings in sorted order by finding code
-    for idx, (finding_code, finding_data) in enumerate(sorted(findings_by_type.items()), start=1):
+    # Add findings sorted by (finding code, location id). One finding code can
+    # now appear under multiple locations, so downstream consumers must key on
+    # the IPL finding's `id`, not `finding_type_code`.
+    def _sort_key(item):
+        (finding_code, location_id), _data = item
+        return (finding_code, location_id or "")
+
+    for idx, (_group_key, finding_data) in enumerate(
+        sorted(findings_by_type.items(), key=_sort_key), start=1
+    ):
         # Sort observations chronologically by exam date
         sorted_observations = sorted(finding_data['observations'], key=lambda x: x['exam_date'])
 
@@ -126,6 +149,7 @@ def generate_ipl(efl_dir: str, output_file: str, patient_name: str = "John Doe")
             "id": f"ipl-finding-{idx:03d}",
             "finding_type_code": finding_data['finding_code'],
             "finding_type_display": finding_data['finding_description'],
+            "anatomicLocation": finding_data['anatomic_location'],
             "observations": sorted_observations
         }
         ipl['findings'].append(ipl_finding)

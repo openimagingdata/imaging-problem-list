@@ -10,8 +10,10 @@ from finding_extractor.core.config import ExtractorSettings, clear_settings_cach
 from finding_extractor.llm.model_settings import ollama_needs_native_output
 from finding_extractor.llm.policy import (
     LocalOnlyViolationError,
+    canonical_vllm_model_id,
     enforce_endpoint_locality,
     enforce_local_only,
+    enforce_vllm_endpoint_locality,
     has_cloud_suffix,
     validate_model_id,
 )
@@ -54,6 +56,22 @@ def test_validate_model_id_accepts_openrouter():
 
 def test_validate_model_id_accepts_openrouter_openai_model():
     validate_model_id("openrouter:openai/gpt-5")
+
+
+def test_validate_model_id_accepts_vllm_models():
+    validate_model_id("vllm:google/gemma-4-31B-it")
+    validate_model_id("vllm:openai/gpt-oss-120b")
+
+
+def test_vllm_model_ids_canonicalize_served_model_name():
+    validate_model_id("vllm:google/gemma-4-31b-it")
+    assert canonical_vllm_model_id("vllm:google/gemma-4-31b-it") == "google/gemma-4-31B-it"
+    assert canonical_vllm_model_id("openai/gpt-oss-120b") == "openai/gpt-oss-120b"
+
+
+def test_validate_model_id_rejects_unknown_vllm_model():
+    with pytest.raises(ValueError, match="vllm model must be one of"):
+        validate_model_id("vllm:meta-llama/Llama-4")
 
 
 def test_validate_model_id_rejects_bad_format():
@@ -167,6 +185,14 @@ class TestLocalOnlyMode:
         settings = self._make_settings(fallback_model="ollama:qwen3.5:9b")
         assert settings.fallback_model == "ollama:qwen3.5:9b"
 
+    def test_keeps_vllm_fallback_model(self):
+        settings = self._make_settings(
+            fallback_model="vllm:openai/gpt-oss-120b",
+            vllm_gpt_oss_120b_base_url="https://vllm.internal.example/gpt-oss/v1",
+            vllm_local_only_allow_hosts="vllm.internal.example",
+        )
+        assert settings.fallback_model == "vllm:openai/gpt-oss-120b"
+
     def test_disables_cloud_reviewer(self):
         settings = self._make_settings(
             reviewer_enabled=True,
@@ -182,6 +208,16 @@ class TestLocalOnlyMode:
         )
         assert settings.reviewer_enabled is True
         assert settings.reviewer_model == "ollama:qwen3.5:27b"
+
+    def test_keeps_vllm_reviewer(self):
+        settings = self._make_settings(
+            reviewer_enabled=True,
+            reviewer_model="vllm:openai/gpt-oss-120b",
+            vllm_gpt_oss_120b_base_url="https://vllm.internal.example/gpt-oss/v1",
+            vllm_local_only_allow_hosts="vllm.internal.example",
+        )
+        assert settings.reviewer_enabled is True
+        assert settings.reviewer_model == "vllm:openai/gpt-oss-120b"
 
     def test_forces_logfire_disabled(self):
         settings = self._make_settings(logfire_enabled=True)
@@ -203,11 +239,53 @@ class TestLocalOnlyMode:
 
     def test_rejects_cloud_default_model(self):
         """IPL_LOCAL_ONLY=true + IPL_MODEL=openai:* must fail at settings load."""
-        with pytest.raises(ValueError, match="not an Ollama model"):
+        with pytest.raises(ValueError, match="not an Ollama or approved vLLM model"):
             ExtractorSettings(
                 local_only_mode=True,
                 default_model="openai:gpt-5.2",
                 ollama_base_url="http://localhost:11434/v1",
+            )
+
+    def test_accepts_vllm_default_model_without_ollama_base_url(self):
+        settings = self._make_settings(
+            default_model="vllm:google/gemma-4-31B-it",
+            fallback_model="vllm:openai/gpt-oss-120b",
+            reviewer_enabled=True,
+            reviewer_model="vllm:openai/gpt-oss-120b",
+            ollama_base_url=None,
+            vllm_gemma4_31b_base_url="https://vllm.internal.example/gemma/v1",
+            vllm_gpt_oss_120b_base_url="https://vllm.internal.example/gpt-oss/v1",
+            vllm_local_only_allow_hosts="vllm.internal.example",
+        )
+        assert settings.default_model == "vllm:google/gemma-4-31B-it"
+        assert settings.fallback_model == "vllm:openai/gpt-oss-120b"
+        assert settings.reviewer_model == "vllm:openai/gpt-oss-120b"
+
+    def test_rejects_vllm_default_model_on_unapproved_host(self):
+        with pytest.raises(ValueError, match="not approved for local-only"):
+            self._make_settings(
+                default_model="vllm:google/gemma-4-31B-it",
+                ollama_base_url=None,
+                vllm_gemma4_31b_base_url="https://vllm.example.com/gemma/v1",
+                vllm_local_only_allow_hosts="vllm.internal.example",
+            )
+
+    def test_rejects_vllm_reviewer_on_unapproved_host(self):
+        with pytest.raises(ValueError, match=r"\[settings reviewer_model\].*not approved"):
+            self._make_settings(
+                reviewer_enabled=True,
+                reviewer_model="vllm:openai/gpt-oss-120b",
+                vllm_gpt_oss_120b_base_url="https://vllm.example.com/gpt-oss/v1",
+                vllm_local_only_allow_hosts="vllm.internal.example",
+            )
+
+    def test_rejects_vllm_without_allow_hosts(self):
+        with pytest.raises(ValueError, match="no vLLM hosts are approved"):
+            self._make_settings(
+                default_model="vllm:google/gemma-4-31B-it",
+                ollama_base_url=None,
+                vllm_gemma4_31b_base_url="https://vllm.internal.example/gemma/v1",
+                vllm_local_only_allow_hosts="",
             )
 
     def test_rejects_missing_ollama_base_url(self):
@@ -367,6 +445,40 @@ class TestEnforceEndpointLocality:
 
 
 # ---------------------------------------------------------------------------
+# enforce_vllm_endpoint_locality
+# ---------------------------------------------------------------------------
+
+
+class TestEnforceVllmEndpointLocality:
+    def test_accepts_configured_host(self):
+        assert (
+            enforce_vllm_endpoint_locality(
+                "https://vllm.internal.example/gemma/v1",
+                allowed_hosts={"vllm.internal.example"},
+            )
+            == "vllm.internal.example"
+        )
+
+    def test_rejects_missing_url(self):
+        with pytest.raises(LocalOnlyViolationError, match="not configured"):
+            enforce_vllm_endpoint_locality(None, allowed_hosts={"vllm.internal.example"})
+
+    def test_rejects_missing_allow_hosts(self):
+        with pytest.raises(LocalOnlyViolationError, match="no vLLM hosts are approved"):
+            enforce_vllm_endpoint_locality(
+                "https://vllm.internal.example/gemma/v1",
+                allowed_hosts=frozenset(),
+            )
+
+    def test_rejects_unapproved_host(self):
+        with pytest.raises(LocalOnlyViolationError, match="not approved"):
+            enforce_vllm_endpoint_locality(
+                "https://vllm.example.com/gemma/v1",
+                allowed_hosts={"vllm.internal.example"},
+            )
+
+
+# ---------------------------------------------------------------------------
 # enforce_local_only (combined gates)
 # ---------------------------------------------------------------------------
 
@@ -384,11 +496,28 @@ class TestEnforceLocalOnly:
         )
 
     def test_rejects_cloud_provider(self):
-        with pytest.raises(LocalOnlyViolationError, match="not an Ollama model"):
+        with pytest.raises(LocalOnlyViolationError, match="not an Ollama or approved vLLM model"):
             enforce_local_only(
                 "openai:gpt-5.2",
                 local_only_mode=True,
                 ollama_base_url=_LOCAL_URL,
+            )
+
+    def test_accepts_approved_vllm(self):
+        enforce_local_only(
+            "vllm:google/gemma-4-31B-it",
+            local_only_mode=True,
+            vllm_base_url="https://vllm.internal.example/gemma/v1",
+            vllm_allowed_hosts={"vllm.internal.example"},
+        )
+
+    def test_rejects_vllm_unapproved_host(self):
+        with pytest.raises(LocalOnlyViolationError, match="not approved"):
+            enforce_local_only(
+                "vllm:google/gemma-4-31B-it",
+                local_only_mode=True,
+                vllm_base_url="https://vllm.example.com/gemma/v1",
+                vllm_allowed_hosts={"vllm.internal.example"},
             )
 
     @pytest.mark.parametrize(

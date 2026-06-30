@@ -17,7 +17,11 @@ from finding_extractor.extractor.runtime import (
     ReliabilityContractError,
     run_extraction_runtime,
 )
-from finding_extractor.llm.policy import LocalOnlyViolationError, enforce_local_only
+from finding_extractor.llm.policy import (
+    LocalOnlyViolationError,
+    enforce_local_only,
+    provider_from_model_id,
+)
 from finding_extractor.models import (
     JobWarningPayload,
     ReliabilityMode,
@@ -99,6 +103,10 @@ async def _run_extraction_impl(
                 resolved_model,
                 local_only_mode=settings.local_only_mode,
                 ollama_base_url=settings.ollama_base_url,
+                vllm_base_url=settings.vllm_base_url_for_model_optional(resolved_model)
+                if provider_from_model_id(resolved_model) == "vllm"
+                else None,
+                vllm_allowed_hosts=settings.vllm_local_only_allowed_hosts,
                 context="worker extraction job",
             )
         except LocalOnlyViolationError as exc:

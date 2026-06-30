@@ -17,6 +17,8 @@ MODEL_OLLAMA_QWEN36_35B_A3B_BF16 = "ollama:qwen3.6:35b-a3b-bf16"
 MODEL_OLLAMA_GEMMA4_26B_MXFP8 = "ollama:gemma4:26b-mxfp8"
 MODEL_OLLAMA_GEMMA4_26B_NVFP4 = "ollama:gemma4:26b-nvfp4"
 MODEL_OLLAMA_MEDGEMMA_27B = "ollama:medgemma:27b"
+MODEL_VLLM_GEMMA4_31B = "vllm:google/gemma-4-31B-it"
+MODEL_VLLM_GPT_OSS_120B = "vllm:openai/gpt-oss-120b"
 
 
 @dataclass(frozen=True, slots=True)
@@ -98,5 +100,15 @@ COMMON_MODELS: tuple[CommonModel, ...] = (
         model=MODEL_OLLAMA_GPT_OSS_120B,
         recommended_reasoning="medium",
         role="local heavy reasoning option",
+    ),
+    CommonModel(
+        model=MODEL_VLLM_GEMMA4_31B,
+        recommended_reasoning="none",
+        role="on-prem vLLM Gemma 4 31B extractor",
+    ),
+    CommonModel(
+        model=MODEL_VLLM_GPT_OSS_120B,
+        recommended_reasoning="medium",
+        role="on-prem vLLM GPT OSS 120B heavy reasoning option",
     ),
 )

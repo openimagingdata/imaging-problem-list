@@ -92,7 +92,7 @@ def test_batch_run_local_only_rejects_cloud_model(monkeypatch, cli_runner):
         )
 
         assert result.exit_code != 0
-        assert "not an Ollama model" in result.output
+        assert "not an Ollama or approved vLLM model" in result.output
         # No run dir should be created.
         assert not (Path(".runs") / "batch-local-only-reject").exists()
 
@@ -322,6 +322,76 @@ def test_batch_run_local_only_without_ipl_model_env(monkeypatch, cli_runner):
         # --suffix .json replaces the extension (source_path.with_suffix) so
         # head_ct_001.txt → head_ct_001.json.
         assert (reports_dir / "head_ct_001.json").exists()
+
+
+def test_batch_run_local_only_accepts_vllm_model(monkeypatch, cli_runner):
+    """--local-only accepts approved vLLM models."""
+    monkeypatch.setenv("VLLM_GEMMA4_31B_BASE_URL", "https://vllm.internal.example/gemma/v1")
+    monkeypatch.setenv("IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS", "vllm.internal.example")
+
+    async def fake_run_extraction_runtime(
+        report_text,
+        *,
+        study_description,
+        model,
+        reasoning,
+        validate,
+        store,
+        db_path,
+        source_ref,
+        **kwargs,
+    ):
+        _ = (study_description, reasoning, validate, store, db_path, source_ref, kwargs)
+        assert model == "vllm:google/gemma-4-31B-it"
+        return _runtime_result(
+            ExtractedReportFindings(
+                exam_info=ExamInfo(study_description="XR chest"),
+                findings=[
+                    Finding(
+                        finding_name="pleural effusion",
+                        presence="absent",
+                        report_text=report_text.strip(),
+                    )
+                ],
+                non_finding_text=[],
+            ),
+        )
+
+    monkeypatch.setattr(
+        "finding_extractor.cli.batch_engine.run_extraction_runtime",
+        fake_run_extraction_runtime,
+    )
+
+    with cli_runner.isolated_filesystem():
+        reports_dir = Path("reports")
+        reports_dir.mkdir(parents=True, exist_ok=True)
+        (reports_dir / "chest.txt").write_text("No pleural effusion.", encoding="utf-8")
+
+        result = cli_runner.invoke(
+            cli,
+            [
+                "run",
+                str(reports_dir),
+                "--glob",
+                "*.txt",
+                "--suffix",
+                ".json",
+                "--run-id",
+                "batch-local-only-vllm",
+                "--run-dir",
+                ".runs",
+                "--model",
+                "vllm:google/gemma-4-31B-it",
+                "--reasoning",
+                "none",
+                "--local-only",
+            ],
+        )
+
+        assert result.exit_code == 0, result.output
+        assert "[local-only] Preflight passed" in result.output
+        assert "vllm endpoint" in result.output
+        assert (reports_dir / "chest.json").exists()
 
 
 def test_batch_run_log_option_captures_summary(monkeypatch, cli_runner):

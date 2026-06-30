@@ -4,6 +4,81 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-06-11 — Laterality + typo follow-up corrections (example2)
+
+Follow-up to the anatomic-location correction pass (commit `9e6c6de`).
+
+- Two CT Chest shoulder findings carried no side in their own verbatim quote but the report's
+  `Shoulders:` section establishes "left"; corrected to *left glenohumeral joint* / *left supraspinatus
+  tendon* so they group longitudinally with the XR Shoulder findings.
+- Hardened `anatomic-location-assignment-rules.md`: resolve laterality against the full report section,
+  not the finding's isolated snippet (with the shoulder case as a worked example).
+- Fixed the finding name typo `enotosis` → `enostosis` across three EFLs; regenerated
+  `MRN0000001_ipl.json` (123 anatomy groups).
+
+---
+
+## 2026-06-11 — Anatomy-aware viewer_v2 first slice
+
+Built the first `viewer_v2` static anatomy-aware IPL viewer for `sample_data/example2/MRN0000001`.
+
+- Added a separate React/Vite/TypeScript/Tailwind app under `viewer_v2/`, with generated committed data under `viewer_v2/public/data/`.
+- Added `scripts/build_viewer_v2_data.py` to generate patient, IPL, EFL/report, anatomy, cluster, and finding-definition bundles from the trusted IPL/sample inputs.
+- Added an anatomy-first dashboard with region/cluster/location progression, spatially lateralized extremity tiles, strict side filtering, status toggles, finding timelines, definition/anatomy metadata separation, and exact evidence drilldown.
+- Reworked the diagram from stacked region cards into a body-map schematic, with heatmap burden and named active-finding chips inside each anatomical zone instead of count-only active badges.
+- Converted `viewer_v2` to a dark radiology-workstation theme; light mode is not treated as an acceptable default for this tool.
+- Tightened the mobile anatomy view after adversarial screenshot review: anatomy remains before detail, laterality remains spatial, active finding names stay visible, and overflow uses compact `N more` controls.
+- Adjusted the body-map layout so the pelvis sits directly below the abdomen, lower extremities sit laterally below the pelvis, active overflow expands in place as `N more`, and the unlocalized tray is hidden when empty under the current filters.
+- Removed global side filters from the v2 viewer; lateral anatomy clicks now drive only local selection context, so selecting a non-lateral region clears the prior side context. Region detail now labels lateral selections directly and presents cluster groups as sub-regions with findings underneath.
+- Generalized anatomy-chip density so any high-burden zone shows more current findings before overflow. Current/always state now uses color accents; always-present findings are collapsed behind an `N always` control, and summary burden rows use the same side-aware anatomy labels as the diagram.
+- Added generated compact finding-name metadata from `viewer_v2/finding_compact_names.json`; dense anatomy chips and finding lists use short labels while detail views preserve the full IPL finding display name.
+- Replaced remaining visible "Cluster" labels with "Sub-region" in the finding detail workflow and removed sticky top-bar behavior that could obscure content while scrolling.
+- Removed the fake "Upper Extremity, Unspecified Side" anatomy tile; generic/unspecified laterality remains metadata/detail context rather than a standalone body-map region.
+- Added Taskfile targets for `viewer:v2:data`, `viewer:v2:dev`, `viewer:v2:build`, and `viewer:v2:deploy` to Cloudflare Pages project `ipl-anatomy`.
+- Incorporated known data quirks: `Body` ontology rows are presentation-bucketed for thorax/abdomen/extremity fallbacks, evidence matching folds Unicode dash/quote variants before exact matching, and missing-anatomy findings emit explicit warnings.
+- Verified data generation, JSON parsing, Vite build, anatomy fallback coverage, and Playwright screenshot states for desktop/mobile review.
+
+Plan: [plans/viewer-v2-anatomy-dashboard.md](plans/viewer-v2-anatomy-dashboard.md).
+
+---
+
+## 2026-06-11 — Anatomic-location correction pass on example2
+
+Hand-reviewed and corrected every anatomic location in `sample_data/example2` against an agreed rule set (documented in [anatomic-location-assignment-rules.md](anatomic-location-assignment-rules.md)). The automated enrichment had systematically fabricated a laterality (usually "left") for bilateral/non-lateralized findings and had several wrong-organ, over-specific, and missing assignments.
+
+- **Fabricated laterality removed:** absent/unsided findings on non-sided exams now use the generic organ (adrenal gland, kidney, seminal vesicle, lung, pleural space, pulmonary hilum, cerebral hemisphere, orbit, maxillary sinus) instead of an invented side.
+- **Wrong organ / specificity fixed:** "lumbar spine degenerative change" → lumbar (was thoracic); "humerus fracture" → humerus (was head of humerus); over-specific lung/soft-tissue targets coarsened to the finding's own anatomic noun or the exam region.
+- **Retrieval misses filled:** prostate findings (the index had returned salivary glands) now resolve to prostate via direct lookup; unlocalized "soft tissue mass" / "generalized osteoporosis" fall back to the exam region (thorax/abdomen).
+- **One bilateral split:** bilateral maxillary mucosal thickening became two observations (`_left`/`_right`).
+- Coverage 274/276 (the 2 unmapped — basal cistern, dural venous sinus — are absent from the ontology). Corrected-state audit at `extracts/anatomy_locations_corrected.csv`.
+- Regenerated `MRN0000001_ipl.json` (125 anatomy groups). Residual same-code/multi-location entries are now either clinically distinct or parent/child pairs for the Step 3b reconciliation, not errors.
+
+---
+
+## 2026-06-10 — Anatomic location on EFLs + anatomy-aware IPL
+
+Added standardized anatomic location to the `sample_data/example2` data, as the foundation for a forthcoming anatomy-aware viewer.
+
+- EFL observations now carry an optional `anatomicLocation` (`{locationId, locationDisplay}`) using the `anatomic-locations` RID system. Populated by `scripts/enrich_efl_anatomy.py`, which adapts each EFL observation into a `Finding` (location unset) and runs the production `run_coding` pipeline, harvesting `location_codes`. The location-coding prompts infer anatomy from report text + exam context, so absent findings are still localized and no new prompt was needed.
+  - Same-named observations are coded in separate `run_coding` calls ("slots") so each keeps its own laterality (the pipeline groups location coding by finding name when location is unset, which would otherwise collapse e.g. left vs. right renal calculi onto one site).
+  - 260/275 example2 observations localized; a review CSV of every decision is written to `extracts/anatomy_enrichment_review.csv`.
+- `scripts/generate_ipl_from_efls.py` now groups by `(findingCode, locationId)` and overwrites `sample_data/example2/MRN0000001_ipl.json` in place. One finding code can appear at multiple locations, so each IPL finding gains an `anatomicLocation` and consumers must key on the finding `id`.
+- `viewer/data/` is intentionally untouched (the current viewer reads its own processed copy; a fresh viewer is planned).
+- Known follow-on: anatomic-compatibility reconciliation (whether observations sharing a finding code are the same problem or distinct) — the first cut over-splits compatible parent/child locations. See `docs/plans/anatomic-location-efl-ipl.md` (Step 3b).
+
+---
+
+## 2026-06-10 — Active documentation refresh
+
+- Corrected active docs for current validation output, `progress_callback`, eval CLI module names, local model defaults, Ollama `NativeOutput` routing, and vLLM profile behavior.
+- Reconciled model-selection notes with `llm/defaults.py`, `.env.ollama.example`, `.env.vllm.example`, and `config.toml.example`.
+- Archived completed plan documents from `docs/plans/` and refreshed the documentation index so only active plans remain listed there.
+- Closed PR-020 in `docs/pending-refactoring.md`.
+
+Plan: `docs/archive/docs-refresh-plan.md`
+
+---
+
 ## 2026-05-14 — Ollama 0.23.1→0.24.0 catch-up; new local default extractor
 
 `gemma4:26b-nvfp4` (17 GB) is the new recommended local default extractor, displacing `qwen3.6:35b-a3b-mlx-bf16` (70 GB). On a 6-report bench at concurrency=2: 67s avg vs qwen3.6's 109s, with 30% more *present* findings (130 vs 100 total). Gemma 4 26B and qwen3.6 are now understood as **complementary**, not redundant — Gemma 4 follows the radiologist's anatomical-checklist style; qwen3.6 captures pathology-named findings. Finding-name Jaccard overlap is 0.22–0.50.
@@ -29,6 +104,19 @@ Code changes:
 Report: [eval-ollama-models-report.md](eval-ollama-models-report.md) §"2026-05-14 round — Ollama 0.23.1→0.24.0 catch-up and new local default".
 
 Plan reference (archived after completion): `~/.claude/plans/please-come-up-with-fuzzy-nygaard.md`.
+
+---
+
+## 2026-04-24 — vLLM provider
+
+- Added `vllm:` model IDs for configured OpenAI-compatible deployments: `vllm:google/gemma-4-31B-it` and `vllm:openai/gpt-oss-120b`.
+- Added configurable vLLM base URLs with defaults for the current Gemma 4 31B and GPT OSS 120B endpoints; optional auth uses env-only `VLLM_API_KEY`.
+- Added model-specific reasoning validation: Gemma 4 accepts `none`; GPT OSS accepts `none|low|medium|high` with `minimal` normalized to `low`.
+- Routed vLLM models through `NativeOutput` because the current servers reject tool-calling requests unless started with a tool-call parser.
+- Hardened vLLM provider construction so it never falls back to `OPENAI_API_KEY`; unauthenticated deployments use a non-secret placeholder key, while authenticated deployments must set `VLLM_API_KEY`.
+- Canonicalized vLLM served model names before sending requests so accepted case variants still call exact deployment names such as `google/gemma-4-31B-it`.
+- Extended `--local-only` / `IPL_LOCAL_ONLY=true` to allow configured vLLM endpoints whose hosts are explicitly allowlisted while still rejecting cloud providers, Ollama cloud tags, and unapproved vLLM hosts.
+- Updated usage/config docs and examples so the on-prem models work through the same CLI/API/batch/eval model fields as existing providers.
 
 ---
 
@@ -150,7 +238,7 @@ Tested: gpt-oss:120b (MXFP4, ~72 tok/s), gpt-oss:20b, nemotron-3-super:120b,
 gemma4:31b, gemma4:26b (via NativeOutput), qwen3.5:27b, llama3.3. All produce
 clinically reasonable extractions. gpt-oss models are fastest on Apple Silicon.
 
-Plan: `docs/plans/ollama-local-model-support.md`
+Plan: `docs/archive/ollama-local-model-support.md`
 
 ---
 

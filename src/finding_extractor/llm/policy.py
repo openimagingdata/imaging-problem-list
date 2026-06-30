@@ -34,6 +34,11 @@ ANTHROPIC_ALLOWED_MAJOR = 4
 ANTHROPIC_ALLOWED_MINORS = {5, 6}
 GOOGLE_ALLOWED_MAJOR = 3
 GOOGLE_ALLOWED_TIERS = {"pro", "flash"}
+VLLM_CANONICAL_MODEL_IDS = {
+    "google/gemma-4-31b-it": "google/gemma-4-31B-it",
+    "openai/gpt-oss-120b": "openai/gpt-oss-120b",
+}
+VLLM_ALLOWED_MODEL_IDS = set(VLLM_CANONICAL_MODEL_IDS.values())
 
 ANTHROPIC_RE_A = re.compile(
     r"^claude-(?P<tier>opus|sonnet|haiku)-(?P<major>\d+)-(?P<minor>\d+)(?:-(?P<stamp>\d{8}))?$"
@@ -56,6 +61,7 @@ KNOWN_PROVIDER_PREFIXES = {
     "google-gla",
     "openrouter",
     "ollama",
+    "vllm",
 }
 
 # Canonical provider prefix mapping (normalized provider names)
@@ -68,6 +74,7 @@ PROVIDER_PREFIX_MAP = {
     "google-gla": "google",
     "openrouter": "openrouter",
     "ollama": "ollama",
+    "vllm": "vllm",
 }
 
 
@@ -106,6 +113,12 @@ def output_model_prefix(provider: str) -> str:
     if provider != "google":
         return provider
     return "google-gla"
+
+
+def canonical_vllm_model_id(model_id: str) -> str | None:
+    """Return the exact served vLLM model name for a raw or prefixed model ID."""
+    raw_model_id = model_id.split(":", maxsplit=1)[1] if model_id.startswith("vllm:") else model_id
+    return VLLM_CANONICAL_MODEL_IDS.get(raw_model_id.lower())
 
 
 def _suffix_stamp_rank(suffix: str | None) -> int:
@@ -244,6 +257,10 @@ def validate_model_id(model_id: str) -> None:
     if provider == "google" and not select_sota_model_ids("google", {raw_model_id}):
         raise ValueError("google model must be gemini-3* pro/flash with google-gla prefix")
 
+    if provider == "vllm" and canonical_vllm_model_id(raw_model_id) is None:
+        allowed = ", ".join(sorted(VLLM_ALLOWED_MODEL_IDS))
+        raise ValueError(f"vllm model must be one of: {allowed}")
+
 
 # ---------------------------------------------------------------------------
 # Local-only enforcement
@@ -363,23 +380,67 @@ def enforce_endpoint_locality(
     return host
 
 
+def enforce_vllm_endpoint_locality(
+    vllm_base_url: str | None,
+    *,
+    allowed_hosts: set[str] | frozenset[str],
+    context: str = "local-only",
+) -> str:
+    """Assert that a vLLM endpoint is approved for local-only mode."""
+    if not vllm_base_url:
+        raise LocalOnlyViolationError(
+            f"[{context}] vLLM base URL is not configured for this model"
+        )
+    if not allowed_hosts:
+        raise LocalOnlyViolationError(
+            f"[{context}] no vLLM hosts are approved for local-only mode. "
+            "Set IPL_VLLM_LOCAL_ONLY_ALLOW_HOSTS to allow configured vLLM endpoints."
+        )
+
+    parsed = urlparse(vllm_base_url)
+    if parsed.scheme not in {"http", "https"}:
+        raise LocalOnlyViolationError(
+            f"[{context}] vLLM base URL must use http or https, got scheme "
+            f"{parsed.scheme!r}"
+        )
+    host = parsed.hostname
+    if not host:
+        raise LocalOnlyViolationError(
+            f"[{context}] vLLM base URL {vllm_base_url!r} has no host component"
+        )
+
+    host_lower = host.lower()
+    normalized_allowed_hosts = {allowed.lower() for allowed in allowed_hosts}
+    if host_lower not in normalized_allowed_hosts:
+        allowed = ", ".join(sorted(normalized_allowed_hosts))
+        raise LocalOnlyViolationError(
+            f"[{context}] vLLM host {host!r} is not approved for local-only mode; "
+            f"approved hosts: {allowed}"
+        )
+    return host_lower
+
+
 def enforce_local_only(
     model_name: str,
     *,
     local_only_mode: bool,
     ollama_base_url: str | None = None,
+    vllm_base_url: str | None = None,
+    vllm_allowed_hosts: set[str] | frozenset[str] | None = None,
     context: str = "local-only",
 ) -> None:
-    """Reject any extraction request that could leave the machine.
+    """Reject any extraction request outside approved local/on-prem inference.
 
     No-op when ``local_only_mode`` is False. When True, raises
     :class:`LocalOnlyViolationError` if any of the following is true:
 
-    1. The model's provider is not ``ollama``.
+    1. The model's provider is not ``ollama`` or ``vllm``.
     2. The model reference carries an Ollama cloud suffix
        (``:cloud`` or ``-cloud`` tag suffix).
     3. ``ollama_base_url`` is unset, malformed, or resolves to a non-loopback
-       host.
+       host for Ollama models.
+    4. ``vllm_base_url`` is unset, malformed, or points outside the configured
+       vLLM host allowlist for vLLM models.
 
     Callers pass ``context`` (e.g. ``"API request"``, ``"batch CLI"``,
     ``"worker"``) so the error message names the enforcement path. Settings
@@ -389,11 +450,23 @@ def enforce_local_only(
         return
 
     provider = provider_from_model_id(model_name)
-    if provider != "ollama":
+    if provider not in {"ollama", "vllm"}:
         raise LocalOnlyViolationError(
-            f"[{context}] model {model_name!r} is not an Ollama model "
-            "(local-only mode requires an ollama:<model> reference)"
+            f"[{context}] model {model_name!r} is not an Ollama or approved vLLM model "
+            "(local-only mode requires an ollama:<model> or vllm:<model> reference)"
         )
+
+    if provider == "vllm":
+        if canonical_vllm_model_id(model_name) is None:
+            raise LocalOnlyViolationError(
+                f"[{context}] model {model_name!r} is not an approved vLLM model"
+            )
+        enforce_vllm_endpoint_locality(
+            vllm_base_url,
+            allowed_hosts=vllm_allowed_hosts or frozenset(),
+            context=context,
+        )
+        return
 
     if has_cloud_suffix(model_name):
         raise LocalOnlyViolationError(

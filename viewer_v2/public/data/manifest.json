@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "viewer-v2-data.1",
+  "generatedAt": "2026-06-11T20:46:58.399446+00:00",
+  "source": {
+    "sampleDir": "sample_data/example2",
+    "ipl": "sample_data/example2/MRN0000001_ipl.json",
+    "findingDefinitions": "viewer/data/finding_display_info.json",
+    "compactFindingNames": "viewer_v2/finding_compact_names.json"
+  },
+  "warnings": [
+    {
+      "type": "missing_anatomy",
+      "findingId": "ipl-finding-053",
+      "message": "Finding has no specific anatomy location and uses the Unlocalized display fallback."
+    },
+    {
+      "type": "evidence_not_exact",
+      "findingId": "ipl-finding-058",
+      "observationId": "renal_calculus_2",
+      "reportId": "d069f74b-2672-4f4f-bb81-f11401720780",
+      "message": "Evidence text is associated with a report but is not an exact normalized substring."
+    },
+    {
+      "type": "missing_definition",
+      "findingId": "ipl-finding-078",
+      "findingCode": "OIFM_MGB_949427",
+      "message": "Finding definition metadata is unavailable."
+    },
+    {
+      "type": "evidence_not_exact",
+      "findingId": "ipl-finding-095",
+      "observationId": "basal_cistern_effacement_0",
+      "reportId": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+      "message": "Evidence text is associated with a report but is not an exact normalized substring."
+    },
+    {
+      "type": "missing_anatomy",
+      "findingId": "ipl-finding-095",
+      "message": "Finding has no specific anatomy location and uses the Unlocalized display fallback."
+    },
+    {
+      "type": "evidence_not_exact",
+      "findingId": "ipl-finding-096",
+      "observationId": "soft_tissue_mass_0",
+      "reportId": "785eae28-f4b4-4268-9730-79292c7eff53",
+      "message": "Evidence text is associated with a report but is not an exact normalized substring."
+    },
+    {
+      "type": "evidence_not_exact",
+      "findingId": "ipl-finding-106",
+      "observationId": "chiari_malformation_0",
+      "reportId": "17d87df5-61e2-41a9-9f56-559ba40f6548",
+      "message": "Evidence text is associated with a report but is not an exact normalized substring."
+    }
+  ],
+  "counts": {
+    "patients": 1,
+    "exams": 10,
+    "findings": 123,
+    "usedLocations": 70,
+    "resolvedLocations": 70,
+    "compactNames": 68,
+    "warnings": 7
+  }
+}

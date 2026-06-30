@@ -159,7 +159,7 @@ def cli() -> None:
     "--local-only",
     is_flag=True,
     default=False,
-    help="Enforce PHI-safe mode: only Ollama models on a local endpoint, no cloud fallback, no logfire.",
+    help="Enforce PHI-safe mode: Ollama loopback or approved vLLM only, no cloud fallback, no logfire.",
 )
 @click.option(
     "--log",

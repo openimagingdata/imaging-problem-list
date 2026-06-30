@@ -4,13 +4,17 @@ from pydantic import BaseModel
 from pydantic_ai import NativeOutput
 from pydantic_ai.exceptions import ModelHTTPError, UnexpectedModelBehavior
 from pydantic_ai.models.fallback import FallbackModel
+from pydantic_ai.models.openai import OpenAIChatModel
 
+from finding_extractor.core.config import clear_settings_cache
 from finding_extractor.llm.resilience import (
+    VLLM_PLACEHOLDER_API_KEY,
     PinnedModelSettingsModel,
     ProviderConcurrencyLimitedModel,
     build_resilient_model,
     clear_provider_limiters,
     get_provider_request_limiter,
+    infer_runtime_model,
     provider_scope_key,
     resolve_output_type,
     should_fallback_on_exception,
@@ -98,6 +102,55 @@ def test_build_resilient_model_carries_model_name(monkeypatch):
     assert runtime.model_name == "ollama:gpt-oss:120b"
 
 
+def test_infer_runtime_model_builds_openai_compatible_vllm_model(monkeypatch):
+    clear_settings_cache()
+    monkeypatch.setenv("VLLM_GEMMA4_31B_BASE_URL", "https://example.org/gemma/v1/chat/completions")
+    model = infer_runtime_model("vllm:google/gemma-4-31B-it")
+    assert isinstance(model, OpenAIChatModel)
+    assert model.model_name == "google/gemma-4-31B-it"
+
+
+def test_infer_runtime_model_canonicalizes_vllm_served_model_name(monkeypatch):
+    clear_settings_cache()
+    monkeypatch.setenv("VLLM_GEMMA4_31B_BASE_URL", "https://example.org/gemma/v1")
+    model = infer_runtime_model("vllm:google/gemma-4-31b-it")
+    assert isinstance(model, OpenAIChatModel)
+    assert model.model_name == "google/gemma-4-31B-it"
+
+
+def test_infer_runtime_model_does_not_reuse_openai_api_key_for_vllm(monkeypatch):
+    clear_settings_cache()
+    monkeypatch.setenv("OPENAI_API_KEY", "openai-test-key")
+    monkeypatch.delenv("VLLM_API_KEY", raising=False)
+    monkeypatch.setenv("VLLM_GPT_OSS_120B_BASE_URL", "https://example.org/gpt-oss/v1")
+    model = infer_runtime_model("vllm:openai/gpt-oss-120b")
+    assert isinstance(model, OpenAIChatModel)
+    assert model.client.api_key == VLLM_PLACEHOLDER_API_KEY
+
+
+def test_infer_runtime_model_uses_vllm_api_key_when_configured(monkeypatch):
+    clear_settings_cache()
+    monkeypatch.setenv("OPENAI_API_KEY", "openai-test-key")
+    monkeypatch.setenv("VLLM_API_KEY", "vllm-test-key")
+    monkeypatch.setenv("VLLM_GPT_OSS_120B_BASE_URL", "https://example.org/gpt-oss/v1")
+    model = infer_runtime_model("vllm:openai/gpt-oss-120b")
+    assert isinstance(model, OpenAIChatModel)
+    assert model.client.api_key == "vllm-test-key"
+
+
+def test_build_resilient_model_wraps_vllm_model(monkeypatch):
+    clear_provider_limiters()
+    clear_settings_cache()
+    monkeypatch.setattr(
+        "finding_extractor.llm.resilience.get_model_settings",
+        lambda model, reasoning=None: None,
+    )
+    monkeypatch.setenv("VLLM_GPT_OSS_120B_BASE_URL", "https://example.org/gpt-oss/v1")
+    runtime = build_resilient_model("vllm:openai/gpt-oss-120b")
+    assert runtime.model_name == "vllm:openai/gpt-oss-120b"
+    assert isinstance(runtime.model, OpenAIChatModel)
+
+
 # ---------------------------------------------------------------------------
 # resolve_output_type
 # ---------------------------------------------------------------------------
@@ -108,7 +161,7 @@ class _DummyOutput(BaseModel):
 
 
 class TestResolveOutputType:
-    """Wrap output_type in NativeOutput for Ollama models that need it."""
+    """Wrap output_type in NativeOutput for models that need it."""
 
     def test_no_wrap_for_non_ollama(self):
         result = resolve_output_type(_DummyOutput, "openai:gpt-5.2")
@@ -126,6 +179,10 @@ class TestResolveOutputType:
         result = resolve_output_type(
             _DummyOutput, "ollama:gpt-oss:120b", fallback_model_name="ollama:medgemma:27b"
         )
+        assert isinstance(result, NativeOutput)
+
+    def test_wraps_for_vllm(self):
+        result = resolve_output_type(_DummyOutput, "vllm:google/gemma-4-31B-it")
         assert isinstance(result, NativeOutput)
 
     def test_no_wrap_when_both_tool_capable(self):

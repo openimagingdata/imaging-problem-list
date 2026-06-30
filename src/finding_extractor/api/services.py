@@ -13,6 +13,7 @@ from finding_extractor.llm.model_settings import resolve_runtime_reasoning
 from finding_extractor.llm.policy import (
     LocalOnlyViolationError,
     enforce_local_only,
+    provider_from_model_id,
     validate_model_id,
 )
 from finding_extractor.read_models import ExtractionDetail, ReportDetail
@@ -58,6 +59,10 @@ async def enqueue_extraction_job(
             model_name,
             local_only_mode=settings.local_only_mode,
             ollama_base_url=settings.ollama_base_url,
+            vllm_base_url=settings.vllm_base_url_for_model_optional(model_name)
+            if provider_from_model_id(model_name) == "vllm"
+            else None,
+            vllm_allowed_hosts=settings.vllm_local_only_allowed_hosts,
             context="API extraction request",
         )
     except LocalOnlyViolationError as exc:

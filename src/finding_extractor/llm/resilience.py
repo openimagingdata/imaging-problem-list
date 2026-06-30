@@ -19,13 +19,17 @@ from pydantic_ai.models import (
     infer_model,
 )
 from pydantic_ai.models.fallback import FallbackModel
+from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.models.wrapper import WrapperModel
+from pydantic_ai.providers.openai import OpenAIProvider
 from pydantic_ai.settings import ModelSettings
 from pydantic_ai.usage import RequestUsage
 
 from finding_extractor.core.config import get_settings
 from finding_extractor.llm.model_settings import get_model_settings
-from finding_extractor.llm.policy import provider_from_model_id
+from finding_extractor.llm.policy import canonical_vllm_model_id, provider_from_model_id
+
+VLLM_PLACEHOLDER_API_KEY = "vllm-no-api-key"
 
 
 @dataclass(frozen=True)
@@ -204,22 +208,47 @@ def _wrap_with_provider_concurrency(
     return ProviderConcurrencyLimitedModel(model, limiter=limiter)
 
 
+def _build_vllm_model(model_name: str) -> OpenAIChatModel:
+    """Build an explicit OpenAI-compatible model for on-prem vLLM deployments."""
+    if ":" not in model_name:
+        raise ValueError("vLLM model names must use 'vllm:<served-model-name>'")
+    raw_model_id = canonical_vllm_model_id(model_name)
+    if raw_model_id is None:
+        raise ValueError(f"unsupported vLLM model {model_name!r}")
+    settings = get_settings()
+    return OpenAIChatModel(
+        raw_model_id,
+        provider=OpenAIProvider(
+            base_url=settings.vllm_base_url_for_model(model_name),
+            api_key=settings.vllm_api_key or VLLM_PLACEHOLDER_API_KEY,
+        ),
+    )
+
+
+def infer_runtime_model(model_name: str) -> Model | str:
+    """Return the model object/string PydanticAI should run for a configured ID."""
+    provider = provider_from_model_id(model_name)
+    if provider == "vllm":
+        return _build_vllm_model(model_name)
+    return model_name
+
+
 def resolve_output_type(
     output_type: Any,
     model_name: str,
     fallback_model_name: str | None = None,
 ) -> Any:
-    """Wrap output_type in NativeOutput if any configured Ollama model needs it.
+    """Wrap output_type in NativeOutput if any configured model needs it.
 
-    When primary and fallback use different output modes (e.g. gpt-oss with tools +
-    gemma4 needing native), bias to native — native output works for all models,
-    while tool mode doesn't.
+    When primary and fallback use different output modes, bias to native. Native
+    output works across the supported OpenAI-compatible paths, while tool mode
+    depends on server/model-specific tool parser configuration.
     """
-    from finding_extractor.llm.model_settings import ollama_needs_native_output
+    from finding_extractor.llm.model_settings import model_needs_native_output
 
-    needs_native = ollama_needs_native_output(model_name)
+    needs_native = model_needs_native_output(model_name)
     if fallback_model_name and not needs_native:
-        needs_native = ollama_needs_native_output(fallback_model_name)
+        needs_native = model_needs_native_output(fallback_model_name)
     if needs_native:
         from pydantic_ai import NativeOutput
 
@@ -237,7 +266,7 @@ def build_resilient_model(
     """Build runtime model stack for primary-only or fallback-capable execution."""
     primary_model_settings = get_model_settings(model_name, reasoning)
     primary_model = _wrap_with_provider_concurrency(
-        model_name,
+        infer_runtime_model(model_name),
         model_name=model_name,
         max_concurrency=provider_request_max_concurrency,
     )
@@ -251,7 +280,7 @@ def build_resilient_model(
 
     fallback_model_settings = get_model_settings(fallback_model_name, reasoning)
     fallback_model = _wrap_with_provider_concurrency(
-        fallback_model_name,
+        infer_runtime_model(fallback_model_name),
         model_name=fallback_model_name,
         max_concurrency=provider_request_max_concurrency,
     )
