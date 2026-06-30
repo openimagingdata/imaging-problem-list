@@ -43,7 +43,16 @@
 ## Active Plans
 
 - [coding-agent-design.md](coding-agent-design.md) — Coding agent design (future, decoupled from extraction)
+- [plans/extractor-evals-redesign.md](plans/extractor-evals-redesign.md) — Evaluation harness redesign plan
+- [plans/local-only-future-tightening.md](plans/local-only-future-tightening.md) — Deferred local-only hardening backlog
+- [plans/nemotron-cascade-2-evaluation.md](plans/nemotron-cascade-2-evaluation.md) — Nemotron Cascade 2 support/evaluation plan
+- [plans/pydantic-ai-thinking-capability-simplification.md](plans/pydantic-ai-thinking-capability-simplification.md) — Future PydanticAI thinking-field simplification
 - [viewer-refactoring.md](viewer-refactoring.md) — Viewer CDN/Tailwind migration plan
+
+## Reports / Benchmarks / Draft References
+
+- [eval-ollama-models-report.md](eval-ollama-models-report.md) — Local Ollama model benchmark and reviewer findings
+- [technical-imaging-findings.md](technical-imaging-findings.md) — Draft technical imaging findings reference
 
 ## Backlogs
 

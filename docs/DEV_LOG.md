@@ -4,6 +4,17 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-06-10 — Active documentation refresh
+
+- Corrected active docs for current validation output, `progress_callback`, eval CLI module names, local model defaults, Ollama `NativeOutput` routing, and vLLM profile behavior.
+- Reconciled model-selection notes with `llm/defaults.py`, `.env.ollama.example`, `.env.vllm.example`, and `config.toml.example`.
+- Archived completed plan documents from `docs/plans/` and refreshed the documentation index so only active plans remain listed there.
+- Closed PR-020 in `docs/pending-refactoring.md`.
+
+Plan: `docs/archive/docs-refresh-plan.md`
+
+---
+
 ## 2026-04-24 — vLLM provider
 
 - Added `vllm:` model IDs for configured OpenAI-compatible deployments: `vllm:google/gemma-4-31B-it` and `vllm:openai/gpt-oss-120b`.
@@ -135,7 +146,7 @@ Tested: gpt-oss:120b (MXFP4, ~72 tok/s), gpt-oss:20b, nemotron-3-super:120b,
 gemma4:31b, gemma4:26b (via NativeOutput), qwen3.5:27b, llama3.3. All produce
 clinically reasonable extractions. gpt-oss models are fastest on Apple Silicon.
 
-Plan: `docs/plans/ollama-local-model-support.md`
+Plan: `docs/archive/ollama-local-model-support.md`
 
 ---
 

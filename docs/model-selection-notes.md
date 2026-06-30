@@ -1,6 +1,6 @@
 # Model Selection Notes
 
-Last updated: 2026-03-16
+Last updated: 2026-04-24
 Status: Active reference
 
 ## Current Defaults
@@ -14,6 +14,9 @@ Status: Active reference
    - `anthropic`: `medium`
    - `openrouter`: `medium`
    - `ollama`: `none`
+   - `vllm`: `none`
+5. Local profile default: extractor `ollama:qwen3.6:35b-a3b-mlx-bf16`, reviewer `ollama:qwen3.6:35b-a3b-bf16` with reasoning=`low`, fallback `ollama:gpt-oss:20b`.
+6. On-prem vLLM profile: extractor `vllm:google/gemma-4-31B-it`, reviewer/fallback `vllm:openai/gpt-oss-120b`.
 
 ## What We Learned (Chunk-Extraction Focus)
 
@@ -24,6 +27,7 @@ Status: Active reference
 5. Gemini model-family reasoning settings must be model-aware:
    - `gemini-3.1-pro*`: supports `low|high`
    - `gemini-3-flash*`: supports `minimal|low|medium|high`
+6. Local model guidance changes quickly. Keep the active local defaults aligned with `src/finding_extractor/llm/defaults.py`, `.env.ollama.example`, `.env.vllm.example`, and `config.toml.example`.
 
 ## Curated Common Models
 
@@ -31,18 +35,41 @@ Canonical source in code:
 - `src/finding_extractor/llm/defaults.py`
 - `src/finding_extractor/llm/model_settings.py` (`EXTRACTION_PRESETS`, `format_preset_help_summary()`)
 
-1. `google-gla:gemini-3-flash-preview` (default extraction)
-2. `openai:gpt-5.2` (default fallback)
-3. `anthropic:claude-opus-4-6` (high-quality validator/extraction option)
-4. `google-gla:gemini-3.1-pro-preview` (strong Google quality option)
-5. `ollama:qwen3:30b-instruct` (local baseline, reasoning=`none`)
-6. `ollama:qwen3:30b-thinking` (local thinking-capable model)
-7. `ollama:gpt-oss:120b` (local heavy reasoning-capable model)
+1. `google-gla:gemini-3-flash-preview` (default extraction, reasoning=`low`)
+2. `openai:gpt-5.2` (default fallback, reasoning=`low` when explicitly selected for this workflow)
+3. `anthropic:claude-opus-4-6` (high-quality validator/extraction option, reasoning=`low`)
+4. `google-gla:gemini-3.1-pro-preview` (strong Google quality option, reasoning=`low`)
+5. `google-gla:gemini-3.1-flash-lite-preview` (fast low-cost Google option, reasoning=`low`)
+6. `ollama:qwen3.6:35b-a3b-mlx-bf16` (local default extractor, reasoning=`none`)
+7. `ollama:qwen3.6:35b-a3b-bf16` (local default reviewer, reasoning=`low`)
+8. `ollama:qwen3.6:35b-a3b-q8_0` (local Q8 alternative, reasoning=`none`)
+9. `ollama:gemma4:26b-mxfp8` (local quality extractor, profile reasoning=`none`)
+10. `ollama:medgemma:27b` (local medical specialist extractor, profile reasoning=`none`)
+11. `ollama:qwen3.5:9b` (cataloged local ultralight; no longer recommended on high-memory Apple Silicon)
+12. `ollama:qwen3:30b-instruct` (legacy local baseline, reasoning=`none`)
+13. `ollama:qwen3:30b-thinking` (legacy local thinking-capable option, reasoning=`low`)
+14. `ollama:gpt-oss:120b` (local heavy reasoning option, reasoning=`medium`; no longer the recommended reviewer)
+15. `vllm:google/gemma-4-31B-it` (on-prem vLLM extractor, reasoning=`none`)
+16. `vllm:openai/gpt-oss-120b` (on-prem vLLM reviewer/fallback, reasoning=`medium`)
+
+Profile-only defaults not in `COMMON_MODELS`:
+- `openai-responses:gpt-5.4-mini` is the current default reviewer from settings.
+- `ollama:gpt-oss:20b` is the `.env.ollama.example` lightweight fallback.
 
 Reasoning notes for curated local models:
-- `ollama:qwen3:30b-thinking`: all reasoning inputs accepted; runtime maps `none` to `think=false` and non-`none` to `think=true`
+- `ollama:qwen3.5:*` / `ollama:qwen3.6:*`: `none|low|medium|high`; runtime sends explicit `reasoning_effort` because these families think by default on the OpenAI-compatible endpoint
+- `ollama:nemotron-cascade-2*` / `ollama:nemotron-3-super*`: `none|low|medium|high`; same explicit `reasoning_effort` handling as Qwen3.5/3.6
 - `ollama:qwen3:30b-instruct`: `none` only
+- `ollama:qwen3:30b-thinking`: all reasoning inputs accepted; runtime maps `none` to `think=false` and non-`none` to `think=true`
 - `ollama:gpt-oss:120b`: `none|low|medium|high` accepted; `minimal` normalizes to `low`
+- `ollama:gemma4:*`, `ollama:medgemma:*`, and `ollama:gpt-oss:20b`: recommended with reasoning `none` through `.env.ollama` / `IPL_ALLOW_UNKNOWN_MODEL_REASONING=true`; they are not currently verified by the strict family compatibility matrix
+- `vllm:google/gemma-4-31B-it`: `none` only
+- `vllm:openai/gpt-oss-120b`: `none|low|medium|high` accepted; `minimal` normalizes to `low`
+
+Structured-output notes:
+- PydanticAI uses tool calls for structured output by default.
+- The extractor routes configured `vllm:` models through `NativeOutput` / JSON-schema output because the current endpoints reject tool-calling requests unless launched with a tool-call parser.
+- Ollama Gemma 3, DeepSeek-R1, MedGemma, `nemotron-cascade-2`, and unknown custom model names use `NativeOutput`. Gemma 4, Qwen3/3.5/3.6, gpt-oss, llama3/4, and other Nemotron families use tool mode.
 
 ## Reviewer Model Evaluation (2026-03-16)
 
@@ -124,9 +151,11 @@ gpt-5.4 family defaults to `none` if `reasoning_effort` is omitted. Explicitly s
 ## Operational Guidance
 
 1. Start with defaults for routine extraction runs.
-2. Move to `openai:gpt-5.2` directly for reliability testing or provider isolation.
-3. `quality` preset is pinned to `anthropic:claude-opus-4-6` intentionally for maximum-quality review/extraction runs; use selectively when latency/cost are acceptable.
-4. Re-run focused model comparison after major prompt/schema changes.
+2. Use `.env.ollama.example` as the canonical local profile. It pairs the Qwen3.6 MLX extractor with the Qwen3.6 BF16 reviewer and `gpt-oss:20b` fallback.
+3. Use `.env.vllm.example` as the canonical on-prem profile. It pairs Gemma 4 extraction with GPT OSS reviewer/fallback endpoints and keeps `VLLM_API_KEY` separate from OpenAI credentials.
+4. Move to `openai:gpt-5.2` directly for reliability testing or provider isolation.
+5. `quality` preset is pinned to `anthropic:claude-opus-4-6` intentionally for maximum-quality review/extraction runs; use selectively when latency/cost are acceptable.
+6. Re-run focused model comparison after major prompt/schema changes.
 
 ## Planned Improvements
 
@@ -136,6 +165,10 @@ gpt-5.4 family defaults to `none` if `reasoning_effort` is omitted. Explicitly s
    - `google-gla:gemini-3.1-pro-preview` + `low`
    - `openai:gpt-5.2` + `low` (and `minimal` normalization)
    - `anthropic:claude-opus-4-6` + `low`
-   - `ollama:qwen3:30b-instruct` + `none`
-   - `ollama:qwen3:30b-thinking` + `low`
+   - `ollama:qwen3.6:35b-a3b-mlx-bf16` + `none`
+   - `ollama:qwen3.6:35b-a3b-bf16` + `low`
+   - `ollama:gemma4:26b-mxfp8` + `none`
+   - `ollama:medgemma:27b` + `none`
    - `ollama:gpt-oss:120b` + `medium`
+   - `vllm:google/gemma-4-31B-it` + `none`
+   - `vllm:openai/gpt-oss-120b` + `medium`

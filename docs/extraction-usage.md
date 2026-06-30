@@ -62,7 +62,7 @@ uv run finding-extractor report.txt -m openrouter:meta-llama/llama-3.1-70b
 
 # Local Ollama (see Ollama setup below)
 uv run finding-extractor report.txt -m ollama:qwen3.6:35b-a3b-mlx-bf16
-uv run finding-extractor report.txt -m ollama:gemma4:26b-mxfp8                 # quality alt
+uv run --env-file .env.ollama finding-extractor report.txt -m ollama:gemma4:26b-mxfp8  # quality alt
 uv run finding-extractor report.txt -m ollama:gpt-oss:120b --reasoning medium  # legacy
 
 # On-prem vLLM
@@ -205,10 +205,10 @@ Reasoning defaults are provider-specific (`openai=medium`, `anthropic=medium`, `
 For Ollama, reasoning is model-specific:
 - `ollama:qwen3.5:*` / `ollama:qwen3.6:*`: `none|low|medium|high` — thinks by default on the OpenAI-compatible endpoint; `reasoning_effort:none` is required to disable (the extractor sends this automatically)
 - `ollama:nemotron-cascade-2:*` / `ollama:nemotron-3-super:*`: same `none|low|medium|high` handling as Qwen3.5/3.6
-- `ollama:gpt-oss:120b` / `ollama:gpt-oss:20b`: `none|low|medium|high` (`minimal` normalizes to `low`)
+- `ollama:gpt-oss:120b`: `none|low|medium|high` (`minimal` normalizes to `low`)
 - `ollama:qwen3:30b-thinking`: `none|minimal|low|medium|high` (mapped to `think=false|true`)
 - `ollama:qwen3:30b-instruct`: `none` only
-- `ollama:medgemma:*`: `none` only (Gemma 3-based, no reasoning surface)
+- Recommended local profile models outside the verified reasoning matrix, including `ollama:gemma4:*`, `ollama:medgemma:*`, and `ollama:gpt-oss:20b`, should be run with reasoning `none` via `.env.ollama` or with `IPL_ALLOW_UNKNOWN_MODEL_REASONING=true`.
 
 For on-prem vLLM:
 - `vllm:google/gemma-4-31B-it`: `none` only
@@ -239,7 +239,9 @@ Options:
 
 Validation is enabled by default. Use `--no-validate` to disable it.
 
-`--validate` runs a **coverage analysis** that checks whether all report text lines are accounted for by extracted findings or non-finding text segments. It does **not** perform verbatim quote checking — that is handled automatically by the agent's output validator, which retries the model when quotes don't match. As a result, `--validate` always returns `is_valid=True` with no `verbatim_errors`; it only produces `coverage_warnings`.
+`--validate` runs the post-extraction validation pass. Validation output is reported as lists of `verbatim_errors` and `coverage_warnings`; there is no aggregate boolean validity field on the validation result.
+
+Verbatim quote checking is enforced during extraction by the agent output validator, which retries the model when quotes do not match the report text. The post-run validation pass can still surface `verbatim_errors` if invalid quotes survive all retries or are introduced by downstream merging. Coverage warnings are advisory unless strict reliability mode is enabled. In strict mode, unrecovered section failures or validation errors fail the run instead of returning a best-effort extraction.
 
 ## Logfire Observability
 
@@ -292,7 +294,7 @@ result = await run_extraction_runtime(
     source_ref=None,
     report_id=None,
     # Optional: receive stage status messages during extraction
-    # status_callback=async_fn_that_takes_a_string,
+    # progress_callback=async_fn_that_takes_a_string,
 )
 
 for finding in result.extraction.findings:

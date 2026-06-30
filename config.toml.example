@@ -8,9 +8,13 @@ fallback_model = "openai:gpt-5.2"
 # Common alternatives:
 # - anthropic:claude-opus-4-6
 # - google-gla:gemini-3.1-pro-preview
-# - ollama:qwen3:30b-instruct
-# - ollama:qwen3:30b-thinking
+# - ollama:qwen3.6:35b-a3b-mlx-bf16
+# - ollama:qwen3.6:35b-a3b-bf16
+# - ollama:qwen3.6:35b-a3b-q8_0
+# - ollama:gemma4:26b-mxfp8
+# - ollama:medgemma:27b
 # - ollama:gpt-oss:120b
+# - ollama:gpt-oss:20b
 # - vllm:google/gemma-4-31B-it
 # - vllm:openai/gpt-oss-120b
 reviewer_enabled = true
@@ -38,9 +42,11 @@ log_json = false
 
 # --- Local Ollama configuration ---
 # For local Ollama extraction, uncomment and adjust these settings:
-# default_model = "ollama:gpt-oss:20b"
+# default_model = "ollama:qwen3.6:35b-a3b-mlx-bf16"
+# default_reasoning = "none"
 # fallback_model = "ollama:gpt-oss:20b"
-# reviewer_model = "ollama:gpt-oss:120b"
+# reviewer_model = "ollama:qwen3.6:35b-a3b-bf16"
+# reviewer_reasoning = "low"
 # subagent_timeout_seconds = 300
 # extractor_max_subagent_concurrency = 1
 # allow_unknown_model_reasoning = true

@@ -89,7 +89,10 @@ Notes:
   - model-specific Ollama behavior is enforced for known families:
     - `ollama:qwen3:30b-thinking` supports all reasoning levels
     - `ollama:qwen3:30b-instruct` supports `none` only
+    - `ollama:qwen3.5:*` / `ollama:qwen3.6:*` support `none|low|medium|high` and require explicit reasoning controls because they think by default on the OpenAI-compatible endpoint
     - `ollama:gpt-oss:120b` supports `none|low|medium|high` (`minimal` normalized to `low`)
+    - `ollama:nemotron-cascade-2*` / `ollama:nemotron-3-super*` support `none|low|medium|high` and use the same explicit reasoning-effort path as Qwen3.5/3.6
+    - recommended local profile models outside this verified matrix, including `ollama:gemma4:*`, `ollama:medgemma:*`, and `ollama:gpt-oss:20b`, should use reasoning `none` with `IPL_ALLOW_UNKNOWN_MODEL_REASONING=true`
   - model-specific vLLM behavior is enforced for known on-prem deployments:
     - `vllm:google/gemma-4-31B-it` supports `none` only
     - `vllm:openai/gpt-oss-120b` supports `none|low|medium|high` (`minimal` normalized to `low`)
@@ -154,7 +157,7 @@ Ollama runs models locally without API keys. Set the base URL to connect:
 
 #### NativeOutput auto-detection
 
-Some Ollama model families (gemma4 MoE, gemma3, deepseek-r1, MedGemma) can't use PydanticAI's tool-calling protocol. The extractor auto-detects these and uses `NativeOutput` (JSON schema mode). Tool-capable families (gpt-oss, llama3/4, qwen3/3.5, nemotron) use the default tool mode. See `ollama_needs_native_output()` in `src/finding_extractor/llm/model_settings.py`.
+Some Ollama model families cannot use PydanticAI's default tool-calling structured-output protocol reliably. The extractor auto-detects these and uses `NativeOutput` (the provider JSON-schema response format) instead. Gemma 3, DeepSeek-R1, MedGemma, `nemotron-cascade-2`, and unknown custom Ollama model names use `NativeOutput`; known tool-capable families such as gpt-oss, llama3/4, qwen3/3.5/3.6, other Nemotron families, and Gemma 4 use the default tool mode. See `ollama_needs_native_output()` in `src/finding_extractor/llm/model_settings.py`.
 
 #### Recommended local config
 
