@@ -44,9 +44,11 @@
 
 - [coding-agent-design.md](coding-agent-design.md) — Coding agent design (future, decoupled from extraction)
 - [plans/extractor-evals-redesign.md](plans/extractor-evals-redesign.md) — Evaluation harness redesign plan
+- [plans/local-model-mlx-reassessment.md](plans/local-model-mlx-reassessment.md) — Local model reassessment: latest Ollama/MLX + gemma4/qwen3.6/Ornith candidates
 - [plans/local-only-future-tightening.md](plans/local-only-future-tightening.md) — Deferred local-only hardening backlog
-- [plans/nemotron-cascade-2-evaluation.md](plans/nemotron-cascade-2-evaluation.md) — Nemotron Cascade 2 support/evaluation plan
+- [plans/anatomic-location-efl-ipl.md](plans/anatomic-location-efl-ipl.md) — Anatomic location on EFLs/IPL (Step 3b reconciliation outstanding)
 - [plans/pydantic-ai-thinking-capability-simplification.md](plans/pydantic-ai-thinking-capability-simplification.md) — Future PydanticAI thinking-field simplification
+- [plans/viewer-v2-anatomy-dashboard.md](plans/viewer-v2-anatomy-dashboard.md) — Anatomy-aware viewer_v2 dashboard plan
 - [viewer-refactoring.md](viewer-refactoring.md) — Viewer CDN/Tailwind migration plan
 
 ## Reports / Benchmarks / Draft References
