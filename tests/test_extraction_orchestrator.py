@@ -243,6 +243,54 @@ No acute cardiopulmonary abnormality.
 
 
 @pytest.mark.asyncio
+async def test_modular_pipeline_supports_standalone_allcaps_findings_only_reports():
+    """Standalone FINDINGS headers should produce an extractable chunk."""
+    report_text = """FINDINGS
+No pleural effusion.
+No pulmonary nodule.
+"""
+    seen_unit_texts: list[str] = []
+
+    async def emit_progress(_message: str) -> None:
+        return None
+
+    async def fake_extract_findings(*, report_text: str, **kwargs):  # noqa: ARG001
+        seen_unit_texts.append(report_text)
+        finding_text = report_text.splitlines()[0].strip()
+        return ExtractionResult(
+            report_findings=ExtractedReportFindings(
+                exam_info=ExamInfo(study_description="CT Chest"),
+                findings=[
+                    Finding(
+                        finding_name="pleural effusion",
+                        presence="absent",
+                        report_text=finding_text,
+                    )
+                ],
+                non_finding_text=[],
+            ),
+            usage=None,
+        )
+
+    result = await run_orchestrated_extraction(
+        report_text=report_text,
+        study_description=None,
+        model_name="openai:gpt-5-mini",
+        reasoning="medium",
+        validate=False,
+        emit_progress=emit_progress,
+        extract_findings_fn=fake_extract_findings,
+        validate_extraction_fn=_validation_ok,
+        max_subagent_concurrency=2,
+    )
+
+    assert len(seen_unit_texts) == 1
+    assert seen_unit_texts[0].startswith("No pleural effusion.")
+    assert len(result.extraction.findings) == 1
+    assert result.pipeline_diagnostics.total_chunks == 1
+
+
+@pytest.mark.asyncio
 async def test_modular_pipeline_supports_findings_impression_combined_header():
     """Combined Findings/Impression header should still be extracted as one chunk."""
     report_text = """Findings/Impression:

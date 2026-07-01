@@ -13,6 +13,7 @@ import pytest
 
 from finding_extractor.cli.batch import cli
 from finding_extractor.cli.batch_engine import (
+    BatchFileProgress,
     BatchRunConfig,
     _process_one_file,
     resolve_run_options,
@@ -546,6 +547,25 @@ def test_batch_run_emits_progress_counters(monkeypatch, cli_runner):
         # Polished DONE banner uses the key=value format for scripted parsing.
         assert "DONE" in result.output
         assert "ok=2" in result.output
+
+
+@pytest.mark.asyncio
+async def test_batch_file_progress_non_tty_emits_status_changes():
+    """Plain progress should be visible when terminal redraws are unavailable."""
+    lines: list[str] = []
+    progress = BatchFileProgress(header="[1/1]  report.txt", on_tty=False, echo=lines.append)
+
+    progress.start()
+    await progress("[stage:sectionize] mode=v2 sections=1 chunks=1 names=findings")
+    await progress("[stage:extract_sections] chunk=findings_1 attempt=1 status=started")
+    await progress("[stage:extract_sections] chunk=findings_1 attempt=1 status=calling_model")
+    await progress("[stage:merge_dedupe] final_merge findings=1 non_findings=0")
+
+    assert any("starting" in line for line in lines)
+    assert any("1 chunks" in line for line in lines)
+    assert any("chunk 1/1" in line for line in lines)
+    assert any("calling_model" in line for line in lines)
+    assert any("merging" in line for line in lines)
 
 
 def test_batch_run_interactive_writes_outputs_and_state(monkeypatch, cli_runner):

@@ -148,6 +148,7 @@ class BatchFileProgress:
     _CHUNK_FAIL_RE = re.compile(
         r"chunk=([^\s]+) attempt=(\d+) status=failed error=([A-Za-z0-9_]+)"
     )
+    _CHUNK_STATUS_RE = re.compile(r"chunk=([^\s]+) attempt=(\d+) status=([A-Za-z0-9_]+)")
 
     def __init__(self, *, header: str, on_tty: bool, echo: Any = click.echo):
         self._header = header  # e.g. "[1/9] head_ct_1.txt"
@@ -160,6 +161,8 @@ class BatchFileProgress:
         self._next_chunk_idx = 0
         self._chunk_index: dict[str, int] = {}
         self._drew_pair = False  # first paint is a full two-line print; then in-place
+        self._last_plain_status: str | None = None
+        self._last_plain_tick = self._started
 
     def _set_status(self, status: str) -> None:
         self._status = status
@@ -168,6 +171,8 @@ class BatchFileProgress:
     def start(self) -> None:
         if self._on_tty:
             self._redraw()
+        else:
+            self._plain_status(force=True)
 
     async def __call__(self, message: str) -> None:
         detail = message.partition("] ")[2]
@@ -194,6 +199,13 @@ class BatchFileProgress:
                 idx = self._chunk_index[chunk_id]
                 total = self._chunk_total or idx
                 self._set_status(f"chunk {idx}/{total}")
+            m = self._CHUNK_STATUS_RE.search(detail)
+            if m and m.group(3) in {"calling_model", "model_call_complete", "model_retrying"}:
+                chunk_id = m.group(1)
+                idx = self._chunk_index.get(chunk_id)
+                total = self._chunk_total or idx or 0
+                prefix = f"chunk {idx}/{total}" if idx else "chunk"
+                self._set_status(f"{prefix} {m.group(3)}")
             m = self._CHUNK_DONE_RE.search(detail)
             if m:
                 # Transient between chunks; a `review` or next `chunk N/M`
@@ -223,10 +235,18 @@ class BatchFileProgress:
 
         if self._on_tty:
             self._redraw()
+        else:
+            self._plain_status()
 
     async def tick(self) -> None:
         if self._on_tty:
             self._redraw()
+            return
+        now = time.monotonic()
+        if now - self._last_plain_tick >= 10:
+            self._last_plain_tick = now
+            total = fmt_duration(now - self._started)
+            self._echo(f"{self._header} · still {self._status} · elapsed {total}")
 
     def finalize(self, *, glyph: str, summary: str) -> str:
         """Replace the live pair with the terminal outcome line; clear step line.
@@ -260,6 +280,14 @@ class BatchFileProgress:
         self._echo(
             f"\033[2A\r\033[2K{file_line}\n\r\033[2K{step_line}"
         )
+
+    def _plain_status(self, *, force: bool = False) -> None:
+        if not force and self._status == self._last_plain_status:
+            return
+        self._last_plain_status = self._status
+        self._last_plain_tick = time.monotonic()
+        total = fmt_duration(self._last_plain_tick - self._started)
+        self._echo(f"{self._header} · {self._status} · elapsed {total}")
 
 
 async def _tick_loop(progress: BatchFileProgress) -> None:

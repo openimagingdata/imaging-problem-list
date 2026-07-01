@@ -98,6 +98,16 @@ class TestHeaderMatching:
         assert result.has_section("findings")
         assert result.has_section("impression")
 
+    def test_standalone_allcaps_findings_header(self):
+        text = """\
+FINDINGS
+No pleural effusion.
+No pulmonary nodule.
+"""
+        result = parse_report_sections(text)
+        assert result.has_section("findings")
+        assert result.get_section_content("findings").strip() == text.strip()
+
     def test_title_case_with_content(self):
         """Title case pattern: 'History: flank pain'."""
         result = parse_report_sections(STRUCTURED_REPORT)
