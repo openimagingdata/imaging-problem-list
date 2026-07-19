@@ -9,6 +9,10 @@
     reviewer: '',
     files: [], // [{sha1, name, data, collapsed}]
     manifest: [],
+    invalidResults: [],
+    csv: null,
+    wizardStep: 1,
+    joinSummary: null,
     selection: { sha1: null, findingIndex: null, panel: null }, // panel: null | "missing"
     reviews: {}, // sha1 -> {responses: {idx: {status, comment, firstReviewedAt, updatedAt}}, missing: [], notes}
   };
@@ -18,7 +22,26 @@
     landing: document.getElementById('landing'),
     app: document.getElementById('app'),
     landingReviewer: document.getElementById('landingReviewer'),
-    pickFolderBtn: document.getElementById('pickFolderBtn'),
+    pickCsvBtn: document.getElementById('pickCsvBtn'),
+    csvInput: document.getElementById('csvInput'),
+    csvDropzone: document.getElementById('csvDropzone'),
+    csvSelection: document.getElementById('csvSelection'),
+    csvErrors: document.getElementById('csvErrors'),
+    columnPicker: document.getElementById('columnPicker'),
+    idColumnSelect: document.getElementById('idColumnSelect'),
+    textColumnSelect: document.getElementById('textColumnSelect'),
+    csvNextBtn: document.getElementById('csvNextBtn'),
+    pickResultsBtn: document.getElementById('pickResultsBtn'),
+    resultsDropzone: document.getElementById('resultsDropzone'),
+    resultsSelection: document.getElementById('resultsSelection'),
+    resultsBackBtn: document.getElementById('resultsBackBtn'),
+    resultsNextBtn: document.getElementById('resultsNextBtn'),
+    confirmBackBtn: document.getElementById('confirmBackBtn'),
+    startReviewBtn: document.getElementById('startReviewBtn'),
+    joinSummary: document.getElementById('joinSummary'),
+    quoteCheck: document.getElementById('quoteCheck'),
+    wizardSteps: [1, 2, 3].map((n) => document.getElementById(`wizardStep${n}`)),
+    progressSteps: [1, 2, 3].map((n) => document.getElementById(`progressStep${n}`)),
     pickFilesBtn: document.getElementById('pickFilesBtn'),
     folderInput: document.getElementById('folderInput'),
     filesInput: document.getElementById('filesInput'),
@@ -65,6 +88,13 @@
 
   async function sha1Hex(bytes) {
     const buf = await crypto.subtle.digest('SHA-1', bytes);
+    return Array.from(new Uint8Array(buf))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  async function sha256Hex(bytes) {
+    const buf = await crypto.subtle.digest('SHA-256', bytes);
     return Array.from(new Uint8Array(buf))
       .map((b) => b.toString(16).padStart(2, '0'))
       .join('');
@@ -145,6 +175,76 @@
     );
   }
 
+  function parseCsv(csvText) {
+    const rows = [];
+    let row = [];
+    let field = '';
+    let quoted = false;
+    for (let i = 0; i < csvText.length; i++) {
+      const char = csvText[i];
+      if (quoted) {
+        if (char === '"') {
+          if (csvText[i + 1] === '"') {
+            field += '"';
+            i++;
+          } else {
+            quoted = false;
+          }
+        } else {
+          field += char;
+        }
+        continue;
+      }
+      if (char === '"' && field.length === 0) {
+        quoted = true;
+      } else if (char === ',') {
+        row.push(field);
+        field = '';
+      } else if (char === '\r' || char === '\n') {
+        row.push(field);
+        rows.push(row);
+        row = [];
+        field = '';
+        if (char === '\r' && csvText[i + 1] === '\n') i++;
+      } else {
+        field += char;
+      }
+    }
+    if (quoted) throw new Error('CSV ends inside a quoted field.');
+    if (field.length || row.length) {
+      row.push(field);
+      rows.push(row);
+    }
+    if (!rows.length || !rows[0].length || rows[0].every((value) => value === '')) {
+      throw new Error('CSV must have a header row.');
+    }
+    const headers = rows[0];
+    const records = rows
+      .slice(1)
+      .filter((values) => !(values.length === 1 && values[0] === ''))
+      .map((values, index) => ({ rowNumber: index + 2, values }));
+    return { headers, records };
+  }
+
+  function normalizeCsvReportText(reportText) {
+    const original = String(reportText || '');
+    const trimmed = original.trim();
+    const marker = /(?<![A-Za-z])(FINDINGS|IMPRESSION)(?![A-Za-z])(\s*:\s*|\s+)/g;
+    const normalized = trimmed.replace(marker, (match, header, separator, offset) => {
+      if (!separator.includes(':') && (separator === ' ' || separator === '\t')) {
+        const nextChar = original.slice(offset + match.length, offset + match.length + 1);
+        if (['.', ',', ';', ')'].includes(nextChar)) return match;
+      }
+      const prefix = offset === 0 ? '' : '\n\n';
+      return `${prefix}${header.toUpperCase()}:\n`;
+    });
+    return normalized.replace(/[ \t]+\n\n(FINDINGS|IMPRESSION):/g, '\n\n$1:').trim();
+  }
+
+  function csvValue(record, columnIndex) {
+    return columnIndex < 0 ? '' : record.values[columnIndex] || '';
+  }
+
   // Normalize report text: strip trailing whitespace per line, drop lines that
   // start with EHR boilerplate, and collapse runs of blank lines.
   function cleanReportText(raw) {
@@ -189,19 +289,37 @@
     return chunks.join('\n\n');
   }
 
-  async function loadFileList(fileList) {
+  function relativePathFor(file) {
+    return String(file.webkitRelativePath || file.reviewerRelativePath || file.name || '').replace(/^\/+/, '');
+  }
+
+  function isStagedReportFile(file) {
+    return relativePathFor(file)
+      .split('/')
+      .some((part) => part === '_staged_reports');
+  }
+
+  async function loadFileList(fileList, { replace = false } = {}) {
     const errors = [];
+    if (replace) {
+      state.files = [];
+      state.manifest = [];
+      state.invalidResults = [];
+    }
     const seenSha1 = new Set(state.files.map((f) => f.sha1));
 
-    // Partition: JSON extractions + paired report text files keyed by basename.
+    // Partition extraction JSONs and source text, retaining staged reports as
+    // a separate, higher-precedence source.
     const textByBase = new Map();
+    const stagedTextByBase = new Map();
     const jsonFiles = [];
     for (const file of fileList) {
       if (!file.name) continue;
       const lower = file.name.toLowerCase();
       if (lower === 'batch_results.jsonl' || lower === 'extraction_reviewer.html') continue;
       if (lower.endsWith('.txt') || lower.endsWith('.md')) {
-        textByBase.set(basenameWithoutExt(file.name), file);
+        const target = isStagedReportFile(file) ? stagedTextByBase : textByBase;
+        target.set(basenameWithoutExt(file.name), file);
       } else if (lower.endsWith('.json')) {
         jsonFiles.push(file);
       }
@@ -217,7 +335,10 @@
         try {
           data = JSON.parse(text);
         } catch {
-          if (/\.(extracted|coded)\.json$/i.test(file.name)) errors.push(`${file.name}: invalid JSON`);
+          if (/\.(extracted|coded)\.json$/i.test(file.name)) {
+            errors.push(`${file.name}: invalid JSON`);
+            state.invalidResults.push({ name: file.name, reason: 'invalid JSON' });
+          }
           continue;
         }
         if (isCsvManifest(data)) {
@@ -225,7 +346,10 @@
           continue;
         }
         if (!data || !Array.isArray(data.findings)) {
-          if (/\.(extracted|coded)\.json$/i.test(file.name)) errors.push(`${file.name}: missing findings[]`);
+          if (/\.(extracted|coded)\.json$/i.test(file.name)) {
+            errors.push(`${file.name}: missing findings[]`);
+            state.invalidResults.push({ name: file.name, reason: 'missing findings[]' });
+          }
           continue;
         }
 
@@ -234,36 +358,54 @@
         let reportText = null;
         let reportSourceName = null;
         let reportIsReconstructed = false;
-        const sibling = textByBase.get(basenameWithoutExt(file.name));
-        if (sibling) {
+        let reportSourceKind = null;
+        let siblingReportText = null;
+        const safeId = basenameWithoutExt(file.name);
+        const staged = stagedTextByBase.get(safeId);
+        const sibling = textByBase.get(safeId);
+        if (staged) {
           try {
-            reportText = await sibling.text();
-            reportSourceName = sibling.name;
+            reportText = await staged.text();
+            reportSourceName = relativePathFor(staged);
+            reportSourceKind = 'staged';
+          } catch (e) {
+            errors.push(`${staged.name}: failed to read (${e.message || e})`);
+          }
+        } else if (sibling) {
+          try {
+            siblingReportText = await sibling.text();
+            reportText = cleanReportText(siblingReportText);
+            reportSourceName = relativePathFor(sibling);
+            reportSourceKind = 'sibling';
           } catch (e) {
             errors.push(`${sibling.name}: failed to read (${e.message || e})`);
           }
         } else if (typeof data.report_text === 'string' && data.report_text.trim()) {
-          reportText = data.report_text;
+          reportText = cleanReportText(data.report_text);
           reportSourceName = `${file.name} (embedded)`;
+          reportSourceKind = 'embedded';
         } else {
           const stitched = reconstructReportFromJson(data);
           if (stitched) {
-            reportText = stitched;
+            reportText = cleanReportText(stitched);
             reportSourceName = `reconstructed from ${file.name}`;
             reportIsReconstructed = true;
+            reportSourceKind = 'reconstructed';
           }
         }
-        reportText = cleanReportText(reportText);
 
         seenSha1.add(sha1);
         state.files.push({
           sha1,
           name: file.name,
+          safeId,
           data,
           collapsed: false,
           reportText,
           reportSourceName,
+          reportSourceKind,
           reportIsReconstructed,
+          siblingReportText,
         });
         ensureReview(sha1);
       } catch (e) {
@@ -297,6 +439,217 @@
     if (wasOnLanding) maybeShowGuideOnFirstVisit();
   }
 
+  function enterReview() {
+    if (!state.files.length) return;
+    const reviewerValue = (el.landingReviewer.value || '').trim();
+    if (reviewerValue) {
+      state.reviewer = reviewerValue;
+      persistReviewer();
+    }
+    state.selection = findNextPending(null) || firstSelection();
+    el.landing.style.display = 'none';
+    el.app.style.display = 'grid';
+    el.reviewerInput.value = state.reviewer;
+    applyAutoCollapse();
+    render();
+    maybeShowGuideOnFirstVisit();
+  }
+
+  function setWizardStep(step) {
+    state.wizardStep = step;
+    el.wizardSteps.forEach((section, index) => {
+      section.style.display = index + 1 === step ? 'grid' : 'none';
+    });
+    el.progressSteps.forEach((item, index) => {
+      item.classList.toggle('active', index + 1 === step);
+      item.classList.toggle('complete', index + 1 < step);
+    });
+  }
+
+  function setCsvError(message) {
+    el.csvErrors.style.display = message ? 'block' : 'none';
+    el.csvErrors.textContent = message || '';
+  }
+
+  function updateColumnMapping() {
+    if (!state.csv) return;
+    state.csv.idColumnIndex = Number(el.idColumnSelect.value);
+    state.csv.textColumnIndex = Number(el.textColumnSelect.value);
+    const valid =
+      Number.isInteger(state.csv.idColumnIndex) &&
+      Number.isInteger(state.csv.textColumnIndex) &&
+      state.csv.idColumnIndex !== state.csv.textColumnIndex;
+    el.csvNextBtn.disabled = !valid;
+    setCsvError(valid ? '' : 'Choose two different columns.');
+  }
+
+  function renderColumnPicker() {
+    const csv = state.csv;
+    if (!csv) return;
+    const options = csv.headers
+      .map((header, index) => `<option value="${index}">${escapeHtml(header || `(column ${index + 1})`)}</option>`)
+      .join('');
+    el.idColumnSelect.innerHTML = options;
+    el.textColumnSelect.innerHTML = options;
+    el.idColumnSelect.value = String(csv.idColumnIndex);
+    el.textColumnSelect.value = String(csv.textColumnIndex);
+    el.columnPicker.style.display = csv.headers.length === 2 ? 'none' : 'grid';
+    updateColumnMapping();
+  }
+
+  async function selectCsvFile(file) {
+    setCsvError('');
+    if (!file || !file.name.toLowerCase().endsWith('.csv')) {
+      setCsvError('Select one .csv file.');
+      return;
+    }
+    try {
+      const rawBytes = new Uint8Array(await file.arrayBuffer());
+      const batchId = await sha256Hex(rawBytes);
+      const decoded = new TextDecoder('utf-8', { fatal: true }).decode(rawBytes);
+      const text = decoded.replace(/^\uFEFF/, '');
+      const parsed = parseCsv(text);
+      if (parsed.headers.length < 2) throw new Error('CSV must have at least two columns.');
+      const idColumnIndex = 0;
+      const textColumnIndex = 1;
+      state.csv = {
+        filename: file.name,
+        rawBytes,
+        text,
+        batchId,
+        headers: parsed.headers,
+        records: parsed.records,
+        idColumnIndex,
+        textColumnIndex,
+      };
+      el.csvSelection.style.display = 'block';
+      el.csvSelection.textContent = `${file.name} · ${parsed.records.length} report row(s)`;
+      renderColumnPicker();
+    } catch (e) {
+      state.csv = null;
+      el.csvSelection.style.display = 'none';
+      el.columnPicker.style.display = 'none';
+      el.csvNextBtn.disabled = true;
+      setCsvError(e.message || String(e));
+    }
+  }
+
+  function sourceBannerHtml(file) {
+    const labels = {
+      staged: 'Staged report text',
+      csv: 'Normalized CSV text',
+      sibling: 'Paired report text',
+      embedded: 'Embedded report text',
+      reconstructed: 'Reconstructed text',
+    };
+    const label = labels[file.reportSourceKind] || 'Source text unavailable';
+    return `<div class="source-banner"><strong>Source:</strong> ${escapeHtml(label)}${file.reportSourceName ? ` · ${escapeHtml(file.reportSourceName)}` : ''}</div>`;
+  }
+
+  function resolveWizardJoin() {
+    const csv = state.csv;
+    const manifestBySafeId = new Map(state.manifest.map((entry) => [entry.safe_id, entry]));
+    const rowsByNumber = new Map(csv.records.map((record) => [record.rowNumber, record]));
+    const consumedRows = new Set();
+    let matched = 0;
+    let unmatchedExtractions = 0;
+    let invalid = state.invalidResults.length;
+
+    for (const file of state.files) {
+      file.sourceId = null;
+      file.csvRowNumber = null;
+      file.joinStatus = 'unmatched';
+      const entry = manifestBySafeId.get(file.safeId);
+      if (!entry) {
+        unmatchedExtractions++;
+        continue;
+      }
+      const record = rowsByNumber.get(entry.row_number);
+      if (!record) {
+        unmatchedExtractions++;
+        continue;
+      }
+      consumedRows.add(record.rowNumber);
+      file.sourceId = entry.source_id;
+      file.csvRowNumber = entry.row_number;
+      const csvSourceId = String(csvValue(record, csv.idColumnIndex)).trim();
+      if (csvSourceId !== entry.source_id) {
+        file.joinStatus = 'invalid';
+        file.joinError = `CSV row ${entry.row_number} identifier “${csvSourceId}” does not match manifest source_id “${entry.source_id}”.`;
+        invalid++;
+        continue;
+      }
+      file.joinStatus = 'matched';
+      matched++;
+      if (file.reportSourceKind !== 'staged') {
+        file.reportText = normalizeCsvReportText(csvValue(record, csv.textColumnIndex));
+        file.reportSourceName = `${csv.filename} · row ${record.rowNumber}`;
+        file.reportSourceKind = 'csv';
+        file.reportIsReconstructed = false;
+      }
+    }
+
+    const unmatchedRows = csv.records.filter((record) => !consumedRows.has(record.rowNumber)).length;
+    const summary = {
+      matched,
+      unmatched: unmatchedExtractions + unmatchedRows,
+      invalid,
+      unmatchedExtractions,
+      unmatchedRows,
+      quoteCheck: null,
+    };
+    const spotCheckFile = state.files.find(
+      (file) =>
+        file.joinStatus === 'matched' && file.data.findings.some((finding) => String(finding.report_text || '').length),
+    );
+    if (spotCheckFile) {
+      const quote = String(spotCheckFile.data.findings.find((finding) => finding.report_text)?.report_text || '');
+      summary.quoteCheck = {
+        ok: Boolean(spotCheckFile.reportText && spotCheckFile.reportText.includes(quote)),
+        filename: spotCheckFile.name,
+        sourceKind: spotCheckFile.reportSourceKind,
+      };
+    }
+    state.joinSummary = summary;
+    return summary;
+  }
+
+  function renderJoinSummary() {
+    const summary = state.joinSummary;
+    if (!summary) return;
+    el.joinSummary.innerHTML = `
+      <div class="join-count matched"><strong>${summary.matched}</strong><span>Matched</span></div>
+      <div class="join-count unmatched"><strong>${summary.unmatched}</strong><span>Unmatched</span></div>
+      <div class="join-count invalid"><strong>${summary.invalid}</strong><span>Invalid</span></div>
+    `;
+    if (!summary.quoteCheck) {
+      el.quoteCheck.className = 'quote-check';
+      el.quoteCheck.textContent = 'Quote spot-check unavailable: no matched report contains an extraction quote.';
+    } else if (summary.quoteCheck.ok) {
+      el.quoteCheck.className = 'quote-check ok';
+      el.quoteCheck.textContent = `Quote spot-check passed for ${summary.quoteCheck.filename} using ${summary.quoteCheck.sourceKind} text.`;
+    } else {
+      el.quoteCheck.className = 'quote-check warning';
+      el.quoteCheck.textContent = `Warning: the first extraction quote in ${summary.quoteCheck.filename} was not found verbatim in the resolved source text. Check the selected text column or normalization.`;
+    }
+    el.startReviewBtn.disabled = !state.csv || !state.files.length;
+  }
+
+  async function selectResultsFiles(files) {
+    const errors = await loadFileList(files, { replace: true });
+    showLoadErrors(errors);
+    if (!state.files.length) {
+      el.resultsSelection.style.display = 'none';
+      el.resultsNextBtn.disabled = true;
+      return;
+    }
+    resolveWizardJoin();
+    const folderName = relativePathFor(files[0]).split('/')[0] || 'selected folder';
+    el.resultsSelection.style.display = 'block';
+    el.resultsSelection.textContent = `${folderName} · ${state.files.length} valid extraction file(s)`;
+    el.resultsNextBtn.disabled = false;
+  }
+
   function showLoadErrors(errors) {
     if (!errors.length) {
       el.loadErrors.style.display = 'none';
@@ -318,6 +671,7 @@
         if (entry.isFile) {
           entry.file(
             (f) => {
+              f.reviewerRelativePath = entry.fullPath || f.name;
               files.push(f);
               resolve();
             },
@@ -657,6 +1011,7 @@
       : '';
 
     const codingHtml = renderCoding(finding.coding);
+    const sourceBanner = sourceBannerHtml(file);
 
     const ctxEntries = nonFindingText
       .map(
@@ -716,6 +1071,7 @@
                 : ''
             }
             ${examStrip}
+            ${sourceBanner}
             ${
               ctxEntries
                 ? `
@@ -869,6 +1225,7 @@
              ${file.reportSourceName ? `<span class="report-source">${escapeHtml(file.reportSourceName)}</span>` : ''}
              ${file.reportIsReconstructed ? `<span class="report-reconstructed" title="Pieced together from extraction snippets">reconstructed</span>` : ''}
            </div>
+           ${sourceBannerHtml(file)}
            <div class="missing-report-text" id="missReportText">${escapeHtml(file.reportText)}</div>
            <div class="hint">Highlight any text above to capture it as the supporting quote. Re-highlight to replace.</div>
          </div>`
@@ -1230,35 +1587,63 @@
   loadReviewer();
   el.landingReviewer.value = state.reviewer;
 
-  el.pickFolderBtn.addEventListener('click', () => el.folderInput.click());
+  function bindDropzone(dropzone, onDrop) {
+    ['dragenter', 'dragover'].forEach((eventName) =>
+      dropzone.addEventListener(eventName, (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        dropzone.classList.add('drag');
+      }),
+    );
+    ['dragleave', 'drop'].forEach((eventName) =>
+      dropzone.addEventListener(eventName, (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        dropzone.classList.remove('drag');
+      }),
+    );
+    dropzone.addEventListener('drop', onDrop);
+  }
+
+  el.pickCsvBtn.addEventListener('click', () => el.csvInput.click());
+  el.csvInput.addEventListener('change', async (ev) => {
+    await selectCsvFile(ev.target.files?.[0]);
+    ev.target.value = '';
+  });
+  bindDropzone(el.csvDropzone, async (ev) => {
+    const files = await readFilesFromDataTransfer(ev.dataTransfer);
+    await selectCsvFile(files.find((file) => file.name.toLowerCase().endsWith('.csv')));
+  });
+  el.idColumnSelect.addEventListener('change', updateColumnMapping);
+  el.textColumnSelect.addEventListener('change', updateColumnMapping);
+  el.csvNextBtn.addEventListener('click', () => {
+    updateColumnMapping();
+    if (!el.csvNextBtn.disabled) setWizardStep(2);
+  });
+
+  el.pickResultsBtn.addEventListener('click', () => el.folderInput.click());
   el.pickFilesBtn.addEventListener('click', () => el.filesInput.click());
   el.folderInput.addEventListener('change', async (ev) => {
     const files = Array.from(ev.target.files || []);
     ev.target.value = '';
-    await handleLoadedFiles(files);
+    await selectResultsFiles(files);
   });
+  bindDropzone(el.resultsDropzone, async (ev) => {
+    const files = await readFilesFromDataTransfer(ev.dataTransfer);
+    await selectResultsFiles(files);
+  });
+  el.resultsBackBtn.addEventListener('click', () => setWizardStep(1));
+  el.resultsNextBtn.addEventListener('click', () => {
+    resolveWizardJoin();
+    renderJoinSummary();
+    setWizardStep(3);
+  });
+  el.confirmBackBtn.addEventListener('click', () => setWizardStep(2));
+  el.startReviewBtn.addEventListener('click', enterReview);
+
   el.filesInput.addEventListener('change', async (ev) => {
     const files = Array.from(ev.target.files || []);
     ev.target.value = '';
-    await handleLoadedFiles(files);
-  });
-
-  ['dragenter', 'dragover'].forEach((e) =>
-    el.dropzone.addEventListener(e, (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      el.dropzone.classList.add('drag');
-    }),
-  );
-  ['dragleave', 'drop'].forEach((e) =>
-    el.dropzone.addEventListener(e, (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      el.dropzone.classList.remove('drag');
-    }),
-  );
-  el.dropzone.addEventListener('drop', async (ev) => {
-    const files = await readFilesFromDataTransfer(ev.dataTransfer);
     await handleLoadedFiles(files);
   });
 
@@ -1305,6 +1690,7 @@
         const text = decoder.decode(data);
         files.push({
           name,
+          reviewerRelativePath: path,
           async text() {
             return text;
           },
