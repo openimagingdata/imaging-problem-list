@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Extraction Review</title>
+    <style>
+      __STYLES__
+    </style>
+  </head>
+  <body>
+    __LANDING_HTML__ __APP_SHELL_HTML__
+
+    <dialog id="helpDialog" class="help-dialog">
+      <div class="help-dialog-frame">
+        <div class="help-dialog-topbar">
+          <strong>Reviewer guide</strong>
+          <button type="button" id="helpCloseBtn" class="help-dialog-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="help-dialog-body">__REVIEWER_GUIDE__</div>
+      </div>
+    </dialog>
+
+    <script>
+      __VENDOR_ZIP_JS__;
+    </script>
+    <script>
+      window.APP_VERSION = '__APP_VERSION__';
+      window.EMBEDDED_BUNDLE_B64 = '__EMBEDDED_BUNDLE_B64__';
+      __APP_JS__;
+    </script>
+  </body>
+</html>

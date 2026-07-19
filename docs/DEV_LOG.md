@@ -162,6 +162,14 @@ Report: [eval-ollama-models-report.md](eval-ollama-models-report.md) (supersedes
 
 ---
 
+## 2026-04-17 — Extraction reviewer MVP
+
+Landed a standalone single-file HTML tool at `extraction_reviewer/` for non-developer review of extraction JSONs. Reviewer opens one HTML, walks each finding (approve / flag with comment), logs missed findings per report, and downloads a zip of per-file review JSONs. Ships zero-install through `uv run python extraction_reviewer/pack.py --reports ...` as either a zip bundle or an embedded HTML; source-only builds use `uv run python extraction_reviewer/build.py -o extraction_reviewer/extraction_reviewer.html`. Handles pre-coded and post-coded extractions in the same template — the coding block renders only when present. Plan and design in [`docs/plans/extraction-reviewer.md`](plans/extraction-reviewer.md); reviewer + maintainer usage in `extraction_reviewer/README.md`; in-app reviewer help in `extraction_reviewer/REVIEWER_GUIDE.md`. Validated end-to-end against a real extraction (pre-coded chest XR) + extraction-with-coding (US abdomen) produced from `sample_data/example2/`.
+
+(Note: built 2026-04-17 on a pre-restructure base; integrated onto dev 2026-07-07 — see [plans/extraction-reviewer-workflows.md](plans/extraction-reviewer-workflows.md).)
+
+---
+
 ## 2026-04-12 — Local-only mode hardening for PHI workloads
 
 An audit of the existing `--local-only` feature (commit `23dfc91`) found it only enforced at the single-report CLI. Batch CLI, API, worker, and Layer 1 settings all had paths where `IPL_LOCAL_ONLY=true` could silently pair with a cloud model. Ollama's cloud-routed models (`:cloud` / `-cloud` tag suffixes, proxied through ollama.com via the local server) were not recognized at all — endpoint-locality alone isn't sufficient since the wire destination stays `localhost`.

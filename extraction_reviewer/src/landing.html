@@ -1,0 +1,40 @@
+<div id="landing" class="landing">
+  <div class="landing-card">
+    <h1>Extraction Review</h1>
+    <p>
+      Open a folder of extraction JSON files to review. For each finding, approve or flag it with a comment. You can
+      also log findings the extractor missed. Progress is saved automatically in this browser. When you&rsquo;re done,
+      download a zip of review files to send back.
+    </p>
+    <div class="landing-row">
+      <label for="landingReviewer">Reviewer identifier</label>
+      <input id="landingReviewer" type="text" placeholder="name, email, or username" autocomplete="off" />
+    </div>
+    <div id="dropzone" class="dropzone">
+      <div class="big">Drop extraction JSON files here</div>
+      <div class="small">
+        Or pick a folder / individual files. Paired <code>.txt</code> or <code>.md</code> files with the same basename
+        (e.g. <code>cxr001.json</code> + <code>cxr001.txt</code>) are loaded as the source report.
+      </div>
+      <div class="dropzone-actions">
+        <button type="button" id="pickFolderBtn">Pick folder</button>
+        <button type="button" id="pickFilesBtn">Pick files</button>
+      </div>
+      <input id="folderInput" type="file" webkitdirectory multiple accept=".json,.txt,.md" style="display: none" />
+      <input
+        id="filesInput"
+        type="file"
+        multiple
+        accept=".json,application/json,.txt,text/plain,.md,text/markdown"
+        style="display: none"
+      />
+    </div>
+    <div id="loadErrors" class="load-errors" style="display: none"></div>
+    <div class="shortcut-help">
+      <strong>Shortcuts</strong>
+      &middot; <kbd>A</kbd> approve &middot; <kbd>F</kbd> focus / send flag &middot; <kbd>J</kbd> / <kbd>K</kbd> prev /
+      next finding &middot; <kbd>H</kbd> / <kbd>L</kbd> prev / next file &middot; <kbd>Enter</kbd> in comment sends
+      flag, <kbd>Shift+Enter</kbd> newline
+    </div>
+  </div>
+</div>
