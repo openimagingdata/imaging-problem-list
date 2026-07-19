@@ -1,7 +1,23 @@
 # Extractor Evals Redesign Plan
 
-Last updated: 2026-03-18
-Status: Active
+Last updated: 2026-07-07
+Status: Active — descoped to v1 (see below)
+
+## 2026-07-07 — Descope decision (v1)
+
+After 3.5 months with zero implementation, this plan was reviewed and deliberately **descoped rather than discarded**. The core problem stands: recent model-selection rounds (e.g. 2026-05-14, which made gemma4 the local default on "67s avg + 30% more findings") score throughput and raw yield, and cannot distinguish recall gains from fabrication. The full plan's ceremony (thresholds, CI gating, slice reporting, 30-case benchmark) is what made it unstartable.
+
+**v1 scope (what we build now):**
+1. Quote-first primary matcher + attribute-*value* scoring (from Phase 2) — the honesty fixes
+2. Frozen run configs + `EvalCaseOutput`/per-case artifacts (from Phase 0) — reproducibility
+3. `import-gold` + `gold_manifest.yaml` (from Phase 1), but for the **10-case `gate` set only**, adjudicated in one half-day session using the extraction reviewer + a review→gold converter — see [extraction-reviewer-workflows.md](extraction-reviewer-workflows.md) Phase B
+4. `task eval:gate:report` as a non-blocking scorecard
+
+**Explicitly deferred (unchanged in the body below, revisit after v1 proves out):** the 30-case `benchmark`, threshold ratification and blocking `eval:gate`, slice reporting, exit-code contract, `extractor_only`-vs-`full_pipeline` dual variants (v1 runs `full_pipeline` only).
+
+**Sequencing:** v1 lands before the local-model MLX reassessment round ([local-model-mlx-reassessment.md](local-model-mlx-reassessment.md)), which becomes the first consumer — its speed columns gain gold-scored accuracy columns.
+
+The remainder of this document is the original full design, kept as the reference target; v1 implements the subset above.
 
 ## Purpose
 
