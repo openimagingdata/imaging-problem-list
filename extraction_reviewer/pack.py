@@ -30,6 +30,16 @@ from build import build as build_html
 REPORT_EXTS = {".txt", ".md"}
 EMBED_SIZE_WARN_MB = 25  # warn if embedded HTML is likely this large or bigger
 
+
+def _report_stem(path: Path) -> str:
+    """Return a pairing stem with extraction/coding suffixes removed."""
+    stem = path.stem
+    for suffix in (".extracted", ".coded"):
+        if stem.lower().endswith(suffix):
+            return stem[: -len(suffix)]
+    return stem
+
+
 README_TEXT = """\
 Extraction Review Bundle
 ========================
@@ -103,13 +113,19 @@ def find_report_pairs(
             raise PackError(f"--report-texts must be a directory: {texts_dir}")
 
     entries = list(reports_dir.iterdir())
-    jsons = sorted(p for p in entries if p.is_file() and p.suffix.lower() == ".json")
+    jsons = sorted(
+        p
+        for p in entries
+        if p.is_file()
+        and p.suffix.lower() == ".json"
+        and p.name.lower() != "csv_inputs_manifest.json"
+    )
 
     text_entries = list(texts_dir.iterdir()) if texts_dir is not None else entries
     by_stem: dict[str, Path] = {}
     for p in text_entries:
         if p.is_file() and p.suffix.lower() in REPORT_EXTS:
-            by_stem.setdefault(p.stem, p)
+            by_stem.setdefault(_report_stem(p), p)
 
     if not jsons:
         raise PackError(
@@ -121,7 +137,7 @@ def find_report_pairs(
     warnings: list[str] = []
     for j in jsons:
         included.append(j)
-        mate = by_stem.get(j.stem)
+        mate = by_stem.get(_report_stem(j))
         if mate:
             included.append(mate)
         else:

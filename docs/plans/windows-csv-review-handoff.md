@@ -1,7 +1,7 @@
 # Plan: CSV-Aware Extraction Reviewer
 
 Created: 2026-07-14
-Status: Ready to implement (adversarial readiness review + amendments 2026-07-19)
+Status: In progress (Phase 1 complete; Phase 2 next)
 
 ## Goal
 

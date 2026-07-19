@@ -8,6 +8,7 @@
   const state = {
     reviewer: '',
     files: [], // [{sha1, name, data, collapsed}]
+    manifest: [],
     selection: { sha1: null, findingIndex: null, panel: null }, // panel: null | "missing"
     reviews: {}, // sha1 -> {responses: {idx: {status, comment, firstReviewedAt, updatedAt}}, missing: [], notes}
   };
@@ -125,7 +126,23 @@
 
   // ---------- Loading files ----------
   function basenameWithoutExt(name) {
-    return String(name || '').replace(/\.(json|txt|md)$/i, '');
+    return String(name || '')
+      .replace(/\.(json|txt|md)$/i, '')
+      .replace(/\.(extracted|coded)$/i, '');
+  }
+
+  function isCsvManifest(data) {
+    return (
+      Array.isArray(data) &&
+      data.every(
+        (entry) =>
+          entry &&
+          Number.isInteger(entry.row_number) &&
+          typeof entry.source_id === 'string' &&
+          typeof entry.safe_id === 'string' &&
+          typeof entry.staged_path === 'string',
+      )
+    );
   }
 
   // Normalize report text: strip trailing whitespace per line, drop lines that
@@ -182,6 +199,7 @@
     for (const file of fileList) {
       if (!file.name) continue;
       const lower = file.name.toLowerCase();
+      if (lower === 'batch_results.jsonl' || lower === 'extraction_reviewer.html') continue;
       if (lower.endsWith('.txt') || lower.endsWith('.md')) {
         textByBase.set(basenameWithoutExt(file.name), file);
       } else if (lower.endsWith('.json')) {
@@ -199,11 +217,15 @@
         try {
           data = JSON.parse(text);
         } catch {
-          errors.push(`${file.name}: invalid JSON`);
+          if (/\.(extracted|coded)\.json$/i.test(file.name)) errors.push(`${file.name}: invalid JSON`);
+          continue;
+        }
+        if (isCsvManifest(data)) {
+          state.manifest = data;
           continue;
         }
         if (!data || !Array.isArray(data.findings)) {
-          errors.push(`${file.name}: missing findings[]`);
+          if (/\.(extracted|coded)\.json$/i.test(file.name)) errors.push(`${file.name}: missing findings[]`);
           continue;
         }
 
