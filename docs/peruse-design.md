@@ -10,13 +10,14 @@ inline per-hunk diffs, and live updates as files change on disk. Catppuccin
 themed (Latte light / Mocha dark).
 
 ```
-npx @talkasab/peruse   # serve the current directory at http://127.0.0.1:7440
+bunx @talkasab/peruse   # serve the current directory at http://127.0.0.1:7440
 ```
 
 (The bare npm name `peruse` is squatted by an abandoned 2017 package, so the
 package publishes under a scope; the installed command is still `peruse`.
-Until it's published, `npx github:talkasab/peruse` works straight from the
-repo.)
+Until it's published, `bunx github:talkasab/peruse` works straight from the
+repo, and `bun build --compile` produces standalone per-platform binaries for
+GitHub releases — no Bun required by the end user.)
 
 ---
 
@@ -53,45 +54,44 @@ glue server plus one page that composes those libraries, not a new app.
 
 ## 3. Recommended architecture
 
-**A small Node.js package: a ~5-route server plus one static page.** All
+**A small Bun package: a ~5-route server plus one static page.** All
 rendering happens in the browser; the server only serves files, answers git
 questions, and pushes change events. Total new code target: **under ~900
-lines**, distributed as an npm package so `npx @talkasab/peruse` works anywhere with no
-setup.
+lines**, distributed as an npm package (`bunx @talkasab/peruse`) and as
+standalone compiled binaries.
 
-### Why Node (and not Python)
+### Why Bun
 
-An earlier draft proposed a Python/Starlette single-file server, anchored on
-the host repo's uv tooling. For a standalone tool the trade-offs point the
-other way:
+An earlier draft proposed a Python/Starlette single-file server (anchored on
+the host repo's uv tooling — see §7), then Node. Bun is the better fit for
+the "as little code as possible" constraint:
 
 - **Every rendering dependency is npm-native.** markdown-it, Shiki, diff2html,
-  Alpine — the best-in-class stack *is* the JS ecosystem. With a Node package
-  they're normal pinned dependencies, bundled at publish time. The Python
-  version could only reach them via CDN at runtime (online requirement,
-  version drift) or awkward vendoring.
-- **Distribution:** `npx <package>` is the established idiom for exactly this
-  kind of tool (difit, serve, vite preview…). "First install uv" is a real
-  barrier for anyone else who wants it.
-- **One language** across server and client; the server half is trivial in
-  either language anyway (the watcher, git subprocess, and SSE all have
-  equally good Node equivalents).
-
-Bun would allow a single compiled binary and is noted as a future option
-(§7); Node ≥ 20 is chosen for ubiquity.
+  Alpine — the best-in-class stack *is* the JS ecosystem, and Bun consumes it
+  directly as normal pinned dependencies, bundled at publish time.
+- **Bun's built-ins replace three dependencies.** `Bun.serve` (HTTP + routing
+  + streaming SSE via `ReadableStream`) replaces Hono; the built-in
+  `bun build` bundler replaces esbuild; `Bun.spawn` covers the git
+  subprocess. The server ends up with **one** external runtime dependency
+  (the file watcher).
+- **Distribution:** `bunx @talkasab/peruse` for Bun users, and
+  `bun build --compile` cross-compiles standalone single-file executables
+  (macOS arm64/x64, Linux, Windows) for GitHub releases — end users need
+  nothing installed at all, not even Bun.
+- **One language** across server and client.
 
 ### Component choices (all best-in-class, all boring)
 
 | Concern | Choice | Why |
 |---|---|---|
-| HTTP server | **[Hono](https://hono.dev)** + `@hono/node-server` | Tiny, modern router with built-in static file serving and an SSE streaming helper; the whole server stays one small file |
-| File watching | **[chokidar](https://github.com/paulmillr/chokidar)** | The de-facto standard Node watcher (powers Vite et al.); handles recursive watching, debouncing quirks, and platform differences |
+| HTTP server | **`Bun.serve`** (built-in) | Five routes need no framework: Bun.serve's `routes` map + `Bun.file` static serving + a `ReadableStream` for SSE keep the server one small zero-framework file |
+| File watching | **[chokidar](https://github.com/paulmillr/chokidar)** | The de-facto standard watcher (powers Vite et al.), runs fine on Bun. Bun's native `fs.watch` has [known event-reliability gaps](https://github.com/oven-sh/bun/discussions/1571), so the battle-tested library earns its place as the server's only dependency; revisit if Bun's watcher matures |
 | Git interrogation | **`git` subprocess** (`status --porcelain=v2`, `diff`) | Zero dependencies, always agrees with the user's git; porcelain v2 is a stable machine format. simple-git/nodegit add weight for no benefit |
 | Markdown | **[markdown-it](https://github.com/markdown-it/markdown-it)** + task-list/anchor plugins | The de-facto CommonMark+GFM renderer (VS Code uses it). Critically, its token `map` gives **source line ranges per block** — which is what makes requirement 5 work on *rendered* markdown |
 | Code highlighting | **[Shiki](https://shiki.style)** | TextMate-grammar highlighting (identical quality to VS Code). Ships **Catppuccin Latte/Frappé/Macchiato/Mocha as bundled themes**, and its [dual-theme mode](https://shiki.style/guide/dual-themes) emits CSS-variable output so light/dark switching is pure CSS |
 | Hunk diff rendering | **[diff2html](https://github.com/rtfpessoa/diff2html)** (per-hunk) | The standard "GitHub-style diff from raw `git diff` text" library; we feed it one hunk at a time (§5); colors overridable via CSS variables → Catppuccin-able |
 | UI reactivity | **Alpine.js** | No framework build; a recursive `<template>` renders the tree in ~30 lines. (If the inline-hunk DOM juggling outgrows it, preact+htm is the fallback — still buildless) |
-| Client bundling | **esbuild**, one-shot at publish | End users never build; `npx` ships prebuilt assets. Solves offline use — no CDN anywhere |
+| Client bundling | **`bun build`** (built-in), one-shot at publish | End users never build; the package ships prebuilt assets. Solves offline use — no CDN anywhere |
 | Theme | **[@catppuccin/palette](https://github.com/catppuccin/palette)** CSS variables | Official palette as CSS custom properties; Latte = light, Mocha = dark; follow `prefers-color-scheme` with a manual toggle persisted in `localStorage` |
 
 ### Layout
@@ -262,23 +262,24 @@ flip restyles everything with zero re-rendering.
 
 ## 6. Repository layout & size budget
 
-Standalone repo (name TBD — working title `peruse`):
+Standalone repo `talkasab/peruse`:
 
 ```
 peruse/
-  package.json          # bin: {"peruse": "bin/peruse.js"}; publishes dist/
-  bin/peruse.js        # CLI arg parsing, open browser        (~40 lines)
-  server/index.js       # Hono app: routes, git, chokidar→SSE  (~280 lines)
+  package.json          # name @talkasab/peruse; bin {"peruse": "bin/peruse.js"}
+  bin/peruse.js         # CLI arg parsing, open browser        (~40 lines)
+  server/index.js       # Bun.serve routes, git, chokidar→SSE  (~280 lines)
   web/
     index.html          # layout + Alpine templates            (~120 lines)
     app.js              # tree/view/hunk/SSE logic             (~350 lines)
     style.css           # Catppuccin variables + layout        (~150 lines)
-  scripts/build.js      # esbuild one-shot → dist/             (~30 lines)
-  dist/                 # prebuilt client (generated, published to npm)
+  dist/                 # prebuilt client (bun build; published to npm)
 ```
 
 Plain modern ESM JavaScript, no TypeScript compile step (JSDoc types where
-they pay for themselves); esbuild exists only to bundle the client libraries.
+they pay for themselves). `bun build` bundles the client libraries into
+`dist/` at publish time; a release script runs `bun build --compile` per
+target platform to attach standalone binaries to GitHub releases.
 
 ## 7. Alternatives considered and rejected
 
@@ -292,15 +293,17 @@ they pay for themselves); esbuild exists only to bundle the client libraries.
 3. **Python (Starlette + uvicorn + watchfiles), PEP 723 single file** — the
    first draft of this design. Rejected for a standalone tool: all client
    libraries are npm-native (Python could only reach them via CDN at runtime),
-   `npx` is the natural distribution channel for this category, and one
+   `npx`/`bunx` is the natural distribution channel for this category, and one
    language beats two. watchfiles/Starlette were fine; the ecosystem seam
    was the problem.
-4. **Bun instead of Node** — attractive (single compiled binary via
-   `bun build --compile`, built-in server and watcher), deliberately kept as
-   a *future packaging option* rather than a requirement: the code is plain
-   ESM and doesn't preclude it, but Node ≥ 20 is what everyone already has.
+4. **Node instead of Bun** — the second draft (Node ≥ 20 + Hono + chokidar +
+   esbuild). Node's ubiquity is real, but it costs two extra dependencies
+   (Hono, esbuild) that Bun provides built-in, and it has no answer to
+   `bun build --compile` standalone binaries — which cover the "I don't have
+   Bun" case better than Node ubiquity covers the "I don't have Node" case.
+   The code stays plain ESM, so a Node port remains cheap if ever needed.
 5. **Server-side rendering (markdown/highlighting on the server)** — fewer
-   moving parts in the browser and Shiki can run in Node, but the dual-theme
+   moving parts in the browser and Shiki runs fine in Bun, but the dual-theme
    CSS trick, scroll-preserving in-place re-renders, and markdown line-map
    plumbing are all simpler with client-side rendering. The server stays a
    dumb file/git/events API.
@@ -327,5 +330,6 @@ they pay for themselves); esbuild exists only to bundle the client libraries.
 - [Shiki dual themes](https://shiki.style/guide/dual-themes), [Shiki bundled themes](https://shiki.style/themes) — Catppuccin Latte/Mocha bundled, CSS-variable dual-theme output
 - [diff2html](https://github.com/rtfpessoa/diff2html) ([site](https://diff2html.xyz/)) — diff → HTML rendering
 - [chokidar](https://github.com/paulmillr/chokidar) — file watching
-- [Hono](https://hono.dev) — minimal HTTP framework with SSE helper
+- [Bun](https://bun.sh) — runtime; `Bun.serve`, `bun build`, `bun build --compile`
+- [Bun watcher reliability discussion](https://github.com/oven-sh/bun/discussions/1571) — why chokidar stays
 - [Catppuccin palette](https://catppuccin.com/palette/), [catppuccin/palette](https://github.com/catppuccin/palette) — official CSS variables
