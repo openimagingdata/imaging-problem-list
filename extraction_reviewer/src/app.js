@@ -80,6 +80,7 @@
     groupList: document.getElementById('groupList'),
     counts: document.getElementById('counts'),
     toolbarEyebrow: document.getElementById('toolbarEyebrow'),
+    toolbarJoinWarning: document.getElementById('toolbarJoinWarning'),
     toolbarTitle: document.getElementById('toolbarTitle'),
     toolbarSubtitle: document.getElementById('toolbarSubtitle'),
     content: document.getElementById('content'),
@@ -1291,7 +1292,7 @@
     header.innerHTML = `
       <span class="group-chevron">${file.collapsed ? '\u25B8' : '\u25BE'}</span>
       <div style="min-width:0; flex:1;">
-        <div class="group-title" title="${escapeHtml(file.name)}">${rev.notes?.trim() ? '<span class="note-dot" title="Report note exists"></span>' : ''}${escapeHtml(file.name)}</div>
+        <div class="group-title" title="${escapeHtml(file.name)}">${rev.notes?.trim() ? '<span class="note-dot" title="Report note exists"></span>' : ''}${escapeHtml(file.name)}${file.joinStatus === 'invalid' ? '<span class="invalid-join-chip">Invalid join</span>' : ''}</div>
         <div class="group-meta">${escapeHtml(metaBits)}</div>
       </div>
     `;
@@ -1364,8 +1365,10 @@
       el.toolbarTitle.textContent = '\u2014';
       el.toolbarSubtitle.textContent = '';
       el.content.innerHTML = `<div class="empty-state">Select a file to begin.</div>`;
+      el.toolbarJoinWarning.style.display = 'none';
       return;
     }
+    el.toolbarJoinWarning.style.display = file.joinStatus === 'invalid' ? '' : 'none';
     if (sel.panel === 'missing') {
       el.toolbarEyebrow.textContent = 'Missing findings';
       el.toolbarTitle.textContent = file.name;
@@ -1924,12 +1927,14 @@
       });
     }
     const exam = file.data.exam_info || {};
+    const joinInvalid = file.joinStatus === 'invalid';
     return {
       app_version: APP_VERSION,
       source_file: file.name,
       source_sha1: file.sha1,
       source_id: file.sourceId || null,
-      csv_row_number: file.csvRowNumber || null,
+      csv_row_number: joinInvalid ? null : file.csvRowNumber || null,
+      join_invalid: joinInvalid,
       source_exam: {
         study_description: exam.study_description || null,
         study_date: exam.study_date || null,
@@ -1969,6 +1974,7 @@
         source_sha1: review.source_sha1,
         source_id: review.source_id,
         csv_row_number: review.csv_row_number,
+        join_invalid: review.join_invalid,
         source_exam: review.source_exam,
         summary: review.summary,
         responses: review.responses,
@@ -1996,6 +2002,7 @@
         unsure: counts.unsure,
         pending: counts.pending,
         missing_findings_count: counts.missingCount,
+        invalid_joins: state.files.filter((file) => file.joinStatus === 'invalid').length,
       },
       reports,
     };

@@ -186,14 +186,15 @@ serialize as `status: "pending"`. `report_level_notes` appears on every report o
   "batch_summary": {
     "reports_total": 40, "reports_reviewed": 38,
     "findings_total": 812, "approved": 750, "flagged": 42, "unsure": 20, "pending": 0,
-    "missing_findings_count": 11
+    "missing_findings_count": 11, "invalid_joins": 1
   },
   "reports": [
     {
       "source_file": "CHEST001.extracted.json",
       "source_sha1": "abcdef123456",
       "source_id": "CHEST001",          // from manifest entry
-      "csv_row_number": 2,              // authoritative join key
+      "csv_row_number": null,           // null when the manifest/CSV join is invalid
+      "join_invalid": true,
       "source_exam": { "study_description": "…", "study_date": "…", "modality": "CT" },
       "summary": { "total_findings": 22, "approved": 18, "flagged": 3, "unsure": 1, "pending": 0,
                    "missing_findings_count": 1 },
@@ -352,7 +353,9 @@ separate later plan):
    keys are inert while typing in a textarea. Download the combined JSON and assert the contract
    (every report, every finding, `pending` where untouched, `status: "unsure"` and `flag_targets`
    serialized, `unsure` counted in summaries, `app_version` 1.2, `report_level_notes` present,
-   `csv_row_number` correct, `finding_index` maps back).
+   `csv_row_number` correct, `finding_index` maps back). Review the deliberately mismatched item
+   and assert it exports with `join_invalid: true`, `csv_row_number: null`, its manifest-claimed
+   `source_id`, and an incremented `batch_summary.invalid_joins` count.
 5. **Persistence acceptance:** close and reopen the HTML; confirm the batch resumes from
    IndexedDB **without reselecting files**, at the saved position, with responses intact —
    including the `unsure` verdict and its `flag_targets`. Confirm delete-batch clears it.
@@ -391,6 +394,10 @@ separate later plan):
 - Non-CSV batch identity hashes the UTF-8 encoding of newline-joined, lexicographically sorted extraction-file
   content hashes. Companion source-text files are excluded, so reopening or repacking the same extraction set
   resolves to the same saved review while freshly loaded source text retains its normal precedence.
+- A manifest/CSV identifier mismatch invalidates the CSV row link, not the extraction file or staged source
+  text. The item remains reviewable because `_staged_reports/<safe_id>.txt` is resolved independently by the
+  extraction filename; exports retain the manifest-claimed `source_id`, set `join_invalid: true`, and null the
+  untrusted `csv_row_number`.
 
 ## Risks / open questions
 
@@ -429,6 +436,8 @@ separate later plan):
   batch identity; the guide's persistence promise is true as written.
 - The review view shows the full source report with the current quote highlighted; the quote
   section is labeled "Evidence quote".
+- Reviewable invalid joins are visibly marked, export with `join_invalid: true` and a null
+  `csv_row_number`, and contribute to `batch_summary.invalid_joins`.
 - Verified against representative fixtures; no extraction-tool code pulled into this workstream.
 
 ## Verification evidence
@@ -437,6 +446,6 @@ separate later plan):
 - `npm run lint:web` and `npm run format:web:check`: clean; standalone HTML build succeeded.
 - WebKit `file://` protocol passed for BOM parsing, join counts (2 matched / 1 unmatched / 1 invalid),
   duplicate-source row resolution, staged-text highlighting, keyboard triage, the version 1.2 combined-export
-  assertions, CSV resume/drift/delete, embedded repack resume, direct-folder restore, and source-report
-  highlight/auto-scroll/warning states.
+  assertions, invalid-join UI/export quarantine, CSV resume/drift/delete, embedded repack resume,
+  direct-folder restore, and source-report highlight/auto-scroll/warning states.
 - Captured acceptance states under `extraction_reviewer/docs/verification/`.
