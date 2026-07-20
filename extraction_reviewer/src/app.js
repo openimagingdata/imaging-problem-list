@@ -40,6 +40,7 @@
   // ---------- Elements ----------
   const el = {
     landing: document.getElementById('landing'),
+    loadingSurface: document.getElementById('loadingSurface'),
     app: document.getElementById('app'),
     landingReviewerLabel: document.getElementById('landingReviewerLabel'),
     landingReviewerChange: document.getElementById('landingReviewerChange'),
@@ -91,6 +92,9 @@
     reviewerDialogTitle: document.getElementById('reviewerDialogTitle'),
     reviewerNameInput: document.getElementById('reviewerNameInput'),
     reviewerCancelBtn: document.getElementById('reviewerCancelBtn'),
+    loadDialog: document.getElementById('loadDialog'),
+    loadDialogBody: document.getElementById('loadDialogBody'),
+    loadDialogCloseBtn: document.getElementById('loadDialogCloseBtn'),
     helpBtn: document.getElementById('helpBtn'),
     helpDialog: document.getElementById('helpDialog'),
     helpCloseBtn: document.getElementById('helpCloseBtn'),
@@ -172,6 +176,24 @@
     updateReviewerUi();
     if (isInApp()) renderSidebar();
     el.reviewerDialog.close();
+  }
+
+  function restoreLoadingSurface() {
+    if (el.loadingSurface.parentElement !== el.landing) el.landing.appendChild(el.loadingSurface);
+    el.loadingSurface.classList.remove('in-load-dialog');
+  }
+
+  function openLoadDialog() {
+    if (!el.loadDialog || el.loadDialog.open) return;
+    el.loadingSurface.classList.add('in-load-dialog');
+    el.loadDialogBody.appendChild(el.loadingSurface);
+    setWizardStep(1);
+    el.loadDialog.showModal();
+  }
+
+  function closeLoadDialog() {
+    if (el.loadDialog?.open) el.loadDialog.close();
+    else restoreLoadingSurface();
   }
 
   // ---------- Storage ----------
@@ -796,6 +818,7 @@
     applyAutoCollapse();
     render();
     scheduleBatchSave();
+    closeLoadDialog();
     if (wasOnLanding) maybeShowGuideOnFirstVisit();
   }
 
@@ -807,6 +830,7 @@
     applyAutoCollapse();
     render();
     scheduleBatchSave();
+    closeLoadDialog();
     maybeShowGuideOnFirstVisit();
   }
 
@@ -2092,7 +2116,7 @@
   function onGlobalKey(ev) {
     const t = ev.target;
     const editing = t && (t.tagName === 'TEXTAREA' || t.tagName === 'INPUT' || t.isContentEditable);
-    if (editing || ev.ctrlKey || ev.metaKey || ev.altKey || el.reviewerDialog?.open) return;
+    if (editing || ev.ctrlKey || ev.metaKey || ev.altKey || el.reviewerDialog?.open || el.loadDialog?.open) return;
     if (!isInApp()) return;
     const k = ev.key.toLowerCase();
     if (k === 'a') {
@@ -2275,7 +2299,12 @@
     if (isInApp()) maybeShowGuideOnFirstVisit();
   });
 
-  el.addFilesBtn.addEventListener('click', () => el.filesInput.click());
+  el.addFilesBtn.addEventListener('click', openLoadDialog);
+  el.loadDialogCloseBtn.addEventListener('click', closeLoadDialog);
+  el.loadDialog.addEventListener('close', restoreLoadingSurface);
+  el.loadDialog.addEventListener('click', (ev) => {
+    if (ev.target === el.loadDialog) closeLoadDialog();
+  });
   el.exportBtn.addEventListener('click', exportCombinedJson);
   el.exportMenuBtn.addEventListener('click', () => {
     const opening = el.exportMenu.hidden;
