@@ -5,9 +5,9 @@
       Load the source CSV and its extraction-results folder, confirm the join, then review every extracted finding.
       Nothing leaves this browser.
     </p>
-    <div class="landing-row">
-      <label for="landingReviewer">Reviewer identifier</label>
-      <input id="landingReviewer" type="text" placeholder="name, email, or username" autocomplete="off" />
+    <div class="landing-reviewer-confirm" aria-live="polite">
+      <span id="landingReviewerLabel">No reviewer set</span>
+      <button type="button" id="landingReviewerChange" class="text-action">Set reviewer</button>
     </div>
 
     <ol class="wizard-progress" aria-label="Load progress">

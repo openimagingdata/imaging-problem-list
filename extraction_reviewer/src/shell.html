@@ -11,6 +11,23 @@
   <body>
     __LANDING_HTML__ __APP_SHELL_HTML__
 
+    <dialog id="reviewerDialog" class="reviewer-dialog" aria-labelledby="reviewerDialogTitle">
+      <form id="reviewerForm" class="reviewer-dialog-frame">
+        <div class="reviewer-dialog-topbar">
+          <strong id="reviewerDialogTitle">Who&rsquo;s reviewing?</strong>
+          <button type="button" id="reviewerCancelBtn" class="dialog-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="reviewer-dialog-body">
+          <p>Enter the name that should appear in the review export.</p>
+          <label for="reviewerNameInput">Reviewer name</label>
+          <input id="reviewerNameInput" type="text" autocomplete="name" placeholder="e.g. Jane Doe" />
+          <div class="reviewer-dialog-actions">
+            <button type="submit" class="primary">Save reviewer</button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
     <dialog id="helpDialog" class="help-dialog">
       <div class="help-dialog-frame">
         <div class="help-dialog-topbar">

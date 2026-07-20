@@ -41,7 +41,8 @@
   const el = {
     landing: document.getElementById('landing'),
     app: document.getElementById('app'),
-    landingReviewer: document.getElementById('landingReviewer'),
+    landingReviewerLabel: document.getElementById('landingReviewerLabel'),
+    landingReviewerChange: document.getElementById('landingReviewerChange'),
     pickCsvBtn: document.getElementById('pickCsvBtn'),
     csvInput: document.getElementById('csvInput'),
     csvDropzone: document.getElementById('csvDropzone'),
@@ -70,13 +71,14 @@
     filesInput: document.getElementById('filesInput'),
     compatFolderInput: document.getElementById('compatFolderInput'),
     loadErrors: document.getElementById('loadErrors'),
-    reviewerInput: document.getElementById('reviewerInput'),
+    reviewerChip: document.getElementById('reviewerChip'),
+    reviewerChipName: document.getElementById('reviewerChipName'),
+    reviewerChipChange: document.getElementById('reviewerChipChange'),
     addFilesBtn: document.getElementById('addFilesBtn'),
     exportBtn: document.getElementById('exportBtn'),
     exportMenuBtn: document.getElementById('exportMenuBtn'),
     exportMenu: document.getElementById('exportMenu'),
     exportZipBtn: document.getElementById('exportZipBtn'),
-    deleteBatchBtn: document.getElementById('deleteBatchBtn'),
     groupList: document.getElementById('groupList'),
     counts: document.getElementById('counts'),
     toolbarEyebrow: document.getElementById('toolbarEyebrow'),
@@ -84,6 +86,11 @@
     toolbarTitle: document.getElementById('toolbarTitle'),
     toolbarSubtitle: document.getElementById('toolbarSubtitle'),
     content: document.getElementById('content'),
+    reviewerDialog: document.getElementById('reviewerDialog'),
+    reviewerForm: document.getElementById('reviewerForm'),
+    reviewerDialogTitle: document.getElementById('reviewerDialogTitle'),
+    reviewerNameInput: document.getElementById('reviewerNameInput'),
+    reviewerCancelBtn: document.getElementById('reviewerCancelBtn'),
     helpBtn: document.getElementById('helpBtn'),
     helpDialog: document.getElementById('helpDialog'),
     helpCloseBtn: document.getElementById('helpCloseBtn'),
@@ -130,6 +137,41 @@
 
   function isInApp() {
     return el.app.style.display !== 'none';
+  }
+
+  function updateReviewerUi() {
+    const name = (state.reviewer || '').trim();
+    el.landingReviewerLabel.textContent = name ? `Reviewing as ${name}` : 'No reviewer set';
+    el.landingReviewerChange.textContent = name ? 'Change' : 'Set reviewer';
+    el.reviewerChipName.textContent = name || 'Set reviewer';
+    el.reviewerChip.classList.toggle('missing', !name);
+    el.reviewerChipChange.textContent = name ? 'Change' : 'Set';
+  }
+
+  function openReviewerDialog() {
+    if (!el.reviewerDialog || el.reviewerDialog.open) return;
+    const name = (state.reviewer || '').trim();
+    el.reviewerDialogTitle.textContent = name ? 'Change reviewer' : "Who's reviewing?";
+    el.reviewerNameInput.value = name;
+    el.reviewerDialog.showModal();
+    window.setTimeout(() => {
+      el.reviewerNameInput.focus();
+      el.reviewerNameInput.select();
+    }, 0);
+  }
+
+  function saveReviewerName() {
+    const name = (el.reviewerNameInput.value || '').trim();
+    if (!name) {
+      el.reviewerNameInput.focus();
+      return;
+    }
+    state.reviewer = name;
+    persistPreferences();
+    scheduleBatchSave();
+    updateReviewerUi();
+    if (isInApp()) renderSidebar();
+    el.reviewerDialog.close();
   }
 
   // ---------- Storage ----------
@@ -292,7 +334,6 @@
       state.batchIndex = [entry, ...state.batchIndex.filter((item) => item.batchId !== entry.batchId)];
       persistBatchIndex();
       renderSavedBatches();
-      if (el.deleteBatchBtn) el.deleteBatchBtn.style.display = '';
       return true;
     } catch (e) {
       console.warn('Batch persistence unavailable:', e);
@@ -738,11 +779,6 @@
   }
 
   async function handleLoadedFiles(fileList, { label = null, kind = 'direct', offerResume = false } = {}) {
-    const reviewerValue = (el.landingReviewer.value || '').trim();
-    if (reviewerValue) {
-      state.reviewer = reviewerValue;
-      persistPreferences();
-    }
     const errors = await loadFileList(fileList);
     showLoadErrors(errors);
     if (!state.files.length) return;
@@ -756,7 +792,6 @@
       state.selection = auto;
       el.landing.style.display = 'none';
       el.app.style.display = 'grid';
-      el.reviewerInput.value = state.reviewer;
     }
     applyAutoCollapse();
     render();
@@ -766,19 +801,12 @@
 
   function enterReview({ preserveSelection = false } = {}) {
     if (!state.files.length) return;
-    const reviewerValue = (el.landingReviewer.value || '').trim();
-    if (reviewerValue) {
-      state.reviewer = reviewerValue;
-      persistPreferences();
-    }
     if (!preserveSelection) state.selection = findNextPending(null) || firstSelection();
     el.landing.style.display = 'none';
     el.app.style.display = 'grid';
-    el.reviewerInput.value = state.reviewer;
     applyAutoCollapse();
     render();
     scheduleBatchSave();
-    if (el.deleteBatchBtn) el.deleteBatchBtn.style.display = currentBatchId() ? '' : 'none';
     maybeShowGuideOnFirstVisit();
   }
 
@@ -1243,6 +1271,7 @@
   }
 
   function renderSidebar() {
+    updateReviewerUi();
     const c = globalCounts();
     const icon = {
       pending: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>`,
@@ -1261,7 +1290,7 @@
     el.exportBtn.disabled = !canExport();
     el.exportBtn.title = canExport()
       ? 'Download one combined review JSON'
-      : 'Enter a reviewer identifier to enable export';
+      : 'Set a reviewer name before downloading review JSON.';
     el.exportMenuBtn.disabled = !canExportZip();
     el.exportZipBtn.disabled = !canExportZip();
 
@@ -2063,7 +2092,7 @@
   function onGlobalKey(ev) {
     const t = ev.target;
     const editing = t && (t.tagName === 'TEXTAREA' || t.tagName === 'INPUT' || t.isContentEditable);
-    if (editing || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    if (editing || ev.ctrlKey || ev.metaKey || ev.altKey || el.reviewerDialog?.open) return;
     if (!isInApp()) return;
     const k = ev.key.toLowerCase();
     if (k === 'a') {
@@ -2148,15 +2177,16 @@
     return Boolean(state.prefs.guideSeen);
   }
   function maybeShowGuideOnFirstVisit() {
-    if (hasSeenGuide()) return;
+    if (hasSeenGuide() || el.reviewerDialog?.open) return;
     openHelp();
   }
 
   // ---------- Wiring ----------
   loadPreferences();
   loadBatchIndex();
-  el.landingReviewer.value = state.reviewer;
+  updateReviewerUi();
   renderSavedBatches();
+  if (!state.reviewer) window.setTimeout(openReviewerDialog, 0);
 
   function bindDropzone(dropzone, onDrop) {
     ['dragenter', 'dragover'].forEach((eventName) =>
@@ -2227,16 +2257,22 @@
     });
   }
 
-  el.landingReviewer.addEventListener('input', () => {
-    state.reviewer = el.landingReviewer.value;
-    persistPreferences();
-    scheduleBatchSave();
+  el.landingReviewerChange.addEventListener('click', openReviewerDialog);
+  el.reviewerChipChange.addEventListener('click', openReviewerDialog);
+  el.reviewerChip.addEventListener('click', (ev) => {
+    if (ev.target !== el.reviewerChipChange) openReviewerDialog();
   });
-  el.reviewerInput.addEventListener('input', () => {
-    state.reviewer = el.reviewerInput.value;
-    persistPreferences();
-    scheduleBatchSave();
-    renderSidebar();
+  el.reviewerForm.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    saveReviewerName();
+  });
+  el.reviewerCancelBtn.addEventListener('click', () => el.reviewerDialog.close());
+  el.reviewerDialog.addEventListener('click', (ev) => {
+    if (ev.target === el.reviewerDialog) el.reviewerDialog.close();
+  });
+  el.reviewerDialog.addEventListener('close', () => {
+    updateReviewerUi();
+    if (isInApp()) maybeShowGuideOnFirstVisit();
   });
 
   el.addFilesBtn.addEventListener('click', () => el.filesInput.click());
@@ -2250,15 +2286,6 @@
     el.exportMenu.hidden = true;
     el.exportMenuBtn.setAttribute('aria-expanded', 'false');
     exportZip();
-  });
-  el.deleteBatchBtn.addEventListener('click', async () => {
-    const batchId = currentBatchId();
-    if (!batchId || !window.confirm('Delete this saved review batch from this browser?')) return;
-    window.clearTimeout(saveTimer);
-    state.csv = null;
-    state.localBatch = null;
-    await deleteBatch(batchId);
-    window.location.reload();
   });
   if (el.helpBtn) el.helpBtn.addEventListener('click', openHelp);
   if (el.helpCloseBtn) el.helpCloseBtn.addEventListener('click', closeHelp);

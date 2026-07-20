@@ -3,26 +3,29 @@
     <div class="sidebar-header">
       <h1 class="sidebar-title">Extraction Review</h1>
       <div id="counts" class="counts"></div>
-      <div class="reviewer-mini">
-        <input id="reviewerInput" type="text" placeholder="reviewer identifier" autocomplete="off" />
+      <div id="reviewerChip" class="reviewer-chip">
+        <span class="reviewer-chip-label">Reviewing as</span>
+        <strong id="reviewerChipName">Set reviewer</strong>
+        <button type="button" id="reviewerChipChange">Change</button>
       </div>
       <div class="sidebar-actions">
-        <div class="export-split">
+        <div class="export-controls">
           <button type="button" id="exportBtn" class="primary">Download review JSON</button>
-          <button
-            type="button"
-            id="exportMenuBtn"
-            class="primary export-menu-toggle"
-            aria-label="More export options"
-            aria-expanded="false"
-          >
-            &#9662;
-          </button>
+          <div class="export-overflow">
+            <button
+              type="button"
+              id="exportMenuBtn"
+              class="export-menu-toggle"
+              aria-label="More export options"
+              aria-expanded="false"
+            >
+              &ctdot;
+            </button>
+          </div>
           <div id="exportMenu" class="export-menu" hidden>
-            <button type="button" id="exportZipBtn">Download per-report zip</button>
+            <button type="button" id="exportZipBtn">Per-report zip (legacy)</button>
           </div>
         </div>
-        <button type="button" id="deleteBatchBtn" class="danger" style="display: none">Delete saved batch</button>
       </div>
     </div>
     <div id="groupList" class="group-list"></div>
