@@ -44,7 +44,46 @@
           <strong>Reviewer guide</strong>
           <button type="button" id="helpCloseBtn" class="help-dialog-close" aria-label="Close">&times;</button>
         </div>
-        <div class="help-dialog-body">__REVIEWER_GUIDE__</div>
+        <div id="helpTabs" class="help-tabs" role="tablist" aria-label="Reviewer guide sections">
+          <button type="button" role="tab" data-help-tab="0">Screen tour</button>
+          <button type="button" role="tab" data-help-tab="1">Reviewing &amp; keys</button>
+          <button type="button" role="tab" data-help-tab="2">Missing &amp; export</button>
+        </div>
+        <div class="help-dialog-body">
+          <div id="helpPanelStage">
+            <section class="help-panel" data-help-panel="0">
+              __GUIDE_SCREEN_TOUR__
+              <button type="button" class="help-more-link" data-help-more="csv">
+                More: CSV wizard details&hellip;
+              </button>
+            </section>
+            <section class="help-panel" data-help-panel="1" hidden>
+              __GUIDE_REVIEWING__
+              <button type="button" class="help-more-link" data-help-more="flagging">
+                More: What to write when flagging&hellip;
+              </button>
+            </section>
+            <section class="help-panel" data-help-panel="2" hidden>
+              __GUIDE_MISSING_EXPORT__
+              <button type="button" class="help-more-link" data-help-more="persistence">
+                More: Persistence &amp; resuming&hellip;
+              </button>
+            </section>
+          </div>
+          <div id="helpMoreStage" hidden>
+            <section class="help-more-panel" data-help-more-panel="persistence" hidden>
+              __GUIDE_MORE_PERSISTENCE__
+            </section>
+            <section class="help-more-panel" data-help-more-panel="csv" hidden>__GUIDE_MORE_CSV__</section>
+            <section class="help-more-panel" data-help-more-panel="flagging" hidden>__GUIDE_MORE_FLAGGING__</section>
+            <button type="button" id="helpMoreBackBtn" class="help-more-back">&larr; Back to quick guide</button>
+          </div>
+        </div>
+        <div id="helpFooter" class="help-footer">
+          <button type="button" id="helpPrevBtn">Previous</button>
+          <span id="helpProgress">1 of 3</span>
+          <button type="button" id="helpNextBtn" class="primary">Next</button>
+        </div>
       </div>
     </dialog>
 

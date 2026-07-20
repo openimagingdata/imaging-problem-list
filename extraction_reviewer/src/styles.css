@@ -770,12 +770,83 @@ button.warning.is-default {
   background: rgba(15, 23, 42, 0.06);
   color: var(--text);
 }
+.help-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 10px 18px 0;
+  background: white;
+}
+.help-tabs button {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.help-tabs button.active {
+  border-color: #c8d8ff;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.help-tabs[hidden],
+.help-footer[hidden],
+#helpPanelStage[hidden],
+#helpMoreStage[hidden],
+.help-panel[hidden],
+.help-more-panel[hidden] {
+  display: none !important;
+}
 .help-dialog-body {
   overflow: auto;
   padding: 20px 26px 28px;
   font-size: 14px;
   line-height: 1.55;
   color: var(--text);
+}
+.help-panel h2,
+.help-more-panel h2 {
+  margin-top: 0;
+}
+.help-panel img {
+  width: 100%;
+  max-height: 410px;
+  object-fit: contain;
+  object-position: top center;
+  background: var(--panel-soft);
+}
+.help-panel ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 24px;
+}
+.help-more-link,
+.help-more-back {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  padding: 4px 0;
+  font-weight: 700;
+}
+.help-footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 18px 14px;
+  border-top: 1px solid var(--border);
+  background: white;
+}
+.help-footer button:first-child {
+  justify-self: start;
+}
+.help-footer button:last-child {
+  justify-self: end;
+}
+.help-footer span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
 }
 .help-dialog-body h1 {
   font-size: 22px;
@@ -1884,5 +1955,11 @@ details.report-context[open] summary {
   }
   .in-load-dialog {
     padding: 16px;
+  }
+  .help-tabs {
+    grid-template-columns: 1fr;
+  }
+  .help-panel ol {
+    grid-template-columns: 1fr;
   }
 }

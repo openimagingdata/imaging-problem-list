@@ -55,7 +55,8 @@ Building requires Python 3.9+ stdlib only — no dependencies.
 
 ## Reviewer workflow
 
-1. Double-click `extraction_reviewer.html` and enter a reviewer identifier.
+1. Double-click `extraction_reviewer.html`. On first open, enter the reviewer name
+   that should appear in exports; later opens show **Reviewing as {name} — Change**.
 2. Select the original source CSV. Two-column files are mapped automatically; wider
    files show identifier-column and report-text-column selectors.
 3. Select the extraction-results directory. It should include the extraction JSONs,
@@ -67,11 +68,13 @@ Building requires Python 3.9+ stdlib only — no dependencies.
    that apply to a whole report. The full source report remains visible beside each
    finding, with its evidence quote highlighted.
 7. Periodically click **Download review JSON**. The combined JSON includes every
-   loaded report and finding, including untouched findings as `pending`. The dropdown
-   retains the legacy per-report zip export.
+   loaded report and finding, including untouched findings as `pending`. The **⋯**
+   menu retains **Per-report zip (legacy)**.
 
 The **Load files directly instead** section remains available for extraction JSONs
 with sibling `.txt`/`.md` reports and for embedded bundles made by `pack.py`.
+During review, **+ Add files** opens this same loading surface in a modal. In-app
+Help is a three-panel quick guide; each panel links to deeper reference topics.
 
 ### Keyboard shortcuts
 

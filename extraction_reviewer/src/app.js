@@ -32,6 +32,7 @@
     joinSummary: null,
     savedBatchCandidate: null,
     prefs: { reviewer: '', guideSeen: false, lastColumnMapping: null },
+    helpPanel: 0,
     batchIndex: [],
     selection: { sha1: null, findingIndex: null, panel: null }, // panel: null | "missing"
     reviews: {}, // sha1 -> {responses: {idx: {status, comment, firstReviewedAt, updatedAt}}, missing: [], notes}
@@ -98,6 +99,18 @@
     helpBtn: document.getElementById('helpBtn'),
     helpDialog: document.getElementById('helpDialog'),
     helpCloseBtn: document.getElementById('helpCloseBtn'),
+    helpTabs: document.getElementById('helpTabs'),
+    helpTabButtons: Array.from(document.querySelectorAll('[data-help-tab]')),
+    helpPanels: Array.from(document.querySelectorAll('[data-help-panel]')),
+    helpPanelStage: document.getElementById('helpPanelStage'),
+    helpMoreStage: document.getElementById('helpMoreStage'),
+    helpMoreLinks: Array.from(document.querySelectorAll('[data-help-more]')),
+    helpMorePanels: Array.from(document.querySelectorAll('[data-help-more-panel]')),
+    helpMoreBackBtn: document.getElementById('helpMoreBackBtn'),
+    helpFooter: document.getElementById('helpFooter'),
+    helpPrevBtn: document.getElementById('helpPrevBtn'),
+    helpNextBtn: document.getElementById('helpNextBtn'),
+    helpProgress: document.getElementById('helpProgress'),
   };
 
   // ---------- Helpers ----------
@@ -2116,7 +2129,16 @@
   function onGlobalKey(ev) {
     const t = ev.target;
     const editing = t && (t.tagName === 'TEXTAREA' || t.tagName === 'INPUT' || t.isContentEditable);
-    if (editing || ev.ctrlKey || ev.metaKey || ev.altKey || el.reviewerDialog?.open || el.loadDialog?.open) return;
+    if (
+      editing ||
+      ev.ctrlKey ||
+      ev.metaKey ||
+      ev.altKey ||
+      el.reviewerDialog?.open ||
+      el.loadDialog?.open ||
+      el.helpDialog?.open
+    )
+      return;
     if (!isInApp()) return;
     const k = ev.key.toLowerCase();
     if (k === 'a') {
@@ -2187,7 +2209,38 @@
     }
   }
 
+  function setHelpPanel(index) {
+    state.helpPanel = Math.max(0, Math.min(el.helpPanels.length - 1, index));
+    el.helpPanelStage.hidden = false;
+    el.helpMoreStage.hidden = true;
+    el.helpTabs.hidden = false;
+    el.helpFooter.hidden = false;
+    el.helpPanels.forEach((panel, panelIndex) => {
+      panel.hidden = panelIndex !== state.helpPanel;
+    });
+    el.helpTabButtons.forEach((button, buttonIndex) => {
+      const active = buttonIndex === state.helpPanel;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-selected', String(active));
+      button.tabIndex = active ? 0 : -1;
+    });
+    el.helpPrevBtn.disabled = state.helpPanel === 0;
+    el.helpNextBtn.disabled = state.helpPanel === el.helpPanels.length - 1;
+    el.helpProgress.textContent = `${state.helpPanel + 1} of ${el.helpPanels.length}`;
+  }
+
+  function showHelpMore(topic) {
+    el.helpPanelStage.hidden = true;
+    el.helpMoreStage.hidden = false;
+    el.helpTabs.hidden = true;
+    el.helpFooter.hidden = true;
+    el.helpMorePanels.forEach((panel) => {
+      panel.hidden = panel.dataset.helpMorePanel !== topic;
+    });
+  }
+
   function openHelp() {
+    setHelpPanel(0);
     if (el.helpDialog && typeof el.helpDialog.showModal === 'function' && !el.helpDialog.open) {
       el.helpDialog.showModal();
     }
@@ -2318,6 +2371,15 @@
   });
   if (el.helpBtn) el.helpBtn.addEventListener('click', openHelp);
   if (el.helpCloseBtn) el.helpCloseBtn.addEventListener('click', closeHelp);
+  el.helpTabButtons.forEach((button) => {
+    button.addEventListener('click', () => setHelpPanel(Number(button.dataset.helpTab)));
+  });
+  el.helpPrevBtn.addEventListener('click', () => setHelpPanel(state.helpPanel - 1));
+  el.helpNextBtn.addEventListener('click', () => setHelpPanel(state.helpPanel + 1));
+  el.helpMoreLinks.forEach((button) => {
+    button.addEventListener('click', () => showHelpMore(button.dataset.helpMore));
+  });
+  el.helpMoreBackBtn.addEventListener('click', () => setHelpPanel(state.helpPanel));
   if (el.helpDialog) {
     // Click-outside-to-close: the <dialog> itself receives clicks on its backdrop.
     el.helpDialog.addEventListener('click', (ev) => {

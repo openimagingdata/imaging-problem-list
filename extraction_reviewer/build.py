@@ -29,7 +29,12 @@ PLACEHOLDERS = {
     "__VENDOR_ZIP_JS__": "vendor_zip",
     "__APP_JS__": "app_js",
     "__EMBEDDED_BUNDLE_B64__": "embedded_bundle",
-    "__REVIEWER_GUIDE__": "reviewer_guide",
+    "__GUIDE_SCREEN_TOUR__": "guide_screen_tour",
+    "__GUIDE_REVIEWING__": "guide_reviewing",
+    "__GUIDE_MISSING_EXPORT__": "guide_missing_export",
+    "__GUIDE_MORE_PERSISTENCE__": "guide_more_persistence",
+    "__GUIDE_MORE_CSV__": "guide_more_csv",
+    "__GUIDE_MORE_FLAGGING__": "guide_more_flagging",
 }
 
 
@@ -160,12 +165,45 @@ def _inline_guide_images(html: str, guide_path: Path, docs_root: Path) -> str:
     return re.sub(r'(<img\s[^>]*src=")([^"]+)(")', repl, html)
 
 
-def _build_reviewer_guide(guide_md_path: Path) -> str:
+def _extract_markdown_section(md: str, heading: str) -> str:
+    pattern = rf"^## {re.escape(heading)}\s*$\n(.*?)(?=^##\s|\Z)"
+    match = re.search(pattern, md, flags=re.MULTILINE | re.DOTALL)
+    if not match:
+        return f"## {heading}\n\nGuide section unavailable."
+    return f"## {heading}\n\n{match.group(1).strip()}"
+
+
+def _build_reviewer_guide_sections(guide_md_path: Path) -> dict[str, str]:
     if not guide_md_path.is_file():
-        return "<p>Reviewer guide not available.</p>"
+        fallback = "<p>Reviewer guide not available.</p>"
+        return dict.fromkeys(
+            (
+                "guide_screen_tour",
+                "guide_reviewing",
+                "guide_missing_export",
+                "guide_more_persistence",
+                "guide_more_csv",
+                "guide_more_flagging",
+            ),
+            fallback,
+        )
     md = guide_md_path.read_text(encoding="utf-8")
-    html = _render_markdown(md)
-    return _inline_guide_images(html, guide_md_path, guide_md_path.parent)
+    headings = {
+        "guide_screen_tour": "Screen tour",
+        "guide_reviewing": "Reviewing & keys",
+        "guide_missing_export": "Missing findings & export",
+        "guide_more_persistence": "More: Persistence & resuming",
+        "guide_more_csv": "More: CSV wizard details",
+        "guide_more_flagging": "More: What to write when flagging",
+    }
+    return {
+        key: _inline_guide_images(
+            _render_markdown(_extract_markdown_section(md, heading)),
+            guide_md_path,
+            guide_md_path.parent,
+        )
+        for key, heading in headings.items()
+    }
 
 
 def build(
@@ -180,6 +218,7 @@ def build(
     if bundle_zip is not None:
         embedded = base64.b64encode(bundle_zip.read_bytes()).decode("ascii")
     guide_md = guide_path or (src_dir.parent / "REVIEWER_GUIDE.md")
+    guide_sections = _build_reviewer_guide_sections(guide_md)
     parts = {
         "app_version": APP_VERSION,
         "styles": (src_dir / "styles.css").read_text(encoding="utf-8"),
@@ -188,7 +227,7 @@ def build(
         "vendor_zip": vendor_zip_path.read_text(encoding="utf-8"),
         "app_js": (src_dir / "app.js").read_text(encoding="utf-8"),
         "embedded_bundle": embedded,
-        "reviewer_guide": _build_reviewer_guide(guide_md),
+        **guide_sections,
     }
 
     out = shell
