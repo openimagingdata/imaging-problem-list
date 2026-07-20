@@ -1,15 +1,16 @@
 # dirview — Design for a Lightweight Local Directory Viewer
 
-**Status:** Design only — not yet implemented.
+**Status:** Design only — not yet implemented. Will live in its own repository;
+this copy is parked here while the design is being discussed.
 
 A small web server you run in any local directory that gives you a two-column
 browsing UI: directory tree on the left, rendered file on the right, with
 first-class markdown rendering, syntax-highlighted code, git status awareness,
-inline change indicators with click-through diffs, and live updates as files
-change on disk. Catppuccin themed (Latte light / Mocha dark).
+inline per-hunk diffs, and live updates as files change on disk. Catppuccin
+themed (Latte light / Mocha dark).
 
 ```
-uv run dirview.py            # serve the current directory at http://127.0.0.1:7440
+npx dirview            # serve the current directory at http://127.0.0.1:7440
 ```
 
 ---
@@ -20,8 +21,9 @@ uv run dirview.py            # serve the current directory at http://127.0.0.1:7
 2. GOOD markdown rendering (GitHub-flavored)
 3. GOOD code rendering (real syntax highlighting, not an afterthought)
 4. Git status shown in the tree; filter to changed/new files
-5. For changed files, a *subtle* indication of *where* changes are, with
-   click-through to a standard diff representation
+5. For changed files, a *subtle* indication of *where* changes are; clicking an
+   individual change expands that **individual hunk's diff inline, in place** —
+   never a whole-page diff view
 6. Watches the directory tree and keeps open views up to date
 
 Constraints: as little code as possible — assemble best-in-class existing
@@ -42,44 +44,50 @@ No single existing tool covers all six requirements; each covers a slice:
 
 **Conclusion:** the gap is real but narrow — every individual capability is a
 solved problem with a clear best-in-class library. The right build is a thin
-glue server (~200–300 lines) plus one HTML page that composes those libraries,
-not a new app.
+glue server plus one page that composes those libraries, not a new app.
 
 ## 3. Recommended architecture
 
-**A single-file Python server + a single static HTML page.** All rendering
-happens in the browser; the server only serves files, answers git questions,
-and pushes change events. Total new code target: **under ~800 lines.**
+**A small Node.js package: a ~5-route server plus one static page.** All
+rendering happens in the browser; the server only serves files, answers git
+questions, and pushes change events. Total new code target: **under ~900
+lines**, distributed as an npm package so `npx dirview` works anywhere with no
+setup.
 
-### Why this shape
+### Why Node (and not Python)
 
-- The server stays trivial (static files + 4 JSON endpoints + 1 SSE stream) —
-  no template engine, no server-side rendering, no build step.
-- The heavy lifting (markdown, highlighting, diff HTML) is done by mature JS
-  libraries loaded as ES modules — exactly the "pull from best-in-class"
-  requirement.
-- Python + `uv` matches this repo's existing tooling. With
-  [PEP 723 inline script metadata](https://packaging.python.org/en/latest/specifications/inline-script-metadata/),
-  `dirview.py` declares its own dependencies and `uv run dirview.py` just works
-  in any directory, no venv setup.
+An earlier draft proposed a Python/Starlette single-file server, anchored on
+the host repo's uv tooling. For a standalone tool the trade-offs point the
+other way:
+
+- **Every rendering dependency is npm-native.** markdown-it, Shiki, diff2html,
+  Alpine — the best-in-class stack *is* the JS ecosystem. With a Node package
+  they're normal pinned dependencies, bundled at publish time. The Python
+  version could only reach them via CDN at runtime (online requirement,
+  version drift) or awkward vendoring.
+- **Distribution:** `npx dirview` is the established idiom for exactly this
+  kind of tool (difit, serve, vite preview…). "First install uv" is a real
+  barrier for anyone else who wants it.
+- **One language** across server and client; the server half is trivial in
+  either language anyway (the watcher, git subprocess, and SSE all have
+  equally good Node equivalents).
+
+Bun would allow a single compiled binary and is noted as a future option
+(§7); Node ≥ 20 is chosen for ubiquity.
 
 ### Component choices (all best-in-class, all boring)
 
 | Concern | Choice | Why |
 |---|---|---|
-| HTTP server | **Starlette + uvicorn** (Python) | Minimal async framework; SSE and static files out of the box. (FastAPI works too but adds nothing we need.) |
-| File watching | **[watchfiles](https://github.com/samuelcolvin/watchfiles)** | Rust `notify`-based, the watcher behind `uvicorn --reload`; `awatch()` gives an async iterator of debounced change batches — feeds SSE directly |
-| Git interrogation | **`git` subprocess** (`status --porcelain=v2`, `diff`) | Zero dependencies, always agrees with the user's git; porcelain v2 is a stable machine format. GitPython/pygit2 add weight for no benefit here |
-| Markdown | **[markdown-it](https://github.com/markdown-it/markdown-it)** (client-side) + task-list/anchor plugins | The de-facto standard CommonMark+GFM renderer (VS Code uses it). Critically, its token `map` gives **source line ranges per block** — which is what makes requirement 5 work on *rendered* markdown |
+| HTTP server | **[Hono](https://hono.dev)** + `@hono/node-server` | Tiny, modern router with built-in static file serving and an SSE streaming helper; the whole server stays one small file |
+| File watching | **[chokidar](https://github.com/paulmillr/chokidar)** | The de-facto standard Node watcher (powers Vite et al.); handles recursive watching, debouncing quirks, and platform differences |
+| Git interrogation | **`git` subprocess** (`status --porcelain=v2`, `diff`) | Zero dependencies, always agrees with the user's git; porcelain v2 is a stable machine format. simple-git/nodegit add weight for no benefit |
+| Markdown | **[markdown-it](https://github.com/markdown-it/markdown-it)** + task-list/anchor plugins | The de-facto CommonMark+GFM renderer (VS Code uses it). Critically, its token `map` gives **source line ranges per block** — which is what makes requirement 5 work on *rendered* markdown |
 | Code highlighting | **[Shiki](https://shiki.style)** | TextMate-grammar highlighting (identical quality to VS Code). Ships **Catppuccin Latte/Frappé/Macchiato/Mocha as bundled themes**, and its [dual-theme mode](https://shiki.style/guide/dual-themes) emits CSS-variable output so light/dark switching is pure CSS |
-| Diff rendering | **[diff2html](https://github.com/rtfpessoa/diff2html)** | The standard "GitHub-style diff from raw `git diff` text" library; line-by-line and side-by-side; colors overridable via CSS variables → Catppuccin-able |
-| UI reactivity | **Alpine.js** | Already used by this repo's viewer; no build step; a recursive `<template>` renders the tree in ~30 lines |
+| Hunk diff rendering | **[diff2html](https://github.com/rtfpessoa/diff2html)** (per-hunk) | The standard "GitHub-style diff from raw `git diff` text" library; we feed it one hunk at a time (§5); colors overridable via CSS variables → Catppuccin-able |
+| UI reactivity | **Alpine.js** | No framework build; a recursive `<template>` renders the tree in ~30 lines. (If the inline-hunk DOM juggling outgrows it, preact+htm is the fallback — still buildless) |
+| Client bundling | **esbuild**, one-shot at publish | End users never build; `npx dirview` ships prebuilt assets. Solves offline use — no CDN anywhere |
 | Theme | **[@catppuccin/palette](https://github.com/catppuccin/palette)** CSS variables | Official palette as CSS custom properties; Latte = light, Mocha = dark; follow `prefers-color-scheme` with a manual toggle persisted in `localStorage` |
-
-JS libraries load from a CDN (esm.sh / jsdelivr) pinned to exact versions.
-*Trade-off:* first load needs internet. If offline use matters, a `--vendor`
-flag (or a tiny fetch-on-first-run cache) can mirror the five files locally —
-noted as an open question below.
 
 ### Layout
 
@@ -87,36 +95,31 @@ noted as an open question below.
 ┌────────────────────────────────────────────────────────────────┐
 │ dirview — ~/some/directory        [changed only ⌥] [☾/☀]       │
 ├──────────────────┬─────────────────────────────────────────────┤
-│ ▸ docs           │  README.md                    [Diff] [Raw]  │
+│ ▸ docs           │  scripts/gen_efl.py            M   [Raw]    │
 │ ▾ scripts        │ ┌─────────────────────────────────────────┐ │
-│    gen_efl.py  M │ │                                         │ │
-│    gen_ipl.py    │ │   # Rendered markdown / highlighted     │ │
-│ ▾ viewer         │ ▌│   code, with a subtle accent bar in    │ │
-│    app.js      M │ │ │  the gutter beside changed regions    │ │
-│    index.html    │ │                                         │ │
-│  README.md     M │ └─────────────────────────────────────────┘ │
-│  new_file.md   U │                                             │
+│    gen_efl.py  M │ │  12  def load_sheet(path):              │ │
+│    gen_ipl.py    │ │▌ 13      wb = openpyxl.load_workbook(   │ │
+│ ▾ viewer         │ │▌ 14      sheet = wb.active              │ │
+│    app.js      M │ │  15      return sheet                   │ │
+│    index.html    │ │      ⌄ (clicked — hunk expands inline)  │ │
+│  README.md     M │ │ ┌─────────────────────────────────────┐ │ │
+│  new_file.md   U │ │ │ - 13  wb = load_workbook(path, ro)  │ │ │
+│                  │ │ │ + 13  wb = openpyxl.load_workbook(  │ │ │
+│                  │ │ │ + 14  sheet = wb.active             │ │ │
+│                  │ │ └─────────────────────────────────────┘ │ │
+│                  │ └─────────────────────────────────────────┘ │
 └──────────────────┴─────────────────────────────────────────────┘
 ```
 
 - Tree: collapsible directories, git status letter + Catppuccin color per file
   (M = yellow, A/U = green, D = red, renamed = teal). A header toggle filters
   the tree to changed/untracked files only (requirement 4).
-- Right pane header: file path, git status badge, `[Diff]` button (only when
-  the file has changes), `[Raw]` toggle for markdown source view.
+- Right pane header: file path, git status badge, `[Raw]` toggle for markdown
+  source view.
 
 ## 4. Server design
 
-One file, `dirview.py`, with PEP 723 metadata:
-
-```python
-# /// script
-# requires-python = ">=3.11"
-# dependencies = ["starlette", "uvicorn", "watchfiles"]
-# ///
-```
-
-CLI: `dirview.py [path] [--port 7440] [--host 127.0.0.1] [--no-open]`.
+`npx dirview [path] [--port 7440] [--host 127.0.0.1] [--no-open]`.
 Binds to localhost only by default. Every request path is resolved and
 verified to live under the served root (path-traversal guard). `.git/` is
 never listed or served.
@@ -125,18 +128,38 @@ never listed or served.
 
 | Endpoint | Returns |
 |---|---|
-| `GET /` | The static `index.html` |
+| `GET /` | The prebuilt static page |
 | `GET /api/tree` | Nested JSON tree of the directory (skipping `.git`), each node annotated with git status from one `git status --porcelain=v2 --untracked-files=all` call; also flags gitignored files so the UI can dim or hide them |
-| `GET /api/file?path=` | JSON: text content, detected language (by extension), size, binary flag, git status, and `changed_ranges` — a list of `{start, end, kind}` line ranges parsed from `git diff -U0 -- <path>` hunk headers (`kind` = added/modified; deletions become zero-width markers) |
-| `GET /api/diff?path=` | Raw unified `git diff` text for that file (worktree vs HEAD, so staged + unstaged both show; untracked files are diffed against `/dev/null` via `git diff --no-index`) — fed straight to diff2html client-side |
+| `GET /api/file?path=` | JSON: text content, detected language (by extension), size, binary flag, git status, and `hunks` (below) |
 | `GET /raw/<path>` | Raw bytes with correct MIME type — used for images and for relative links/images inside rendered markdown |
 | `GET /api/events` | SSE stream of change events |
 
+### Hunk data (requirement 5)
+
+`/api/file` runs `git diff --no-color -U3 -- <path>` (worktree vs `HEAD`, so
+staged and unstaged changes both show; untracked files are diffed against
+empty via `--no-index`) and parses it **once, server-side** into:
+
+```json
+"hunks": [
+  {
+    "newStart": 13, "newLines": 2,      // where the bar goes in the current file
+    "oldStart": 13, "oldLines": 1,
+    "kind": "modified",                  // added | modified | deleted
+    "patch": "@@ -13,1 +13,2 @@ def load_sheet\n-...\n+...\n+..."
+  }
+]
+```
+
+`newStart`/`newLines` drive the gutter indicators; `patch` is the exact raw
+hunk text, ready to be handed to diff2html client-side with a synthesized file
+header. No whole-file diff endpoint exists — the hunk is the unit of diffing
+throughout, matching the interaction model.
+
 ### Watching → SSE (requirement 6)
 
-A single `watchfiles.awatch(root)` task feeds a broadcast queue consumed by
-`/api/events` subscribers. Events are debounced batches (watchfiles does this
-natively, ~50ms; we add a 200ms coalesce):
+One chokidar watcher on the root feeds a broadcast queue consumed by
+`/api/events` subscribers, coalesced into ~200ms batches:
 
 ```json
 { "changed": ["scripts/gen_efl.py", "README.md"], "git": true }
@@ -148,15 +171,14 @@ natively, ~50ms; we add a 200ms coalesce):
 - Client behavior: on any event, re-fetch `/api/tree` (cheap; the tree JSON for
   a normal project is small). If the currently open file is in `changed`, or
   `git` is true and the open file has status, re-fetch it and re-render **while
-  preserving scroll position**. `EventSource` reconnects automatically; on
-  reconnect the client does one full refresh to resync.
+  preserving scroll position and any expanded hunks that still exist**.
+  `EventSource` reconnects automatically; on reconnect the client does one full
+  refresh to resync.
 
 This is deliberately dumb — no granular cache invalidation, no tree diffing.
 At local-directory scale, re-fetching JSON is faster than being clever.
 
 ## 5. Frontend design
-
-One `index.html` (Alpine.js + inline module script + inline CSS). No build.
 
 ### Markdown rendering (requirement 2)
 
@@ -167,12 +189,12 @@ One `index.html` (Alpine.js + inline module script + inline CSS). No build.
   identical.
 - A ~10-line markdown-it core rule copies each block token's `map` (source
   line range) onto the rendered element as `data-lines="12-18"` — the standard
-  trick from live-preview editors, reused here for change indicators (§6).
+  trick from live-preview editors, reused here for change indicators (below).
 - Relative links between files are intercepted and opened *inside* dirview
   (tree selection follows); relative image sources are rewritten to `/raw/…`.
   External links open in a new tab.
 - Optional (v1.1): Mermaid diagram blocks and KaTeX math, each ~5 lines of
-  glue with their standard CDN builds. Omitted from v1 to keep the page lean.
+  glue with their standard npm builds. Omitted from v1 to keep the page lean.
 
 ### Code rendering (requirement 3)
 
@@ -180,7 +202,9 @@ One `index.html` (Alpine.js + inline module script + inline CSS). No build.
   `themes: { light: "catppuccin-latte", dark: "catppuccin-mocha" }` —
   dual-theme CSS-variable output, so theme switching never re-highlights.
 - Language chosen by extension (Shiki's bundled grammar set covers everything
-  in a typical project; unknown extensions fall back to plain text).
+  in a typical project; unknown extensions fall back to plain text). To keep
+  the client bundle sane, a curated grammar subset is bundled eagerly and the
+  long tail lazy-loads from the package's own assets.
 - Line numbers via CSS counters in the gutter. Large-file guard: above ~1 MB
   or ~10k lines, skip highlighting and show plain text with a notice.
 - Binary files: images render via `/raw/`; other binaries show a metadata
@@ -191,21 +215,37 @@ One `index.html` (Alpine.js + inline module script + inline CSS). No build.
 Tree level: status letters + colors as in §3; "changed only" filter collapses
 the tree to changed/untracked files (directories auto-expanded).
 
-In-file, the *subtle* indicator is the familiar editor gutter bar, driven by
-`changed_ranges` from the server:
+In-file, the *subtle* indicator is the familiar editor gutter mark, driven by
+the server's `hunks`:
 
-- **Code files:** a 3px vertical bar in the gutter beside changed lines —
-  Catppuccin green for added, yellow for modified — plus a small red triangle
-  marker where lines were deleted. Exactly the VS Code / JetBrains gutter
-  convention, so it reads instantly and stays out of the way.
+- **Code files:** a 3px vertical bar in the gutter beside each hunk's
+  `newStart..newStart+newLines` — Catppuccin green for added, yellow for
+  modified — plus a small red triangle marker where lines were deleted.
+  Exactly the VS Code / JetBrains gutter convention: legible, ignorable.
 - **Rendered markdown:** any block whose `data-lines` range intersects a
-  changed range gets a 3px accent left-border. Subtle, and it survives the
-  source→rendered transformation because of the line-map plumbing above.
-- **Click-through:** clicking any gutter bar/border, or the `[Diff]` button,
-  opens a diff panel for that file: raw `git diff` text from `/api/diff`
-  rendered by diff2html, with a line-by-line ⇄ side-by-side toggle, styled via
-  diff2html's CSS variables mapped onto Catppuccin colors. Where possible the
-  panel scrolls to the hunk containing the clicked line.
+  hunk's new-file range gets a 3px accent left-border.
+
+**Click → inline hunk expansion.** Clicking a gutter bar (or a marked
+markdown block) expands **that hunk only**, in place — the page never
+navigates away:
+
+- An expansion panel is inserted into the document flow directly below the
+  last line of the hunk (below the marked block, for markdown). Content
+  stays put above; content below shifts down, exactly like VS Code's
+  dirty-diff peek or GitHub's expanded comment threads.
+- The panel body is diff2html rendering *just that hunk*: the client wraps
+  the hunk's `patch` in a minimal synthesized diff header and calls
+  `Diff2HtmlUI` on it. Unified view by default; a per-panel toggle offers
+  side-by-side. Deleted lines therefore appear only inside the panel —
+  the main view always shows the current file.
+- Toggle behavior: click again (or the panel's ✕, or `Esc`) collapses it.
+  Multiple hunks can be open at once. A subtle "N changes" chip in the
+  header offers expand-all/collapse-all for review-the-whole-file flow.
+- On SSE-driven re-render, expanded panels re-attach to the hunk nearest
+  their old `newStart` if it still exists; vanished hunks close silently.
+
+There is deliberately **no whole-page diff mode** — the hunk panel is the
+only diff representation, so the reading context is never lost.
 
 ### Theming
 
@@ -217,38 +257,48 @@ flip restyles everything with zero re-rendering.
 
 ## 6. Repository layout & size budget
 
+Standalone repo (name TBD — working title `dirview`):
+
 ```
-tools/dirview/
-  dirview.py        # server: CLI + endpoints + watcher   (~250 lines)
-  static/
-    index.html      # layout + Alpine templates + CSS     (~250 lines)
-    app.js          # tree/view/diff/SSE logic            (~300 lines)
-  README.md         # usage
+dirview/
+  package.json          # bin: {"dirview": "bin/dirview.js"}; publishes dist/
+  bin/dirview.js        # CLI arg parsing, open browser        (~40 lines)
+  server/index.js       # Hono app: routes, git, chokidar→SSE  (~280 lines)
+  web/
+    index.html          # layout + Alpine templates            (~120 lines)
+    app.js              # tree/view/hunk/SSE logic             (~350 lines)
+    style.css           # Catppuccin variables + layout        (~150 lines)
+  scripts/build.js      # esbuild one-shot → dist/             (~30 lines)
+  dist/                 # prebuilt client (generated, published to npm)
 ```
 
-If it proves generally useful it can graduate to its own repo /
-`uv tool install` package later; nothing in the design ties it to this repo.
+Plain modern ESM JavaScript, no TypeScript compile step (JSDoc types where
+they pay for themselves); esbuild exists only to bundle the client libraries.
 
 ## 7. Alternatives considered and rejected
 
 1. **Just run `code serve-web`** — genuinely zero code and covers all six
-   requirements, but it's an IDE: heavy process, editing-focused chrome,
-   markdown preview is a secondary pane, and the reading experience the
-   requirements describe (calm two-pane viewer) isn't what you get. Worth
-   knowing it exists as the fallback.
+   requirements, but it's an IDE: heavy process, editing-focused chrome, and
+   the reading experience the requirements describe isn't what you get.
 2. **Extend markserv or difit** — each would need the *other half* of the
    feature set bolted on (git for markserv, browsing/markdown for difit),
    inside someone else's architecture. More code than the glue server, less
    control.
-3. **Node/Bun server instead of Python** — perfectly viable (chokidar +
-   simple-git + the same client libraries), and would allow server-side Shiki.
-   Chosen against only because this repo is uv/Python-first and PEP 723 makes
-   the Python version a self-contained single file. The frontend is identical
-   either way, so switching later is cheap.
-4. **Server-side rendering (Python-Markdown + Pygments)** — fewer moving
-   parts in the browser, but worse output quality than markdown-it + Shiki,
-   no dual-theme CSS trick, and the line-map plumbing for change indicators
-   gets harder. The client-side stack is where the best-in-class tools are.
+3. **Python (Starlette + uvicorn + watchfiles), PEP 723 single file** — the
+   first draft of this design. Rejected for a standalone tool: all client
+   libraries are npm-native (Python could only reach them via CDN at runtime),
+   `npx` is the natural distribution channel for this category, and one
+   language beats two. watchfiles/Starlette were fine; the ecosystem seam
+   was the problem.
+4. **Bun instead of Node** — attractive (single compiled binary via
+   `bun build --compile`, built-in server and watcher), deliberately kept as
+   a *future packaging option* rather than a requirement: the code is plain
+   ESM and doesn't preclude it, but Node ≥ 20 is what everyone already has.
+5. **Server-side rendering (markdown/highlighting on the server)** — fewer
+   moving parts in the browser and Shiki can run in Node, but the dual-theme
+   CSS trick, scroll-preserving in-place re-renders, and markdown line-map
+   plumbing are all simpler with client-side rendering. The server stays a
+   dumb file/git/events API.
 
 ## 8. Open questions
 
@@ -257,12 +307,12 @@ If it proves generally useful it can graduate to its own repo /
 2. **Diff baseline:** worktree vs `HEAD` (staged + unstaged together — the
    design default) or a staged/unstaged distinction like `git diff` vs
    `git diff --staged`? A dropdown is cheap but is it wanted?
-3. **Offline use:** is CDN-loaded JS acceptable, or should v1 vendor the five
-   libraries locally?
-4. **Mermaid/KaTeX in v1?** Cheap to add; excluded only for leanness.
-5. **Non-git directories:** everything except requirements 4–5 still works;
-   the design degrades gracefully (no status column, no diff button). Confirm
-   that's the desired behavior rather than an error.
+3. **Mermaid/KaTeX in v1?** Cheap to add; excluded only for leanness.
+4. **Non-git directories:** everything except requirements 4–5 still works;
+   the design degrades gracefully (no status column, no gutter marks).
+   Confirm that's the desired behavior rather than an error.
+5. **Name:** `dirview` is a working title (npm has crowded namespaces here —
+   check availability before publishing).
 
 ## Sources
 
@@ -271,5 +321,6 @@ If it proves generally useful it can graduate to its own repo /
 - [Ferrite](https://github.com/OlaProeis/Ferrite) — native-app near-miss
 - [Shiki dual themes](https://shiki.style/guide/dual-themes), [Shiki bundled themes](https://shiki.style/themes) — Catppuccin Latte/Mocha bundled, CSS-variable dual-theme output
 - [diff2html](https://github.com/rtfpessoa/diff2html) ([site](https://diff2html.xyz/)) — diff → HTML rendering
-- [watchfiles](https://github.com/samuelcolvin/watchfiles) ([docs](https://watchfiles.helpmanual.io/)) — Rust-backed file watching with async API
+- [chokidar](https://github.com/paulmillr/chokidar) — file watching
+- [Hono](https://hono.dev) — minimal HTTP framework with SSE helper
 - [Catppuccin palette](https://catppuccin.com/palette/), [catppuccin/palette](https://github.com/catppuccin/palette) — official CSS variables
