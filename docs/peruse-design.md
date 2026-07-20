@@ -1,4 +1,4 @@
-# dirview — Design for a Lightweight Local Directory Viewer
+# peruse — Design for a Lightweight Local Directory Viewer
 
 **Status:** Design only — not yet implemented. Will live in its own repository;
 this copy is parked here while the design is being discussed.
@@ -10,8 +10,13 @@ inline per-hunk diffs, and live updates as files change on disk. Catppuccin
 themed (Latte light / Mocha dark).
 
 ```
-npx dirview            # serve the current directory at http://127.0.0.1:7440
+npx @talkasab/peruse   # serve the current directory at http://127.0.0.1:7440
 ```
+
+(The bare npm name `peruse` is squatted by an abandoned 2017 package, so the
+package publishes under a scope; the installed command is still `peruse`.
+Until it's published, `npx github:talkasab/peruse` works straight from the
+repo.)
 
 ---
 
@@ -51,7 +56,7 @@ glue server plus one page that composes those libraries, not a new app.
 **A small Node.js package: a ~5-route server plus one static page.** All
 rendering happens in the browser; the server only serves files, answers git
 questions, and pushes change events. Total new code target: **under ~900
-lines**, distributed as an npm package so `npx dirview` works anywhere with no
+lines**, distributed as an npm package so `npx @talkasab/peruse` works anywhere with no
 setup.
 
 ### Why Node (and not Python)
@@ -65,7 +70,7 @@ other way:
   they're normal pinned dependencies, bundled at publish time. The Python
   version could only reach them via CDN at runtime (online requirement,
   version drift) or awkward vendoring.
-- **Distribution:** `npx dirview` is the established idiom for exactly this
+- **Distribution:** `npx <package>` is the established idiom for exactly this
   kind of tool (difit, serve, vite preview…). "First install uv" is a real
   barrier for anyone else who wants it.
 - **One language** across server and client; the server half is trivial in
@@ -86,14 +91,14 @@ Bun would allow a single compiled binary and is noted as a future option
 | Code highlighting | **[Shiki](https://shiki.style)** | TextMate-grammar highlighting (identical quality to VS Code). Ships **Catppuccin Latte/Frappé/Macchiato/Mocha as bundled themes**, and its [dual-theme mode](https://shiki.style/guide/dual-themes) emits CSS-variable output so light/dark switching is pure CSS |
 | Hunk diff rendering | **[diff2html](https://github.com/rtfpessoa/diff2html)** (per-hunk) | The standard "GitHub-style diff from raw `git diff` text" library; we feed it one hunk at a time (§5); colors overridable via CSS variables → Catppuccin-able |
 | UI reactivity | **Alpine.js** | No framework build; a recursive `<template>` renders the tree in ~30 lines. (If the inline-hunk DOM juggling outgrows it, preact+htm is the fallback — still buildless) |
-| Client bundling | **esbuild**, one-shot at publish | End users never build; `npx dirview` ships prebuilt assets. Solves offline use — no CDN anywhere |
+| Client bundling | **esbuild**, one-shot at publish | End users never build; `npx` ships prebuilt assets. Solves offline use — no CDN anywhere |
 | Theme | **[@catppuccin/palette](https://github.com/catppuccin/palette)** CSS variables | Official palette as CSS custom properties; Latte = light, Mocha = dark; follow `prefers-color-scheme` with a manual toggle persisted in `localStorage` |
 
 ### Layout
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│ dirview — ~/some/directory        [changed only ⌥] [☾/☀]       │
+│ peruse — ~/some/directory        [changed only ⌥] [☾/☀]       │
 ├──────────────────┬─────────────────────────────────────────────┤
 │ ▸ docs           │  scripts/gen_efl.py            M   [Raw]    │
 │ ▾ scripts        │ ┌─────────────────────────────────────────┐ │
@@ -119,7 +124,7 @@ Bun would allow a single compiled binary and is noted as a future option
 
 ## 4. Server design
 
-`npx dirview [path] [--port 7440] [--host 127.0.0.1] [--no-open]`.
+`peruse [path] [--port 7440] [--host 127.0.0.1] [--no-open]`.
 Binds to localhost only by default. Every request path is resolved and
 verified to live under the served root (path-traversal guard). `.git/` is
 never listed or served.
@@ -190,7 +195,7 @@ At local-directory scale, re-fetching JSON is faster than being clever.
 - A ~10-line markdown-it core rule copies each block token's `map` (source
   line range) onto the rendered element as `data-lines="12-18"` — the standard
   trick from live-preview editors, reused here for change indicators (below).
-- Relative links between files are intercepted and opened *inside* dirview
+- Relative links between files are intercepted and opened *inside* peruse
   (tree selection follows); relative image sources are rewritten to `/raw/…`.
   External links open in a new tab.
 - Optional (v1.1): Mermaid diagram blocks and KaTeX math, each ~5 lines of
@@ -257,12 +262,12 @@ flip restyles everything with zero re-rendering.
 
 ## 6. Repository layout & size budget
 
-Standalone repo (name TBD — working title `dirview`):
+Standalone repo (name TBD — working title `peruse`):
 
 ```
-dirview/
-  package.json          # bin: {"dirview": "bin/dirview.js"}; publishes dist/
-  bin/dirview.js        # CLI arg parsing, open browser        (~40 lines)
+peruse/
+  package.json          # bin: {"peruse": "bin/peruse.js"}; publishes dist/
+  bin/peruse.js        # CLI arg parsing, open browser        (~40 lines)
   server/index.js       # Hono app: routes, git, chokidar→SSE  (~280 lines)
   web/
     index.html          # layout + Alpine templates            (~120 lines)
@@ -311,8 +316,8 @@ they pay for themselves); esbuild exists only to bundle the client libraries.
 4. **Non-git directories:** everything except requirements 4–5 still works;
    the design degrades gracefully (no status column, no gutter marks).
    Confirm that's the desired behavior rather than an error.
-5. **Name:** `dirview` is a working title (npm has crowded namespaces here —
-   check availability before publishing).
+5. ~~**Name**~~ Resolved: `peruse`, repo `talkasab/peruse`, published as
+   `@talkasab/peruse` (bare npm name is squatted); installed bin is `peruse`.
 
 ## Sources
 
