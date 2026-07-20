@@ -376,6 +376,45 @@ button.warning.is-default {
   margin: 8px 0;
   font-size: 13px;
 }
+.saved-batches {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  gap: 8px;
+}
+.saved-batch-list {
+  display: grid;
+  gap: 7px;
+}
+.saved-batch-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 10px;
+  background: var(--panel-soft);
+}
+.saved-batch-row > div:first-child {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.saved-batch-row strong,
+.saved-batch-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.saved-batch-row span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.saved-batch-actions {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
 .source-banner {
   display: flex;
   align-items: center;

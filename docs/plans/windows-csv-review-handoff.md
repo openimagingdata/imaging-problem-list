@@ -1,7 +1,7 @@
 # Plan: CSV-Aware Extraction Reviewer
 
 Created: 2026-07-14
-Status: In progress (Phases 1–2 complete; Phase 3 next)
+Status: In progress (Phases 1–3 complete; Phase 4 next)
 
 ## Goal
 

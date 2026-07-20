@@ -1,8 +1,11 @@
 (() => {
   const APP_VERSION = window.APP_VERSION || 'dev';
   const STORAGE_PREFIX = 'extraction-reviewer:';
-  const REVIEWER_KEY = STORAGE_PREFIX + 'reviewer';
-  const GUIDE_SEEN_KEY = STORAGE_PREFIX + 'guide-seen';
+  const LEGACY_REVIEWER_KEY = STORAGE_PREFIX + 'reviewer';
+  const PREFS_KEY = STORAGE_PREFIX + 'preferences';
+  const BATCH_INDEX_KEY = STORAGE_PREFIX + 'batch-index';
+  const DB_NAME = STORAGE_PREFIX + 'batches';
+  const DB_STORE = 'batches';
 
   // ---------- State ----------
   const state = {
@@ -10,9 +13,13 @@
     files: [], // [{sha1, name, data, collapsed}]
     manifest: [],
     invalidResults: [],
+    extractionSet: [],
     csv: null,
     wizardStep: 1,
     joinSummary: null,
+    savedBatchCandidate: null,
+    prefs: { reviewer: '', guideSeen: false, lastColumnMapping: null },
+    batchIndex: [],
     selection: { sha1: null, findingIndex: null, panel: null }, // panel: null | "missing"
     reviews: {}, // sha1 -> {responses: {idx: {status, comment, firstReviewedAt, updatedAt}}, missing: [], notes}
   };
@@ -40,16 +47,18 @@
     startReviewBtn: document.getElementById('startReviewBtn'),
     joinSummary: document.getElementById('joinSummary'),
     quoteCheck: document.getElementById('quoteCheck'),
+    savedBatches: document.getElementById('savedBatches'),
+    savedBatchList: document.getElementById('savedBatchList'),
     wizardSteps: [1, 2, 3].map((n) => document.getElementById(`wizardStep${n}`)),
     progressSteps: [1, 2, 3].map((n) => document.getElementById(`progressStep${n}`)),
     pickFilesBtn: document.getElementById('pickFilesBtn'),
     folderInput: document.getElementById('folderInput'),
     filesInput: document.getElementById('filesInput'),
-    dropzone: document.getElementById('dropzone'),
     loadErrors: document.getElementById('loadErrors'),
     reviewerInput: document.getElementById('reviewerInput'),
     addFilesBtn: document.getElementById('addFilesBtn'),
     exportBtn: document.getElementById('exportBtn'),
+    deleteBatchBtn: document.getElementById('deleteBatchBtn'),
     groupList: document.getElementById('groupList'),
     counts: document.getElementById('counts'),
     toolbarEyebrow: document.getElementById('toolbarEyebrow'),
@@ -105,44 +114,279 @@
   }
 
   // ---------- Storage ----------
-  function loadReviewer() {
+  function loadPreferences() {
     try {
-      const v = localStorage.getItem(REVIEWER_KEY);
-      if (v) state.reviewer = v;
-    } catch {
-      // localStorage may be unavailable under strict browser/privacy settings.
-    }
-  }
-  function persistReviewer() {
-    try {
-      localStorage.setItem(REVIEWER_KEY, state.reviewer || '');
-    } catch {
-      // localStorage may be unavailable under strict browser/privacy settings.
-    }
-  }
-  function loadReviewForFile(sha1) {
-    try {
-      const raw = localStorage.getItem(STORAGE_PREFIX + sha1);
-      if (!raw) return null;
-      return JSON.parse(raw);
-    } catch {
-      return null;
-    }
-  }
-  function persistReviewForFile(sha1) {
-    const r = state.reviews[sha1];
-    if (!r) return;
-    try {
-      localStorage.setItem(STORAGE_PREFIX + sha1, JSON.stringify(r));
+      const raw = localStorage.getItem(PREFS_KEY);
+      if (raw) state.prefs = { ...state.prefs, ...JSON.parse(raw) };
+      if (!state.prefs.reviewer) state.prefs.reviewer = localStorage.getItem(LEGACY_REVIEWER_KEY) || '';
+      state.reviewer = state.prefs.reviewer || '';
     } catch {
       // localStorage may be unavailable under strict browser/privacy settings.
     }
   }
 
+  function persistPreferences() {
+    state.prefs.reviewer = state.reviewer || '';
+    try {
+      localStorage.setItem(PREFS_KEY, JSON.stringify(state.prefs));
+    } catch {
+      // localStorage may be unavailable under strict browser/privacy settings.
+    }
+  }
+
+  function loadBatchIndex() {
+    try {
+      const raw = localStorage.getItem(BATCH_INDEX_KEY);
+      state.batchIndex = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(state.batchIndex)) state.batchIndex = [];
+    } catch {
+      state.batchIndex = [];
+    }
+  }
+
+  function persistBatchIndex() {
+    try {
+      localStorage.setItem(BATCH_INDEX_KEY, JSON.stringify(state.batchIndex));
+    } catch {
+      // localStorage may be unavailable under strict browser/privacy settings.
+    }
+  }
+
+  function openReviewDb() {
+    return new Promise((resolve, reject) => {
+      if (!window.indexedDB) {
+        reject(new Error('IndexedDB is unavailable.'));
+        return;
+      }
+      const request = indexedDB.open(DB_NAME, 1);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        if (!db.objectStoreNames.contains(DB_STORE)) db.createObjectStore(DB_STORE, { keyPath: 'batchId' });
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error || new Error('Could not open IndexedDB.'));
+    });
+  }
+
+  async function withBatchStore(mode, operation) {
+    const db = await openReviewDb();
+    try {
+      return await new Promise((resolve, reject) => {
+        const transaction = db.transaction(DB_STORE, mode);
+        const store = transaction.objectStore(DB_STORE);
+        const request = operation(store);
+        let result;
+        request.onsuccess = () => {
+          result = request.result;
+        };
+        request.onerror = () => reject(request.error || new Error('IndexedDB request failed.'));
+        transaction.oncomplete = () => resolve(result);
+        transaction.onabort = () => reject(transaction.error || new Error('IndexedDB transaction aborted.'));
+      });
+    } finally {
+      db.close();
+    }
+  }
+
+  function getSavedBatch(batchId) {
+    return withBatchStore('readonly', (store) => store.get(batchId));
+  }
+
+  function putSavedBatch(payload) {
+    return withBatchStore('readwrite', (store) => store.put(payload));
+  }
+
+  function removeSavedBatch(batchId) {
+    return withBatchStore('readwrite', (store) => store.delete(batchId));
+  }
+
+  function serializeFiles() {
+    return state.files.map((file) => ({ ...file }));
+  }
+
+  function buildBatchPayload() {
+    if (!state.csv?.batchId) return null;
+    return {
+      batchId: state.csv.batchId,
+      csvFilename: state.csv.filename,
+      csvText: state.csv.text,
+      csvHeaders: state.csv.headers,
+      csvRecords: state.csv.records,
+      idColumnIndex: state.csv.idColumnIndex,
+      textColumnIndex: state.csv.textColumnIndex,
+      manifest: state.manifest,
+      files: serializeFiles(),
+      invalidResults: state.invalidResults,
+      extractionSet: state.extractionSet,
+      reviews: state.reviews,
+      reportNotes: Object.fromEntries(
+        Object.entries(state.reviews).map(([sha1, review]) => [sha1, review.notes || '']),
+      ),
+      missingFindings: Object.fromEntries(
+        Object.entries(state.reviews).map(([sha1, review]) => [sha1, review.missing || []]),
+      ),
+      selection: state.selection,
+      joinSummary: state.joinSummary,
+      reviewer: state.reviewer,
+      updatedAt: nowIso(),
+    };
+  }
+
+  let saveTimer = null;
+  function scheduleBatchSave() {
+    if (!state.csv?.batchId || !state.files.length) return;
+    window.clearTimeout(saveTimer);
+    saveTimer = window.setTimeout(() => {
+      saveCurrentBatch();
+    }, 150);
+  }
+
+  async function saveCurrentBatch() {
+    const payload = buildBatchPayload();
+    if (!payload) return false;
+    try {
+      await putSavedBatch(payload);
+      const counts = globalCounts();
+      const entry = {
+        batchId: payload.batchId,
+        csvFilename: payload.csvFilename,
+        updatedAt: payload.updatedAt,
+        counts: {
+          reportsTotal: state.files.length,
+          findingsTotal: counts.total,
+          reviewed: counts.approved + counts.flagged,
+        },
+      };
+      state.batchIndex = [entry, ...state.batchIndex.filter((item) => item.batchId !== entry.batchId)];
+      persistBatchIndex();
+      renderSavedBatches();
+      if (el.deleteBatchBtn) el.deleteBatchBtn.style.display = '';
+      return true;
+    } catch (e) {
+      console.warn('Batch persistence unavailable:', e);
+      return false;
+    }
+  }
+
+  function persistReviewForFile() {
+    scheduleBatchSave();
+  }
+
+  function renderSavedBatches() {
+    if (!el.savedBatches || !el.savedBatchList) return;
+    el.savedBatches.style.display = state.batchIndex.length ? 'grid' : 'none';
+    el.savedBatchList.innerHTML = '';
+    for (const batch of state.batchIndex) {
+      const row = document.createElement('div');
+      row.className = 'saved-batch-row';
+      const counts = batch.counts || {};
+      row.innerHTML = `
+        <div>
+          <strong>${escapeHtml(batch.csvFilename)}</strong>
+          <span>${escapeHtml(String(counts.reportsTotal ?? 0))} reports · ${escapeHtml(String(counts.reviewed ?? 0))}/${escapeHtml(String(counts.findingsTotal ?? 0))} findings reviewed</span>
+        </div>
+        <div class="saved-batch-actions">
+          <button type="button" data-resume-batch="${escapeHtml(batch.batchId)}">Resume</button>
+          <button type="button" class="danger" data-delete-batch="${escapeHtml(batch.batchId)}">Delete</button>
+        </div>
+      `;
+      el.savedBatchList.appendChild(row);
+    }
+    el.savedBatchList.querySelectorAll('[data-resume-batch]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const payload = await getSavedBatch(button.dataset.resumeBatch).catch(() => null);
+        if (payload) restoreBatch(payload, { openReview: true });
+      });
+    });
+    el.savedBatchList.querySelectorAll('[data-delete-batch]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const batchId = button.dataset.deleteBatch;
+        if (!window.confirm('Delete this saved review batch from this browser?')) return;
+        await deleteBatch(batchId);
+      });
+    });
+  }
+
+  async function deleteBatch(batchId) {
+    try {
+      await removeSavedBatch(batchId);
+    } catch (e) {
+      console.warn('Could not delete saved batch:', e);
+    }
+    state.batchIndex = state.batchIndex.filter((item) => item.batchId !== batchId);
+    persistBatchIndex();
+    renderSavedBatches();
+  }
+
+  function restoreBatch(payload, { openReview = false } = {}) {
+    state.csv = {
+      filename: payload.csvFilename,
+      text: payload.csvText,
+      batchId: payload.batchId,
+      headers: payload.csvHeaders,
+      records: payload.csvRecords,
+      idColumnIndex: payload.idColumnIndex,
+      textColumnIndex: payload.textColumnIndex,
+    };
+    state.manifest = payload.manifest || [];
+    state.files = payload.files || [];
+    state.invalidResults = payload.invalidResults || [];
+    state.extractionSet = payload.extractionSet || [];
+    state.reviews = payload.reviews || {};
+    state.selection = payload.selection || firstSelection();
+    state.joinSummary = payload.joinSummary || null;
+    state.reviewer = payload.reviewer || state.reviewer;
+    state.prefs.reviewer = state.reviewer;
+    persistPreferences();
+    if (openReview) enterReview({ preserveSelection: true });
+  }
+
+  function extractionSetsEqual(left, right) {
+    const normalize = (items) =>
+      (items || [])
+        .map((item) => `${item.name}\u0000${item.hash}`)
+        .sort()
+        .join('\n');
+    return normalize(left) === normalize(right);
+  }
+
+  function findingStableKey(finding, index) {
+    const explicitId = finding.id || finding.observation_id || finding.observationId || finding.finding_id;
+    if (explicitId) return `id:${explicitId}`;
+    return `content:${index}:${finding.finding_name || ''}:${finding.presence || ''}:${finding.report_text || ''}`;
+  }
+
+  function preserveApplicableReviews(savedPayload) {
+    const oldFiles = new Map((savedPayload.files || []).map((file) => [file.safeId, file]));
+    const preserved = {};
+    for (const file of state.files) {
+      const oldFile = oldFiles.get(file.safeId);
+      const oldReview = oldFile ? savedPayload.reviews?.[oldFile.sha1] : null;
+      if (!oldFile || !oldReview) continue;
+      const oldResponses = new Map();
+      (oldFile.data.findings || []).forEach((finding, index) => {
+        if (oldReview.responses?.[index]) {
+          oldResponses.set(findingStableKey(finding, index), oldReview.responses[index]);
+        }
+      });
+      const responses = {};
+      (file.data.findings || []).forEach((finding, index) => {
+        const response = oldResponses.get(findingStableKey(finding, index));
+        if (response) responses[index] = response;
+      });
+      preserved[file.sha1] = {
+        responses,
+        missing: oldReview.missing || [],
+        notes: oldReview.notes || '',
+      };
+    }
+    state.reviews = preserved;
+    for (const file of state.files) ensureReview(file.sha1);
+  }
+
   function ensureReview(sha1) {
     if (!state.reviews[sha1]) {
-      const loaded = loadReviewForFile(sha1);
-      state.reviews[sha1] = loaded || { responses: {}, missing: [], notes: '' };
+      state.reviews[sha1] = { responses: {}, missing: [], notes: '' };
     }
     return state.reviews[sha1];
   }
@@ -305,8 +549,10 @@
       state.files = [];
       state.manifest = [];
       state.invalidResults = [];
+      state.extractionSet = [];
+      state.reviews = {};
     }
-    const seenSha1 = new Set(state.files.map((f) => f.sha1));
+    const seenFiles = new Set(state.files.map((f) => `${f.name}\u0000${f.contentHash || f.sha1}`));
 
     // Partition extraction JSONs and source text, retaining staged reports as
     // a separate, higher-precedence source.
@@ -330,14 +576,18 @@
         const text = await file.text();
         const bytes = new TextEncoder().encode(text);
         const sha1 = (await sha1Hex(bytes)).slice(0, 12);
-        if (seenSha1.has(sha1)) continue;
+        const contentHash = await sha256Hex(bytes);
+        const fileKey = `${file.name}\u0000${contentHash}`;
+        if (seenFiles.has(fileKey)) continue;
+        const extractionNamed = /\.(extracted|coded)\.json$/i.test(file.name);
         let data;
         try {
           data = JSON.parse(text);
         } catch {
-          if (/\.(extracted|coded)\.json$/i.test(file.name)) {
+          if (extractionNamed) {
             errors.push(`${file.name}: invalid JSON`);
             state.invalidResults.push({ name: file.name, reason: 'invalid JSON' });
+            state.extractionSet.push({ name: file.name, hash: contentHash });
           }
           continue;
         }
@@ -346,12 +596,14 @@
           continue;
         }
         if (!data || !Array.isArray(data.findings)) {
-          if (/\.(extracted|coded)\.json$/i.test(file.name)) {
+          if (extractionNamed) {
             errors.push(`${file.name}: missing findings[]`);
             state.invalidResults.push({ name: file.name, reason: 'missing findings[]' });
+            state.extractionSet.push({ name: file.name, hash: contentHash });
           }
           continue;
         }
+        state.extractionSet.push({ name: file.name, hash: contentHash });
 
         // Pair with a sibling .txt / .md report; fall back to an embedded field
         // or a reconstruction pieced together from the extraction output.
@@ -394,9 +646,10 @@
           }
         }
 
-        seenSha1.add(sha1);
+        seenFiles.add(fileKey);
         state.files.push({
           sha1,
+          contentHash,
           name: file.name,
           safeId,
           data,
@@ -413,6 +666,7 @@
       }
     }
     state.files.sort((a, b) => a.name.localeCompare(b.name));
+    state.extractionSet.sort((a, b) => a.name.localeCompare(b.name));
     return errors;
   }
 
@@ -420,7 +674,7 @@
     const reviewerValue = (el.landingReviewer.value || '').trim();
     if (reviewerValue) {
       state.reviewer = reviewerValue;
-      persistReviewer();
+      persistPreferences();
     }
     const errors = await loadFileList(fileList);
     showLoadErrors(errors);
@@ -439,19 +693,21 @@
     if (wasOnLanding) maybeShowGuideOnFirstVisit();
   }
 
-  function enterReview() {
+  function enterReview({ preserveSelection = false } = {}) {
     if (!state.files.length) return;
     const reviewerValue = (el.landingReviewer.value || '').trim();
     if (reviewerValue) {
       state.reviewer = reviewerValue;
-      persistReviewer();
+      persistPreferences();
     }
-    state.selection = findNextPending(null) || firstSelection();
+    if (!preserveSelection) state.selection = findNextPending(null) || firstSelection();
     el.landing.style.display = 'none';
     el.app.style.display = 'grid';
     el.reviewerInput.value = state.reviewer;
     applyAutoCollapse();
     render();
+    scheduleBatchSave();
+    if (el.deleteBatchBtn) el.deleteBatchBtn.style.display = state.csv?.batchId ? '' : 'none';
     maybeShowGuideOnFirstVisit();
   }
 
@@ -480,6 +736,13 @@
       Number.isInteger(state.csv.textColumnIndex) &&
       state.csv.idColumnIndex !== state.csv.textColumnIndex;
     el.csvNextBtn.disabled = !valid;
+    if (valid) {
+      state.prefs.lastColumnMapping = {
+        idColumn: state.csv.headers[state.csv.idColumnIndex],
+        textColumn: state.csv.headers[state.csv.textColumnIndex],
+      };
+      persistPreferences();
+    }
     setCsvError(valid ? '' : 'Choose two different columns.');
   }
 
@@ -510,8 +773,11 @@
       const text = decoded.replace(/^\uFEFF/, '');
       const parsed = parseCsv(text);
       if (parsed.headers.length < 2) throw new Error('CSV must have at least two columns.');
-      const idColumnIndex = 0;
-      const textColumnIndex = 1;
+      const lastMapping = state.prefs.lastColumnMapping;
+      const preferredIdIndex = lastMapping ? parsed.headers.indexOf(lastMapping.idColumn) : -1;
+      const preferredTextIndex = lastMapping ? parsed.headers.indexOf(lastMapping.textColumn) : -1;
+      const idColumnIndex = parsed.headers.length === 2 || preferredIdIndex < 0 ? 0 : preferredIdIndex;
+      const textColumnIndex = parsed.headers.length === 2 || preferredTextIndex < 0 ? 1 : preferredTextIndex;
       state.csv = {
         filename: file.name,
         rawBytes,
@@ -522,6 +788,23 @@
         idColumnIndex,
         textColumnIndex,
       };
+      const savedEntry = state.batchIndex.find((entry) => entry.batchId === batchId);
+      if (savedEntry) {
+        const saved = await getSavedBatch(batchId).catch(() => null);
+        if (saved) {
+          if (window.confirm(`Resume the saved review for ${file.name}?`)) {
+            restoreBatch(saved, { openReview: true });
+            return;
+          }
+          state.savedBatchCandidate = saved;
+        } else {
+          state.batchIndex = state.batchIndex.filter((entry) => entry.batchId !== batchId);
+          persistBatchIndex();
+          renderSavedBatches();
+        }
+      } else {
+        state.savedBatchCandidate = null;
+      }
       el.csvSelection.style.display = 'block';
       el.csvSelection.textContent = `${file.name} · ${parsed.records.length} report row(s)`;
       renderColumnPicker();
@@ -636,6 +919,7 @@
   }
 
   async function selectResultsFiles(files) {
+    const savedCandidate = state.savedBatchCandidate;
     const errors = await loadFileList(files, { replace: true });
     showLoadErrors(errors);
     if (!state.files.length) {
@@ -643,6 +927,17 @@
       el.resultsNextBtn.disabled = true;
       return;
     }
+    if (savedCandidate && !extractionSetsEqual(savedCandidate.extractionSet, state.extractionSet)) {
+      const replace = window.confirm(
+        'This extraction folder differs from the saved batch. Replace the saved extraction data? Existing responses will be preserved where finding identifiers still match.',
+      );
+      if (!replace) {
+        restoreBatch(savedCandidate, { openReview: true });
+        return;
+      }
+      preserveApplicableReviews(savedCandidate);
+    }
+    state.savedBatchCandidate = null;
     resolveWizardJoin();
     const folderName = relativePathFor(files[0]).split('/')[0] || 'selected folder';
     el.resultsSelection.style.display = 'block';
@@ -732,6 +1027,7 @@
     const changedFile = sel && sel.sha1 !== state.selection.sha1;
     state.selection = sel;
     if (changedFile) applyAutoCollapse();
+    scheduleBatchSave();
   }
 
   function findNextPending(startAfter) {
@@ -1562,21 +1858,14 @@
     if (el.helpDialog && typeof el.helpDialog.showModal === 'function' && !el.helpDialog.open) {
       el.helpDialog.showModal();
     }
-    try {
-      localStorage.setItem(GUIDE_SEEN_KEY, '1');
-    } catch {
-      // localStorage may be unavailable under strict browser/privacy settings.
-    }
+    state.prefs.guideSeen = true;
+    persistPreferences();
   }
   function closeHelp() {
     if (el.helpDialog && el.helpDialog.open) el.helpDialog.close();
   }
   function hasSeenGuide() {
-    try {
-      return localStorage.getItem(GUIDE_SEEN_KEY) === '1';
-    } catch {
-      return false;
-    }
+    return Boolean(state.prefs.guideSeen);
   }
   function maybeShowGuideOnFirstVisit() {
     if (hasSeenGuide()) return;
@@ -1584,8 +1873,10 @@
   }
 
   // ---------- Wiring ----------
-  loadReviewer();
+  loadPreferences();
+  loadBatchIndex();
   el.landingReviewer.value = state.reviewer;
+  renderSavedBatches();
 
   function bindDropzone(dropzone, onDrop) {
     ['dragenter', 'dragover'].forEach((eventName) =>
@@ -1649,16 +1940,26 @@
 
   el.landingReviewer.addEventListener('input', () => {
     state.reviewer = el.landingReviewer.value;
-    persistReviewer();
+    persistPreferences();
+    scheduleBatchSave();
   });
   el.reviewerInput.addEventListener('input', () => {
     state.reviewer = el.reviewerInput.value;
-    persistReviewer();
+    persistPreferences();
+    scheduleBatchSave();
     renderSidebar();
   });
 
   el.addFilesBtn.addEventListener('click', () => el.filesInput.click());
   el.exportBtn.addEventListener('click', exportZip);
+  el.deleteBatchBtn.addEventListener('click', async () => {
+    const batchId = state.csv?.batchId;
+    if (!batchId || !window.confirm('Delete this saved review batch from this browser?')) return;
+    window.clearTimeout(saveTimer);
+    state.csv = null;
+    await deleteBatch(batchId);
+    window.location.reload();
+  });
   if (el.helpBtn) el.helpBtn.addEventListener('click', openHelp);
   if (el.helpCloseBtn) el.helpCloseBtn.addEventListener('click', closeHelp);
   if (el.helpDialog) {
