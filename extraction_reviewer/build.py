@@ -19,7 +19,7 @@ import html as htmllib
 import re
 from pathlib import Path
 
-APP_VERSION = "1.0"
+APP_VERSION = "1.1"
 
 PLACEHOLDERS = {
     "__APP_VERSION__": "app_version",

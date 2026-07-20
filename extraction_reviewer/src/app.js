@@ -58,6 +58,9 @@
     reviewerInput: document.getElementById('reviewerInput'),
     addFilesBtn: document.getElementById('addFilesBtn'),
     exportBtn: document.getElementById('exportBtn'),
+    exportMenuBtn: document.getElementById('exportMenuBtn'),
+    exportMenu: document.getElementById('exportMenu'),
+    exportZipBtn: document.getElementById('exportZipBtn'),
     deleteBatchBtn: document.getElementById('deleteBatchBtn'),
     groupList: document.getElementById('groupList'),
     counts: document.getElementById('counts'),
@@ -1142,8 +1145,10 @@
     `;
     el.exportBtn.disabled = !canExport();
     el.exportBtn.title = canExport()
-      ? 'Download zip of review files'
-      : 'Enter reviewer identifier and review at least one finding to enable';
+      ? 'Download one combined review JSON'
+      : 'Enter a reviewer identifier to enable export';
+    el.exportMenuBtn.disabled = !canExportZip();
+    el.exportZipBtn.disabled = !canExportZip();
 
     el.groupList.innerHTML = '';
     for (const file of state.files) {
@@ -1153,6 +1158,7 @@
 
   function renderGroup(file) {
     const counts = fileCounts(file);
+    const rev = ensureReview(file.sha1);
     const exam = file.data.exam_info || {};
     const group = document.createElement('div');
     group.className = 'group' + (file.collapsed ? ' collapsed' : '');
@@ -1170,7 +1176,7 @@
     header.innerHTML = `
       <span class="group-chevron">${file.collapsed ? '\u25B8' : '\u25BE'}</span>
       <div style="min-width:0; flex:1;">
-        <div class="group-title" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</div>
+        <div class="group-title" title="${escapeHtml(file.name)}">${rev.notes?.trim() ? '<span class="note-dot" title="Report note exists"></span>' : ''}${escapeHtml(file.name)}</div>
         <div class="group-meta">${escapeHtml(metaBits)}</div>
       </div>
     `;
@@ -1184,7 +1190,6 @@
     file.data.findings.forEach((finding, idx) => {
       items.appendChild(renderListItem(file, finding, idx));
     });
-    const rev = ensureReview(file.sha1);
     const missingBtn = document.createElement('button');
     missingBtn.type = 'button';
     missingBtn.className =
@@ -1262,6 +1267,40 @@
     el.toolbarTitle.textContent = finding.finding_name || '(unnamed)';
     el.toolbarSubtitle.textContent = file.data.exam_info?.study_description || '';
     renderFindingView(file, finding, idx);
+  }
+
+  function reportNoteHtml(file) {
+    const notes = ensureReview(file.sha1).notes || '';
+    return `
+      <div class="report-note ${notes.trim() ? 'expanded' : ''}">
+        <button type="button" id="reportNoteToggle" class="report-note-toggle">
+          ${notes.trim() ? 'Edit report note' : '＋ Add report note'}
+        </button>
+        <textarea id="reportNoteBox" rows="2" placeholder="Notes that apply to this report" ${notes.trim() ? '' : 'hidden'}>${escapeHtml(notes)}</textarea>
+      </div>
+    `;
+  }
+
+  function wireReportNote(file) {
+    const toggle = document.getElementById('reportNoteToggle');
+    const box = document.getElementById('reportNoteBox');
+    if (!toggle || !box) return;
+    toggle.addEventListener('click', () => {
+      box.hidden = false;
+      box.focus();
+    });
+    box.addEventListener('input', () => {
+      const rev = ensureReview(file.sha1);
+      rev.notes = box.value;
+      persistReviewForFile(file.sha1);
+      renderSidebar();
+      if (!box.value) {
+        box.hidden = true;
+        toggle.textContent = '＋ Add report note';
+      } else {
+        toggle.textContent = 'Edit report note';
+      }
+    });
   }
 
   function renderFindingView(file, finding, idx) {
@@ -1367,6 +1406,7 @@
                 : ''
             }
             ${examStrip}
+            ${reportNoteHtml(file)}
             ${sourceBanner}
             ${
               ctxEntries
@@ -1428,6 +1468,7 @@
       const b = document.getElementById('commentBox');
       if (b) b.focus();
     });
+    wireReportNote(file);
   }
 
   function statusChipHtml(response, draft) {
@@ -1536,6 +1577,7 @@
           <h2>Missing findings &mdash; ${escapeHtml(file.name)}</h2>
           <p class="hint" style="margin:0;">Log findings the extractor should have produced but didn&rsquo;t. Saved under <code>missing_findings</code> in this file&rsquo;s review JSON.</p>
         </div>
+        ${reportNoteHtml(file)}
         ${reportBlock}
         <div class="missing-form">
           <div>
@@ -1660,6 +1702,7 @@
         render();
       });
     });
+    wireReportNote(file);
   }
 
   // ---------- Actions ----------
@@ -1705,12 +1748,15 @@
 
   // ---------- Export ----------
   function canExport() {
-    if (!(state.reviewer || '').trim()) return false;
-    for (const file of state.files) {
+    return Boolean((state.reviewer || '').trim() && state.files.length);
+  }
+
+  function canExportZip() {
+    if (!canExport()) return false;
+    return state.files.some((file) => {
       const rev = ensureReview(file.sha1);
-      if (Object.keys(rev.responses).length || rev.missing.length || (rev.notes || '').trim()) return true;
-    }
-    return false;
+      return Object.keys(rev.responses).length || rev.missing.length || (rev.notes || '').trim();
+    });
   }
 
   function buildReviewJson(file) {
@@ -1739,6 +1785,8 @@
       app_version: APP_VERSION,
       source_file: file.name,
       source_sha1: file.sha1,
+      source_id: file.sourceId || null,
+      csv_row_number: file.csvRowNumber || null,
       source_exam: {
         study_description: exam.study_description || null,
         study_date: exam.study_date || null,
@@ -1759,13 +1807,91 @@
     };
   }
 
+  function reportWasReviewed(file) {
+    const rev = ensureReview(file.sha1);
+    return (
+      Object.values(rev.responses).some((response) => response.status !== 'pending') ||
+      rev.missing.length > 0 ||
+      Boolean((rev.notes || '').trim())
+    );
+  }
+
+  function buildCombinedReviewJson() {
+    const exportedAt = nowIso();
+    const reports = state.files.map((file) => {
+      const review = buildReviewJson(file);
+      return {
+        source_file: review.source_file,
+        source_sha1: review.source_sha1,
+        source_id: review.source_id,
+        csv_row_number: review.csv_row_number,
+        source_exam: review.source_exam,
+        summary: review.summary,
+        responses: review.responses,
+        report_level_notes: review.report_level_notes,
+        missing_findings: review.missing_findings,
+      };
+    });
+    const counts = globalCounts();
+    return {
+      app_version: APP_VERSION,
+      kind: 'extraction-review-batch',
+      batch: {
+        csv_filename: state.csv?.filename || null,
+        csv_sha256: state.csv?.batchId || null,
+        batch_id: state.csv?.batchId || null,
+      },
+      reviewer: { identifier: state.reviewer || '' },
+      exported_at: exportedAt,
+      batch_summary: {
+        reports_total: state.files.length,
+        reports_reviewed: state.files.filter(reportWasReviewed).length,
+        findings_total: counts.total,
+        approved: counts.approved,
+        flagged: counts.flagged,
+        pending: counts.pending,
+        missing_findings_count: counts.missingCount,
+      },
+      reports,
+    };
+  }
+
+  function downloadStamp() {
+    const now = new Date();
+    return (
+      [now.getFullYear(), String(now.getMonth() + 1).padStart(2, '0'), String(now.getDate()).padStart(2, '0')].join(
+        '',
+      ) +
+      '-' +
+      [String(now.getHours()).padStart(2, '0'), String(now.getMinutes()).padStart(2, '0')].join('')
+    );
+  }
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportCombinedJson() {
+    if (!canExport()) return;
+    const payload = buildCombinedReviewJson();
+    const blob = new Blob([JSON.stringify(payload, null, 2) + '\n'], { type: 'application/json' });
+    downloadBlob(blob, `review-${slugify(state.reviewer)}-${downloadStamp()}.json`);
+  }
+
   function reviewFilenameFor(file) {
     const base = file.name.replace(/\.json$/i, '');
     return `${base}.review.json`;
   }
 
   function exportZip() {
-    if (!canExport()) return;
+    if (!canExportZip()) return;
     const files = {};
     for (const f of state.files) {
       const rev = ensureReview(f.sha1);
@@ -1778,21 +1904,7 @@
     if (!Object.keys(files).length) return;
     const zipped = fflate.zipSync(files);
     const blob = new Blob([zipped], { type: 'application/zip' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    const now = new Date();
-    const stamp =
-      [now.getFullYear(), String(now.getMonth() + 1).padStart(2, '0'), String(now.getDate()).padStart(2, '0')].join(
-        '',
-      ) +
-      '-' +
-      [String(now.getHours()).padStart(2, '0'), String(now.getMinutes()).padStart(2, '0')].join('');
-    a.href = url;
-    a.download = `reviews-${slugify(state.reviewer)}-${stamp}.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+    downloadBlob(blob, `reviews-${slugify(state.reviewer)}-${downloadStamp()}.zip`);
   }
 
   // ---------- Keyboard ----------
@@ -1951,7 +2063,17 @@
   });
 
   el.addFilesBtn.addEventListener('click', () => el.filesInput.click());
-  el.exportBtn.addEventListener('click', exportZip);
+  el.exportBtn.addEventListener('click', exportCombinedJson);
+  el.exportMenuBtn.addEventListener('click', () => {
+    const opening = el.exportMenu.hidden;
+    el.exportMenu.hidden = !opening;
+    el.exportMenuBtn.setAttribute('aria-expanded', String(opening));
+  });
+  el.exportZipBtn.addEventListener('click', () => {
+    el.exportMenu.hidden = true;
+    el.exportMenuBtn.setAttribute('aria-expanded', 'false');
+    exportZip();
+  });
   el.deleteBatchBtn.addEventListener('click', async () => {
     const batchId = state.csv?.batchId;
     if (!batchId || !window.confirm('Delete this saved review batch from this browser?')) return;

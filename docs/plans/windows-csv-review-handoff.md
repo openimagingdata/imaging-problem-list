@@ -1,7 +1,7 @@
 # Plan: CSV-Aware Extraction Reviewer
 
 Created: 2026-07-14
-Status: In progress (Phases 1–3 complete; Phase 4 next)
+Status: In progress (Phases 1–4 complete; Phase 4b revision next, then Phase 5)
 
 ## Goal
 
@@ -296,6 +296,12 @@ extraction output.)
 3. `docs/DEV_LOG.md` entry.
 4. Taskfile target `review:build` rides along.
 5. No CHANGELOG entry — internal tooling.
+
+## Implementation notes
+
+- `batch_summary.reports_reviewed` counts a report once it has at least one approved/flagged finding, a missing
+  finding, or a non-empty report note. This is the minimal observable definition for the otherwise unspecified
+  summary field; untouched reports remain included in the export but do not increment it.
 
 ## Risks / open questions
 

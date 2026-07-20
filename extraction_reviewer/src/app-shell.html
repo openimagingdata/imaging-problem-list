@@ -7,7 +7,21 @@
         <input id="reviewerInput" type="text" placeholder="reviewer identifier" autocomplete="off" />
       </div>
       <div class="sidebar-actions">
-        <button type="button" id="exportBtn" class="primary">Download reviews (zip)</button>
+        <div class="export-split">
+          <button type="button" id="exportBtn" class="primary">Download review JSON</button>
+          <button
+            type="button"
+            id="exportMenuBtn"
+            class="primary export-menu-toggle"
+            aria-label="More export options"
+            aria-expanded="false"
+          >
+            &#9662;
+          </button>
+          <div id="exportMenu" class="export-menu" hidden>
+            <button type="button" id="exportZipBtn">Download per-report zip</button>
+          </div>
+        </div>
         <button type="button" id="deleteBatchBtn" class="danger" style="display: none">Delete saved batch</button>
       </div>
     </div>
