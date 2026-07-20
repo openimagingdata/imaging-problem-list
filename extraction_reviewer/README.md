@@ -1,9 +1,9 @@
 # Extraction Reviewer
 
 Single-file HTML tool for reviewing extraction JSON output from the finding-extractor
-pipeline. The reviewer opens the HTML, loads a folder of extraction JSONs, walks the
-findings, approves or flags with comments, optionally logs missed findings, and
-exports a zip of per-file review JSONs.
+pipeline. Its primary workflow joins a source CSV to an extraction-results directory,
+then collects approved, flagged, or unsure verdicts, questioned attributes, missed
+findings, and report notes in one combined review JSON.
 
 No server, no install, no network access at run time. Runs entirely in the browser.
 
@@ -12,8 +12,8 @@ No server, no install, no network access at run time. Runs entirely in the brows
 ### Build just the app
 
 ```bash
-# From the repo root (or from this directory)
-uv run python extraction_reviewer/build.py -o extraction_reviewer/extraction_reviewer.html
+# From the repo root
+task review:build
 ```
 
 This writes the ignored build artifact `extraction_reviewer/extraction_reviewer.html`.
@@ -55,27 +55,36 @@ Building requires Python 3.9+ stdlib only — no dependencies.
 
 ## Reviewer workflow
 
-1. Unzip the bundle.
-2. Double-click `extraction_reviewer.html` (or open it in any modern browser).
-3. Enter a reviewer identifier (name, email, or GitHub username).
-4. Drag and drop the JSON files, or pick the folder. Progress saves automatically
-   in this browser.
-5. Walk the findings in the sidebar. For each one:
-   - Press <kbd>A</kbd> or click **Approve** to accept the extraction as-is.
-   - Type notes and press <kbd>Enter</kbd> (or click **Flag**) to record an issue.
-6. For each report, use **+ Missing findings** in the sidebar to log anything the
-   extractor missed (description + optional supporting quote).
-7. When done, click **Download reviews (zip)**. Send the zip back to the maintainer.
+1. Double-click `extraction_reviewer.html` and enter a reviewer identifier.
+2. Select the original source CSV. Two-column files are mapped automatically; wider
+   files show identifier-column and report-text-column selectors.
+3. Select the extraction-results directory. It should include the extraction JSONs,
+   `csv_inputs_manifest.json`, and preferably `_staged_reports/`.
+4. Confirm the matched/unmatched/invalid counts and the quote spot-check, then start.
+5. Review each finding as **Approve**, **Flag**, or **Unsure**. Flagged and unsure
+   findings can optionally identify what is in question with attribute chips.
+6. Use **+ Missing findings** to log omissions, and **+ Add report note** for notes
+   that apply to a whole report. The full source report remains visible beside each
+   finding, with its evidence quote highlighted.
+7. Periodically click **Download review JSON**. The combined JSON includes every
+   loaded report and finding, including untouched findings as `pending`. The dropdown
+   retains the legacy per-report zip export.
+
+The **Load files directly instead** section remains available for extraction JSONs
+with sibling `.txt`/`.md` reports and for embedded bundles made by `pack.py`.
 
 ### Keyboard shortcuts
 
 - <kbd>A</kbd> — approve the current finding
-- <kbd>F</kbd> — focus the comment box; if it already has text, send it as a flag
-- <kbd>J</kbd> / <kbd>K</kbd> — previous / next finding (crosses file boundaries)
-- <kbd>H</kbd> / <kbd>L</kbd> — previous / next file (lands on first pending)
+- <kbd>F</kbd> — flag the current finding
+- <kbd>U</kbd> — mark the current finding unsure
+- <kbd>↑</kbd> / <kbd>↓</kbd> — previous / next finding (crosses file boundaries)
 - <kbd>Enter</kbd> in the comment box — send flag and jump to next pending
 - <kbd>Shift+Enter</kbd> — newline in the comment box
 - <kbd>Esc</kbd> in the comment box — blur
+- <kbd>?</kbd> — open the reviewer guide
+
+Shortcuts are inactive while typing in any input or textarea.
 
 ## Input: extraction JSON
 
@@ -103,46 +112,38 @@ Matches `ExtractedReportFindings` from `src/finding_extractor/models.py`:
 The reviewer displays the `coding` block only when present, so pre-coded and
 post-coded files both work from the same HTML.
 
-## Output: review zip
+## Output: combined review JSON
 
-The exported zip contains one `<basename>.review.json` per source file the reviewer
-touched. Untouched source files are skipped. Each review JSON looks like:
+The primary export contains every loaded report and every finding. Untouched findings
+are explicit `pending` responses, and every report has `report_level_notes`:
 
 ```
 {
-  "app_version": "1.0",
-  "source_file": "us_abdomen_20220208.coded.json",
-  "source_sha1": "bd9083980f1b",
-  "source_exam": { "study_description", "study_date", "modality" },
+  "app_version": "1.2",
+  "kind": "extraction-review-batch",
+  "batch": { "csv_filename": "reports.csv", "csv_sha256": "...", "batch_id": "..." },
   "reviewer": { "identifier": "..." },
   "exported_at": "2026-04-17T13:18:39.120Z",
-  "summary": {
-    "total_findings": 35,
-    "approved": 1,
-    "flagged": 1,
-    "pending": 33,
-    "missing_findings_count": 1
-  },
-  "responses": [
+  "batch_summary": { "reports_total": 3, "findings_total": 35, "approved": 1,
+    "flagged": 1, "unsure": 1, "pending": 32, "missing_findings_count": 1 },
+  "reports": [
     {
-      "finding_index": 1,
-      "finding_name": "hepatic steatosis",
-      "presence": "present",
-      "status": "approved" | "flagged" | "pending",
-      "comment": "...",
-      "first_reviewed_at": "...",
-      "updated_at": "..."
-    },
-    ...
-  ],
-  "report_level_notes": "",
-  "missing_findings": [
-    { "description": "...", "report_text": "...", "added_at": "..." }
+      "source_file": "us_abdomen_20220208.coded.json",
+      "source_id": "ROW-001",
+      "csv_row_number": 2,
+      "responses": [{ "finding_index": 0, "status": "unsure",
+        "comment": "...", "flag_targets": ["presence"] }],
+      "report_level_notes": "",
+      "missing_findings": []
+    }
   ]
 }
 ```
 
-`finding_index` matches the position in the source `findings[]` array.
+`finding_index` matches the source `findings[]` position. Stable `flag_targets`
+include finding name, presence, anatomy, laterality, size, severity, extent,
+temporal status, hedged language, and lumped findings. The dropdown export produces
+the legacy per-report zip, updated to the same verdict and response schema.
 
 ## Layout
 
@@ -202,11 +203,14 @@ formatting plus the build command.
 
 ## Persistence
 
-Each source file's review state is saved in `localStorage` under
-`extraction-reviewer:<sha1-prefix>`, keyed by the SHA-1 of the file contents (first
-12 hex chars). Renaming a source file doesn't disturb its progress. The reviewer
-identifier is mirrored to `extraction-reviewer:reviewer` so it survives reloads.
+Review payloads are stored in IndexedDB; `localStorage` holds only a small saved-batch
+index and preferences under the `extraction-reviewer:` prefix. CSV batches are keyed
+by the SHA-256 of the raw CSV bytes. Embedded bundles and direct loads use a stable
+SHA-256 derived from their extraction-file hashes.
 
-`localStorage` is per-browser-profile — if the reviewer wants to continue on a
-different machine, they should download the zip first, or we'd need to add an
-import step (not implemented).
+Reopening an embedded bundle offers an immediate resume. A CSV batch can resume
+without reselecting files. For a direct folder/files load, re-pick the same input to
+restore its saved responses. Saved work is tied to the same browser/profile and HTML
+location: `file://` origin rules vary by browser, and Chromium treats file-backed
+IndexedDB as best-effort storage that may be evicted under disk pressure. Download
+the combined JSON periodically so the browser is never the only copy.

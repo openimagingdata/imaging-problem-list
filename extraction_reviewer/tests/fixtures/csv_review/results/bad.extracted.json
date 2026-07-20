@@ -1,0 +1,19 @@
+{
+  "exam_info": {
+    "study_description": "Abdominal CT",
+    "study_date": "2026-07-03",
+    "modality": "CT"
+  },
+  "findings": [
+    {
+      "id": "bad-cyst",
+      "finding_name": "Hepatic cyst",
+      "presence": "present",
+      "report_text": "Simple hepatic cyst.",
+      "source_section": "findings",
+      "location": { "specific_anatomy": "liver", "laterality": null },
+      "attributes": []
+    }
+  ],
+  "non_finding_text": []
+}

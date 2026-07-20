@@ -35,8 +35,8 @@ Acceptance: one half-day session produces the 10-case `gate` set (per the evals-
 
 ## Phase C — Workflow integration
 
-1. **Taskfile targets**: `review:build` (build.py), `review:pack -- <reports-dir>` (zip/embed bundle) so the tool is discoverable via `task --list`.
-2. **Batch-run handoff**: document (and if needed, glue) pointing `pack.py` at a `finding-extractor-batch` output directory + source reports — extract → bundle → send to reviewer becomes one documented flow. This composes with the windows-csv handoff: the same colleague running CSV extractions can receive a reviewer bundle for the outputs.
+1. **Taskfile targets**: `review:build` is complete; `review:pack -- <reports-dir>` remains planned for the zip/embed compatibility workflow.
+2. **[Complete] Batch-run handoff**: the standalone reviewer now directly accepts the source CSV plus a `finding-extractor-batch` results directory, joins through `csv_inputs_manifest.json`, prefers staged report text, persists the batch locally, and emits one combined review JSON. See the completed [CSV-aware reviewer plan](windows-csv-review-handoff.md). `pack.py` remains available for embedded and direct-load compatibility bundles.
 3. **`docs/human-review-workflow.md`**: rewrite around the reviewer tool as the instrument (current doc predates it), folding in the evals plan's adjudication rules (verbatim evidence spans, blanket-negative policy, exam_info completion).
 4. **Eval ingestion**: `finding-extractor-eval import-gold` (evals v1) consumes the converter's output + manifest. The reviewer→converter→import-gold pipeline is the documented source-of-truth path for gold.
 5. **Docs index + README**: reviewer listed in the main README's tooling section; both reviewer plan docs indexed.

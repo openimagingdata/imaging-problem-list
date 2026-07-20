@@ -4,6 +4,17 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-07-20 — CSV-aware extraction reviewer
+
+- Added a three-step offline CSV/results-directory wizard with manifest-row joining, staged-text precedence, BOM-safe parsing, and a pre-review quote check.
+- Added browser-local batch resume, drift replacement, deletion, and content-derived autosave for CSV, embedded-bundle, and direct-load workflows.
+- Added approved/flagged/unsure triage, optional questioned-attribute targets, keyboard navigation, report notes, missing findings, and a full source-report pane with evidence highlighting.
+- Added the authoritative combined JSON export (`app_version` 1.2), representative browser fixtures and screenshots, and the `review:build` Taskfile target.
+
+Plan: [plans/windows-csv-review-handoff.md](plans/windows-csv-review-handoff.md)
+
+---
+
 ## 2026-06-11 — Laterality + typo follow-up corrections (example2)
 
 Follow-up to the anatomic-location correction pass (commit `9e6c6de`).

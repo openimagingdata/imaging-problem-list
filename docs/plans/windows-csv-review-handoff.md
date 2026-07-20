@@ -1,7 +1,7 @@
 # Plan: CSV-Aware Extraction Reviewer
 
 Created: 2026-07-14
-Status: In progress (Phases 1–5 complete; Phase 6 next)
+Status: Complete (2026-07-20)
 
 ## Goal
 
@@ -430,3 +430,13 @@ separate later plan):
 - The review view shows the full source report with the current quote highlighted; the quote
   section is labeled "Evidence quote".
 - Verified against representative fixtures; no extraction-tool code pulled into this workstream.
+
+## Verification evidence
+
+- `uv run pytest`: 742 passed, 81 deselected.
+- `npm run lint:web` and `npm run format:web:check`: clean; standalone HTML build succeeded.
+- WebKit `file://` protocol passed for BOM parsing, join counts (2 matched / 1 unmatched / 1 invalid),
+  duplicate-source row resolution, staged-text highlighting, keyboard triage, the version 1.2 combined-export
+  assertions, CSV resume/drift/delete, embedded repack resume, direct-folder restore, and source-report
+  highlight/auto-scroll/warning states.
+- Captured acceptance states under `extraction_reviewer/docs/verification/`.

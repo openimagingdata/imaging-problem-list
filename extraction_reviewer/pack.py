@@ -55,23 +55,25 @@ How to review
 2. Double-click extraction_reviewer.html to open it in your browser
    (Chrome, Edge, or Safari recommended).
 3. Enter your name or identifier on the landing screen.
-4. Drag the reports/ folder onto the drop zone, or click "Pick folder".
+4. Open "Load files directly instead", click "Pick a folder", and choose reports/.
 5. For each finding:
      A        approve
-     F        focus the comment box / send a flag
-     J / K    previous / next finding
-     H / L    previous / next file
+     F        flag
+     U        unsure
+     Up/Down  previous / next finding
      Enter    in the comment box, submits the flag
      ?        open the in-app reviewer guide
 6. Use "+ Missing findings" in the sidebar to log findings the extractor
    missed. Highlight text in the source report to capture a supporting quote.
-7. When you're done, click "Download reviews (zip)" to download a zip of
-   review JSON files. Send that zip back.
+7. When you're done, click "Download review JSON" to download one combined
+   review file. Send that JSON back. A per-report zip remains in the dropdown.
 
 Notes
 -----
-- Progress auto-saves in your browser's local storage, keyed per file. You
-  can close the tab and come back.
+- Progress auto-saves in this browser. Reopen an embedded bundle to get a
+  resume prompt; for a folder bundle, re-pick the same folder to restore it.
+- Browser storage under file:// is best-effort. Export periodically, and
+  export before moving the HTML or switching browsers/profiles.
 - Nothing leaves your machine; the app makes no network calls once opened.
 - Pairing: each report_name.json is matched with a sibling report_name.txt
   (or .md) with the exact same basename.
