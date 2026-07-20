@@ -6,6 +6,18 @@
   const BATCH_INDEX_KEY = STORAGE_PREFIX + 'batch-index';
   const DB_NAME = STORAGE_PREFIX + 'batches';
   const DB_STORE = 'batches';
+  const FLAG_TARGETS = [
+    ['finding_name', 'Finding name'],
+    ['presence', 'Presence'],
+    ['anatomic_site', 'Anatomic site'],
+    ['laterality', 'Laterality'],
+    ['size', 'Size'],
+    ['severity', 'Severity'],
+    ['extent', 'Extent'],
+    ['temporal_status', 'Temporal status'],
+    ['hedged_language', 'Hedged language'],
+    ['aggregated_findings', 'Lumps multiple findings'],
+  ];
 
   // ---------- State ----------
   const state = {
@@ -257,7 +269,10 @@
         counts: {
           reportsTotal: state.files.length,
           findingsTotal: counts.total,
-          reviewed: counts.approved + counts.flagged,
+          approved: counts.approved,
+          flagged: counts.flagged,
+          unsure: counts.unsure,
+          reviewed: counts.approved + counts.flagged + counts.unsure,
         },
       };
       state.batchIndex = [entry, ...state.batchIndex.filter((item) => item.batchId !== entry.batchId)];
@@ -286,7 +301,7 @@
       row.innerHTML = `
         <div>
           <strong>${escapeHtml(batch.csvFilename)}</strong>
-          <span>${escapeHtml(String(counts.reportsTotal ?? 0))} reports · ${escapeHtml(String(counts.reviewed ?? 0))}/${escapeHtml(String(counts.findingsTotal ?? 0))} findings reviewed</span>
+          <span>${escapeHtml(String(counts.reportsTotal ?? 0))} reports · ${escapeHtml(String(counts.reviewed ?? 0))}/${escapeHtml(String(counts.findingsTotal ?? 0))} reviewed · ${escapeHtml(String(counts.approved ?? 0))} approved · ${escapeHtml(String(counts.flagged ?? 0))} flagged · ${escapeHtml(String(counts.unsure ?? 0))} unsure</span>
         </div>
         <div class="saved-batch-actions">
           <button type="button" data-resume-batch="${escapeHtml(batch.batchId)}">Resume</button>
@@ -396,8 +411,15 @@
   function ensureResponse(sha1, findingIndex) {
     const rev = ensureReview(sha1);
     if (!rev.responses[findingIndex]) {
-      rev.responses[findingIndex] = { status: 'pending', comment: '', firstReviewedAt: null, updatedAt: null };
+      rev.responses[findingIndex] = {
+        status: 'pending',
+        comment: '',
+        flagTargets: [],
+        firstReviewedAt: null,
+        updatedAt: null,
+      };
     }
+    if (!Array.isArray(rev.responses[findingIndex].flagTargets)) rev.responses[findingIndex].flagTargets = [];
     return rev.responses[findingIndex];
   }
 
@@ -1094,6 +1116,7 @@
     let total = 0,
       approved = 0,
       flagged = 0,
+      unsure = 0,
       missingCount = 0;
     for (const file of state.files) {
       total += file.data.findings.length;
@@ -1101,26 +1124,37 @@
       for (const r of Object.values(rev.responses)) {
         if (r.status === 'approved') approved++;
         else if (r.status === 'flagged') flagged++;
+        else if (r.status === 'unsure') unsure++;
       }
       missingCount += rev.missing.length;
     }
-    return { total, approved, flagged, pending: total - approved - flagged, missingCount };
+    return { total, approved, flagged, unsure, pending: total - approved - flagged - unsure, missingCount };
   }
 
   function fileCounts(file) {
     const rev = ensureReview(file.sha1);
     let approved = 0,
       flagged = 0,
+      unsure = 0,
       draft = 0;
     for (let i = 0; i < file.data.findings.length; i++) {
       const r = rev.responses[i];
       if (!r) continue;
       if (r.status === 'approved') approved++;
       else if (r.status === 'flagged') flagged++;
+      else if (r.status === 'unsure') unsure++;
       else if ((r.comment || '').trim()) draft++;
     }
     const total = file.data.findings.length;
-    return { total, approved, flagged, draft, missing: rev.missing.length, done: approved + flagged };
+    return {
+      total,
+      approved,
+      flagged,
+      unsure,
+      draft,
+      missing: rev.missing.length,
+      done: approved + flagged + unsure,
+    };
   }
 
   // ---------- Rendering ----------
@@ -1135,12 +1169,14 @@
       pending: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>`,
       approved: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
       flagged: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M6 4h12l-3 4.5 3 4.5H6z" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+      unsure: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.4 9.4a2.8 2.8 0 115 1.7c-.9.8-1.7 1.2-1.7 2.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12.2" cy="17" r="1.1" fill="currentColor"/></svg>`,
       missed: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>`,
     };
     el.counts.innerHTML = `
       <span class="pill" title="${c.pending} pending"><span class="pill-icon pending">${icon.pending}</span><strong>${c.pending}</strong></span>
       <span class="pill" title="${c.approved} approved"><span class="pill-icon approved">${icon.approved}</span><strong>${c.approved}</strong></span>
       <span class="pill" title="${c.flagged} flagged"><span class="pill-icon flagged">${icon.flagged}</span><strong>${c.flagged}</strong></span>
+      <span class="pill" title="${c.unsure} unsure"><span class="pill-icon unsure">${icon.unsure}</span><strong>${c.unsure}</strong></span>
       <span class="pill" title="${c.missingCount} missed (logged by reviewer)"><span class="pill-icon missed">${icon.missed}</span><strong>${c.missingCount}</strong></span>
     `;
     el.exportBtn.disabled = !canExport();
@@ -1169,6 +1205,7 @@
       exam.study_description || '',
       `${counts.done}/${counts.total}`,
       counts.flagged ? `${counts.flagged} flagged` : '',
+      counts.unsure ? `${counts.unsure} unsure` : '',
       counts.missing ? `${counts.missing} missing` : '',
     ]
       .filter(Boolean)
@@ -1219,6 +1256,7 @@
       active ? 'active' : '',
       status === 'approved' ? 'status-approved done-approved' : '',
       status === 'flagged' ? 'status-flagged done-flagged' : '',
+      status === 'unsure' ? 'status-unsure done-unsure' : '',
       draft ? 'status-draft' : '',
     ]
       .filter(Boolean)
@@ -1303,6 +1341,23 @@
     });
   }
 
+  function flagTargetsHtml(response) {
+    if (!['flagged', 'unsure'].includes(response.status)) return '';
+    const selected = new Set(response.flagTargets || []);
+    return `
+      <div class="flag-targets">
+        <div class="flag-targets-label">What&rsquo;s in question</div>
+        <div class="flag-target-chips">
+          ${FLAG_TARGETS.map(
+            ([token, label]) => `
+              <button type="button" class="flag-target-chip ${selected.has(token) ? 'active' : ''}" data-flag-target="${token}" aria-pressed="${selected.has(token)}">${escapeHtml(label)}</button>
+            `,
+          ).join('')}
+        </div>
+      </div>
+    `;
+  }
+
   function renderFindingView(file, finding, idx) {
     const response = ensureResponse(file.sha1, idx);
     const draft = response.status === 'pending' && (response.comment || '').trim();
@@ -1311,9 +1366,11 @@
         ? 'approved'
         : response.status === 'flagged'
           ? 'flagged'
-          : draft
-            ? 'draft'
-            : 'pending';
+          : response.status === 'unsure'
+            ? 'unsure'
+            : draft
+              ? 'draft'
+              : 'pending';
 
     const exam = file.data.exam_info || {};
     const location = finding.location || {};
@@ -1423,16 +1480,18 @@
               <div>${chip}</div>
               <div>
                 <div class="section-title" style="margin-bottom:6px;">Reviewer comment</div>
-                <textarea id="commentBox" placeholder="Notes for flagging. Drafts save automatically."></textarea>
+                <textarea id="commentBox" placeholder="Optional review notes. Drafts save automatically."></textarea>
               </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:space-between;">
                 <button type="button" id="clearBtn">Clear</button>
                 <div style="display:flex; gap:8px;">
-                  <button type="button" class="warning ${draft ? 'is-default' : ''}" id="flagBtn">Flag</button>
-                  <button type="button" class="success ${draft ? '' : 'is-default'}" id="approveBtn">Approve</button>
+                  <button type="button" class="success ${draft ? '' : 'is-default'}" id="approveBtn">Approve (A)</button>
+                  <button type="button" class="warning ${draft ? 'is-default' : ''}" id="flagBtn">Flag (F)</button>
+                  <button type="button" class="unsure" id="unsureBtn">Unsure (U)</button>
                 </div>
               </div>
-              <div class="hint">Enter sends flag and jumps to the next pending finding. A approves. J/K move, H/L jump files.</div>
+              ${flagTargetsHtml(response)}
+              <div class="hint">Arrow Up/Down moves between findings. A approves, F flags, U marks unsure. Shortcuts pause while typing.</div>
             </div>
           </aside>
         </div>
@@ -1460,6 +1519,22 @@
     });
     document.getElementById('approveBtn').addEventListener('click', approveCurrent);
     document.getElementById('flagBtn').addEventListener('click', submitFlag);
+    document.getElementById('unsureBtn').addEventListener('click', markUnsureCurrent);
+    el.content.querySelectorAll('[data-flag-target]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const token = button.dataset.flagTarget;
+        const targets = new Set(response.flagTargets || []);
+        if (targets.has(token)) targets.delete(token);
+        else targets.add(token);
+        response.flagTargets = FLAG_TARGETS.map(([knownToken]) => knownToken).filter((knownToken) =>
+          targets.has(knownToken),
+        );
+        response.updatedAt = nowIso();
+        button.classList.toggle('active', targets.has(token));
+        button.setAttribute('aria-pressed', String(targets.has(token)));
+        persistReviewForFile(file.sha1);
+      });
+    });
     document.getElementById('clearBtn').addEventListener('click', () => {
       response.comment = '';
       response.updatedAt = nowIso();
@@ -1474,6 +1549,7 @@
   function statusChipHtml(response, draft) {
     if (response.status === 'approved') return `<span class="status-chip approved">Approved</span>`;
     if (response.status === 'flagged') return `<span class="status-chip flagged">Flagged</span>`;
+    if (response.status === 'unsure') return `<span class="status-chip unsure">Unsure</span>`;
     if (draft) return `<span class="status-chip draft">Draft comment</span>`;
     return `<span class="status-chip pending">Pending</span>`;
   }
@@ -1706,34 +1782,29 @@
   }
 
   // ---------- Actions ----------
-  function approveCurrent() {
+  function setCurrentVerdict(status) {
     const sel = state.selection;
     if (sel.sha1 == null || sel.findingIndex == null) return;
     const r = ensureResponse(sel.sha1, sel.findingIndex);
     const now = nowIso();
     if (!r.firstReviewedAt) r.firstReviewedAt = now;
-    r.status = 'approved';
+    r.status = status;
+    if (status === 'approved') r.flagTargets = [];
     r.updatedAt = now;
     persistReviewForFile(sel.sha1);
     moveToNextPendingOrStay();
   }
 
+  function approveCurrent() {
+    setCurrentVerdict('approved');
+  }
+
   function submitFlag() {
-    const sel = state.selection;
-    if (sel.sha1 == null || sel.findingIndex == null) return;
-    const r = ensureResponse(sel.sha1, sel.findingIndex);
-    const comment = (r.comment || '').trim();
-    if (!comment) {
-      const box = document.getElementById('commentBox');
-      if (box) box.focus();
-      return;
-    }
-    const now = nowIso();
-    if (!r.firstReviewedAt) r.firstReviewedAt = now;
-    r.status = 'flagged';
-    r.updatedAt = now;
-    persistReviewForFile(sel.sha1);
-    moveToNextPendingOrStay();
+    setCurrentVerdict('flagged');
+  }
+
+  function markUnsureCurrent() {
+    setCurrentVerdict('unsure');
   }
 
   function moveToNextPendingOrStay() {
@@ -1764,18 +1835,21 @@
     const findings = file.data.findings || [];
     const responses = [];
     let approved = 0,
-      flagged = 0;
+      flagged = 0,
+      unsure = 0;
     for (let i = 0; i < findings.length; i++) {
       const r = rev.responses[i];
       const status = r ? r.status : 'pending';
       if (status === 'approved') approved++;
       else if (status === 'flagged') flagged++;
+      else if (status === 'unsure') unsure++;
       responses.push({
         finding_index: i,
         finding_name: findings[i].finding_name || '',
         presence: findings[i].presence || null,
         status,
         comment: r ? r.comment || '' : '',
+        flag_targets: r && Array.isArray(r.flagTargets) ? r.flagTargets : [],
         first_reviewed_at: r ? r.firstReviewedAt : null,
         updated_at: r ? r.updatedAt : null,
       });
@@ -1798,7 +1872,8 @@
         total_findings: findings.length,
         approved,
         flagged,
-        pending: findings.length - approved - flagged,
+        unsure,
+        pending: findings.length - approved - flagged - unsure,
         missing_findings_count: rev.missing.length,
       },
       responses,
@@ -1849,6 +1924,7 @@
         findings_total: counts.total,
         approved: counts.approved,
         flagged: counts.flagged,
+        unsure: counts.unsure,
         pending: counts.pending,
         missing_findings_count: counts.missingCount,
       },
@@ -1921,14 +1997,30 @@
     }
     if (k === 'f') {
       ev.preventDefault();
-      const box = document.getElementById('commentBox');
-      if (!box) return;
-      const r =
-        state.selection.findingIndex != null
-          ? ensureResponse(state.selection.sha1, state.selection.findingIndex)
-          : null;
-      if (r && (r.comment || '').trim()) submitFlag();
-      else box.focus();
+      submitFlag();
+      return;
+    }
+    if (k === 'u') {
+      ev.preventDefault();
+      markUnsureCurrent();
+      return;
+    }
+    if (k === 'arrowup') {
+      ev.preventDefault();
+      const s = stepFinding(state.selection, -1);
+      if (s) {
+        setSelection(s);
+        render();
+      }
+      return;
+    }
+    if (k === 'arrowdown') {
+      ev.preventDefault();
+      const s = stepFinding(state.selection, 1);
+      if (s) {
+        setSelection(s);
+        render();
+      }
       return;
     }
     if (k === 'j') {

@@ -1,7 +1,7 @@
 # Plan: CSV-Aware Extraction Reviewer
 
 Created: 2026-07-14
-Status: In progress (Phases 1–4 complete; Phase 4b revision next, then Phase 5)
+Status: In progress (Phases 1–4b complete; Phase 5 next)
 
 ## Goal
 
@@ -9,7 +9,7 @@ Ship **one self-contained HTML file** a non-developer colleague can open in a br
 human feedback on **already-extracted** data:
 
 1. **Input:** the original source CSV + a directory of existing extraction JSON files.
-2. **Activity:** human review of the extracted findings (approve / flag / missing / notes).
+2. **Activity:** human review of the extracted findings (approve / flag / unsure / missing / notes).
 3. **Output:** one combined review JSON to send back.
 
 A static, offline, browser-only page. This is Phase C item 2 of
@@ -43,6 +43,11 @@ produced is irrelevant here — the tool consumes them wherever they came from. 
   remains as a secondary/compatibility export behind a dropdown.
 - **`report_level_notes` gets a minimal, non-obtrusive UI** — a collapsed "＋ Add report note"
   link, not an always-visible textarea.
+- **Finding responses have three verdicts** (`approved`, `flagged`, `unsure`). Flagged and unsure
+  responses may identify the questioned attributes with stable `flag_targets` tokens; an empty
+  array means the reviewer did not specify a target.
+- **Keyboard triage uses non-vim bindings:** Arrow Down/Up moves between findings and A/F/U sets
+  the verdict. The verdict buttons display their keys; shortcuts are inert while typing.
 - **PHI is not a constraint** on the review output.
 
 ## Input formats (reference)
@@ -173,14 +178,14 @@ serialize as `status: "pending"`. `report_level_notes` appears on every report o
 
 ```jsonc
 {
-  "app_version": "1.1",
+  "app_version": "1.2",
   "kind": "extraction-review-batch",
   "batch": { "csv_filename": "reports.csv", "csv_sha256": "…", "batch_id": "…" },
   "reviewer": { "identifier": "jane.doe@example.org" },
   "exported_at": "2026-07-14T12:34:56.000Z",
   "batch_summary": {
     "reports_total": 40, "reports_reviewed": 38,
-    "findings_total": 812, "approved": 770, "flagged": 42, "pending": 0,
+    "findings_total": 812, "approved": 750, "flagged": 42, "unsure": 20, "pending": 0,
     "missing_findings_count": 11
   },
   "reports": [
@@ -190,10 +195,11 @@ serialize as `status: "pending"`. `report_level_notes` appears on every report o
       "source_id": "CHEST001",          // from manifest entry
       "csv_row_number": 2,              // authoritative join key
       "source_exam": { "study_description": "…", "study_date": "…", "modality": "CT" },
-      "summary": { "total_findings": 22, "approved": 19, "flagged": 3, "pending": 0,
+      "summary": { "total_findings": 22, "approved": 18, "flagged": 3, "unsure": 1, "pending": 0,
                    "missing_findings_count": 1 },
       "responses": [ /* one per finding: finding_index, finding_name, presence,
-                        status ("pending" when untouched), comment,
+                        status ("pending"/"approved"/"flagged"/"unsure"), comment,
+                        flag_targets (stable token array; [] when unspecified),
                         first_reviewed_at, updated_at */ ],
       "report_level_notes": "",         // present on every report
       "missing_findings": [ { "description": "…", "report_text": "…", "added_at": "…" } ]
@@ -337,9 +343,13 @@ and commit this phase.
 
 ## Implementation notes
 
-- `batch_summary.reports_reviewed` counts a report once it has at least one approved/flagged finding, a missing
-  finding, or a non-empty report note. This is the minimal observable definition for the otherwise unspecified
-  summary field; untouched reports remain included in the export but do not increment it.
+- `batch_summary.reports_reviewed` counts a report once it has at least one approved, flagged, or unsure finding,
+  a missing finding, or a non-empty report note. Untouched reports remain included in the export but do not
+  increment it.
+- Flag and unsure verdicts do not require either a comment or a flag target; both are optional refinements so
+  keyboard triage remains a one-key action.
+- Changing a response to approved clears any prior `flag_targets`, preventing stale question categories from
+  being exported on an approved response.
 
 ## Risks / open questions
 

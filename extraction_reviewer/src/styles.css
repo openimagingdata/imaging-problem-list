@@ -14,6 +14,8 @@
   --success-soft: #e8f6ee;
   --warning: #9a6700;
   --warning-soft: #fff4d8;
+  --unsure: #6d28d9;
+  --unsure-soft: #f3e8ff;
   --danger: #a3252c;
   --danger-soft: #fceaec;
   --shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
@@ -77,6 +79,11 @@ button.warning {
   background: white;
   color: #8c5d0b;
   border-color: #edcf99;
+}
+button.unsure {
+  background: white;
+  color: var(--unsure);
+  border-color: #c4b5fd;
 }
 button.danger {
   background: white;
@@ -504,6 +511,9 @@ button.warning.is-default {
 .pill-icon.flagged {
   color: #c78310;
 }
+.pill-icon.unsure {
+  color: var(--unsure);
+}
 .pill-icon.missed {
   color: var(--accent);
 }
@@ -794,6 +804,10 @@ button.warning.is-default {
   background: #fff8ec;
   border-color: #efcf96;
 }
+.list-item.done-unsure {
+  background: var(--unsure-soft);
+  border-color: #c4b5fd;
+}
 .status-dot {
   width: 8px;
   height: 8px;
@@ -806,6 +820,9 @@ button.warning.is-default {
 }
 .status-flagged .status-dot {
   background: var(--warning);
+}
+.status-unsure .status-dot {
+  background: var(--unsure);
 }
 .status-draft .status-dot {
   background: var(--accent);
@@ -933,6 +950,9 @@ button.warning.is-default {
 .status-indicator.flagged,
 .status-indicator.draft {
   background: #c78310;
+}
+.status-indicator.unsure {
+  background: var(--unsure);
 }
 .status-indicator.pending {
   background: #a5b1c2;
@@ -1103,6 +1123,35 @@ button.warning.is-default {
   border-radius: 14px;
   padding: 14px;
   background: #fbfcff;
+}
+.flag-targets {
+  display: grid;
+  gap: 7px;
+  padding-top: 2px;
+}
+.flag-targets-label {
+  color: var(--muted-2);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.flag-target-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.flag-target-chip {
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+.flag-target-chip.active {
+  border-color: #a78bfa;
+  background: var(--unsure-soft);
+  color: var(--unsure);
 }
 .section {
   display: grid;
@@ -1299,6 +1348,11 @@ details.candidates > summary {
   background: var(--warning-soft);
   border-color: #efcf98;
   color: var(--warning);
+}
+.status-chip.unsure {
+  background: var(--unsure-soft);
+  border-color: #c4b5fd;
+  color: var(--unsure);
 }
 .status-chip.pending {
   color: var(--muted);
