@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 860" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <style>
+      .panel { fill: #ffffff; stroke: #d1d5db; stroke-width: 1.5; rx: 8; }
+      .panel-dark { fill: #f9fafb; stroke: #d1d5db; stroke-width: 1.5; }
+      .title { font-size: 15px; font-weight: 700; fill: #111827; }
+      .label { font-size: 11px; font-weight: 600; fill: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; }
+      .body-text { font-size: 12px; fill: #374151; }
+      .small { font-size: 11px; fill: #6b7280; }
+      .tiny { font-size: 10px; fill: #9ca3af; }
+      .annotation { font-size: 12.5px; fill: #1d4ed8; font-weight: 600; }
+      .chip-green { fill: #dcfce7; }
+      .chip-green-text { font-size: 11px; font-weight: 600; fill: #15803d; }
+      .chip-gray { fill: #f3f4f6; }
+      .chip-gray-text { font-size: 11px; font-weight: 500; fill: #4b5563; }
+      .chip-blue { fill: #dbeafe; }
+      .chip-blue-text { font-size: 11px; font-weight: 600; fill: #1d4ed8; }
+      .chip-amber { fill: #fef3c7; }
+      .chip-amber-text { font-size: 11px; font-weight: 600; fill: #b45309; }
+      .hl { fill: #fef9c3; }
+      .btn { fill: #2563eb; rx: 6; }
+      .btn-text { font-size: 11px; font-weight: 600; fill: #ffffff; }
+      .btn-ghost { fill: #ffffff; stroke: #d1d5db; stroke-width: 1.5; }
+      .btn-ghost-text { font-size: 11px; font-weight: 600; fill: #374151; }
+      .leader { stroke: #2563eb; stroke-width: 1.5; fill: none; marker-end: url(#arrow); stroke-dasharray: 4 3; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+  </defs>
+
+  <!-- canvas -->
+  <rect x="0" y="0" width="1240" height="860" fill="#eef2f7"/>
+
+  <!-- ===== top nav ===== -->
+  <rect x="0" y="0" width="1240" height="52" fill="#1f2937"/>
+  <text x="24" y="32" font-size="15" font-weight="700" fill="#ffffff">Imaging Report Extractor</text>
+  <text x="240" y="32" font-size="13" fill="#9ca3af">Submit</text>
+  <text x="300" y="32" font-size="13" fill="#9ca3af">Reports</text>
+  <circle cx="1200" cy="26" r="14" fill="#374151"/>
+  <text x="1200" y="31" font-size="12" fill="#d1d5db" text-anchor="middle">&#9790;</text>
+
+  <!-- ===== breadcrumb ===== -->
+  <text x="24" y="82" class="small"><tspan fill="#2563eb">Reports</tspan><tspan fill="#9ca3af">  /  </tspan><tspan fill="#2563eb">mock-report-1</tspan><tspan fill="#9ca3af">  /  </tspan><tspan fill="#111827" font-weight="600">Extraction mock-extraction-1</tspan></text>
+
+  <!-- ===== consolidated metadata strip ===== -->
+  <rect x="24" y="96" width="1192" height="56" class="panel" rx="8"/>
+  <text x="44" y="129" font-size="14" font-weight="700" fill="#111827">CT Abdomen</text>
+  <text x="150" y="129" class="body-text">&#183; CT &#183; abdomen &#183; 2026-07-19</text>
+  <rect x="420" y="112" width="118" height="24" rx="12" class="chip-gray"/>
+  <text x="479" y="128" text-anchor="middle" class="chip-gray-text">mock-model</text>
+  <rect x="548" y="112" width="104" height="24" rx="12" class="chip-green"/>
+  <text x="600" y="128" text-anchor="middle" class="chip-green-text">7/7 coded</text>
+  <rect x="662" y="112" width="110" height="24" rx="12" class="chip-amber"/>
+  <text x="717" y="128" text-anchor="middle" class="chip-amber-text">1 warning</text>
+  <rect x="782" y="112" width="120" height="24" rx="12" class="chip-blue"/>
+  <text x="842" y="128" text-anchor="middle" class="chip-blue-text">3/7 reviewed</text>
+  <rect x="1086" y="112" width="110" height="24" rx="6" class="btn-ghost"/>
+  <text x="1141" y="128" text-anchor="middle" class="btn-ghost-text">Mark complete</text>
+
+  <!-- ===== LEFT: report text pane (sticky) ===== -->
+  <rect x="24" y="168" width="470" height="600" class="panel" rx="8"/>
+  <text x="44" y="196" class="title">Report Text</text>
+  <rect x="350" y="180" width="124" height="22" rx="11" class="chip-gray"/>
+  <text x="412" y="195" text-anchor="middle" class="chip-gray-text">3 quotes linked</text>
+
+  <text x="44" y="224" class="body-text">EXAM: CT Abdomen without contrast</text>
+  <text x="44" y="244" class="body-text">FINDINGS:</text>
+  <text x="44" y="264" class="body-text">The liver is unremarkable.</text>
+
+  <!-- highlighted quote (linked to selected finding) -->
+  <rect x="40" y="272" width="430" height="40" rx="4" class="hl" stroke="#eab308" stroke-width="1.5"/>
+  <text x="48" y="288" class="body-text" font-weight="600">Left kidney stone measuring 3mm.</text>
+  <text x="48" y="304" class="small">&#8592; quote for selected finding #2 (auto-scrolled, exact-match highlight)</text>
+
+  <text x="44" y="336" class="body-text">No hydronephrosis. The spleen, pancreas,</text>
+  <text x="44" y="354" class="body-text">and adrenal glands are normal.</text>
+  <text x="44" y="374" class="body-text">Small right renal cyst, unchanged.</text>
+  <text x="44" y="404" class="body-text">IMPRESSION:</text>
+  <text x="44" y="424" class="body-text">1. Left nephrolithiasis, 3 mm.</text>
+  <text x="44" y="444" class="body-text">2. Stable right renal cyst.</text>
+  <text x="44" y="488" class="tiny">Pane is sticky: stays in view while findings scroll.</text>
+  <text x="44" y="506" class="tiny">Clicking a finding scrolls to &amp; highlights its quote.</text>
+  <text x="44" y="524" class="tiny">Ambiguous/unmatched quotes get a warning chip.</text>
+
+  <!-- ===== RIGHT: findings workspace ===== -->
+  <!-- filter / status bar -->
+  <rect x="510" y="168" width="706" height="48" class="panel-dark" rx="8"/>
+  <text x="530" y="197" class="title">Findings <tspan font-weight="400" fill="#6b7280">(7)</tspan></text>
+  <rect x="630" y="180" width="88" height="24" rx="12" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="674" y="196" text-anchor="middle" class="chip-gray-text">All &#9662;</text>
+  <rect x="726" y="180" width="88" height="24" rx="12" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="770" y="196" text-anchor="middle" class="chip-gray-text">Present</text>
+  <rect x="822" y="180" width="86" height="24" rx="12" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="865" y="196" text-anchor="middle" class="chip-gray-text">Absent</text>
+  <rect x="916" y="180" width="120" height="24" rx="12" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="976" y="196" text-anchor="middle" class="chip-gray-text">Uncoded only</text>
+  <rect x="1044" y="180" width="156" height="24" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="1056" y="196" class="small" fill="#9ca3af">Filter by text&#8230;</text>
+
+  <!-- finding card 1: compact, accepted -->
+  <rect x="510" y="228" width="706" height="64" class="panel" rx="8"/>
+  <text x="530" y="254" font-size="13" font-weight="700" fill="#111827">#1 Renal cyst</text>
+  <rect x="636" y="240" width="66" height="20" rx="10" class="chip-green"/>
+  <text x="669" y="254" text-anchor="middle" class="chip-green-text">present</text>
+  <rect x="710" y="240" width="176" height="20" rx="10" class="chip-gray"/>
+  <text x="798" y="254" text-anchor="middle" class="chip-gray-text">OIFM_GMTS_003811 &#183; exact</text>
+  <text x="530" y="278" class="small">right kidney &#183; right &#183; &#8220;Small right renal cyst, unchanged.&#8221;</text>
+  <circle cx="1160" cy="260" r="13" fill="#22c55e"/>
+  <text x="1160" y="265" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">&#10003;</text>
+
+  <!-- finding card 2: SELECTED, expanded, warning inline -->
+  <rect x="510" y="304" width="706" height="252" class="panel" rx="8" stroke="#2563eb" stroke-width="2"/>
+  <text x="530" y="332" font-size="13" font-weight="700" fill="#111827">#2 Kidney stone</text>
+  <rect x="662" y="318" width="66" height="20" rx="10" class="chip-green"/>
+  <text x="695" y="332" text-anchor="middle" class="chip-green-text">present</text>
+  <rect x="736" y="318" width="186" height="20" rx="10" class="chip-gray"/>
+  <text x="829" y="332" text-anchor="middle" class="chip-gray-text">OIFM_GMTS_016552 &#183; exact</text>
+  <rect x="930" y="318" width="130" height="20" rx="10" class="chip-amber"/>
+  <text x="995" y="332" text-anchor="middle" class="chip-amber-text">&#9888; quote mismatch</text>
+
+  <text x="530" y="360" class="label">Location</text>
+  <text x="530" y="378" class="body-text">abdomen &#8250; left kidney &#8250; left &#183; RID29662</text>
+  <text x="530" y="404" class="label">Attributes</text>
+  <text x="530" y="422" class="body-text">size: 3 mm</text>
+  <text x="530" y="448" class="label">Quote</text>
+  <rect x="530" y="456" width="520" height="24" rx="4" fill="#f9fafb" stroke="#e5e7eb"/>
+  <text x="540" y="472" font-size="12" font-style="italic" fill="#4b5563">&#8220;Left kidney stone measuring 3mm.&#8221;</text>
+
+  <!-- inline validation -->
+  <rect x="530" y="490" width="520" height="26" rx="6" class="chip-amber"/>
+  <text x="542" y="507" class="chip-amber-text">&#9888; Quote normalized differently than report text &#8212; verify span</text>
+
+  <!-- per-finding actions -->
+  <rect x="530" y="524" width="86" height="24" rx="6" class="btn"/>
+  <text x="573" y="540" text-anchor="middle" class="btn-text">Accept (a)</text>
+  <rect x="624" y="524" width="74" height="24" rx="6" class="btn-ghost"/>
+  <text x="661" y="540" text-anchor="middle" class="btn-ghost-text">Flag (f)</text>
+  <rect x="706" y="524" width="72" height="24" rx="6" class="btn-ghost"/>
+  <text x="742" y="540" text-anchor="middle" class="btn-ghost-text">Edit (e)</text>
+  <text x="800" y="540" class="small">j/k: prev/next finding</text>
+  <circle cx="1160" cy="330" r="13" fill="#e5e7eb"/>
+  <text x="1160" y="335" text-anchor="middle" font-size="13" font-weight="700" fill="#9ca3af">&#10003;</text>
+
+  <!-- finding card 3: compact, uncoded -->
+  <rect x="510" y="568" width="706" height="64" class="panel" rx="8"/>
+  <text x="530" y="594" font-size="13" font-weight="700" fill="#111827">#3 Hydronephrosis</text>
+  <rect x="700" y="580" width="64" height="20" rx="10" fill="#fee2e2"/>
+  <text x="732" y="594" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">absent</text>
+  <rect x="772" y="580" width="96" height="20" rx="10" class="chip-amber"/>
+  <text x="820" y="594" text-anchor="middle" class="chip-amber-text">uncoded</text>
+  <text x="530" y="618" class="small">&#8220;No hydronephrosis.&#8221;</text>
+  <circle cx="1160" cy="600" r="13" fill="#e5e7eb"/>
+  <text x="1160" y="605" text-anchor="middle" font-size="13" font-weight="700" fill="#9ca3af">&#10003;</text>
+
+  <!-- corrections dock -->
+  <rect x="510" y="648" width="706" height="56" class="panel-dark" rx="8"/>
+  <text x="530" y="672" class="title" font-size="13">Corrections</text>
+  <text x="530" y="692" class="small">Scoped to selected finding #2 &#8212; or comment on the whole extraction &#183; 1 existing</text>
+  <rect x="1076" y="664" width="120" height="26" rx="6" class="btn-ghost"/>
+  <text x="1136" y="681" text-anchor="middle" class="btn-ghost-text">Add comment</text>
+
+  <!-- ===== annotations ===== -->
+  <text x="700" y="40" class="annotation">Consolidated metadata strip</text>
+  <path class="leader" d="M 690 46 L 610 100"/>
+  <text x="300" y="790" class="annotation">Sticky report pane with linked quote highlighting</text>
+  <path class="leader" d="M 380 780 L 300 730"/>
+  <text x="800" y="790" class="annotation">Findings workspace: filters, compact cards,</text>
+  <text x="800" y="808" class="annotation">inline validation, keyboard triage</text>
+  <path class="leader" d="M 900 780 L 880 640"/>
+
+  <!-- legend -->
+  <rect x="24" y="830" width="1192" height="1" fill="#d1d5db"/>
+  <text x="24" y="852" class="tiny">Wireframe: proposed two-column extraction review layout (wide viewport). Narrow viewports stack: metadata &#8594; findings &#8594; report pane collapses to a toggleable drawer.</text>
+</svg>

@@ -269,6 +269,39 @@ extraction output.)
 3. Wire up `report_level_notes` with the collapsed "＋ Add report note" UI.
 4. Bump `app_version` to `1.1`.
 
+### Phase 4b — Review-response revision (added 2026-07-20)
+
+Motivated by a real-world review a colleague performed by hand in a spreadsheet: she needed to
+express *uncertainty* (distinct from "wrong"), to say *which attribute* of a finding she doubted,
+and to mark findings that lump several real findings together. Keyboard triage is added for bulk
+review ergonomics. Commit the outstanding Phase 4 work as its own commit first, then implement
+and commit this phase.
+
+1. **`unsure` verdict.** A third per-finding status alongside `approved`/`flagged`, with its own
+   color/icon and its own count everywhere approved/flagged counts appear (sidebar, batch index,
+   `batch_summary`). `unsure` counts toward `reports_reviewed` (same rationale as flagged —
+   the reviewer engaged with the report).
+2. **Flag-target chips.** When a finding is `flagged` OR `unsure`, show an optional row of toggle
+   chips under the verdict buttons — "What's in question": finding name, presence, anatomic site,
+   laterality, size, severity, extent, temporal status, hedged language, lumps multiple findings.
+   Stored on the response as `flag_targets: string[]` using stable tokens (`finding_name`,
+   `presence`, `anatomic_site`, `laterality`, `size`, `severity`, `extent`, `temporal_status`,
+   `hedged_language`, `aggregated_findings`); empty array = unspecified. Additive to the
+   persisted response shape — existing saved batches load with `flag_targets` defaulting to `[]`,
+   no migration.
+3. **Export contract additions.** `responses[].status` gains `"unsure"` as a valid value;
+   `responses[]` gains `flag_targets`; `batch_summary` (and per-report `summary`) gain an
+   `unsure` count. Applies to both the combined JSON and the per-report zip export. Bump
+   `app_version` to `1.2`.
+4. **Keyboard triage (non-vim bindings — the reviewer is a non-developer).** `ArrowDown` /
+   `ArrowUp` = next/previous finding (with `preventDefault` so the page doesn't scroll; `j`/`k`
+   may exist as unadvertised synonyms), `a` = approve, `f` = flag, `u` = unsure, `?` = shortcut
+   help overlay. All keys inert while focus is in any input/textarea. Discoverability comes from
+   the buttons themselves — each verdict button shows its key ("Approve (A)").
+5. **Doc convergence.** As part of this phase, update the implemented-behavior sections of this
+   plan (Decisions, the export-contract example, Implementation notes) to reflect the final
+   behavior — integrated in place, not appended as corrections.
+
 ### Phase 5 — Verify end-to-end (fixtures)
 1. Build a **representative fixture** results dir by hand: 2–3 `*.extracted.json`, a matching
    `csv_inputs_manifest.json` (including one duplicate-`source_id` pair and one deliberately
@@ -280,19 +313,24 @@ extraction output.)
    `row_number` (duplicate ids resolve to distinct rows), source text shows from the staged files
    (banner says so), quote highlighting works on the normalized (inline-marker) report, and the
    BOM'd CSV parses with clean headers.
-4. Approve / flag / add a missing finding / add a report note; download the combined JSON and
-   assert the contract (every report, every finding, `pending` where untouched,
-   `report_level_notes` present, `csv_row_number` correct, `finding_index` maps back).
+4. Approve / flag / mark one finding **unsure with flag-target chips** / add a missing finding /
+   add a report note; drive part of the triage **via keyboard** (arrows + `a`/`f`/`u`) and confirm
+   keys are inert while typing in a textarea. Download the combined JSON and assert the contract
+   (every report, every finding, `pending` where untouched, `status: "unsure"` and `flag_targets`
+   serialized, `unsure` counted in summaries, `app_version` 1.2, `report_level_notes` present,
+   `csv_row_number` correct, `finding_index` maps back).
 5. **Persistence acceptance:** close and reopen the HTML; confirm the batch resumes from
-   IndexedDB **without reselecting files**, at the saved position, with responses intact. Confirm
-   delete-batch clears it.
+   IndexedDB **without reselecting files**, at the saved position, with responses intact —
+   including the `unsure` verdict and its `flag_targets`. Confirm delete-batch clears it.
 
 ### Phase 6 — Documentation
 1. Mark this plan complete; update
    [extraction-reviewer-workflows.md](extraction-reviewer-workflows.md) Phase C item 2 and
    cross-link.
 2. `extraction_reviewer/README.md` + `REVIEWER_GUIDE.md`: document the wizard, CSV loading,
-   browser-local persistence (and its `file://` limitation), and the combined export.
+   browser-local persistence (and its `file://` limitation), the combined export, the three
+   verdicts (approve / flag / unsure) with the "what's in question" chips, and the keyboard
+   shortcuts.
 3. `docs/DEV_LOG.md` entry.
 4. Taskfile target `review:build` rides along.
 5. No CHANGELOG entry — internal tooling.
@@ -333,4 +371,7 @@ extraction output.)
   drift-replace, and delete all work; close/reopen resumes without reselecting files.
 - Combined export includes every report, a response per finding (`pending` when untouched), and
   `report_level_notes` on every report.
+- Three verdicts (`approved` / `flagged` / `unsure`) with optional `flag_targets` captured,
+  persisted, and exported at `app_version` 1.2; keyboard triage (arrows + `a`/`f`/`u`) works with
+  keys shown on the verdict buttons.
 - Verified against representative fixtures; no extraction-tool code pulled into this workstream.

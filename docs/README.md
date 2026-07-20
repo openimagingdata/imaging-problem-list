@@ -51,6 +51,7 @@
 - [plans/anatomic-location-efl-ipl.md](plans/anatomic-location-efl-ipl.md) — Anatomic location on EFLs/IPL (Step 3b reconciliation outstanding)
 - [plans/pydantic-ai-thinking-capability-simplification.md](plans/pydantic-ai-thinking-capability-simplification.md) — Future PydanticAI thinking-field simplification
 - [plans/viewer-v2-anatomy-dashboard.md](plans/viewer-v2-anatomy-dashboard.md) — Anatomy-aware viewer_v2 dashboard plan
+- [plans/extractor-ui-review-ux.md](plans/extractor-ui-review-ux.md) — Extraction review UX evaluation + two-column workspace redesign
 - [viewer-refactoring.md](viewer-refactoring.md) — Viewer CDN/Tailwind migration plan
 
 ## Reports / Benchmarks / Draft References
