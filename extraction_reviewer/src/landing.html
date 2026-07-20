@@ -101,6 +101,7 @@
         reconstructs source text from extraction quotes.
       </p>
       <button type="button" id="pickFilesBtn">Pick individual files</button>
+      <button type="button" id="pickCompatFolderBtn">Pick a folder</button>
       <input
         id="filesInput"
         type="file"
@@ -108,13 +109,13 @@
         accept=".json,application/json,.txt,text/plain,.md,text/markdown"
         style="display: none"
       />
+      <input id="compatFolderInput" type="file" webkitdirectory multiple style="display: none" />
     </details>
 
     <div class="shortcut-help">
       <strong>Shortcuts</strong>
-      &middot; <kbd>A</kbd> approve &middot; <kbd>F</kbd> focus / send flag &middot; <kbd>J</kbd> / <kbd>K</kbd> prev /
-      next finding &middot; <kbd>H</kbd> / <kbd>L</kbd> prev / next file &middot; <kbd>Enter</kbd> in comment sends
-      flag, <kbd>Shift+Enter</kbd> newline
+      &middot; <kbd>&uarr;</kbd> / <kbd>&darr;</kbd> previous / next finding &middot; <kbd>A</kbd> approve &middot;
+      <kbd>F</kbd> flag &middot; <kbd>U</kbd> unsure &middot; <kbd>?</kbd> help &middot; shortcuts pause while typing
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 # Plan: CSV-Aware Extraction Reviewer
 
 Created: 2026-07-14
-Status: In progress (Phases 1–4b complete; Phase 5 next)
+Status: In progress (Phases 1–5 complete; Phase 6 next)
 
 ## Goal
 
@@ -308,6 +308,34 @@ and commit this phase.
    plan (Decisions, the export-contract example, Implementation notes) to reflect the final
    behavior — integrated in place, not appended as corrections.
 
+### Phase 4c — Functional gaps from the UX evaluation (added 2026-07-20)
+
+A dedicated UX evaluation of this tool ([extraction-reviewer-ux.md](extraction-reviewer-ux.md))
+verified two functional gaps we resolve **in this push** (its layout/triage redesign remains a
+separate later plan):
+
+1. **Universal autosave.** Review decisions currently persist only for CSV-wizard batches
+   (`scheduleBatchSave` guards on `state.csv?.batchId`); embedded-bundle and direct-load sessions
+   lose all work on reload — while REVIEWER_GUIDE promises otherwise. Fix by deriving a batch id
+   for non-CSV sessions: **SHA-256 over the lexicographically sorted list of per-file content
+   hashes** (so a re-packed bundle containing the same reports resumes the same batch). Reuse the
+   existing IndexedDB batch machinery (save, resume, delete, batch index — index rows show the
+   bundle/folder name where the CSV filename would be). Resume semantics differ by path and both
+   are acceptable: an **embedded bundle** reopens with an immediate resume offer (its data is in
+   the HTML); a **direct folder load** restores saved responses after the folder is re-picked
+   (matching id). No drift prompt is needed for non-CSV batches — a changed file set is simply a
+   different batch id.
+2. **Source report visible in the review view.** The review view shows only the finding's quote;
+   the full report exists only in the Missing-findings view. Add the full resolved source text to
+   the review view (same source-text precedence and banner as established), with the current
+   finding's quote highlighted and auto-scrolled into view, and the existing warning treatment
+   when the quote is unmatched or the text is reconstructed. Reuse the Missing-findings report
+   rendering and quote matching — one report component, two views. (The UX plan's further ideas —
+   reviewed-quote dimming, click-quote-to-select, responsive drawers — stay deferred to that
+   plan.)
+3. **Relabel** the finding-detail section "Report text" → **"Evidence quote"** — it shows the
+   quote, not the report.
+
 ### Phase 5 — Verify end-to-end (fixtures)
 1. Build a **representative fixture** results dir by hand: 2–3 `*.extracted.json`, a matching
    `csv_inputs_manifest.json` (including one duplicate-`source_id` pair and one deliberately
@@ -328,6 +356,13 @@ and commit this phase.
 5. **Persistence acceptance:** close and reopen the HTML; confirm the batch resumes from
    IndexedDB **without reselecting files**, at the saved position, with responses intact —
    including the `unsure` verdict and its `flag_targets`. Confirm delete-batch clears it.
+6. **Universal-autosave acceptance:** repeat the reload test for (a) an embedded bundle — reopen
+   offers resume with responses intact — and (b) a direct folder load — re-picking the same
+   folder restores responses. Confirm a re-packed bundle with identical reports resumes the same
+   batch.
+7. **Report-pane acceptance:** in the review view, the full source report is visible with the
+   current finding's quote highlighted and auto-scrolled; the detail section reads "Evidence
+   quote"; unmatched/reconstructed states show their warning treatment.
 
 ### Phase 6 — Documentation
 1. Mark this plan complete; update
@@ -335,8 +370,11 @@ and commit this phase.
    cross-link.
 2. `extraction_reviewer/README.md` + `REVIEWER_GUIDE.md`: document the wizard, CSV loading,
    browser-local persistence (and its `file://` limitation), the combined export, the three
-   verdicts (approve / flag / unsure) with the "what's in question" chips, and the keyboard
-   shortcuts.
+   verdicts (approve / flag / unsure) with the "what's in question" chips, the keyboard
+   shortcuts, and the review-view report pane. **Verify the persistence promise in the guide
+   matches final behavior on every load path** (with universal autosave it becomes true —
+   keep the wording, add the direct-load "re-pick the folder to resume" nuance and the
+   best-effort `file://` storage caveat encouraging periodic export).
 3. `docs/DEV_LOG.md` entry.
 4. Taskfile target `review:build` rides along.
 5. No CHANGELOG entry — internal tooling.
@@ -350,6 +388,9 @@ and commit this phase.
   keyboard triage remains a one-key action.
 - Changing a response to approved clears any prior `flag_targets`, preventing stale question categories from
   being exported on an approved response.
+- Non-CSV batch identity hashes the UTF-8 encoding of newline-joined, lexicographically sorted extraction-file
+  content hashes. Companion source-text files are excluded, so reopening or repacking the same extraction set
+  resolves to the same saved review while freshly loaded source text retains its normal precedence.
 
 ## Risks / open questions
 
@@ -384,4 +425,8 @@ and commit this phase.
 - Three verdicts (`approved` / `flagged` / `unsure`) with optional `flag_targets` captured,
   persisted, and exported at `app_version` 1.2; keyboard triage (arrows + `a`/`f`/`u`) works with
   keys shown on the verdict buttons.
+- Autosave covers every load path (CSV wizard, embedded bundle, direct load) with content-derived
+  batch identity; the guide's persistence promise is true as written.
+- The review view shows the full source report with the current quote highlighted; the quote
+  section is labeled "Evidence quote".
 - Verified against representative fixtures; no extraction-tool code pulled into this workstream.

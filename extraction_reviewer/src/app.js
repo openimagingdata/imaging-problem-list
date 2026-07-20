@@ -27,6 +27,7 @@
     invalidResults: [],
     extractionSet: [],
     csv: null,
+    localBatch: null,
     wizardStep: 1,
     joinSummary: null,
     savedBatchCandidate: null,
@@ -64,8 +65,10 @@
     wizardSteps: [1, 2, 3].map((n) => document.getElementById(`wizardStep${n}`)),
     progressSteps: [1, 2, 3].map((n) => document.getElementById(`progressStep${n}`)),
     pickFilesBtn: document.getElementById('pickFilesBtn'),
+    pickCompatFolderBtn: document.getElementById('pickCompatFolderBtn'),
     folderInput: document.getElementById('folderInput'),
     filesInput: document.getElementById('filesInput'),
+    compatFolderInput: document.getElementById('compatFolderInput'),
     loadErrors: document.getElementById('loadErrors'),
     reviewerInput: document.getElementById('reviewerInput'),
     addFilesBtn: document.getElementById('addFilesBtn'),
@@ -219,16 +222,26 @@
     return state.files.map((file) => ({ ...file }));
   }
 
+  function currentBatchId() {
+    return state.csv?.batchId || state.localBatch?.batchId || null;
+  }
+
+  function currentBatchLabel() {
+    return state.csv?.filename || state.localBatch?.label || 'Review batch';
+  }
+
   function buildBatchPayload() {
-    if (!state.csv?.batchId) return null;
+    const batchId = currentBatchId();
+    if (!batchId) return null;
     return {
-      batchId: state.csv.batchId,
-      csvFilename: state.csv.filename,
-      csvText: state.csv.text,
-      csvHeaders: state.csv.headers,
-      csvRecords: state.csv.records,
-      idColumnIndex: state.csv.idColumnIndex,
-      textColumnIndex: state.csv.textColumnIndex,
+      batchId,
+      batchKind: state.csv ? 'csv' : state.localBatch.kind,
+      csvFilename: currentBatchLabel(),
+      csvText: state.csv?.text ?? null,
+      csvHeaders: state.csv?.headers ?? null,
+      csvRecords: state.csv?.records ?? null,
+      idColumnIndex: state.csv?.idColumnIndex ?? null,
+      textColumnIndex: state.csv?.textColumnIndex ?? null,
       manifest: state.manifest,
       files: serializeFiles(),
       invalidResults: state.invalidResults,
@@ -249,7 +262,7 @@
 
   let saveTimer = null;
   function scheduleBatchSave() {
-    if (!state.csv?.batchId || !state.files.length) return;
+    if (!currentBatchId() || !state.files.length) return;
     window.clearTimeout(saveTimer);
     saveTimer = window.setTimeout(() => {
       saveCurrentBatch();
@@ -337,15 +350,21 @@
   }
 
   function restoreBatch(payload, { openReview = false } = {}) {
-    state.csv = {
-      filename: payload.csvFilename,
-      text: payload.csvText,
-      batchId: payload.batchId,
-      headers: payload.csvHeaders,
-      records: payload.csvRecords,
-      idColumnIndex: payload.idColumnIndex,
-      textColumnIndex: payload.textColumnIndex,
-    };
+    const isCsvBatch = payload.batchKind ? payload.batchKind === 'csv' : payload.csvText != null;
+    state.csv = isCsvBatch
+      ? {
+          filename: payload.csvFilename,
+          text: payload.csvText,
+          batchId: payload.batchId,
+          headers: payload.csvHeaders,
+          records: payload.csvRecords,
+          idColumnIndex: payload.idColumnIndex,
+          textColumnIndex: payload.textColumnIndex,
+        }
+      : null;
+    state.localBatch = isCsvBatch
+      ? null
+      : { batchId: payload.batchId, label: payload.csvFilename, kind: payload.batchKind || 'direct' };
     state.manifest = payload.manifest || [];
     state.files = payload.files || [];
     state.invalidResults = payload.invalidResults || [];
@@ -366,6 +385,28 @@
         .sort()
         .join('\n');
     return normalize(left) === normalize(right);
+  }
+
+  async function deriveLocalBatchId() {
+    const hashes = state.files.map((file) => file.contentHash || file.sha1).sort();
+    return sha256Hex(new TextEncoder().encode(hashes.join('\n')));
+  }
+
+  async function prepareLocalBatch({ label, kind, offerResume = false }) {
+    if (!state.files.length || state.csv) return false;
+    const batchId = await deriveLocalBatchId();
+    state.localBatch = { batchId, label, kind };
+    const saved = await getSavedBatch(batchId).catch(() => null);
+    if (!saved) return false;
+    if (offerResume && !window.confirm(`Resume the saved review for ${label}?`)) return false;
+    state.reviews = saved.reviews || {};
+    for (const file of state.files) ensureReview(file.sha1);
+    state.selection = saved.selection || firstSelection();
+    state.reviewer = saved.reviewer || state.reviewer;
+    state.prefs.reviewer = state.reviewer;
+    persistPreferences();
+    enterReview({ preserveSelection: true });
+    return true;
   }
 
   function findingStableKey(finding, index) {
@@ -695,7 +736,7 @@
     return errors;
   }
 
-  async function handleLoadedFiles(fileList) {
+  async function handleLoadedFiles(fileList, { label = null, kind = 'direct', offerResume = false } = {}) {
     const reviewerValue = (el.landingReviewer.value || '').trim();
     if (reviewerValue) {
       state.reviewer = reviewerValue;
@@ -704,6 +745,9 @@
     const errors = await loadFileList(fileList);
     showLoadErrors(errors);
     if (!state.files.length) return;
+
+    const batchLabel = label || (fileList.length === 1 ? fileList[0].name : `Direct files (${fileList.length})`);
+    if (await prepareLocalBatch({ label: batchLabel, kind, offerResume })) return;
 
     const wasOnLanding = !isInApp();
     if (wasOnLanding) {
@@ -715,6 +759,7 @@
     }
     applyAutoCollapse();
     render();
+    scheduleBatchSave();
     if (wasOnLanding) maybeShowGuideOnFirstVisit();
   }
 
@@ -732,7 +777,7 @@
     applyAutoCollapse();
     render();
     scheduleBatchSave();
-    if (el.deleteBatchBtn) el.deleteBatchBtn.style.display = state.csv?.batchId ? '' : 'none';
+    if (el.deleteBatchBtn) el.deleteBatchBtn.style.display = currentBatchId() ? '' : 'none';
     maybeShowGuideOnFirstVisit();
   }
 
@@ -813,6 +858,7 @@
         idColumnIndex,
         textColumnIndex,
       };
+      state.localBatch = null;
       const savedEntry = state.batchIndex.find((entry) => entry.batchId === batchId);
       if (savedEntry) {
         const saved = await getSavedBatch(batchId).catch(() => null);
@@ -852,6 +898,38 @@
     };
     const label = labels[file.reportSourceKind] || 'Source text unavailable';
     return `<div class="source-banner"><strong>Source:</strong> ${escapeHtml(label)}${file.reportSourceName ? ` · ${escapeHtml(file.reportSourceName)}` : ''}</div>`;
+  }
+
+  function sourceReportHtml(file, { quote = '', textId = 'sourceReportText', captureHint = false } = {}) {
+    if (!file.reportText) {
+      return `<div class="missing-report missing-report-absent">
+        <div class="section-title">Source report</div>
+        <p class="hint" style="margin:0;">No source report text is available for this extraction.</p>
+      </div>`;
+    }
+    const quoteIndex = quote ? file.reportText.indexOf(quote) : -1;
+    const reportHtml =
+      quoteIndex >= 0
+        ? escapeHtml(file.reportText.slice(0, quoteIndex)) +
+          `<mark class="current-quote">${escapeHtml(quote)}</mark>` +
+          escapeHtml(file.reportText.slice(quoteIndex + quote.length))
+        : escapeHtml(file.reportText);
+    const warning = file.reportIsReconstructed
+      ? '<div class="source-report-warning">This report was reconstructed from extraction snippets and may be incomplete.</div>'
+      : quote && quoteIndex < 0
+        ? '<div class="source-report-warning">The evidence quote was not found verbatim in this source report.</div>'
+        : '';
+    return `<div class="missing-report">
+      <div class="missing-report-head">
+        <div class="section-title">Source report</div>
+        ${file.reportSourceName ? `<span class="report-source">${escapeHtml(file.reportSourceName)}</span>` : ''}
+        ${file.reportIsReconstructed ? '<span class="report-reconstructed">reconstructed</span>' : ''}
+      </div>
+      ${sourceBannerHtml(file)}
+      ${warning}
+      <div class="missing-report-text" id="${textId}">${reportHtml}</div>
+      ${captureHint ? '<div class="hint">Highlight any text above to capture it as the supporting quote. Re-highlight to replace.</div>' : ''}
+    </div>`;
   }
 
   function resolveWizardJoin() {
@@ -1403,8 +1481,6 @@
       : '';
 
     const codingHtml = renderCoding(finding.coding);
-    const sourceBanner = sourceBannerHtml(file);
-
     const ctxEntries = nonFindingText
       .map(
         (nt) => `
@@ -1432,7 +1508,7 @@
               finding.report_text
                 ? `
               <div class="section">
-                <div class="section-title">Report text</div>
+                <div class="section-title">Evidence quote</div>
                 <div class="quote">${escapeHtml(finding.report_text)}</div>
               </div>`
                 : ''
@@ -1464,7 +1540,7 @@
             }
             ${examStrip}
             ${reportNoteHtml(file)}
-            ${sourceBanner}
+            ${sourceReportHtml(file, { quote: finding.report_text || '' })}
             ${
               ctxEntries
                 ? `
@@ -1544,6 +1620,13 @@
       if (b) b.focus();
     });
     wireReportNote(file);
+    const currentQuote = document.querySelector('#sourceReportText mark.current-quote');
+    if (currentQuote) {
+      window.requestAnimationFrame(() => {
+        const report = document.getElementById('sourceReportText');
+        if (report) report.scrollTop = currentQuote.offsetTop - report.clientHeight / 2;
+      });
+    }
   }
 
   function statusChipHtml(response, draft) {
@@ -1631,21 +1714,7 @@
       )
       .join('');
 
-    const reportBlock = file.reportText
-      ? `<div class="missing-report">
-           <div class="missing-report-head">
-             <div class="section-title">Source report</div>
-             ${file.reportSourceName ? `<span class="report-source">${escapeHtml(file.reportSourceName)}</span>` : ''}
-             ${file.reportIsReconstructed ? `<span class="report-reconstructed" title="Pieced together from extraction snippets">reconstructed</span>` : ''}
-           </div>
-           ${sourceBannerHtml(file)}
-           <div class="missing-report-text" id="missReportText">${escapeHtml(file.reportText)}</div>
-           <div class="hint">Highlight any text above to capture it as the supporting quote. Re-highlight to replace.</div>
-         </div>`
-      : `<div class="missing-report missing-report-absent">
-           <div class="section-title">Source report</div>
-           <p class="hint" style="margin:0;">No paired report loaded. Drop a <code>.txt</code> or <code>.md</code> file whose basename matches <code>${escapeHtml(basenameWithoutExt(file.name))}</code> to see the full report here.</p>
-         </div>`;
+    const reportBlock = sourceReportHtml(file, { textId: 'missReportText', captureHint: true });
 
     el.content.innerHTML = `
       <div class="missing-panel">
@@ -2118,6 +2187,7 @@
 
   el.pickResultsBtn.addEventListener('click', () => el.folderInput.click());
   el.pickFilesBtn.addEventListener('click', () => el.filesInput.click());
+  el.pickCompatFolderBtn.addEventListener('click', () => el.compatFolderInput.click());
   el.folderInput.addEventListener('change', async (ev) => {
     const files = Array.from(ev.target.files || []);
     ev.target.value = '';
@@ -2141,6 +2211,14 @@
     ev.target.value = '';
     await handleLoadedFiles(files);
   });
+  if (el.compatFolderInput) {
+    el.compatFolderInput.addEventListener('change', async (ev) => {
+      const files = Array.from(ev.target.files || []);
+      ev.target.value = '';
+      const label = relativePathFor(files[0]).split('/')[0] || 'Direct folder';
+      await handleLoadedFiles(files, { label, kind: 'direct' });
+    });
+  }
 
   el.landingReviewer.addEventListener('input', () => {
     state.reviewer = el.landingReviewer.value;
@@ -2167,10 +2245,11 @@
     exportZip();
   });
   el.deleteBatchBtn.addEventListener('click', async () => {
-    const batchId = state.csv?.batchId;
+    const batchId = currentBatchId();
     if (!batchId || !window.confirm('Delete this saved review batch from this browser?')) return;
     window.clearTimeout(saveTimer);
     state.csv = null;
+    state.localBatch = null;
     await deleteBatch(batchId);
     window.location.reload();
   });
@@ -2211,7 +2290,13 @@
           },
         });
       }
-      if (files.length) await handleLoadedFiles(files);
+      if (files.length) {
+        await handleLoadedFiles(files, {
+          label: 'Embedded review bundle',
+          kind: 'embedded',
+          offerResume: true,
+        });
+      }
     } catch (e) {
       showLoadErrors([`embedded bundle failed to load: ${e.message || e}`]);
     }

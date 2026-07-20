@@ -1589,6 +1589,21 @@ details.report-context[open] summary {
   padding: 0 2px;
   border-radius: 2px;
 }
+.missing-report-text mark.current-quote {
+  background: #fde68a;
+  color: inherit;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+.source-report-warning {
+  border: 1px solid #efcf98;
+  border-radius: 8px;
+  background: var(--warning-soft);
+  color: var(--warning);
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
 .missing-report-absent {
   display: grid;
   gap: 6px;
