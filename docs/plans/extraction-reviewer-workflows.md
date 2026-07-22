@@ -17,7 +17,10 @@ Decisions made:
 1. [x] Copy `extraction_reviewer/` + `docs/plans/extraction-reviewer.md` verbatim from the worktree (excluding gitignored build output)
 2. [x] Re-apply shared-file edits: `package.json` lint/format globs; `.gitignore` (`.codex/`, build output); DEV_LOG 2026-04-17 entry in chronological position
 3. [x] Verify: `uv run pytest` (742 passed), eslint/htmlhint/prettier over the new globs, `build.py` smoke (667.8 KB), `pack.py --embed` smoke against the bundled samples
-4. [ ] Merge to dev; remove the `feature/review-maker` branch + `../imaging-problem-list-review` worktree (`wt`)
+4. [x] Merged to dev 2026-07-21 (`ba5a24b`) — including the CSV review workflow, Phase 0 UX
+   round, and live-review hardening. Remaining cleanup (awaiting explicit approval): remove the
+   `feature/review-maker` branch + `../imaging-problem-list-review` worktree, and optionally the
+   merged `feature/extraction-reviewer` branch.
 
 Deferred from the old branch: nothing else — the samples ship as-is (they predate the example2 laterality/typo fixes; refreshing them happens naturally in Phase B when gold work touches sample data).
 
