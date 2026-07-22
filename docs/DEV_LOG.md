@@ -4,6 +4,17 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-07-21 — Reviewer live-review hardening + manifest-less CSV join
+
+An owner live-review session surfaced four works-on-fixtures/fails-on-reality bugs in the extraction reviewer, all fixed and verified same-day (details: findings 18–21 in [plans/extraction-reviewer-ux.md](plans/extraction-reviewer-ux.md)):
+
+- Startup dialog pile-up eliminated: saved work resumes silently on content-identity paths; the CSV wizard offers resume via a non-blocking inline notice; native prompts remain only for destructive actions.
+- Source-report auto-scroll fixed for reports longer than the pane (container-relative geometry; previously only quotes near the report's end were ever scrolled into view).
+- Wizard step 2 can no longer fail silently (explicit diagnostics for unrecognized folders, manifest found/missing surfaced) and can no longer clobber a live session (state snapshot/restore around the add-files modal). A global error strip now surfaces any swallowed runtime failure.
+- **CSV join works without a manifest**: `csv_inputs_manifest.json` is now preferred rather than required — manifest-less results folders match rows to files by sanitized-id filename (exact, then unambiguous prefix); exports carry `join_method` per report. Source text picks raw vs. normalized CSV text by quote presence, so extractions produced outside the CSV pipeline highlight correctly.
+
+---
+
 ## 2026-07-20 — CSV-aware extraction reviewer
 
 - Added a three-step offline CSV/results-directory wizard with manifest-row joining, staged-text precedence, BOM-safe parsing, and a pre-review quote check.

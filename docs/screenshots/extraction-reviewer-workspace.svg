@@ -1,0 +1,214 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 880" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <style>
+      .panel { fill: #ffffff; stroke: #d1d5db; stroke-width: 1.5; }
+      .panel-dark { fill: #f8fafc; stroke: #d1d5db; stroke-width: 1.5; }
+      .title { font-size: 14px; font-weight: 700; fill: #111827; }
+      .label { font-size: 10.5px; font-weight: 700; fill: #6b7280; letter-spacing: 0.06em; }
+      .body-text { font-size: 12px; fill: #374151; }
+      .small { font-size: 11px; fill: #6b7280; }
+      .tiny { font-size: 10px; fill: #9ca3af; }
+      .annotation { font-size: 12.5px; fill: #1d4ed8; font-weight: 600; }
+      .chip { fill: #f3f4f6; }
+      .chip-text { font-size: 11px; font-weight: 500; fill: #4b5563; }
+      .chip-active { fill: #2563eb; }
+      .chip-active-text { font-size: 11px; font-weight: 600; fill: #ffffff; }
+      .chip-green { fill: #dcfce7; }
+      .chip-green-text { font-size: 11px; font-weight: 600; fill: #15803d; }
+      .chip-amber { fill: #fef3c7; }
+      .chip-amber-text { font-size: 11px; font-weight: 600; fill: #b45309; }
+      .hl { fill: #fef9c3; stroke: #eab308; stroke-width: 1.5; }
+      .hl-dim { fill: #fefce8; }
+      .btn { fill: #16a34a; }
+      .btn-text { font-size: 12px; font-weight: 700; fill: #ffffff; }
+      .btn-ghost { fill: #ffffff; stroke: #d1d5db; stroke-width: 1.5; }
+      .btn-ghost-text { font-size: 11.5px; font-weight: 600; fill: #374151; }
+      .btn-flag { fill: #ffffff; stroke: #f59e0b; stroke-width: 1.5; }
+      .btn-flag-text { font-size: 11.5px; font-weight: 600; fill: #b45309; }
+      .leader { stroke: #2563eb; stroke-width: 1.5; fill: none; marker-end: url(#arrow); stroke-dasharray: 4 3; }
+      .row { fill: #ffffff; }
+      .row-sel { fill: #eff6ff; stroke: #93c5fd; stroke-width: 1.5; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="880" fill="#eef2f7"/>
+
+  <!-- ===== top bar ===== -->
+  <rect x="0" y="0" width="1280" height="54" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="20" y="33" font-size="15" font-weight="800" fill="#111827">Extraction Review</text>
+  <text x="180" y="33" class="small">us_abdomen_20220208.coded.json &#183; Finding 2 of 35</text>
+  <text x="180" y="48" class="tiny">US Abdomen</text>
+  <rect x="1120" y="14" width="66" height="26" rx="6" class="btn-ghost"/>
+  <text x="1153" y="31" text-anchor="middle" class="btn-ghost-text">+ Add files</text>
+  <rect x="1196" y="14" width="56" height="26" rx="6" class="btn-ghost"/>
+  <text x="1224" y="31" text-anchor="middle" class="btn-ghost-text">? Help</text>
+
+  <!-- ===== SIDEBAR ===== -->
+  <rect x="12" y="66" width="216" height="792" class="panel-dark" rx="8"/>
+  <!-- stats -->
+  <circle cx="34" cy="92" r="8" fill="#e5e7eb"/><text x="48" y="96" class="body-text">33 pending</text>
+  <circle cx="34" cy="114" r="8" fill="#22c55e"/><text x="48" y="118" class="body-text">1 approved</text>
+  <circle cx="34" cy="136" r="8" fill="#f59e0b"/><text x="48" y="140" class="body-text">1 flagged</text>
+  <circle cx="34" cy="158" r="8" fill="#a855f7"/><text x="48" y="162" class="body-text">0 unsure</text>
+
+  <rect x="24" y="174" width="192" height="26" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="34" y="191" class="tiny">reviewer identifier</text>
+  <rect x="24" y="206" width="192" height="28" rx="6" fill="#93c5fd"/>
+  <text x="120" y="224" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffffff">Download review (.zip)</text>
+
+  <!-- NEW: filter chips -->
+  <rect x="24" y="246" width="44" height="20" rx="10" class="chip-active"/>
+  <text x="46" y="260" text-anchor="middle" class="chip-active-text">All</text>
+  <rect x="72" y="246" width="66" height="20" rx="10" class="chip"/>
+  <text x="105" y="260" text-anchor="middle" class="chip-text">Pending 33</text>
+  <rect x="142" y="246" width="60" height="20" rx="10" class="chip"/>
+  <text x="172" y="260" text-anchor="middle" class="chip-text">Flagged 1</text>
+  <rect x="24" y="272" width="192" height="22" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="32" y="287" class="tiny">Filter findings&#8230;</text>
+
+  <!-- file header with promoted missing-findings button + resume -->
+  <rect x="24" y="304" width="192" height="66" rx="8" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="34" y="324" font-size="11.5" font-weight="700" fill="#111827">us_abdomen_20220208&#8230;</text>
+  <text x="34" y="339" class="tiny">US Abdomen &#183; 2/35 reviewed</text>
+  <rect x="34" y="346" width="104" height="18" rx="9" class="chip"/>
+  <text x="86" y="359" text-anchor="middle" class="chip-text">+ Missing (0)</text>
+  <rect x="142" y="346" width="66" height="18" rx="9" class="chip-blue" fill="#dbeafe"/>
+  <text x="175" y="359" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1d4ed8">Resume &#8250;</text>
+
+  <!-- finding rows -->
+  <rect x="24" y="380" width="192" height="30" rx="6" class="row"/>
+  <circle cx="38" cy="395" r="5" fill="#22c55e"/>
+  <text x="50" y="392" font-size="11.5" font-weight="600" fill="#111827">hepatomegaly</text>
+  <text x="50" y="404" class="tiny">absent &#183; liver</text>
+
+  <rect x="24" y="414" width="192" height="30" rx="6" class="row-sel"/>
+  <circle cx="38" cy="429" r="5" fill="#e5e7eb"/>
+  <text x="50" y="426" font-size="11.5" font-weight="600" fill="#111827">hepatic steatosis</text>
+  <text x="50" y="438" class="tiny">present &#183; hepatic parenchyma</text>
+
+  <rect x="24" y="448" width="192" height="30" rx="6" class="row"/>
+  <circle cx="38" cy="463" r="5" fill="#f59e0b"/>
+  <text x="50" y="460" font-size="11.5" font-weight="600" fill="#111827">hepatic mass</text>
+  <text x="50" y="472" class="tiny">absent &#183; liver</text>
+
+  <rect x="24" y="482" width="192" height="30" rx="6" class="row"/>
+  <circle cx="38" cy="497" r="5" fill="#e5e7eb"/>
+  <text x="50" y="494" font-size="11.5" font-weight="600" fill="#111827">hepatic vein patency</text>
+  <text x="50" y="506" class="tiny">present &#183; hepatic veins</text>
+  <text x="28" y="532" class="tiny">&#8942; 31 more</text>
+
+  <!-- ===== REPORT PANE (NEW, sticky) ===== -->
+  <rect x="240" y="66" width="420" height="792" class="panel" rx="8"/>
+  <text x="258" y="94" class="title">Source Report</text>
+  <text x="372" y="94" class="tiny">paired &#183; us_abdomen_20220208.txt</text>
+  <rect x="540" y="80" width="104" height="20" rx="10" class="chip"/>
+  <text x="592" y="94" text-anchor="middle" class="chip-text">35 quotes linked</text>
+
+  <text x="258" y="122" class="body-text" font-weight="600">FINAL REPORT</text>
+  <text x="258" y="142" class="body-text">EXAMINATION: US ABDOMEN</text>
+  <text x="258" y="162" class="body-text">FINDINGS:</text>
+  <text x="258" y="182" class="body-text">The liver is normal in size measuring</text>
+  <text x="258" y="198" class="body-text">16 cm in craniocaudal dimension.</text>
+
+  <!-- current finding quote: strong highlight -->
+  <rect x="252" y="206" width="396" height="52" rx="4" class="hl"/>
+  <text x="260" y="226" class="body-text" font-weight="600">The hepatic parenchyma demonstrates</text>
+  <text x="260" y="242" class="body-text" font-weight="600">diffusely increased echogenicity</text>
+  <text x="260" y="256" class="body-text" font-weight="600">consistent with hepatic steatosis.</text>
+
+  <!-- previously reviewed quote: dim highlight -->
+  <rect x="252" y="268" width="396" height="36" rx="4" class="hl-dim"/>
+  <text x="260" y="284" class="body-text">No focal mass lesion identified.</text>
+  <text x="260" y="298" class="tiny">reviewed &#10003; (dimmed once decided)</text>
+
+  <text x="258" y="330" class="body-text">The hepatic veins and portal vein are</text>
+  <text x="258" y="346" class="body-text">patent with normal flow direction.</text>
+  <text x="258" y="374" class="body-text">IMPRESSION:</text>
+  <text x="258" y="394" class="body-text">1. Hepatic steatosis.</text>
+
+  <text x="258" y="840" class="tiny">Sticky pane: auto-scrolls so the selected finding&#8217;s quote is in view.</text>
+  <text x="258" y="856" class="tiny">Unmatched/reconstructed quotes show a warning chip instead of a highlight.</text>
+
+  <!-- ===== FINDING DETAIL ===== -->
+  <rect x="672" y="66" width="352" height="560" class="panel" rx="8"/>
+  <text x="690" y="94" class="label">EVIDENCE QUOTE</text>
+  <rect x="690" y="102" width="316" height="40" rx="6" fill="#f8fafc" stroke="#e5e7eb"/>
+  <text x="700" y="119" font-size="11.5" font-style="italic" fill="#4b5563">&#8220;&#8230;diffusely increased echogenicity</text>
+  <text x="700" y="134" font-size="11.5" font-style="italic" fill="#4b5563">consistent with hepatic steatosis.&#8221;</text>
+
+  <circle cx="700" cy="168" r="6" fill="#e5e7eb"/>
+  <text x="714" y="174" font-size="16" font-weight="800" fill="#111827">hepatic steatosis</text>
+  <rect x="856" y="158" width="64" height="20" rx="10" class="chip-green"/>
+  <text x="888" y="172" text-anchor="middle" class="chip-green-text">PRESENT</text>
+  <rect x="928" y="158" width="62" height="20" rx="10" fill="#dbeafe"/>
+  <text x="959" y="172" text-anchor="middle" font-size="10" font-weight="600" fill="#1d4ed8">FINDINGS</text>
+
+  <rect x="690" y="188" width="196" height="20" rx="10" class="chip"/>
+  <text x="788" y="202" text-anchor="middle" class="chip-text">ANATOMY hepatic parenchyma</text>
+  <rect x="894" y="188" width="112" height="20" rx="10" class="chip"/>
+  <text x="950" y="202" text-anchor="middle" class="chip-text">REGION abdomen</text>
+
+  <text x="690" y="230" class="label">ATTRIBUTES</text>
+  <text x="690" y="250" class="small">MORPHOLOGY</text>
+  <text x="800" y="250" class="body-text">diffusely increased echogenicity</text>
+
+  <text x="690" y="278" class="label">CODING</text>
+  <rect x="690" y="286" width="316" height="34" rx="6" fill="#f8fafc" stroke="#e5e7eb"/>
+  <text x="700" y="301" class="tiny">FINDING</text>
+  <rect x="744" y="291" width="42" height="16" rx="8" class="chip-green"/>
+  <text x="765" y="302" text-anchor="middle" font-size="9.5" font-weight="600" fill="#15803d">coded</text>
+  <text x="792" y="303" font-size="11.5" font-weight="600" fill="#111827">fatty liver</text>
+  <text x="856" y="303" class="tiny">OIFM_GMTS_022461</text>
+  <rect x="690" y="326" width="316" height="30" rx="6" fill="#f8fafc" stroke="#e5e7eb"/>
+  <text x="700" y="345" class="tiny">LOCATION</text>
+  <rect x="752" y="333" width="42" height="16" rx="8" class="chip-green"/>
+  <text x="773" y="344" text-anchor="middle" font-size="9.5" font-weight="600" fill="#15803d">coded</text>
+  <text x="800" y="345" font-size="11.5" font-weight="600" fill="#111827">liver</text>
+  <text x="836" y="345" class="tiny">RID58</text>
+
+  <rect x="690" y="368" width="316" height="30" rx="6" fill="#f8fafc" stroke="#e5e7eb"/>
+  <text x="700" y="387" class="tiny">EXAM</text>
+  <text x="744" y="388" class="small">US Abdomen &#183; 2022-02-08 &#183; US &#183; abdomen</text>
+
+  <text x="690" y="424" class="label">REVIEWER COMMENT</text>
+  <rect x="690" y="432" width="316" height="70" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="700" y="452" class="tiny">Optional review notes. Drafts save automatically.</text>
+
+  <!-- actions: keyboard-first -->
+  <rect x="690" y="516" width="98" height="32" rx="6" class="btn"/>
+  <text x="739" y="537" text-anchor="middle" class="btn-text">Approve (A)</text>
+  <rect x="796" y="516" width="76" height="32" rx="6" class="btn-flag"/>
+  <text x="834" y="537" text-anchor="middle" class="btn-flag-text">Flag (F)</text>
+  <rect x="880" y="516" width="86" height="32" rx="6" class="btn-ghost"/>
+  <text x="923" y="537" text-anchor="middle" class="btn-ghost-text">Unsure (U)</text>
+  <text x="690" y="570" class="tiny">&#8593;/&#8595; or J/K prev/next &#183; decision jumps to next pending</text>
+
+  <rect x="690" y="588" width="316" height="26" rx="6" class="btn-ghost"/>
+  <text x="848" y="605" text-anchor="middle" class="btn-ghost-text">+ Add report note</text>
+
+  <!-- ===== annotations ===== -->
+  <text x="30" y="706" class="annotation">Sidebar upgrades:</text>
+  <text x="30" y="724" class="annotation">filters, search, Resume,</text>
+  <text x="30" y="742" class="annotation">Missing promoted to file card</text>
+  <path class="leader" d="M 120 696 L 120 380"/>
+
+  <text x="270" y="700" class="annotation">NEW: permanent report pane</text>
+  <text x="270" y="718" class="annotation">(was only in Missing-findings view)</text>
+  <path class="leader" d="M 420 690 L 440 270"/>
+
+  <text x="1050" y="180" class="annotation">Detail column keeps existing</text>
+  <text x="1050" y="198" class="annotation">blocks; quote relabeled</text>
+  <text x="1050" y="216" class="annotation">&#8220;Evidence quote&#8221; (was &#8220;Report text&#8221;)</text>
+  <path class="leader" d="M 1044 190 L 1010 150"/>
+
+  <text x="1050" y="520" class="annotation">Action rail folds into detail</text>
+  <text x="1050" y="538" class="annotation">column on medium widths;</text>
+  <text x="1050" y="556" class="annotation">keyboard shortcuts unchanged</text>
+  <path class="leader" d="M 1044 530 L 980 530"/>
+
+  <rect x="12" y="866" width="1256" height="1" fill="#d1d5db"/>
+  <text x="12" y="878" class="tiny">Wireframe: proposed extraction-reviewer workspace (wide viewport, 4 zones: sidebar / report / detail+actions). Narrow: report becomes a collapsible drawer above the detail; sidebar becomes an overlay drawer.</text>
+</svg>

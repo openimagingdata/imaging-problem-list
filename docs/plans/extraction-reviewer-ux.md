@@ -74,6 +74,57 @@ Wireframe of the proposed workspace: [../screenshots/extraction-reviewer-workspa
     cram batch management into the review surface; mid-session loading belongs in a modal.
 17. **The in-app help is a wall.** Five pages of dense text defeats its first-run purpose. It
     should be three panels — ≤4 bullets and one image each — with deeper topics behind links.
+18. **Startup dialog pile-up (found in live review, 2026-07-21; fixed same day).** Reopening an
+    embedded bundle with a saved batch but no reviewer set stacked three layers: the identity
+    modal, a native `window.confirm("Resume the saved review…?")` on top of it, and the CSV
+    wizard landing behind both. Root cause: the embedded auto-load path interrupted startup with
+    a blocking native prompt, racing the identity flow; the Phase 0 acceptance matrix missed the
+    saved-batch + no-reviewer reopen state. **Fix:** saved work now resumes *silently* on all
+    content-identity paths (embedded, direct) — nothing to ask, the content hash already proves
+    it's the same batch; the CSV wizard's re-pick prompt became a non-blocking inline
+    "Saved review found for this CSV — Resume / continue to load a results folder" notice, which
+    keeps the drift-replace path reachable. Native `confirm()` remains only for genuinely
+    destructive actions (delete batch, drift replace). Verified: the exact failure sequence now
+    yields one dialog (identity) over the resumed workspace, and a wizard re-pick after a saved
+    verdict shows the notice, resumes on click, and restores the verdict.
+19. **Source-report auto-scroll never worked on long reports (found in live review, 2026-07-21;
+    fixed same day).** The scroll used `mark.offsetTop`, which is relative to the nearest
+    *positioned* ancestor — not the scrolling container (`.missing-report-text` is unpositioned)
+    — so `scrollTop` always clamped to maximum and only quotes near the report's end were ever
+    visible. Every earlier verification used short fixture/reconstructed reports where the wrong
+    math clamps to sane values, so "auto-scroll verified" was trivially true. **Fix:**
+    container-relative `getBoundingClientRect()` delta math, centering the quote. Verified
+    against the long paired sample reports: four findings at different depths all render with
+    the highlight centered (±1px) and distinct scroll offsets. Lesson recorded: scroll-position
+    assertions are meaningless unless the fixture content overflows the container.
+20. **Wizard step 2 could fail in total silence — and quietly wreck the live session (found in
+    live review, 2026-07-21; fixed same day).** If the picked results folder yielded zero
+    recognized extraction files with no per-file errors (wrong folder level, JSONs without a
+    findings list, text-only contents), the Continue button simply never enabled — no summary,
+    no error, nothing. Worse, `loadFileList(replace: true)` wiped the live session state the
+    moment the folder was picked, so cancelling the modal left a zombie UI over empty state.
+    **Fixes:** (a) step 2 is never silent — a zero-result pick explains what was seen and what
+    was expected (file counts, skipped-JSON reasons, `*.extracted.json`/`*.coded.json` hint),
+    and the success summary now also reports manifest found/missing; (b) opening the add-files
+    modal snapshots the session and closing it without starting a review restores the snapshot —
+    the wizard can no longer destroy live work. Verified: bad-folder pick shows the explanation;
+    cancel restores a fully interactive session (verdict made post-restore); the happy path
+    through the modal still joins 2/1/1 and starts review.
+21. **The manifest was required when it should have been preferred (found in live review,
+    2026-07-21; fixed same day).** The CSV wizard hard-required `csv_inputs_manifest.json` — an
+    artifact only the *unmerged* windows-csv-handoff producer writes — so every results folder a
+    user can actually make today (plain `*.extracted.json` named by report id) dead-ended as
+    fully unmatched, violating the plan's own "how the JSONs were produced is irrelevant" scope
+    principle. All acceptance testing had used fixtures that simulate the unshipped producer.
+    **Fix: manifest preferred, filename fallback.** With no manifest, CSV ids are sanitized with
+    the producer's exact rules and matched to file stems (exact first, then unambiguous prefix;
+    duplicate sanitized ids and ambiguous pairings stay unmatched), case-insensitively. Source
+    text picks raw vs. normalized CSV text by which contains the file's first quote (non-pipeline
+    extractions quote raw text). Step 2 announces "manifest missing — will match rows by
+    filename"; Step 3 carries an explanatory note; exports carry `join_method`
+    ("manifest"/"filename") per report. Verified end-to-end on a manifest-less fixture (2 matched
+    by filename, unmatched row counted, spot-check passes on raw text, highlight visible, export
+    fields correct) with the manifest path regression-clean (2/1/1).
 
 ## Proposed design (see wireframe)
 
