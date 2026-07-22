@@ -1,0 +1,474 @@
+{
+  "exam_info": {
+    "study_description": "XR Chest PA and Lateral",
+    "study_date": "2021-06-14",
+    "modality": "XR",
+    "body_region": "chest",
+    "body_part": "chest",
+    "contrast": null,
+    "laterality": null
+  },
+  "findings": [
+    {
+      "finding_name": "airspace opacity",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "right lower lobe",
+        "laterality": "right"
+      },
+      "attributes": [
+        {
+          "key": "morphology",
+          "value": "focal"
+        }
+      ],
+      "report_text": "There is a focal airspace opacity in the right lower lobe consistent with pneumonia.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "pneumonia",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "right lower lobe",
+        "laterality": "right"
+      },
+      "attributes": [],
+      "report_text": "There is a focal airspace opacity in the right lower lobe consistent with pneumonia.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "pulmonary cavitation",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "lungs",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No cavitation.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "pulmonary parenchymal abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "left lung",
+        "laterality": "left"
+      },
+      "attributes": [],
+      "report_text": "The left lung is clear.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "pleural effusion",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "pleural space",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No pleural effusion or pneumothorax.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "pneumothorax",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "pleural space",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No pleural effusion or pneumothorax.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "cardiomegaly",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "heart",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "The heart size is normal.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "mitral annular calcification",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "mitral annulus",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "Mitral annular calcification is present.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "coronary artery calcification",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "coronary artery",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "severity",
+          "value": "mild"
+        }
+      ],
+      "report_text": "Mild coronary artery calcification.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "mediastinal abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "mediastinum",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "The mediastinal contours are unremarkable.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "aortic knob prominence",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "aortic knob",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "severity",
+          "value": "mildly"
+        }
+      ],
+      "report_text": "The aortic knob is mildly prominent.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "hilar abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "hila",
+        "laterality": "bilateral"
+      },
+      "attributes": [],
+      "report_text": "Normal hilar contours bilaterally.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "pleural abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "pleura",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No pleural abnormality.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "thoracic spine degenerative change",
+      "presence": "present",
+      "location": {
+        "body_region": "spine",
+        "specific_anatomy": "thoracic spine",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "count",
+          "value": "multilevel"
+        }
+      ],
+      "report_text": "Multilevel degenerative changes of the thoracic spine",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "bridging osteophytes",
+      "presence": "present",
+      "location": {
+        "body_region": "spine",
+        "specific_anatomy": "thoracic spine",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "morphology",
+          "value": "flowing anterior bridging"
+        }
+      ],
+      "report_text": "with flowing anterior bridging osteophytes",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "diffuse idiopathic skeletal hyperostosis (DISH)",
+      "presence": "present",
+      "location": {
+        "body_region": "spine",
+        "specific_anatomy": "thoracic spine",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "consistent with diffuse idiopathic skeletal hyperostosis (DISH).",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "vertebral compression fracture",
+      "presence": "present",
+      "location": {
+        "body_region": "spine",
+        "specific_anatomy": "T9 superior endplate",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "acute-appearing"
+        }
+      ],
+      "report_text": "An acute-appearing superior endplate compression fracture is present at T9.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "rib fracture",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "left 7th rib (posterolateral)",
+        "laterality": "left"
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "healed"
+        }
+      ],
+      "report_text": "Healed fractures of the left 7th and 8th ribs are noted posterolaterally.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "rib fracture",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "left 8th rib (posterolateral)",
+        "laterality": "left"
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "healed"
+        }
+      ],
+      "report_text": "Healed fractures of the left 7th and 8th ribs are noted posterolaterally.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "clavicle fracture",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "left mid clavicle",
+        "laterality": "left"
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "old healed"
+        }
+      ],
+      "report_text": "An old healed left mid-clavicular fracture is identified.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "osteopenia",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": null,
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "severity",
+          "value": "Moderate"
+        }
+      ],
+      "report_text": "Moderate osteopenia.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "soft tissue abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "soft tissues",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "Soft Tissues:\nUnremarkable.",
+      "source_section": "findings",
+      "coding": null
+    },
+    {
+      "finding_name": "pneumonia",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "right lower lobe",
+        "laterality": "right"
+      },
+      "attributes": [],
+      "report_text": "Right lower lobe pneumonia.",
+      "source_section": "impression",
+      "coding": null
+    },
+    {
+      "finding_name": "cardiac calcification",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "heart",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "Cardiac calcifications.",
+      "source_section": "impression",
+      "coding": null
+    },
+    {
+      "finding_name": "diffuse idiopathic skeletal hyperostosis (DISH)",
+      "presence": "present",
+      "location": {
+        "body_region": "spine",
+        "specific_anatomy": null,
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "DISH with extensive degenerative changes.",
+      "source_section": "impression",
+      "coding": null
+    },
+    {
+      "finding_name": "degenerative changes",
+      "presence": "present",
+      "location": {
+        "body_region": "spine",
+        "specific_anatomy": null,
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "severity",
+          "value": "extensive"
+        }
+      ],
+      "report_text": "extensive degenerative changes",
+      "source_section": "impression",
+      "coding": null
+    },
+    {
+      "finding_name": "vertebral compression fracture",
+      "presence": "present",
+      "location": {
+        "body_region": "spine",
+        "specific_anatomy": "T9 vertebra",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "acute"
+        }
+      ],
+      "report_text": "Acute T9 compression fracture.",
+      "source_section": "impression",
+      "coding": null
+    },
+    {
+      "finding_name": "rib fracture",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "left 7th and 8th ribs",
+        "laterality": "left"
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "healed"
+        },
+        {
+          "key": "count",
+          "value": "2"
+        }
+      ],
+      "report_text": "Healed left 7th and 8th rib fractures",
+      "source_section": "impression",
+      "coding": null
+    },
+    {
+      "finding_name": "clavicle fracture",
+      "presence": "present",
+      "location": {
+        "body_region": "chest",
+        "specific_anatomy": "left clavicle",
+        "laterality": "left"
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "healed"
+        }
+      ],
+      "report_text": "left clavicular fracture",
+      "source_section": "impression",
+      "coding": null
+    },
+    {
+      "finding_name": "osteopenia",
+      "presence": "present",
+      "location": null,
+      "attributes": [],
+      "report_text": "Osteopenia.",
+      "source_section": "impression",
+      "coding": null
+    }
+  ],
+  "non_finding_text": []
+}

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Extraction Review</title>
+    <style>
+      __STYLES__
+    </style>
+  </head>
+  <body>
+    __LANDING_HTML__ __APP_SHELL_HTML__
+
+    <dialog id="reviewerDialog" class="reviewer-dialog" aria-labelledby="reviewerDialogTitle">
+      <form id="reviewerForm" class="reviewer-dialog-frame">
+        <div class="reviewer-dialog-topbar">
+          <strong id="reviewerDialogTitle">Who&rsquo;s reviewing?</strong>
+          <button type="button" id="reviewerCancelBtn" class="dialog-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="reviewer-dialog-body">
+          <p>Enter the name that should appear in the review export.</p>
+          <label for="reviewerNameInput">Reviewer name</label>
+          <input id="reviewerNameInput" type="text" autocomplete="name" placeholder="e.g. Jane Doe" />
+          <div class="reviewer-dialog-actions">
+            <button type="submit" class="primary">Save reviewer</button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="loadDialog" class="load-dialog" aria-labelledby="loadDialogTitle">
+      <div class="load-dialog-frame">
+        <div class="load-dialog-topbar">
+          <strong id="loadDialogTitle">Add files</strong>
+          <button type="button" id="loadDialogCloseBtn" class="dialog-close" aria-label="Close">&times;</button>
+        </div>
+        <div id="loadDialogBody" class="load-dialog-body"></div>
+      </div>
+    </dialog>
+
+    <dialog id="helpDialog" class="help-dialog">
+      <div class="help-dialog-frame">
+        <div class="help-dialog-topbar">
+          <strong>Reviewer guide</strong>
+          <button type="button" id="helpCloseBtn" class="help-dialog-close" aria-label="Close">&times;</button>
+        </div>
+        <div id="helpTabs" class="help-tabs" role="tablist" aria-label="Reviewer guide sections">
+          <button type="button" role="tab" data-help-tab="0">Screen tour</button>
+          <button type="button" role="tab" data-help-tab="1">Reviewing &amp; keys</button>
+          <button type="button" role="tab" data-help-tab="2">Missing &amp; export</button>
+        </div>
+        <div class="help-dialog-body">
+          <div id="helpPanelStage">
+            <section class="help-panel" data-help-panel="0">
+              __GUIDE_SCREEN_TOUR__
+              <button type="button" class="help-more-link" data-help-more="csv">
+                More: CSV wizard details&hellip;
+              </button>
+            </section>
+            <section class="help-panel" data-help-panel="1" hidden>
+              __GUIDE_REVIEWING__
+              <button type="button" class="help-more-link" data-help-more="flagging">
+                More: What to write when flagging&hellip;
+              </button>
+            </section>
+            <section class="help-panel" data-help-panel="2" hidden>
+              __GUIDE_MISSING_EXPORT__
+              <button type="button" class="help-more-link" data-help-more="persistence">
+                More: Persistence &amp; resuming&hellip;
+              </button>
+            </section>
+          </div>
+          <div id="helpMoreStage" hidden>
+            <section class="help-more-panel" data-help-more-panel="persistence" hidden>
+              __GUIDE_MORE_PERSISTENCE__
+            </section>
+            <section class="help-more-panel" data-help-more-panel="csv" hidden>__GUIDE_MORE_CSV__</section>
+            <section class="help-more-panel" data-help-more-panel="flagging" hidden>__GUIDE_MORE_FLAGGING__</section>
+            <button type="button" id="helpMoreBackBtn" class="help-more-back">&larr; Back to quick guide</button>
+          </div>
+        </div>
+        <div id="helpFooter" class="help-footer">
+          <button type="button" id="helpPrevBtn">Previous</button>
+          <span id="helpProgress">1 of 3</span>
+          <button type="button" id="helpNextBtn" class="primary">Next</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script>
+      __VENDOR_ZIP_JS__;
+    </script>
+    <script>
+      window.APP_VERSION = '__APP_VERSION__';
+      window.EMBEDDED_BUNDLE_B64 = '__EMBEDDED_BUNDLE_B64__';
+      __APP_JS__;
+    </script>
+  </body>
+</html>

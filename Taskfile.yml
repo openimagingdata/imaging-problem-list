@@ -184,6 +184,11 @@ tasks:
     cmds:
       - uv run --env-file .env finding-extractor-batch run sample_data/example3 --glob "*.txt" --workers "${WORKERS:-4}" --model "${MODEL:-openai:gpt-5-mini}" --reasoning "${REASONING:-medium}" --validate --resume --mode interactive --allow-slow
 
+  review:build:
+    desc: Build the standalone offline extraction reviewer HTML
+    cmds:
+      - uv run python extraction_reviewer/build.py -o extraction_reviewer/extraction_reviewer.html
+
   stack:up:
     desc: Start backend docker stack (redis/api/worker) with DB migration preflight
     cmds:

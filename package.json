@@ -2,11 +2,11 @@
   "scripts": {
     "deploy": "wrangler pages deploy viewer --project-name=imaging-problem-list --branch=main",
     "deploy:v2": "wrangler pages deploy viewer_v2/dist --project-name=ipl-anatomy --branch=main",
-    "lint:js": "eslint extractor-ui viewer --ext .js,.ts",
-    "lint:html": "htmlhint \"extractor-ui/**/*.html\" \"viewer/**/*.html\"",
+    "lint:js": "eslint extractor-ui viewer extraction_reviewer/src --ext .js,.ts",
+    "lint:html": "htmlhint \"extractor-ui/**/*.html\" \"viewer/**/*.html\" \"extraction_reviewer/src/shell.html\"",
     "lint:web": "npm run lint:js && npm run lint:html",
-    "format:web": "prettier --write \"extractor-ui/**/*.{js,ts,css,html}\" \"viewer/**/*.{js,ts,css,html}\"",
-    "format:web:check": "prettier --check \"extractor-ui/**/*.{js,ts,css,html}\" \"viewer/**/*.{js,ts,css,html}\""
+    "format:web": "prettier --write \"extractor-ui/**/*.{js,ts,css,html}\" \"viewer/**/*.{js,ts,css,html}\" \"extraction_reviewer/src/**/*.{js,css,html}\"",
+    "format:web:check": "prettier --check \"extractor-ui/**/*.{js,ts,css,html}\" \"viewer/**/*.{js,ts,css,html}\" \"extraction_reviewer/src/**/*.{js,css,html}\""
   },
   "dependencies": {
     "@playwright/cli": "^0.1.0",

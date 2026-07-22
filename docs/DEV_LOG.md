@@ -4,6 +4,28 @@ Older entries through 2026-02-17 are archived in [archive/dev-log-through-2026-0
 
 ---
 
+## 2026-07-21 — Reviewer live-review hardening + manifest-less CSV join
+
+An owner live-review session surfaced four works-on-fixtures/fails-on-reality bugs in the extraction reviewer, all fixed and verified same-day (details: findings 18–21 in [plans/extraction-reviewer-ux.md](plans/extraction-reviewer-ux.md)):
+
+- Startup dialog pile-up eliminated: saved work resumes silently on content-identity paths; the CSV wizard offers resume via a non-blocking inline notice; native prompts remain only for destructive actions.
+- Source-report auto-scroll fixed for reports longer than the pane (container-relative geometry; previously only quotes near the report's end were ever scrolled into view).
+- Wizard step 2 can no longer fail silently (explicit diagnostics for unrecognized folders, manifest found/missing surfaced) and can no longer clobber a live session (state snapshot/restore around the add-files modal). A global error strip now surfaces any swallowed runtime failure.
+- **CSV join works without a manifest**: `csv_inputs_manifest.json` is now preferred rather than required — manifest-less results folders match rows to files by sanitized-id filename (exact, then unambiguous prefix); exports carry `join_method` per report. Source text picks raw vs. normalized CSV text by quote presence, so extractions produced outside the CSV pipeline highlight correctly.
+
+---
+
+## 2026-07-20 — CSV-aware extraction reviewer
+
+- Added a three-step offline CSV/results-directory wizard with manifest-row joining, staged-text precedence, BOM-safe parsing, and a pre-review quote check.
+- Added browser-local batch resume, drift replacement, deletion, and content-derived autosave for CSV, embedded-bundle, and direct-load workflows.
+- Added approved/flagged/unsure triage, optional questioned-attribute targets, keyboard navigation, report notes, missing findings, and a full source-report pane with evidence highlighting.
+- Added the authoritative combined JSON export (`app_version` 1.2), representative browser fixtures and screenshots, and the `review:build` Taskfile target.
+
+Plan: [plans/windows-csv-review-handoff.md](plans/windows-csv-review-handoff.md)
+
+---
+
 ## 2026-06-11 — Laterality + typo follow-up corrections (example2)
 
 Follow-up to the anatomic-location correction pass (commit `9e6c6de`).
@@ -159,6 +181,14 @@ Code changes:
 Catalog pruned of obsolete/dominated variants (qwen3.5 MLX-bf16 trio, gemma3:27b, llama3.3, deepseek-r1 32b/70b, community MedGemma uploads, gemma4 Q4_K_M, qwen3.6 q4_K_M/mxfp8/bf16 variants dominated by q8_0 on this hardware).
 
 Report: [eval-ollama-models-report.md](eval-ollama-models-report.md) (supersedes 2026-04-08 round).
+
+---
+
+## 2026-04-17 — Extraction reviewer MVP
+
+Landed a standalone single-file HTML tool at `extraction_reviewer/` for non-developer review of extraction JSONs. Reviewer opens one HTML, walks each finding (approve / flag with comment), logs missed findings per report, and downloads a zip of per-file review JSONs. Ships zero-install through `uv run python extraction_reviewer/pack.py --reports ...` as either a zip bundle or an embedded HTML; source-only builds use `uv run python extraction_reviewer/build.py -o extraction_reviewer/extraction_reviewer.html`. Handles pre-coded and post-coded extractions in the same template — the coding block renders only when present. Plan and design in [`docs/plans/extraction-reviewer.md`](plans/extraction-reviewer.md); reviewer + maintainer usage in `extraction_reviewer/README.md`; in-app reviewer help in `extraction_reviewer/REVIEWER_GUIDE.md`. Validated end-to-end against a real extraction (pre-coded chest XR) + extraction-with-coding (US abdomen) produced from `sample_data/example2/`.
+
+(Note: built 2026-04-17 on a pre-restructure base; integrated onto dev 2026-07-07 — see [plans/extraction-reviewer-workflows.md](plans/extraction-reviewer-workflows.md).)
 
 ---
 

@@ -1,0 +1,70 @@
+<div id="app" class="app" style="display: none">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1 class="sidebar-title">Extraction Review</h1>
+      <div id="counts" class="counts"></div>
+      <div id="reviewerChip" class="reviewer-chip">
+        <span class="reviewer-chip-label">Reviewing as</span>
+        <strong id="reviewerChipName">Set reviewer</strong>
+        <button type="button" id="reviewerChipChange">Change</button>
+      </div>
+      <div class="sidebar-actions">
+        <div class="export-controls">
+          <button type="button" id="exportBtn" class="primary">Download review JSON</button>
+          <div class="export-overflow">
+            <button
+              type="button"
+              id="exportMenuBtn"
+              class="export-menu-toggle"
+              aria-label="More export options"
+              aria-expanded="false"
+            >
+              &ctdot;
+            </button>
+          </div>
+          <div id="exportMenu" class="export-menu" hidden>
+            <button type="button" id="exportZipBtn">Per-report zip (legacy)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="groupList" class="group-list"></div>
+  </aside>
+
+  <main class="main">
+    <div class="toolbar">
+      <div class="toolbar-meta">
+        <div class="toolbar-subtitle toolbar-eyebrow-row">
+          <span id="toolbarEyebrow">Current item</span>
+          <span id="toolbarJoinWarning" class="invalid-join-chip" style="display: none">Invalid join</span>
+        </div>
+        <h2 class="toolbar-title" id="toolbarTitle">&mdash;</h2>
+        <div class="toolbar-subtitle" id="toolbarSubtitle"></div>
+      </div>
+      <div class="toolbar-actions">
+        <button type="button" id="addFilesBtn" class="toolbar-btn">+ Add files</button>
+        <button
+          type="button"
+          id="helpBtn"
+          class="toolbar-btn"
+          title="Open reviewer guide (press ?)"
+          aria-label="Open reviewer guide"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
+            <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2" />
+            <path
+              d="M9 9.5a3 3 0 115.1 2.1c-.8.7-1.6 1.1-1.6 2.1v.8"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <circle cx="12.4" cy="17.3" r="1.1" fill="currentColor" />
+          </svg>
+          <span>Help</span>
+        </button>
+      </div>
+    </div>
+    <div id="content" class="content"></div>
+  </main>
+</div>

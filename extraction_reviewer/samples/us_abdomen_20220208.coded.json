@@ -1,0 +1,2393 @@
+{
+  "exam_info": {
+    "study_description": "US Abdomen",
+    "study_date": "2022-02-08",
+    "modality": "US",
+    "body_region": "abdomen",
+    "body_part": "abdomen",
+    "contrast": null,
+    "laterality": null
+  },
+  "findings": [
+    {
+      "finding_name": "hepatomegaly",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "liver",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "size",
+          "value": "16 cm"
+        }
+      ],
+      "report_text": "The liver is normal in size measuring 16 cm in craniocaudal dimension.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_001845",
+          "oifm_name": "hepatomegaly",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID58",
+            "location_name": "liver",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "hepatic steatosis",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "hepatic parenchyma",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "morphology",
+          "value": "diffusely increased echogenicity"
+        }
+      ],
+      "report_text": "The hepatic parenchyma demonstrates diffusely increased echogenicity consistent with hepatic steatosis.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_022461",
+          "oifm_name": "fatty liver",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID58",
+            "location_name": "liver",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Hepatic steatosis is a diffuse change in the hepatic parenchyma, i.e., the liver as an organ; no specific duct/artery/vein location is implied.",
+            "candidates": [
+              {
+                "location_id": "RID58",
+                "location_name": "liver"
+              },
+              {
+                "location_id": "RID194",
+                "location_name": "right hepatic duct"
+              },
+              {
+                "location_id": "RID914",
+                "location_name": "proper hepatic artery"
+              },
+              {
+                "location_id": "RID193",
+                "location_name": "left hepatic duct"
+              },
+              {
+                "location_id": "RID918",
+                "location_name": "right hepatic artery"
+              },
+              {
+                "location_id": "RID916",
+                "location_name": "left hepatic artery"
+              },
+              {
+                "location_id": "RID1179",
+                "location_name": "hepatic vein"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "hepatic mass",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "liver",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No focal mass lesion identified.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_OIDM_160831",
+          "oifm_name": "hepatic lesion",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID58",
+            "location_name": "liver",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "hepatic vein patency",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "hepatic veins",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "flow_direction",
+          "value": "normal"
+        }
+      ],
+      "report_text": "The hepatic veins and portal vein are patent with normal flow direction.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "unmapped",
+          "oifm_id": null,
+          "oifm_name": null,
+          "method": "unresolved",
+          "reason": "wrong_concept",
+          "reasoning": "The report states normal hepatic vein (and portal vein) patency with normal flow direction. None of the candidates represent the concept of 'hepatic vein patency/normal hepatic venous flow'; all available options are abnormalities (dilatation, dampened waveform) or obstructive/thrombotic diagnoses.",
+          "closest_candidate_id": "OIFM_GMTS_001880",
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_002330",
+              "name": "hepatic vein dilatation"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005561",
+              "name": "dampened waveform of hepatic vein"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_035535",
+              "name": "portal vein obstruction"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_001880",
+              "name": "budd-chiari syndrome"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_035534",
+              "name": "portal vein thrombosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022555",
+              "name": "portal venous hypertension"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_002376",
+              "name": "increased portal vein flow"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID1179",
+            "location_name": "hepatic vein",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding explicitly pertains to hepatic vein patency; candidate RID1179 directly matches the hepatic veins (nonlateral abdominal structure). Liver (RID58) is broader and would be less specific.",
+            "candidates": [
+              {
+                "location_id": "RID1179",
+                "location_name": "hepatic vein"
+              },
+              {
+                "location_id": "RID58",
+                "location_name": "liver"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "portal vein patency",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "portal vein",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "flow_direction",
+          "value": "normal"
+        }
+      ],
+      "report_text": "The hepatic veins and portal vein are patent with normal flow direction.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "unmapped",
+          "oifm_id": null,
+          "oifm_name": null,
+          "method": "unresolved",
+          "reason": "wrong_concept",
+          "reasoning": "The report states the portal vein is patent with normal flow direction (a normal/negative finding). None of the candidates represent portal vein patency/normal portal venous flow; all are pathologic entities (gas, thrombosis, obstruction, cavernous transformation, increased flow, portal hypertension).",
+          "closest_candidate_id": "OIFM_GMTS_035535",
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_002852",
+              "name": "portal vein gas"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_035534",
+              "name": "portal vein thrombosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_035535",
+              "name": "portal vein obstruction"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_002372",
+              "name": "cavernous transformation of portal vein"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_002376",
+              "name": "increased portal vein flow"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022555",
+              "name": "portal venous hypertension"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID1208",
+            "location_name": "portal vein",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "gallbladder distention",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "gallbladder",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "distention",
+          "value": "non-distended"
+        }
+      ],
+      "report_text": "The gallbladder is non-distended",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_003556",
+          "oifm_name": "distended gallbladder in a child",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID187",
+            "location_name": "gallbladder",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "gallstone",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "gallbladder",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "count",
+          "value": "multiple"
+        },
+        {
+          "key": "mobility",
+          "value": "mobile"
+        },
+        {
+          "key": "morphology",
+          "value": "echogenic foci with posterior acoustic shadowing"
+        },
+        {
+          "key": "size",
+          "value": "7 mm (largest)"
+        }
+      ],
+      "report_text": "The gallbladder is non-distended and contains multiple mobile echogenic foci with posterior acoustic shadowing consistent with cholelithiasis. The largest stone measures 7 mm.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_022482",
+          "oifm_name": "gallstone",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID187",
+            "location_name": "gallbladder",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "gallbladder wall thickening",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "gallbladder wall",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "size",
+          "value": "2 mm"
+        }
+      ],
+      "report_text": "The gallbladder wall measures 2 mm, within normal limits.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_004740",
+          "oifm_name": "diffuse gallbladder wall thickening",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID187",
+            "location_name": "gallbladder",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding refers to the gallbladder wall; among candidates the best available anatomic location representing this structure is the gallbladder (RID187). No separate gallbladder-wall candidate is provided.",
+            "candidates": [
+              {
+                "location_id": "RID31748",
+                "location_name": "fossa for gallbladder"
+              },
+              {
+                "location_id": "RID30014",
+                "location_name": "wall of abdomen"
+              },
+              {
+                "location_id": "RID29859",
+                "location_name": "anterior chest wall"
+              },
+              {
+                "location_id": "RID30008",
+                "location_name": "anterior abdominal wall"
+              },
+              {
+                "location_id": "RID32817",
+                "location_name": "posterior abdominal wall"
+              },
+              {
+                "location_id": "RID32809",
+                "location_name": "musculature of anterior abdominal wall"
+              },
+              {
+                "location_id": "RID187",
+                "location_name": "gallbladder"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "pericholecystic fluid",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "pericholecystic region",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No pericholecystic fluid.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_003554",
+          "oifm_name": "pericholecystic fluid",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID187",
+            "location_name": "gallbladder",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Pericholecystic fluid is fluid adjacent to/around the gallbladder; among candidates, the gallbladder (RID187) is the best anatomic anchor in the abdomen for this finding. Other candidates are head/neck or pleural space and do not match.",
+            "candidates": [
+              {
+                "location_id": "RID7565",
+                "location_name": "retropharyngeal space of head"
+              },
+              {
+                "location_id": "RID7572",
+                "location_name": "perivertebral space"
+              },
+              {
+                "location_id": "RID7568",
+                "location_name": "carotid space"
+              },
+              {
+                "location_id": "RID7569_RID5825",
+                "location_name": "right masticator space"
+              },
+              {
+                "location_id": "RID1363_RID5825",
+                "location_name": "right pleural space"
+              },
+              {
+                "location_id": "RID7569",
+                "location_name": "masticator space"
+              },
+              {
+                "location_id": "RID187",
+                "location_name": "gallbladder"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "sonographic Murphy sign",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "gallbladder",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "Sonographic Murphy sign is negative.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "unmapped",
+          "oifm_id": null,
+          "oifm_name": null,
+          "method": "unresolved",
+          "reason": "wrong_concept",
+          "reasoning": "The finding is a (negative) sonographic Murphy sign, a specific ultrasound sign of gallbladder tenderness. None of the candidates represent the Murphy sign itself; the available gallbladder entities are diagnoses (cholecystitis) or other imaging findings (wall thickening, echoes, nonvisualization, enlargement).",
+          "closest_candidate_id": "OIFM_GMTS_000570",
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_017833",
+              "name": "indefinite uterus sign"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000143",
+              "name": "Cholecystitis US"
+            },
+            {
+              "oifm_id": "OIFM_OIDM_201175",
+              "name": "bowel inflammation"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005035",
+              "name": "double bubble sign"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005197",
+              "name": "sonographic bulls-eye sign"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_013669",
+              "name": "third mogul sign"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_018696",
+              "name": "absent bow-tie sign in knee meniscus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004740",
+              "name": "diffuse gallbladder wall thickening"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005651",
+              "name": "echo within gallbladder"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005642",
+              "name": "nonvisualization of gallbladder"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005698",
+              "name": "enlarged gallbladder"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_000570",
+              "name": "cholecystitis"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID187",
+            "location_name": "gallbladder",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "common bile duct dilatation",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "common bile duct",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "size",
+          "value": "4 mm"
+        }
+      ],
+      "report_text": "The common bile duct measures 4 mm, within normal limits.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_005226",
+          "oifm_name": "dilated bile ducts",
+          "method": "llm",
+          "reason": null,
+          "reasoning": "Best match to the extracted finding concept of bile duct dilatation is the general finding 'dilated bile ducts' (includes CBD dilatation). Other options add extra qualifiers (e.g., without jaundice/obstruction) or refer to obstruction/other specific entities.",
+          "closest_candidate_id": null,
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_005226",
+              "name": "dilated bile ducts"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_001732",
+              "name": "biliary dilatation without jaundice or obstruction"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_001741",
+              "name": "biliary obstruction without dilatation"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_001753",
+              "name": "cystic and saccular lesions of bile ducts with dilatation of intrahepatic bile ducts"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004609",
+              "name": "dilated intrahepatic ducts"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_001552",
+              "name": "calcification in gallbladder or common bile duct"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005492",
+              "name": "bile duct narrowing or obstruction"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005479",
+              "name": "bile duct filling defect"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000159",
+              "name": "Choledocholithiasis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005526",
+              "name": "echoes within bile ducts"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID199",
+            "location_name": "common bile duct",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "intrahepatic biliary ductal dilatation",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "intrahepatic bile ducts",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No intrahepatic biliary ductal dilatation.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_004609",
+          "oifm_name": "dilated intrahepatic ducts",
+          "method": "llm",
+          "reason": null,
+          "reasoning": "Best match for the finding concept 'intrahepatic biliary ductal dilatation' (even though absent in report). Candidate 1 specifically represents dilatation of intrahepatic bile ducts and includes the exact synonym 'intrahepatic duct dilatation'.",
+          "closest_candidate_id": null,
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_004609",
+              "name": "dilated intrahepatic ducts"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005226",
+              "name": "dilated bile ducts"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_001732",
+              "name": "biliary dilatation without jaundice or obstruction"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_001746",
+              "name": "cystic and saccular lesions of bile ducts with normal-sized intrahepatic bile ducts"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_001753",
+              "name": "cystic and saccular lesions of bile ducts with dilatation of intrahepatic bile ducts"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_002330",
+              "name": "hepatic vein dilatation"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_002674",
+              "name": "dilated pancreatic duct"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID33652",
+            "location_name": "biliary tree",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding refers to intrahepatic bile ducts (part of the biliary tree). No candidate explicitly represents intrahepatic ducts or both hepatic ducts, so the closest appropriate anatomic grouping is the biliary tree rather than extrahepatic ducts (CBD/CHD/cystic duct) or ampulla.",
+            "candidates": [
+              {
+                "location_id": "RID200",
+                "location_name": "common hepatic duct"
+              },
+              {
+                "location_id": "RID201",
+                "location_name": "cystic duct"
+              },
+              {
+                "location_id": "RID199",
+                "location_name": "common bile duct"
+              },
+              {
+                "location_id": "RID45811",
+                "location_name": "hepatopancreatic ampulla"
+              },
+              {
+                "location_id": "RID33652",
+                "location_name": "biliary tree"
+              },
+              {
+                "location_id": "RID194",
+                "location_name": "right hepatic duct"
+              },
+              {
+                "location_id": "RID94",
+                "location_name": "gastrointestinal tract"
+              },
+              {
+                "location_id": "RID17726",
+                "location_name": "tract of spinal cord"
+              },
+              {
+                "location_id": "RID204",
+                "location_name": "urinary tract"
+              },
+              {
+                "location_id": "RID22697",
+                "location_name": "right optic tract"
+              },
+              {
+                "location_id": "RID49024",
+                "location_name": "right iliotibial band"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "pancreatic abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "pancreatic head and body",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "The pancreatic head and body are visualized and appear normal.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_OIDM_371547",
+          "oifm_name": "pancreatic lesion",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID170",
+            "location_name": "pancreas",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Report describes normal appearance of the pancreatic head and body. A specific candidate exists for head (RID171) but none for pancreatic body; selecting the parent structure (pancreas, RID170) best captures the described region without redundant ancestor/descendant coding.",
+            "candidates": [
+              {
+                "location_id": "RID171",
+                "location_name": "head of pancreas"
+              },
+              {
+                "location_id": "RID175",
+                "location_name": "tail of pancreas"
+              },
+              {
+                "location_id": "RID173",
+                "location_name": "neck of pancreas"
+              },
+              {
+                "location_id": "RID172",
+                "location_name": "uncinate process of pancreas"
+              },
+              {
+                "location_id": "RID9083",
+                "location_name": "body of mandible"
+              },
+              {
+                "location_id": "RID7752",
+                "location_name": "C3 vertebral body"
+              },
+              {
+                "location_id": "RID170",
+                "location_name": "pancreas"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "pancreatic tail not visualized",
+      "presence": "indeterminate",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "pancreatic tail",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "reason",
+          "value": "overlying bowel gas"
+        }
+      ],
+      "report_text": "The tail is obscured by overlying bowel gas.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "unmapped",
+          "oifm_id": null,
+          "oifm_name": null,
+          "method": "unresolved",
+          "reason": "wrong_concept",
+          "reasoning": "Finding describes nonvisualization/limited assessment of the pancreatic tail on ultrasound due to overlying bowel gas (technical limitation), not an intrinsic pancreatic abnormality such as a lesion, calcification, pancreatitis, or fatty change.",
+          "closest_candidate_id": "OIFM_OIDM_371547",
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_004232",
+              "name": "hypervascular pancreatic lesion"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022453",
+              "name": "pancreatic calcification"
+            },
+            {
+              "oifm_id": "OIFM_OIDM_371547",
+              "name": "pancreatic lesion"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000207",
+              "name": "Pancreatic Cyst on CT"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022492",
+              "name": "pancreatic exocrine insufficiency"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004354",
+              "name": "fatty infiltration of pancreas"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022467",
+              "name": "pancreatitis in a child"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022465",
+              "name": "fatty pancreas"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004345",
+              "name": "increased echogenicity of pancreas"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022464",
+              "name": "pancreatic dysplasia"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005368",
+              "name": "pancreatic lesion characterized by blood"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004878",
+              "name": "focal shadowing pancreatic lesion"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID175",
+            "location_name": "tail of pancreas",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding explicitly refers to the pancreatic tail ('The tail is obscured by overlying bowel gas.'), so select the specific anatomic substructure rather than the parent pancreas.",
+            "candidates": [
+              {
+                "location_id": "RID175",
+                "location_name": "tail of pancreas"
+              },
+              {
+                "location_id": "RID170",
+                "location_name": "pancreas"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "splenomegaly",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "spleen",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "size",
+          "value": "10 cm"
+        }
+      ],
+      "report_text": "The spleen is normal in size measuring 10 cm in craniocaudal dimension.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_003565",
+          "oifm_name": "splenomegaly",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID86",
+            "location_name": "spleen",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "splenic echotexture abnormality",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "spleen",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "Normal echotexture.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "unmapped",
+          "oifm_id": null,
+          "oifm_name": null,
+          "method": "unresolved",
+          "reason": "too_specific",
+          "reasoning": "Report states spleen has normal echotexture (i.e., no splenic echotexture abnormality). None of the candidates represent a normal splenic echotexture finding without additional pathology.",
+          "closest_candidate_id": "OIFM_GMTS_004726",
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_004227",
+              "name": "splenic vein obstruction"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004726",
+              "name": "splenomegaly with normal echogenicity"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_002547",
+              "name": "abnormality on splenic arteriography"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004733",
+              "name": "splenomegaly with diffuse hyperechoic pattern"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004219",
+              "name": "solitary splenic calcification"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004731",
+              "name": "splenomegaly with diffuse hypoechoic pattern"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_003565",
+              "name": "splenomegaly"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004291",
+              "name": "focal hyperechoic splenic lesion"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022455",
+              "name": "splenic calcification"
+            },
+            {
+              "oifm_id": "OIFM_MSFT_213340",
+              "name": "pleural abnormality"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005290",
+              "name": "multiple splenic hypointensities"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID86",
+            "location_name": "spleen",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "renal cortical thinning",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "right kidney cortex",
+        "laterality": "right"
+      },
+      "attributes": [],
+      "report_text": "with normal cortical thickness",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "unmapped",
+          "oifm_id": null,
+          "oifm_name": null,
+          "method": "unresolved",
+          "reason": "wrong_concept",
+          "reasoning": "The report explicitly states normal renal cortical thickness (i.e., renal cortical thinning is not present). None of the candidate codes represent the concept of renal cortical thinning; available \u201ccortical thinning\u201d options are for bone, and the renal options describe echogenicity change, nephrocalcinosis, hydronephrosis, or segmental renal atrophy rather than cortical thinning.",
+          "closest_candidate_id": "OIFM_GMTS_016291",
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_011583",
+              "name": "widespread cortical bone thinning"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017002",
+              "name": "decreased renal cortical echogenicity"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_020518",
+              "name": "cortical nephrocalcinosis"
+            },
+            {
+              "oifm_id": "OIFM_OIDM_874812",
+              "name": "hydronephrosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_006429",
+              "name": "generalized skull thinning"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_011171",
+              "name": "bone blister"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_025634",
+              "name": "cortical bone thickening"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_011568",
+              "name": "localized cortical bone thickening"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_011577",
+              "name": "widespread cortical bone thickening"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000100",
+              "name": "Focal Cortical Dysplasia"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016291",
+              "name": "decreased size of part of a kidney"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID31789",
+            "location_name": "cortex of right kidney",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding pertains to the right renal cortex (\u201cright kidney cortex\u201d, normal cortical thickness), so the most specific matching candidate is cortex of right kidney (RID31789) rather than the broader right kidney.",
+            "candidates": [
+              {
+                "location_id": "RID31789",
+                "location_name": "cortex of right kidney"
+              },
+              {
+                "location_id": "RID29662",
+                "location_name": "right kidney"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "increased renal echogenicity",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "right kidney",
+        "laterality": "right"
+      },
+      "attributes": [],
+      "report_text": "normal cortical thickness and echogenicity.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_017023",
+          "oifm_name": "hyperechoic renal parenchyma",
+          "method": "llm",
+          "reason": null,
+          "reasoning": "The extracted finding concept is increased renal echogenicity (i.e., a hyperechoic kidney on ultrasound). Among candidates, 'hyperechoic renal parenchyma' best matches this general concept without being overly specific to cortex or medulla or implying a discrete mass. Presence is absent in the report, but code selection is based on the finding concept.",
+          "closest_candidate_id": null,
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_005484",
+              "name": "hyperechoic liver"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016960",
+              "name": "isoechoic renal mass"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016964",
+              "name": "hyperechoic renal mass"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005526",
+              "name": "echoes within bile ducts"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017002",
+              "name": "decreased renal cortical echogenicity"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017023",
+              "name": "hyperechoic renal parenchyma"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_020518",
+              "name": "cortical nephrocalcinosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017005",
+              "name": "hyperechoic renal cortex"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004345",
+              "name": "increased echogenicity of pancreas"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017016",
+              "name": "hyperechoic renal medulla"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID29662",
+            "location_name": "right kidney",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "renal calculus",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "right kidney",
+        "laterality": "right"
+      },
+      "attributes": [
+        {
+          "key": "count",
+          "value": "Multiple"
+        },
+        {
+          "key": "morphology",
+          "value": "small echogenic foci with posterior acoustic shadowing"
+        }
+      ],
+      "report_text": "Multiple small echogenic foci with posterior acoustic shadowing are present consistent with renal calculi",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_016996",
+          "oifm_name": "shadowing mass in renal collecting system",
+          "method": "llm",
+          "reason": null,
+          "reasoning": "Report describes multiple echogenic foci with posterior acoustic shadowing on ultrasound consistent with renal calculi (nephrolithiasis). Candidate OIFM_GMTS_016996 explicitly represents a shadowing structure in the renal collecting system and includes synonyms nephrolithiasis/renal stone, matching the asserted finding better than broader urinary tract calculus or modality/radiodensity-specific stone types.",
+          "closest_candidate_id": null,
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_020556",
+              "name": "radiodense urinary calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017328",
+              "name": "bladder calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016552",
+              "name": "urinary tract calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_020557",
+              "name": "radiolucent urinary calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_003303",
+              "name": "nephrocalcinosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016931",
+              "name": "renal vein thrombosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022482",
+              "name": "gallstone"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017027",
+              "name": "renal collecting system echoes"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016996",
+              "name": "shadowing mass in renal collecting system"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID29662",
+            "location_name": "right kidney",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "renal calculus",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "right kidney lower pole",
+        "laterality": "right"
+      },
+      "attributes": [
+        {
+          "key": "size",
+          "value": "3 mm"
+        },
+        {
+          "key": "count",
+          "value": "largest"
+        }
+      ],
+      "report_text": "largest measuring 3 mm in the lower pole.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_016996",
+          "oifm_name": "shadowing mass in renal collecting system",
+          "method": "llm",
+          "reason": null,
+          "reasoning": "Report describes multiple echogenic foci with posterior acoustic shadowing on ultrasound consistent with renal calculi (nephrolithiasis). Candidate OIFM_GMTS_016996 explicitly represents a shadowing structure in the renal collecting system and includes synonyms nephrolithiasis/renal stone, matching the asserted finding better than broader urinary tract calculus or modality/radiodensity-specific stone types.",
+          "closest_candidate_id": null,
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_020556",
+              "name": "radiodense urinary calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017328",
+              "name": "bladder calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016552",
+              "name": "urinary tract calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_020557",
+              "name": "radiolucent urinary calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_003303",
+              "name": "nephrocalcinosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016931",
+              "name": "renal vein thrombosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022482",
+              "name": "gallstone"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017027",
+              "name": "renal collecting system echoes"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016996",
+              "name": "shadowing mass in renal collecting system"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID29662",
+            "location_name": "right kidney",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding is a renal calculus in the lower pole of the right kidney. No specific 'lower pole' candidate is available, so select the best laterality-matched anatomic structure: right kidney (RID29662). Avoid cortex-specific codes since stone location is not specified as cortical.",
+            "candidates": [
+              {
+                "location_id": "RID29662",
+                "location_name": "right kidney"
+              },
+              {
+                "location_id": "RID29663",
+                "location_name": "left kidney"
+              },
+              {
+                "location_id": "RID31789",
+                "location_name": "cortex of right kidney"
+              },
+              {
+                "location_id": "RID1315",
+                "location_name": "lower lobe of right lung"
+              },
+              {
+                "location_id": "RID2638_RID5825",
+                "location_name": "right lower extremity"
+              },
+              {
+                "location_id": "RID211",
+                "location_name": "cortex of kidney"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "hydronephrosis",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "kidneys",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "No hydronephrosis.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_OIDM_874812",
+          "oifm_name": "hydronephrosis",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID29662",
+            "location_name": "right kidney",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Report states 'No hydronephrosis' on US abdomen with specific anatomy kidneys and no laterality specified, which in typical usage implies absence in both kidneys. Select both right and left kidney candidates.",
+            "candidates": [
+              {
+                "location_id": "RID29662",
+                "location_name": "right kidney"
+              },
+              {
+                "location_id": "RID29663",
+                "location_name": "left kidney"
+              }
+            ]
+          },
+          {
+            "status": "coded",
+            "location_id": "RID29663",
+            "location_name": "left kidney",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Report states 'No hydronephrosis' on US abdomen with specific anatomy kidneys and no laterality specified, which in typical usage implies absence in both kidneys. Select both right and left kidney candidates.",
+            "candidates": [
+              {
+                "location_id": "RID29662",
+                "location_name": "right kidney"
+              },
+              {
+                "location_id": "RID29663",
+                "location_name": "left kidney"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "normal renal cortical thickness",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "left kidney cortex",
+        "laterality": "left"
+      },
+      "attributes": [],
+      "report_text": "The left kidney measures 11.0 cm in length with normal cortical thickness.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "unmapped",
+          "oifm_id": null,
+          "oifm_name": null,
+          "method": "unresolved",
+          "reason": "wrong_concept",
+          "reasoning": "Finding is normal renal cortical thickness (a normal anatomic measurement). None of the candidates represent renal cortical thickness (normal or abnormal); available renal options concern cortical/parenchymal echogenicity or calcification/cystic disease, which are different concepts.",
+          "closest_candidate_id": "OIFM_GMTS_017002",
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_020518",
+              "name": "cortical nephrocalcinosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_025634",
+              "name": "cortical bone thickening"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_011583",
+              "name": "widespread cortical bone thinning"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_011568",
+              "name": "localized cortical bone thickening"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_011577",
+              "name": "widespread cortical bone thickening"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000100",
+              "name": "Focal Cortical Dysplasia"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017002",
+              "name": "decreased renal cortical echogenicity"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017005",
+              "name": "hyperechoic renal cortex"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017023",
+              "name": "hyperechoic renal parenchyma"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_011588",
+              "name": "split cortex"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016635",
+              "name": "renal cystic disease"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017412",
+              "name": "unilateral adrenal enlargement"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID31790",
+            "location_name": "cortex of left kidney",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding explicitly refers to the left kidney cortex with normal cortical thickness; the most specific non-redundant candidate matching that structure and laterality is the cortex of left kidney (RID31790), rather than the broader left kidney (RID29663).",
+            "candidates": [
+              {
+                "location_id": "RID31790",
+                "location_name": "cortex of left kidney"
+              },
+              {
+                "location_id": "RID29663",
+                "location_name": "left kidney"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "renal cortical thinning",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "left kidney cortex",
+        "laterality": "left"
+      },
+      "attributes": [],
+      "report_text": "normal cortical thickness",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "unmapped",
+          "oifm_id": null,
+          "oifm_name": null,
+          "method": "unresolved",
+          "reason": "wrong_concept",
+          "reasoning": "The report explicitly states normal renal cortical thickness (i.e., renal cortical thinning is not present). None of the candidate codes represent the concept of renal cortical thinning; available \u201ccortical thinning\u201d options are for bone, and the renal options describe echogenicity change, nephrocalcinosis, hydronephrosis, or segmental renal atrophy rather than cortical thinning.",
+          "closest_candidate_id": "OIFM_GMTS_016291",
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_011583",
+              "name": "widespread cortical bone thinning"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017002",
+              "name": "decreased renal cortical echogenicity"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_020518",
+              "name": "cortical nephrocalcinosis"
+            },
+            {
+              "oifm_id": "OIFM_OIDM_874812",
+              "name": "hydronephrosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_006429",
+              "name": "generalized skull thinning"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_011171",
+              "name": "bone blister"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_025634",
+              "name": "cortical bone thickening"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_011568",
+              "name": "localized cortical bone thickening"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_011577",
+              "name": "widespread cortical bone thickening"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000100",
+              "name": "Focal Cortical Dysplasia"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016291",
+              "name": "decreased size of part of a kidney"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID31790",
+            "location_name": "cortex of left kidney",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding pertains to the left kidney cortex (renal cortical thinning/normal cortical thickness). Candidate RID31790 specifically codes the cortex of the left kidney with correct laterality; RID29663 is less specific (entire left kidney).",
+            "candidates": [
+              {
+                "location_id": "RID31790",
+                "location_name": "cortex of left kidney"
+              },
+              {
+                "location_id": "RID29663",
+                "location_name": "left kidney"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "kidney size",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "left kidney",
+        "laterality": "left"
+      },
+      "attributes": [
+        {
+          "key": "size",
+          "value": "11.0 cm"
+        }
+      ],
+      "report_text": "The left kidney measures 11.0 cm in length",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "unmapped",
+          "oifm_id": null,
+          "oifm_name": null,
+          "method": "unresolved",
+          "reason": "wrong_concept",
+          "reasoning": "The report provides a numeric left kidney length (11.0 cm) without interpreting it as enlarged or small. None of the candidates represent a neutral 'kidney size measurement/normal kidney size' finding; available options encode abnormal enlargement or atrophy.",
+          "closest_candidate_id": "OIFM_GMTS_022591",
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_016360",
+              "name": "bilateral large kidneys"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016316",
+              "name": "bilateral small kidneys"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022592",
+              "name": "small kidney"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022591",
+              "name": "large kidney"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016291",
+              "name": "decreased size of part of a kidney"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016341",
+              "name": "unilateral large kidney"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000172",
+              "name": "Leg Length Discrepancy"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016698",
+              "name": "renal pseudotumor"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_010368",
+              "name": "limb asymmetry"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000088",
+              "name": "Automated Insall-Salvatti Index"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000240",
+              "name": "Prostate Imaging Reporting and Data System (PI-RADS)"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000277",
+              "name": "Sella Mass"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID29663",
+            "location_name": "left kidney",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "urinary calculus",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "left kidney mid-pole",
+        "laterality": "left"
+      },
+      "attributes": [
+        {
+          "key": "size",
+          "value": "3 mm"
+        },
+        {
+          "key": "morphology",
+          "value": "echogenic focus with shadowing"
+        }
+      ],
+      "report_text": "A 3 mm echogenic focus with shadowing consistent with a calculus is present in the mid-pole region.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_016552",
+          "oifm_name": "urinary tract calculus",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID29663",
+            "location_name": "left kidney",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding is a calculus in the left kidney mid-pole. No specific mid-pole candidate is provided; the best non-redundant match with correct laterality is the overall left kidney (RID29663). Cortex or renal pelvis are not specified in the report.",
+            "candidates": [
+              {
+                "location_id": "RID29663",
+                "location_name": "left kidney"
+              },
+              {
+                "location_id": "RID29662",
+                "location_name": "right kidney"
+              },
+              {
+                "location_id": "RID31790",
+                "location_name": "cortex of left kidney"
+              },
+              {
+                "location_id": "RID31789",
+                "location_name": "cortex of right kidney"
+              },
+              {
+                "location_id": "RID211",
+                "location_name": "cortex of kidney"
+              },
+              {
+                "location_id": "RID228",
+                "location_name": "renal pelvis"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "renal parapelvic cyst",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "parapelvic region",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "morphology",
+          "value": "anechoic"
+        },
+        {
+          "key": "size",
+          "value": "largest measuring 1.5 cm"
+        },
+        {
+          "key": "change_from_prior",
+          "value": "increased from 1.0 cm on prior CT (April 2006)"
+        }
+      ],
+      "report_text": "Anechoic parapelvic cysts are noted, largest measuring 1.5 cm, increased from 1.0 cm on prior CT (April 2006).",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_OIDM_467681",
+          "oifm_name": "parapelvic renal cyst",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID228",
+            "location_name": "renal pelvis",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding described as parapelvic cysts in the parapelvic region, which corresponds most closely to the renal pelvis/renal sinus area; laterality not specified, so nonlateral renal pelvis is appropriate over generic kidney.",
+            "candidates": [
+              {
+                "location_id": "RID228",
+                "location_name": "renal pelvis"
+              },
+              {
+                "location_id": "RID205",
+                "location_name": "kidney"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "abdominal aortic aneurysm",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "proximal abdominal aorta",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "caliber",
+          "value": "normal"
+        }
+      ],
+      "report_text": "The visualized proximal abdominal aorta is normal in caliber.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_MSFT_134126",
+          "oifm_name": "abdominal aortic aneurysm",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID905",
+            "location_name": "abdominal aorta",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding refers to the proximal abdominal aorta on abdominal ultrasound; the best matching candidate is the nonlateral abdominal aorta (RID905).",
+            "candidates": [
+              {
+                "location_id": "RID905",
+                "location_name": "abdominal aorta"
+              },
+              {
+                "location_id": "RID879",
+                "location_name": "thoracic aorta"
+              },
+              {
+                "location_id": "RID580",
+                "location_name": "ascending aorta"
+              },
+              {
+                "location_id": "RID32954",
+                "location_name": "abdominal cavity"
+              },
+              {
+                "location_id": "RID35844",
+                "location_name": "descending thoracic aorta"
+              },
+              {
+                "location_id": "RID936",
+                "location_name": "renal artery"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "atherosclerotic calcification",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "abdominal aorta",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "Atherosclerotic calcifications are present.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_022512",
+          "oifm_name": "arterial calcification",
+          "method": "llm",
+          "reason": null,
+          "reasoning": "The finding explicitly describes calcifications related to atherosclerosis, i.e., calcium deposits in arterial walls/plaques. 'Arterial calcification' matches this concept more specifically than the broader 'vascular calcification' and better reflects the described imaging finding than the diagnosis-level term 'atherosclerosis' without calcification.",
+          "closest_candidate_id": null,
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_013002",
+              "name": "vascular calcification"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022512",
+              "name": "arterial calcification"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022519",
+              "name": "atherosclerosis"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID905",
+            "location_name": "abdominal aorta",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "inferior vena cava thrombosis",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "inferior vena cava",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "Patent with normal respiratory variation.",
+      "source_section": "findings",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_OIDM_668318",
+          "oifm_name": "inferior vena cava thrombosis",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID1178",
+            "location_name": "inferior vena cava",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "gallstone",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "gallbladder",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "**Cholelithiasis**",
+      "source_section": "impression",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_022482",
+          "oifm_name": "gallstone",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID187",
+            "location_name": "gallbladder",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "acute cholecystitis",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "gallbladder",
+        "laterality": null
+      },
+      "attributes": [
+        {
+          "key": "acuity",
+          "value": "acute"
+        }
+      ],
+      "report_text": "without evidence of acute cholecystitis",
+      "source_section": "impression",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_000570",
+          "oifm_name": "cholecystitis",
+          "method": "llm",
+          "reason": null,
+          "reasoning": "The finding is acute cholecystitis (inflammation of the gallbladder). The best matching standardized diagnosis concept among candidates is the general 'cholecystitis' code; there is no separate candidate for 'acute cholecystitis,' and more specific entities (emphysematous cholecystitis, gallbladder empyema) are not stated. The 'Cholecystitis US' CDE/module is not the diagnosis concept itself.",
+          "closest_candidate_id": null,
+          "candidates": [
+            {
+              "oifm_id": "OIFM_CDE_000143",
+              "name": "Cholecystitis US"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_000570",
+              "name": "cholecystitis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_001550",
+              "name": "emphysematous cholecystitis"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000233",
+              "name": "Acute Rib Fracture"
+            },
+            {
+              "oifm_id": "OIFM_CDE_000231",
+              "name": "Acute Clavicle Fracture"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005699",
+              "name": "gallbladder empyema"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004739",
+              "name": "striations in thickened gallbladder wall"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_004740",
+              "name": "diffuse gallbladder wall thickening"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_005642",
+              "name": "nonvisualization of gallbladder"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_003556",
+              "name": "distended gallbladder in a child"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID187",
+            "location_name": "gallbladder",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "renal calculus",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "kidneys",
+        "laterality": "bilateral"
+      },
+      "attributes": [
+        {
+          "key": "laterality",
+          "value": "bilateral"
+        }
+      ],
+      "report_text": "Bilateral renal calculi",
+      "source_section": "impression",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_016996",
+          "oifm_name": "shadowing mass in renal collecting system",
+          "method": "llm",
+          "reason": null,
+          "reasoning": "Report describes multiple echogenic foci with posterior acoustic shadowing on ultrasound consistent with renal calculi (nephrolithiasis). Candidate OIFM_GMTS_016996 explicitly represents a shadowing structure in the renal collecting system and includes synonyms nephrolithiasis/renal stone, matching the asserted finding better than broader urinary tract calculus or modality/radiodensity-specific stone types.",
+          "closest_candidate_id": null,
+          "candidates": [
+            {
+              "oifm_id": "OIFM_GMTS_020556",
+              "name": "radiodense urinary calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017328",
+              "name": "bladder calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016552",
+              "name": "urinary tract calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_020557",
+              "name": "radiolucent urinary calculus"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_003303",
+              "name": "nephrocalcinosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016931",
+              "name": "renal vein thrombosis"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_022482",
+              "name": "gallstone"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_017027",
+              "name": "renal collecting system echoes"
+            },
+            {
+              "oifm_id": "OIFM_GMTS_016996",
+              "name": "shadowing mass in renal collecting system"
+            }
+          ]
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID29662",
+            "location_name": "right kidney",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding is 'Bilateral renal calculi' on abdominal US with laterality explicitly bilateral kidneys. Select both right kidney and left kidney candidates; no need for higher-level redundant parent terms.",
+            "candidates": [
+              {
+                "location_id": "RID29662",
+                "location_name": "right kidney"
+              },
+              {
+                "location_id": "RID29663",
+                "location_name": "left kidney"
+              }
+            ]
+          },
+          {
+            "status": "coded",
+            "location_id": "RID29663",
+            "location_name": "left kidney",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Finding is 'Bilateral renal calculi' on abdominal US with laterality explicitly bilateral kidneys. Select both right kidney and left kidney candidates; no need for higher-level redundant parent terms.",
+            "candidates": [
+              {
+                "location_id": "RID29662",
+                "location_name": "right kidney"
+              },
+              {
+                "location_id": "RID29663",
+                "location_name": "left kidney"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "hydronephrosis",
+      "presence": "absent",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "kidneys",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "without hydronephrosis",
+      "source_section": "impression",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_OIDM_874812",
+          "oifm_name": "hydronephrosis",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID29662",
+            "location_name": "right kidney",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Report states 'No hydronephrosis' on US abdomen with specific anatomy kidneys and no laterality specified, which in typical usage implies absence in both kidneys. Select both right and left kidney candidates.",
+            "candidates": [
+              {
+                "location_id": "RID29662",
+                "location_name": "right kidney"
+              },
+              {
+                "location_id": "RID29663",
+                "location_name": "left kidney"
+              }
+            ]
+          },
+          {
+            "status": "coded",
+            "location_id": "RID29663",
+            "location_name": "left kidney",
+            "method": "llm",
+            "reason": null,
+            "reasoning": "Report states 'No hydronephrosis' on US abdomen with specific anatomy kidneys and no laterality specified, which in typical usage implies absence in both kidneys. Select both right and left kidney candidates.",
+            "candidates": [
+              {
+                "location_id": "RID29662",
+                "location_name": "right kidney"
+              },
+              {
+                "location_id": "RID29663",
+                "location_name": "left kidney"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "hepatic steatosis",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "liver",
+        "laterality": null
+      },
+      "attributes": [],
+      "report_text": "3. Hepatic steatosis.",
+      "source_section": "impression",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_GMTS_022461",
+          "oifm_name": "fatty liver",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID58",
+            "location_name": "liver",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    },
+    {
+      "finding_name": "renal parapelvic cyst",
+      "presence": "present",
+      "location": {
+        "body_region": "abdomen",
+        "specific_anatomy": "left kidney",
+        "laterality": "left"
+      },
+      "attributes": [],
+      "report_text": "4. Left renal parapelvic cysts.",
+      "source_section": "impression",
+      "coding": {
+        "finding_code": {
+          "status": "coded",
+          "oifm_id": "OIFM_OIDM_467681",
+          "oifm_name": "parapelvic renal cyst",
+          "method": "fast-path",
+          "reason": null,
+          "reasoning": null,
+          "closest_candidate_id": null,
+          "candidates": []
+        },
+        "location_codes": [
+          {
+            "status": "coded",
+            "location_id": "RID29663",
+            "location_name": "left kidney",
+            "method": "fast-path",
+            "reason": null,
+            "reasoning": null,
+            "candidates": []
+          }
+        ]
+      }
+    }
+  ],
+  "non_finding_text": []
+}

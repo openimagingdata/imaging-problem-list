@@ -1,0 +1,28 @@
+{
+  "exam_info": {
+    "study_description": "Chest radiograph",
+    "study_date": "2026-07-01",
+    "modality": "XR"
+  },
+  "findings": [
+    {
+      "id": "dup-effusion",
+      "finding_name": "Pleural effusion",
+      "presence": "present",
+      "report_text": "Small left pleural effusion.",
+      "source_section": "findings",
+      "location": { "specific_anatomy": "pleura", "laterality": "left" },
+      "attributes": [{ "key": "size", "value": "small" }]
+    },
+    {
+      "id": "dup-atelectasis",
+      "finding_name": "Atelectasis",
+      "presence": "present",
+      "report_text": "Mild bibasilar atelectasis.",
+      "source_section": "findings",
+      "location": { "specific_anatomy": "lung", "laterality": "bilateral" },
+      "attributes": [{ "key": "severity", "value": "mild" }]
+    }
+  ],
+  "non_finding_text": []
+}

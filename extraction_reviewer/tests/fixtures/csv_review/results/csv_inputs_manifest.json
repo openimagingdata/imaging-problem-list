@@ -1,0 +1,20 @@
+[
+  {
+    "row_number": 2,
+    "source_id": "DUP",
+    "safe_id": "dup",
+    "staged_path": "_staged_reports/dup.txt"
+  },
+  {
+    "row_number": 3,
+    "source_id": "DUP",
+    "safe_id": "dup__2",
+    "staged_path": "_staged_reports/dup__2.txt"
+  },
+  {
+    "row_number": 4,
+    "source_id": "EXPECTED_BAD",
+    "safe_id": "bad",
+    "staged_path": "_staged_reports/bad.txt"
+  }
+]

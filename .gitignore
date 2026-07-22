@@ -237,3 +237,9 @@ scripts/output/
 
 # Claude Code runtime artifacts
 .claude/scheduled_tasks.lock
+
+# Codex runtime config (local only)
+.codex/
+
+# Extraction reviewer build output (derived from src/, rebuilt with build.py)
+extraction_reviewer/extraction_reviewer.html

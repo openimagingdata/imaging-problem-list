@@ -1,0 +1,31 @@
+{
+  "exam_info": {
+    "study_description": "Chest CT",
+    "study_date": "2026-07-02",
+    "modality": "CT"
+  },
+  "findings": [
+    {
+      "id": "dup2-nodule",
+      "finding_name": "Pulmonary nodule",
+      "presence": "present",
+      "report_text": "A 4 mm right upper lobe nodule, unchanged.",
+      "source_section": "findings",
+      "location": { "specific_anatomy": "right upper lobe", "laterality": "right" },
+      "attributes": [
+        { "key": "size", "value": "4 mm" },
+        { "key": "temporal_status", "value": "unchanged" }
+      ]
+    },
+    {
+      "id": "dup2-cardiomegaly",
+      "finding_name": "Cardiomegaly",
+      "presence": "absent",
+      "report_text": "Heart size is normal.",
+      "source_section": "findings",
+      "location": { "specific_anatomy": "heart", "laterality": null },
+      "attributes": []
+    }
+  ],
+  "non_finding_text": []
+}

@@ -35,6 +35,7 @@ Source of truth for the current code state: `src/finding_extractor/llm/defaults.
 
 ## Interactions with other active work
 
+- **Evals v1 gates this round** (decided 2026-07-07): the descoped evals redesign ([extractor-evals-redesign.md](extractor-evals-redesign.md)) — quote-first matcher + 10-case adjudicated gold `gate` set — lands first, so this round's bench gains gold-scored accuracy columns alongside speed. Gold adjudication uses the extraction reviewer ([extraction-reviewer-workflows.md](extraction-reviewer-workflows.md) Phase B). This directly answers whether gemma4's "+30% findings" is recall or fabrication, and vets Ornith's hallucination behavior.
 - `docs/plans/pydantic-ai-thinking-capability-simplification.md` — its Ollama branch is a deliberate no-change zone; if this round changes the model roster, the per-family branches in `build_ollama_settings` / `_ollama_supported_reasoning_for_model` change here, not there. Sequence whichever lands first carefully.
 - **PR-025** (collapse manual Ollama reasoning plumbing) — the version survey in step 1 doubles as the parity-check trigger evidence.
 - **PR-026** (`num_ctx`) — re-check issue #6544 status during step 1.

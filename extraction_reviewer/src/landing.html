@@ -1,0 +1,125 @@
+<div id="landing" class="landing">
+  <div id="loadingSurface" class="landing-card wizard-card">
+    <h1>Extraction Review</h1>
+    <p class="landing-intro">
+      Load the source CSV and its extraction-results folder, confirm the join, then review every extracted finding.
+      Nothing leaves this browser.
+    </p>
+    <div class="landing-reviewer-confirm" aria-live="polite">
+      <span id="landingReviewerLabel">No reviewer set</span>
+      <button type="button" id="landingReviewerChange" class="text-action">Set reviewer</button>
+    </div>
+
+    <ol class="wizard-progress" aria-label="Load progress">
+      <li id="progressStep1" class="active"><span>1</span> Source CSV</li>
+      <li id="progressStep2"><span>2</span> Results folder</li>
+      <li id="progressStep3"><span>3</span> Confirm</li>
+    </ol>
+
+    <section id="wizardStep1" class="wizard-step">
+      <div class="wizard-heading">
+        <div>
+          <div class="wizard-kicker">Step 1</div>
+          <h2>Select the source CSV</h2>
+        </div>
+      </div>
+      <div id="csvDropzone" class="dropzone compact-dropzone">
+        <div class="big">Drop one <code>.csv</code> file here</div>
+        <div class="small">Quoted commas, embedded quotes, and multi-line report cells are supported.</div>
+        <div class="dropzone-actions">
+          <button type="button" id="pickCsvBtn">Pick CSV</button>
+        </div>
+        <input id="csvInput" type="file" accept=".csv,text/csv" style="display: none" />
+      </div>
+      <div id="csvSelection" class="selection-summary" style="display: none"></div>
+      <div id="csvResumeNotice" class="selection-summary" style="display: none">
+        <span id="csvResumeText"></span>
+        <button type="button" class="text-action" id="csvResumeBtn">Resume that review</button>
+      </div>
+      <div id="columnPicker" class="column-picker" style="display: none">
+        <p>This CSV has more than two columns. Choose the identifier and report-text columns.</p>
+        <div class="column-picker-grid">
+          <label for="idColumnSelect">Identifier column</label>
+          <select id="idColumnSelect"></select>
+          <label for="textColumnSelect">Report-text column</label>
+          <select id="textColumnSelect"></select>
+        </div>
+      </div>
+      <div id="csvErrors" class="load-errors" style="display: none"></div>
+      <div class="wizard-actions">
+        <span></span>
+        <button type="button" id="csvNextBtn" class="primary" disabled>Continue</button>
+      </div>
+    </section>
+
+    <section id="wizardStep2" class="wizard-step" style="display: none">
+      <div class="wizard-heading">
+        <div>
+          <div class="wizard-kicker">Step 2</div>
+          <h2>Select the extraction-results folder</h2>
+        </div>
+      </div>
+      <div id="resultsDropzone" class="dropzone compact-dropzone">
+        <div class="big">Drop the results folder here</div>
+        <div class="small">
+          The folder should include extraction JSON files, <code>csv_inputs_manifest.json</code>, and preferably
+          <code>_staged_reports/</code>.
+        </div>
+        <div class="dropzone-actions">
+          <button type="button" id="pickResultsBtn">Pick results folder</button>
+        </div>
+        <input id="folderInput" type="file" webkitdirectory multiple style="display: none" />
+      </div>
+      <div id="resultsSelection" class="selection-summary" style="display: none"></div>
+      <div id="loadErrors" class="load-errors" style="display: none"></div>
+      <div class="wizard-actions">
+        <button type="button" id="resultsBackBtn">Back</button>
+        <button type="button" id="resultsNextBtn" class="primary" disabled>Continue</button>
+      </div>
+    </section>
+
+    <section id="wizardStep3" class="wizard-step" style="display: none">
+      <div class="wizard-heading">
+        <div>
+          <div class="wizard-kicker">Step 3</div>
+          <h2>Confirm the batch</h2>
+        </div>
+      </div>
+      <div id="joinSummary" class="join-summary"></div>
+      <div id="quoteCheck" class="quote-check"></div>
+      <div class="wizard-actions">
+        <button type="button" id="confirmBackBtn">Back</button>
+        <button type="button" id="startReviewBtn" class="primary" disabled>Start review</button>
+      </div>
+    </section>
+
+    <section id="savedBatches" class="saved-batches" style="display: none">
+      <div class="wizard-kicker">Saved in this browser</div>
+      <div id="savedBatchList" class="saved-batch-list"></div>
+    </section>
+
+    <details class="compatibility-loader">
+      <summary>Load files directly instead</summary>
+      <p>
+        Compatibility mode accepts extraction JSONs with sibling <code>.txt</code>/<code>.md</code> reports, or
+        reconstructs source text from extraction quotes.
+      </p>
+      <button type="button" id="pickFilesBtn">Pick individual files</button>
+      <button type="button" id="pickCompatFolderBtn">Pick a folder</button>
+      <input
+        id="filesInput"
+        type="file"
+        multiple
+        accept=".json,application/json,.txt,text/plain,.md,text/markdown"
+        style="display: none"
+      />
+      <input id="compatFolderInput" type="file" webkitdirectory multiple style="display: none" />
+    </details>
+
+    <div class="shortcut-help landing-shortcuts">
+      <strong>Shortcuts</strong>
+      &middot; <kbd>&uarr;</kbd> / <kbd>&darr;</kbd> previous / next finding &middot; <kbd>A</kbd> approve &middot;
+      <kbd>F</kbd> flag &middot; <kbd>U</kbd> unsure &middot; <kbd>?</kbd> help &middot; shortcuts pause while typing
+    </div>
+  </div>
+</div>
