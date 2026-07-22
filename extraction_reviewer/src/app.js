@@ -1,5 +1,24 @@
 (() => {
   const APP_VERSION = window.APP_VERSION || 'dev';
+
+  // Surface any swallowed failure visibly — reviewers won't open a console.
+  function surfaceRuntimeError(message) {
+    let strip = document.getElementById('runtimeErrorStrip');
+    if (!strip) {
+      strip = document.createElement('div');
+      strip.id = 'runtimeErrorStrip';
+      strip.innerHTML =
+        '<span id="runtimeErrorText"></span><button type="button" id="runtimeErrorDismiss">Dismiss</button>';
+      document.body.appendChild(strip);
+      strip.querySelector('#runtimeErrorDismiss').addEventListener('click', () => strip.remove());
+    }
+    const text = strip.querySelector('#runtimeErrorText');
+    text.textContent = `Something went wrong: ${message} — please report this message.`;
+  }
+  window.addEventListener('error', (ev) => surfaceRuntimeError(ev.message || 'unknown error'));
+  window.addEventListener('unhandledrejection', (ev) =>
+    surfaceRuntimeError((ev.reason && (ev.reason.message || String(ev.reason))) || 'unknown failure'),
+  );
   const STORAGE_PREFIX = 'extraction-reviewer:';
   const LEGACY_REVIEWER_KEY = STORAGE_PREFIX + 'reviewer';
   const PREFS_KEY = STORAGE_PREFIX + 'preferences';
@@ -49,6 +68,9 @@
     csvInput: document.getElementById('csvInput'),
     csvDropzone: document.getElementById('csvDropzone'),
     csvSelection: document.getElementById('csvSelection'),
+    csvResumeNotice: document.getElementById('csvResumeNotice'),
+    csvResumeText: document.getElementById('csvResumeText'),
+    csvResumeBtn: document.getElementById('csvResumeBtn'),
     csvErrors: document.getElementById('csvErrors'),
     columnPicker: document.getElementById('columnPicker'),
     idColumnSelect: document.getElementById('idColumnSelect'),
@@ -194,10 +216,30 @@
   function restoreLoadingSurface() {
     if (el.loadingSurface.parentElement !== el.landing) el.landing.appendChild(el.loadingSurface);
     el.loadingSurface.classList.remove('in-load-dialog');
+    if (state.wizardSnapshot) {
+      Object.assign(state, state.wizardSnapshot);
+      state.wizardSnapshot = null;
+      hideCsvResumeNotice();
+      showLoadErrors([]);
+      render();
+    }
   }
 
   function openLoadDialog() {
     if (!el.loadDialog || el.loadDialog.open) return;
+    // The wizard mutates live state as soon as inputs are picked; snapshot the
+    // session so closing the modal without starting a review restores it.
+    state.wizardSnapshot = {
+      files: state.files,
+      manifest: state.manifest,
+      invalidResults: state.invalidResults,
+      extractionSet: state.extractionSet,
+      reviews: state.reviews,
+      csv: state.csv,
+      localBatch: state.localBatch,
+      selection: state.selection,
+      savedBatchCandidate: state.savedBatchCandidate,
+    };
     el.loadingSurface.classList.add('in-load-dialog');
     el.loadDialogBody.appendChild(el.loadingSurface);
     setWizardStep(1);
@@ -469,13 +511,14 @@
     return sha256Hex(new TextEncoder().encode(hashes.join('\n')));
   }
 
-  async function prepareLocalBatch({ label, kind, offerResume = false }) {
+  async function prepareLocalBatch({ label, kind }) {
     if (!state.files.length || state.csv) return false;
     const batchId = await deriveLocalBatchId();
     state.localBatch = { batchId, label, kind };
     const saved = await getSavedBatch(batchId).catch(() => null);
     if (!saved) return false;
-    if (offerResume && !window.confirm(`Resume the saved review for ${label}?`)) return false;
+    // Saved work for this exact content set: resume silently. Never interrupt
+    // startup with a blocking prompt — it can stack under/over other dialogs.
     state.reviews = saved.reviews || {};
     for (const file of state.files) ensureReview(file.sha1);
     state.selection = saved.selection || firstSelection();
@@ -688,6 +731,7 @@
 
   async function loadFileList(fileList, { replace = false } = {}) {
     const errors = [];
+    const stats = { total: 0, valid: 0, textFiles: 0, otherFiles: 0, unrecognizedJson: 0, manifestFound: false };
     if (replace) {
       state.files = [];
       state.manifest = [];
@@ -704,13 +748,17 @@
     const jsonFiles = [];
     for (const file of fileList) {
       if (!file.name) continue;
+      stats.total++;
       const lower = file.name.toLowerCase();
       if (lower === 'batch_results.jsonl' || lower === 'extraction_reviewer.html') continue;
       if (lower.endsWith('.txt') || lower.endsWith('.md')) {
+        stats.textFiles++;
         const target = isStagedReportFile(file) ? stagedTextByBase : textByBase;
         target.set(basenameWithoutExt(file.name), file);
       } else if (lower.endsWith('.json')) {
         jsonFiles.push(file);
+      } else {
+        stats.otherFiles++;
       }
     }
 
@@ -736,6 +784,7 @@
         }
         if (isCsvManifest(data)) {
           state.manifest = data;
+          stats.manifestFound = true;
           continue;
         }
         if (!data || !Array.isArray(data.findings)) {
@@ -743,6 +792,8 @@
             errors.push(`${file.name}: missing findings[]`);
             state.invalidResults.push({ name: file.name, reason: 'missing findings[]' });
             state.extractionSet.push({ name: file.name, hash: contentHash });
+          } else {
+            stats.unrecognizedJson++;
           }
           continue;
         }
@@ -810,16 +861,17 @@
     }
     state.files.sort((a, b) => a.name.localeCompare(b.name));
     state.extractionSet.sort((a, b) => a.name.localeCompare(b.name));
-    return errors;
+    stats.valid = state.files.length;
+    return { errors, stats };
   }
 
-  async function handleLoadedFiles(fileList, { label = null, kind = 'direct', offerResume = false } = {}) {
-    const errors = await loadFileList(fileList);
+  async function handleLoadedFiles(fileList, { label = null, kind = 'direct' } = {}) {
+    const { errors } = await loadFileList(fileList);
     showLoadErrors(errors);
     if (!state.files.length) return;
 
     const batchLabel = label || (fileList.length === 1 ? fileList[0].name : `Direct files (${fileList.length})`);
-    if (await prepareLocalBatch({ label: batchLabel, kind, offerResume })) return;
+    if (await prepareLocalBatch({ label: batchLabel, kind })) return;
 
     const wasOnLanding = !isInApp();
     if (wasOnLanding) {
@@ -837,6 +889,7 @@
 
   function enterReview({ preserveSelection = false } = {}) {
     if (!state.files.length) return;
+    state.wizardSnapshot = null;
     if (!preserveSelection) state.selection = findNextPending(null) || firstSelection();
     el.landing.style.display = 'none';
     el.app.style.display = 'grid';
@@ -882,6 +935,17 @@
     setCsvError(valid ? '' : 'Choose two different columns.');
   }
 
+  function showCsvResumeNotice(saved) {
+    if (!el.csvResumeNotice) return;
+    const counts = saved.countsSummary || '';
+    el.csvResumeText.textContent = `Saved review found for this CSV${counts ? ` (${counts})` : ''} — or continue to load a results folder.`;
+    el.csvResumeNotice.style.display = 'flex';
+  }
+
+  function hideCsvResumeNotice() {
+    if (el.csvResumeNotice) el.csvResumeNotice.style.display = 'none';
+  }
+
   function renderColumnPicker() {
     const csv = state.csv;
     if (!csv) return;
@@ -925,22 +989,22 @@
         textColumnIndex,
       };
       state.localBatch = null;
+      state.savedBatchCandidate = null;
+      hideCsvResumeNotice();
       const savedEntry = state.batchIndex.find((entry) => entry.batchId === batchId);
       if (savedEntry) {
         const saved = await getSavedBatch(batchId).catch(() => null);
         if (saved) {
-          if (window.confirm(`Resume the saved review for ${file.name}?`)) {
-            restoreBatch(saved, { openReview: true });
-            return;
-          }
+          // Same CSV re-picked with saved work: offer resume inline (never a
+          // blocking prompt). Continuing through the wizard instead keeps the
+          // drift-replace path reachable for a re-run extraction folder.
           state.savedBatchCandidate = saved;
+          showCsvResumeNotice(saved);
         } else {
           state.batchIndex = state.batchIndex.filter((entry) => entry.batchId !== batchId);
           persistBatchIndex();
           renderSavedBatches();
         }
-      } else {
-        state.savedBatchCandidate = null;
       }
       el.csvSelection.style.display = 'block';
       el.csvSelection.textContent = `${file.name} · ${parsed.records.length} report row(s)`;
@@ -998,6 +1062,24 @@
     </div>`;
   }
 
+  function sanitizeIdForFilename(value) {
+    return String(value)
+      .trim()
+      .replace(/[^A-Za-z0-9._-]+/g, '_')
+      .replace(/^[._-]+|[._-]+$/g, '')
+      .slice(0, 120);
+  }
+
+  function pickCsvText(rawText, file) {
+    // Extractions produced outside the CSV pipeline quote against RAW text;
+    // pipeline-produced ones quote against normalized text. Pick whichever
+    // contains this file's first quote; default to normalized.
+    const normalized = normalizeCsvReportText(rawText);
+    const quote = (file.data.findings || []).map((f) => String(f.report_text || '')).find((q) => q.length);
+    if (quote && !normalized.includes(quote) && String(rawText).includes(quote)) return String(rawText);
+    return normalized;
+  }
+
   function resolveWizardJoin() {
     const csv = state.csv;
     const manifestBySafeId = new Map(state.manifest.map((entry) => [entry.safe_id, entry]));
@@ -1007,10 +1089,58 @@
     let unmatchedExtractions = 0;
     let invalid = state.invalidResults.length;
 
+    const joinMethod = state.manifest.length ? 'manifest' : 'filename';
+    // Filename fallback (no manifest): sanitized CSV ids matched against file
+    // stems — exact stem first, then unambiguous prefix. Rows whose sanitized
+    // ids are duplicated cannot be filename-matched and stay unmatched.
+    let fileByRow = new Map();
+    if (joinMethod === 'filename') {
+      const idCounts = new Map();
+      const rows = csv.records.map((record) => {
+        const sanitized = sanitizeIdForFilename(csvValue(record, csv.idColumnIndex)).toLowerCase();
+        idCounts.set(sanitized, (idCounts.get(sanitized) || 0) + 1);
+        return { record, sanitized };
+      });
+      const usableRows = rows.filter((r) => r.sanitized && idCounts.get(r.sanitized) === 1);
+      for (const file of state.files) {
+        const stem = String(file.safeId || '').toLowerCase();
+        const exact = usableRows.filter((r) => r.sanitized === stem);
+        const prefix = exact.length ? exact : usableRows.filter((r) => stem.startsWith(r.sanitized));
+        if (prefix.length === 1) {
+          const already = fileByRow.get(prefix[0].record.rowNumber);
+          if (already)
+            fileByRow.set(prefix[0].record.rowNumber, null); // ambiguous both ways
+          else fileByRow.set(prefix[0].record.rowNumber, file);
+        }
+      }
+    }
+
     for (const file of state.files) {
       file.sourceId = null;
       file.csvRowNumber = null;
       file.joinStatus = 'unmatched';
+      file.joinMethod = null;
+      if (joinMethod === 'filename') {
+        const rowEntry = [...fileByRow.entries()].find(([, f]) => f === file);
+        if (!rowEntry) {
+          unmatchedExtractions++;
+          continue;
+        }
+        const record = rowsByNumber.get(rowEntry[0]);
+        consumedRows.add(record.rowNumber);
+        file.sourceId = String(csvValue(record, csv.idColumnIndex)).trim();
+        file.csvRowNumber = record.rowNumber;
+        file.joinStatus = 'matched';
+        file.joinMethod = 'filename';
+        matched++;
+        if (file.reportSourceKind !== 'staged') {
+          file.reportText = pickCsvText(csvValue(record, csv.textColumnIndex), file);
+          file.reportSourceName = `${csv.filename} · row ${record.rowNumber} (matched by filename)`;
+          file.reportSourceKind = 'csv';
+          file.reportIsReconstructed = false;
+        }
+        continue;
+      }
       const entry = manifestBySafeId.get(file.safeId);
       if (!entry) {
         unmatchedExtractions++;
@@ -1032,6 +1162,7 @@
         continue;
       }
       file.joinStatus = 'matched';
+      file.joinMethod = 'manifest';
       matched++;
       if (file.reportSourceKind !== 'staged') {
         file.reportText = normalizeCsvReportText(csvValue(record, csv.textColumnIndex));
@@ -1048,6 +1179,7 @@
       invalid,
       unmatchedExtractions,
       unmatchedRows,
+      joinMethod,
       quoteCheck: null,
     };
     const spotCheckFile = state.files.find(
@@ -1074,6 +1206,9 @@
       <div class="join-count unmatched"><strong>${summary.unmatched}</strong><span>Unmatched</span></div>
       <div class="join-count invalid"><strong>${summary.invalid}</strong><span>Invalid</span></div>
     `;
+    if (summary.joinMethod === 'filename') {
+      el.joinSummary.innerHTML += `<div class="quote-check" style="grid-column: 1 / -1;">No manifest in this folder — rows were matched to result files by filename (sanitized CSV id vs. file name).</div>`;
+    }
     if (!summary.quoteCheck) {
       el.quoteCheck.className = 'quote-check';
       el.quoteCheck.textContent = 'Quote spot-check unavailable: no matched report contains an extraction quote.';
@@ -1089,9 +1224,25 @@
 
   async function selectResultsFiles(files) {
     const savedCandidate = state.savedBatchCandidate;
-    const errors = await loadFileList(files, { replace: true });
+    const { errors, stats } = await loadFileList(files, { replace: true });
     showLoadErrors(errors);
     if (!state.files.length) {
+      const folderName = files.length ? relativePathFor(files[0]).split('/')[0] : '';
+      const parts = [];
+      if (!files.length) {
+        parts.push('No files were received from the folder selection.');
+      } else {
+        parts.push(`No extraction files found in “${folderName}” (${stats.total} file(s) seen).`);
+        if (stats.unrecognizedJson)
+          parts.push(`${stats.unrecognizedJson} JSON file(s) skipped — not extraction output (no findings list).`);
+        if (stats.textFiles && !stats.unrecognizedJson)
+          parts.push(`${stats.textFiles} text file(s) found but no extraction JSONs.`);
+        parts.push('Expected the batch results folder containing *.extracted.json / *.coded.json files.');
+      }
+      showLoadErrors(errors);
+      el.loadErrors.style.display = 'block';
+      el.loadErrors.innerHTML =
+        (errors.length ? el.loadErrors.innerHTML + '<br>' : '') + parts.map(escapeHtml).join('<br>');
       el.resultsSelection.style.display = 'none';
       el.resultsNextBtn.disabled = true;
       return;
@@ -1110,7 +1261,7 @@
     resolveWizardJoin();
     const folderName = relativePathFor(files[0]).split('/')[0] || 'selected folder';
     el.resultsSelection.style.display = 'block';
-    el.resultsSelection.textContent = `${folderName} · ${state.files.length} valid extraction file(s)`;
+    el.resultsSelection.textContent = `${folderName} · ${state.files.length} valid extraction file(s) · manifest ${state.manifest.length ? 'found' : 'missing — will match rows by filename'}`;
     el.resultsNextBtn.disabled = false;
   }
 
@@ -1693,7 +1844,13 @@
     if (currentQuote) {
       window.requestAnimationFrame(() => {
         const report = document.getElementById('sourceReportText');
-        if (report) report.scrollTop = currentQuote.offsetTop - report.clientHeight / 2;
+        if (!report) return;
+        // offsetTop is relative to the nearest *positioned* ancestor, which is
+        // not this container — measure the actual on-screen delta instead, so
+        // the scroll centers the quote regardless of report length.
+        const boxRect = report.getBoundingClientRect();
+        const markRect = currentQuote.getBoundingClientRect();
+        report.scrollTop += markRect.top - boxRect.top - (report.clientHeight - markRect.height) / 2;
       });
     }
   }
@@ -2001,6 +2158,7 @@
       source_id: file.sourceId || null,
       csv_row_number: joinInvalid ? null : file.csvRowNumber || null,
       join_invalid: joinInvalid,
+      join_method: file.joinMethod || null,
       source_exam: {
         study_description: exam.study_description || null,
         study_date: exam.study_date || null,
@@ -2041,6 +2199,7 @@
         source_id: review.source_id,
         csv_row_number: review.csv_row_number,
         join_invalid: review.join_invalid,
+        join_method: review.join_method,
         source_exam: review.source_exam,
         summary: review.summary,
         responses: review.responses,
@@ -2369,6 +2528,11 @@
     el.exportMenuBtn.setAttribute('aria-expanded', 'false');
     exportZip();
   });
+  if (el.csvResumeBtn)
+    el.csvResumeBtn.addEventListener('click', () => {
+      const saved = state.savedBatchCandidate;
+      if (saved) restoreBatch(saved, { openReview: true });
+    });
   if (el.helpBtn) el.helpBtn.addEventListener('click', openHelp);
   if (el.helpCloseBtn) el.helpCloseBtn.addEventListener('click', closeHelp);
   el.helpTabButtons.forEach((button) => {
@@ -2419,7 +2583,6 @@
         await handleLoadedFiles(files, {
           label: 'Embedded review bundle',
           kind: 'embedded',
-          offerResume: true,
         });
       }
     } catch (e) {

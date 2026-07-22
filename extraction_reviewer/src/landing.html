@@ -32,6 +32,10 @@
         <input id="csvInput" type="file" accept=".csv,text/csv" style="display: none" />
       </div>
       <div id="csvSelection" class="selection-summary" style="display: none"></div>
+      <div id="csvResumeNotice" class="selection-summary" style="display: none">
+        <span id="csvResumeText"></span>
+        <button type="button" class="text-action" id="csvResumeBtn">Resume that review</button>
+      </div>
       <div id="columnPicker" class="column-picker" style="display: none">
         <p>This CSV has more than two columns. Choose the identifier and report-text columns.</p>
         <div class="column-picker-grid">
