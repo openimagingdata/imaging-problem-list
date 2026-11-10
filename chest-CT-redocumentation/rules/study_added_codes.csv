@@ -1,0 +1,16 @@
+id,name,category,parent_id
+BID90002,osseous_destruction,osseous,BID2100
+BID90003,osseous_deformity,osseous,BID2100
+BID90004,breast_mass,breast,BID1081
+BID90005,aortic_root_replacement,vascular,BID1802
+BID90006,postsurgical_change,extrinsic,
+BID90007,bronchiolitis,airway,BID2456
+BID90008,subclavian_vein_compression,vascular,BID1800
+BID90009,mitral_valve_clip,extrinsic,BID2200
+BID90010,anterior_mediastinal_soft_tissue,mediastinum,BID1050
+BID90011,brachiocephalic_vein_nonvisualization,vascular,BID1820
+BID90012,aortomitral_continuity_calcification,cardiac,BID1035
+BID90013,vertebral_fusion,spine,BID2010
+BID90014,vertebral_body_height_loss,spine,BID2010
+BID90015,vertebral_body_sclerosis,spine,BID2010
+BID90016,pleuroparenchymal_scarring,lung,BID2706
